@@ -1,0 +1,8 @@
+# Defines files and folders that git will ignore
+# This prevents problems with incompatible metadata files and configuration files
+
+# IntelliJ-specific project files (Marcello)
+.idea/
+SE31.iml
+
+# Netbeans-specific project files (anyone using Netbeans)
