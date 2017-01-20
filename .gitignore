@@ -6,3 +6,7 @@
 SE31.iml
 
 # Netbeans-specific project files (anyone using Netbeans)
+
+# Visual Paradigm
+*.bak*
+*.vux
