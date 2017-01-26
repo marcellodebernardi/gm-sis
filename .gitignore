@@ -2,9 +2,6 @@
 # This prevents problems with incompatible metadata files and configuration files
 
 # IntelliJ-specific project files (Marcello)
-.idea/
-
-# Netbeans-specific project files (anyone using Netbeans)
 
 # Visual Paradigm
 *.bak*
