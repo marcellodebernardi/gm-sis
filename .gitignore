@@ -1,8 +1,9 @@
 # Defines files and folders that git will ignore
 # This prevents problems with incompatible metadata files and configuration files
 
-# IntelliJ-specific project files (Marcello)
+# IntelliJ-specific project files
 
 # Visual Paradigm
 *.bak*
 *.vux
+*.lck
