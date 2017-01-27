@@ -11,8 +11,8 @@ public class Bill {
     private boolean settled;
 
 
-    Bill(int billID, double amount) {
-        this.billID = billID;
+    Bill(double amount) {
+        this.billID = 0; // TODO make persistence layer handle this
         this.amount = amount;
         settled = false;
     }
