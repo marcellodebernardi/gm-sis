@@ -1,4 +1,6 @@
-import java.util.SortedSet;
+package logic;
+
+import java.util.List;
 
 /**
  * <p>
@@ -40,7 +42,7 @@ public interface CriterionRepository {
      * @param criteria        object defining set of criteria connected by AND logical connective
      * @return SortedSet of objects of same actual type as the passed working.logic.Criterion objects
      */
-    SortedSet<Criterion> getByCriteria(boolean patternMatching, Criterion... criteria);
+    List<Criterion> getByCriteria(boolean patternMatching, Criterion... criteria);
 
     /**
      * <p>

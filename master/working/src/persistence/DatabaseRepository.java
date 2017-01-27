@@ -1,4 +1,10 @@
-import java.util.SortedSet;
+package persistence;
+
+import logic.Criterion;
+import logic.CriterionRepository;
+
+import java.util.List;
+
 
 /**
  * Implementation of the CriterionRepository interface to work with the SQLite DBMS.
@@ -9,22 +15,18 @@ import java.util.SortedSet;
  */
 public class DatabaseRepository implements CriterionRepository {
 
-    @Override
-    public SortedSet<Criterion> getByCriteria(boolean patternMatching, Criterion ... criteria) {
+    public List<Criterion> getByCriteria(boolean patternMatching, Criterion ... criteria) {
         return null; // placeholder
     }
 
-    @Override
     public boolean addItem(Criterion... items) {
         return false; // placeholder
     }
 
-    @Override
     public boolean updateByCriteria(Criterion... items) {
         return false; // placeholder
     }
 
-    @Override
     public boolean deleteByCriteria(boolean patternMatching, Criterion ... criteria) {
         return false; // placeholder
     }
