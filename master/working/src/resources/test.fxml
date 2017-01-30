@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
       <Button fx:id="loginBtn" layoutX="313.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Login" onAction="#handleButtonClick" />
       <Label layoutX="50.0" layoutY="32.0" prefHeight="90.0" prefWidth="501.0" text="Garage Management System" textAlignment="CENTER">
