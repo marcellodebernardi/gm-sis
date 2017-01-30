@@ -14,6 +14,21 @@ public class AuthenticationSystem {
 
     }
 
+    public static void checkLogin(String username, String password)
+    {
+        System.out.println(username);
+        System.out.println(password);
+        if (username.equals("hello") && password.equals("bye"))
+        {
+            System.out.println("logged in");
+        }
+        else
+        {
+            System.out.println("wrong");
+
+        }
+    }
+
     /**
      * Returns the singleton instance of the authentication system.
      *

@@ -13,7 +13,7 @@ public class LoginController {
 
     public void handleButtonClick()
     {
-        AuthenticationSystem.
+        AuthenticationSystem.checkLogin(username.getText(), password.getText());
     }
 
     public void handleButtonClick2() {
