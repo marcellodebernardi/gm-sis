@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * @author Marcello De Bernardi
+ * @author Marcello De Bernardi, Dillon Vaghela
  * @version 0.1
  * @since 0.1
  */
