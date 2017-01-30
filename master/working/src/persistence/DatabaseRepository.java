@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseRepository implements CriterionRepository {
 
     public List<Criterion> getByCriteria(boolean patternMatching, Criterion ... criteria) {
-        return null; // placeholder
+        return null;
     }
 
     public boolean addItem(Criterion... items) {
