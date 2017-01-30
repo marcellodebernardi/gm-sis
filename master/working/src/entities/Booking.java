@@ -9,6 +9,8 @@ import logic.Criterion;
  */
 public abstract class Booking implements Criterion {
 
+    public Booking(){}
+
     // TODO consider this kind of persistence solution
     public static Iterable<Booking> getIterable() {
         return null;

@@ -9,9 +9,6 @@ import java.util.Map;
  * @since 0.1
  */
 public class DiagnosisRepairBooking extends Booking {
-    // protected SpecialistRepairBooking spcBooking;
-    public
-
     public Map<String, String> getAttributes() {
         return new HashMap<String, String>(); // placeholder
     }
