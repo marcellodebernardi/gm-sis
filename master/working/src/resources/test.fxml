@@ -9,14 +9,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="313.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Login" />
+      <Button fx:id="loginBtn" layoutX="313.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Login" xmlns:fx="" />
       <Label layoutX="50.0" layoutY="32.0" prefHeight="90.0" prefWidth="501.0" text="Garage Management System" textAlignment="CENTER">
          <font>
             <Font name="AppleGothic Regular" size="36.0" />
          </font>
       </Label>
-      <PasswordField layoutX="148.0" layoutY="200.0" prefHeight="42.0" prefWidth="387.0" />
-      <TextArea layoutX="148.0" layoutY="138.0" maxWidth="-Infinity" prefHeight="42.0" prefWidth="387.0" />
+      <PasswordField fx:id="password" layoutX="148.0" layoutY="200.0" prefHeight="42.0" prefWidth="387.0" />
+      <TextArea fx:id="username" layoutX="148.0" layoutY="138.0" maxWidth="-Infinity" prefHeight="42.0" prefWidth="387.0" />
       <Label layoutX="46.0" layoutY="146.0" prefHeight="27.0" prefWidth="91.0" text="Username">
          <font>
             <Font size="18.0" />
@@ -27,6 +27,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="433.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Exit" />
+      <Button fx:id="exitBtn" layoutX="433.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Exit" />
    </children>
 </AnchorPane>

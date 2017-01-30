@@ -44,6 +44,10 @@ public interface CriterionRepository {
      */
     List<Criterion> getByCriteria(boolean patternMatching, Criterion... criteria);
 
+
+
+
+
     /**
      * <p>
      * Takes any number of Criterion objects and adds them all to the persistence layer if none of
