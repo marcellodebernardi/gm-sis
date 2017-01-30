@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="loginBtn" layoutX="313.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Login" xmlns:fx="" />
+      <Button fx:id="loginBtn" layoutX="313.0" layoutY="288.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="102.0" text="Login" onAction="#handleButtonClick" />
       <Label layoutX="50.0" layoutY="32.0" prefHeight="90.0" prefWidth="501.0" text="Garage Management System" textAlignment="CENTER">
          <font>
             <Font name="AppleGothic Regular" size="36.0" />
