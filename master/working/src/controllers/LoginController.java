@@ -10,4 +10,10 @@ public class LoginController {
     {
         System.out.println("working");
     }
-}
+
+    public void handleButtonClick2() {
+
+        System.exit(0);
+    }
+
+    }
