@@ -14,8 +14,8 @@ public class AuthenticationSystem {
 
     }
 
-    public static void checkLogin(String username, String password)
-    {
+    public static void checkLogin(String username, String password) {
+
         System.out.println(username);
         System.out.println(password);
         if (username.equals("hello") && password.equals("bye"))
