@@ -12,6 +12,5 @@ TODO:
 SECONDARY TODO:
 
 <ol>
-<li>Deprecate criterion system in favor of something better</li>
 <li>Implement caching in database controller</li>
 </ol>
