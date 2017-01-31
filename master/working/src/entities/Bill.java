@@ -12,7 +12,8 @@ public class Bill {
 
 
     Bill(double amount) {
-        this.billID = 0; // TODO make persistence layer handle this
+        // TODO make persistence layer handle this
+        this.billID = 0;
         this.amount = amount;
         settled = false;
     }

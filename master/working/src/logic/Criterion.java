@@ -1,6 +1,6 @@
 package logic;
 
-import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * * <p>
@@ -23,12 +23,10 @@ import java.util.Map;
  * @since 0.1
  */
 public interface Criterion {
-
     /**
-     * <p>Returns the values and variable names of the object as a Map<String, String>. This map must
+     * <p>Returns the values and variable names of the object as a Map<String, Object>. This map must
      * conform to the following rules:
      * <ol>
-     * <li>One key must be "class", and it must map to the name of the class implementing Criterion</li>
      * <li>For each variable in the class, a key entry must be present</li>
      * <li>For "multi-valued" variables, the key must map to a value of form "value1, value2, ..., valueN"</li>
      * <li>For variables set to null, no key should be added to map
@@ -37,5 +35,5 @@ public interface Criterion {
      *
      * @return a Map<> containing variable names as map keys and variable values as map values.
      */
-    Map<String, String> getAttributes();
+    SortedMap<String, Object> getAttributes();
 }

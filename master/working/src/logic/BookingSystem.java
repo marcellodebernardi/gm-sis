@@ -27,13 +27,8 @@ public class BookingSystem {
      * @return singleton instance of BookingSystem
      */
     public BookingSystem getInstance(CriterionRepository persistence) {
-        if (instance != null) {
-            return instance;
-        }
-        else {
-            instance = new BookingSystem(persistence);
-            return instance;
-        }
+        if (instance == null) instance = new BookingSystem(persistence);
+        return instance;
     }
 
     /**
@@ -42,12 +37,12 @@ public class BookingSystem {
      * @return List of diagnosis and repair bookings
      */
     public List<DiagnosisRepairBooking> getBookingList() {
-        List<Criterion> tempList = persistence.getByCriteria(false, new DiagnosisRepairBooking());
+        // List<Criterion> tempList = persistence.getByCriteria(false, new DiagnosisRepairBooking());
         List<DiagnosisRepairBooking> finalList = new ArrayList<DiagnosisRepairBooking>();
 
-        for (int i = 0; i < tempList.size(); i++) {
-            finalList.set(i, (DiagnosisRepairBooking)tempList.get(i));
-        }
+        // for (int i = 0; i < tempList.size(); i++) {
+           // finalList.set(i, (DiagnosisRepairBooking)tempList.get(i));
+        //}
 
         return finalList;
     }
@@ -58,7 +53,8 @@ public class BookingSystem {
      * @return true if addition successful, false otherwise
      */
     public boolean addBooking() {
-        return persistence.addItem(new DiagnosisRepairBooking());
+        //return persistence.addItem(new DiagnosisRepairBooking());
+        return false;
     }
 
     /**
@@ -68,6 +64,7 @@ public class BookingSystem {
      */
     public boolean deleteBooking(String bookingID) {
         // TODO: bookingID in booking constructor
-        return persistence.deleteByCriteria(false, new DiagnosisRepairBooking());
+        // return persistence.deleteByCriteria(false, new DiagnosisRepairBooking());
+        return false;
     }
 }

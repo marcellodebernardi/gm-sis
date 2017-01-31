@@ -2,7 +2,7 @@ package entities;
 
 /**
  * @author Marcello De Bernardi
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public enum UserType {

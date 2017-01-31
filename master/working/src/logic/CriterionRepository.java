@@ -15,9 +15,6 @@ import java.util.List;
  * @since 0.1
  */
 public interface CriterionRepository {
-
-    // TODO: consider alternative abstraction model and deprecation of criterion abstraction
-
     /**
      * <p>
      * Takes any number of Criterion objects and returns a SortedSet of objects stored in the
@@ -26,7 +23,7 @@ public interface CriterionRepository {
      * connected by the OR logical operator. For example:
      * </p>
      * <p>
-     * <i>new Criterion("alpha", "beta", null), new Criterion ("ALPHA", "BETA", "GAMMA")</i>
+     * <i>new Criterion(false, "alpha", "beta", null), new Criterion (false, "ALPHA", "BETA", "GAMMA")</i>
      * </p>
      * <p>
      * corresponds to the logical statement
@@ -36,13 +33,20 @@ public interface CriterionRepository {
      * </p>
      * <p>
      * <p>The patternMatching flag determines whether certain attributes, such as names, are
-     * to be interpreted as regular expressions. </p>
+     * to be interpreted as regular expressions. The eClass flag has to match the type of objects
+     * to be returned. For example, if the calling code expects vehicles in return, the arguments
+     * would be:</p>
+     * <p>
+     *     <i>getByCriteria(false, Vehicle.class, ...)</i>
+     * </p>
      *
      * @param patternMatching true for regular expression interpretation
+     * @param eClass          Class of objects expected in return, e.g. Vehicle.class
      * @param criteria        object defining set of criteria connected by AND logical connective
      * @return SortedSet of objects of same actual type as the passed working.logic.Criterion objects
      */
-    List<Criterion> getByCriteria(boolean patternMatching, Criterion... criteria);
+    <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, Criterion ... criteria)
+            throws InconsistentCriteriaException;
 
 
 
