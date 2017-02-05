@@ -6,4 +6,5 @@ package persistence;
  * @since 0.1
  */
 class PartsMapper {
+    // todo implement Mapper
 }

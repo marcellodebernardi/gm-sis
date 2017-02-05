@@ -182,10 +182,4 @@ public class DiagnosisRepairBooking extends Booking {
     public void setRepairEndDate(Date repairEndDate) {
         this.repairEndDate = repairEndDate;
     }
-
-
-
-    public SortedMap<String, Object> getAttributes() {
-        return new TreeMap<String, Object>(); // placeholder
-    }
 }

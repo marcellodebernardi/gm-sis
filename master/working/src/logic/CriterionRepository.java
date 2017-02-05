@@ -14,7 +14,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-public interface CriterionRepository {
+public interface CriterionRepository<E extends Criterion> {
     /**
      * <p>
      * Takes any number of Criterion objects and returns a SortedSet of objects stored in the
@@ -45,7 +45,7 @@ public interface CriterionRepository {
      * @param criteria        object defining set of criteria connected by AND logical connective
      * @return SortedSet of objects of same actual type as the passed working.logic.Criterion objects
      */
-    <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, Criterion ... criteria)
+    List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria)
             throws InconsistentCriteriaException;
 
 
@@ -63,10 +63,10 @@ public interface CriterionRepository {
      * Only the top-level object in a hierarchy of new objects needs to be added.
      * </p>
      *
-     * @param items Criterion objects to add to the database
+     * @param item Criterion objects to add to the database
      * @return true if add successful, false is add unsuccessful
      */
-    boolean addItem(Criterion... items);
+    boolean addItem(Class<E> eClass, E item);
 
     /**
      * /**
@@ -79,10 +79,10 @@ public interface CriterionRepository {
      * Only the top-level object in a hierarchy of updated objects need to be passed as argument.
      * </p>
      *
-     * @param items Criterion objects to add to the database
+     * @param item Criterion object to add to the database
      * @return true if update successful, false is update rejected
      */
-    boolean updateByCriteria(Criterion... items);
+    boolean updateItem(Class<E> eClass, E item);
 
     /**
      * <p>
@@ -100,9 +100,8 @@ public interface CriterionRepository {
      * as regular expressions.
      * </p>
      *
-     * @param patternMatching if true interpret fields as regular expressions
-     * @param criteria Criterion objects to define the objects to remove
+     * @param criterion Criterion objects to define the objects to remove
      * @return true if successful, false if unsuccessful
      */
-    boolean deleteByCriteria(boolean patternMatching, Criterion... criteria);
+    boolean deleteItem(Class<E> eClass, E criterion);
 }

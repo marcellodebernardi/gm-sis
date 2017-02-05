@@ -64,7 +64,7 @@ public class BookingSystem {
      */
     public boolean deleteBooking(String bookingID) {
         // TODO: bookingID in booking constructor
-        // return persistence.deleteByCriteria(false, new DiagnosisRepairBooking());
+        // return persistence.deleteItem(false, new DiagnosisRepairBooking());
         return false;
     }
 }

@@ -5,10 +5,7 @@ import logic.CriterionRepository;
 import logic.InconsistentCriteriaException;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -18,16 +15,17 @@ import java.util.Set;
  * @version 0.1
  * @since 0.1
  */
-public class DatabaseRepository implements CriterionRepository {
+public class DatabaseRepository<E extends Criterion> implements CriterionRepository<E> {
     private static DatabaseRepository instance;
 
+    // todo setup connection correctly
     private final String JDBC_DRIVER = null;
     private final String DB_URL = null;
     private final String DB_USER = null;
     private final String DB_PASS = null;
     private Connection connection;
     private PreparedStatement statement;
-    private ResultSet results;
+    private MapperFactory factory;
 
 
     /**
@@ -37,6 +35,7 @@ public class DatabaseRepository implements CriterionRepository {
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL);
+            factory = new MapperFactory();
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.toString());
         }
@@ -62,68 +61,71 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
 
-    public <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, Criterion ... criteria)
+    public List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria)
             throws InconsistentCriteriaException {
         // handle bad input
-        if (criteria == null || criteria.length == 0) throw new NullPointerException("No criteria given.");
+        if (criteria == null || criteria.size() == 0) throw new NullPointerException("No criteria given.");
         for (Criterion crit : criteria) {
-            if (eClass != crit.getClass()) throw new InconsistentCriteriaException();
+            if (!eClass.getName().equals(crit.getClass().getName())) throw new InconsistentCriteriaException();
         }
 
-        List<E> returnList = new ArrayList<>();
-
+        // get requested objects using appropriate mapper
         try {
-            String SQL = "SELECT * FROM " + eClass.getName() + " WHERE " + parseWhere(criteria) + ";";
-
-            statement = connection.prepareStatement(SQL);
-            results = statement.executeQuery();
-
-            // iterate over rows
-            while(results.next()) {
-                switch(eClass.getName()) {
-                    case "User":
-                        // returnList.add()
-                }
-            }
-
-
-        } catch (SQLException e) {
-            System.out.print(e.toString());
+            statement = connection.prepareStatement(factory.getMapper(eClass).toSelectQuery(criteria));
+            return factory.getMapper(eClass).toObjects(statement.executeQuery());
         }
-        return returnList;
-    }
-
-    public boolean addItem(Criterion... items) {
-        return false; // placeholder
-    }
-
-    public boolean updateByCriteria(Criterion... items) {
-        return false; // placeholder
-    }
-
-    public boolean deleteByCriteria(boolean patternMatching, Criterion... criteria) {
-        return false; // placeholder
-    }
-
-
-    /**
-     * Takes a list of criteria and returns the WHERE portion of the SQL statement.
-     * Returns it in format "(attribute='something' AND attribute='something') OR (...)"
-     */
-    private <E extends Criterion> String parseWhere(Criterion... criteria) {
-        String SQLresult = "";
-
-        for (Criterion crit : criteria) {
-            Set<Map.Entry<String, Object>> entrySet = crit.getAttributes().entrySet();
-            SQLresult = SQLresult + "(";
-
-            for (Map.Entry<String, Object> entry : entrySet) {
-                SQLresult = SQLresult + entry.getKey() + "='" + entry.getValue() + "' AND";
-            }
-
-            SQLresult = SQLresult.substring(0, SQLresult.length() - 3) + ") OR";
+        catch(SQLException e) {
+            // todo not necessarily a good way to handle error
+            System.err.print(e.toString());
+            return null;
         }
-        if (criteria.length == 1) SQLresult = SQLresult.substring(1, SQLresult.length() - 2);
-        return SQLresult;
+    }
+
+    public boolean addItem(Class<E> eClass, E item) {
+        // handle bad input
+        if (item == null) throw new NullPointerException();
+
+        // todo implement so it prevents adding existing items
+        try {
+            statement = connection.prepareStatement(factory.getMapper(eClass).toInsertQuery(item));
+            statement.executeUpdate();
+            return true;
+        }
+        catch (SQLException e) {
+            System.err.print(e.toString());
+            return false;
+        }
+    }
+
+    public boolean updateItem(Class<E> eClass, E item) {
+        // handle bad input
+        if (item == null) throw new NullPointerException();
+
+        // todo implement to prevent undesired updates
+        try {
+            statement = connection.prepareStatement(factory.getMapper(eClass).toUpdateQuery(item));
+            statement.executeUpdate();
+            return true;
+        }
+        catch (SQLException e) {
+            System.err.print(e.toString());
+            return false;
+        }
+    }
+
+    public boolean deleteItem(Class<E> eClass, E item) {
+        // handle bad input
+        if (item == null) throw new NullPointerException();
+
+        // todo implement to prevent undesired deletes
+        try {
+            statement = connection.prepareStatement(factory.getMapper(eClass).toDeleteQuery(item));
+            statement.executeUpdate();
+            return true;
+        }
+        catch (SQLException e) {
+            System.err.print(e.toString());
+            return false;
+        }
     }
 }

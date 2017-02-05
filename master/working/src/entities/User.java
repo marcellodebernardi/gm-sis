@@ -1,11 +1,15 @@
 package entities;
 
+import logic.Criterion;
+
+import java.util.SortedMap;
+
 /**
  * @author Marcello De Bernardi
  * @version 1.0
  * @since 0.1
  */
-public class User {
+public class User implements Criterion {
     private String userID;
     private String password;
     private String firstName;
