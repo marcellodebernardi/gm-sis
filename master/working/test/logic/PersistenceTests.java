@@ -1,11 +1,8 @@
-import entities.Booking;
-import logic.Criterion;
-import logic.CriterionRepository;
+package logic;
+
 import org.junit.Test;
 import persistence.DatabaseRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Marcello De Bernardi

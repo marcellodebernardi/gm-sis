@@ -16,11 +16,23 @@ import java.util.TreeMap;
  * @since 0.1
  */
 class MapperFactory {
+    private static MapperFactory instance;
     private Map<String, Mapper<? extends Criterion>> mapperMap = new TreeMap<>();
 
-    MapperFactory() {
-        mapperMap.put(User.class.getName(), new UserMapper());
-        mapperMap.put(Booking.class.getName(), new BookingMapper());
+    private MapperFactory() {
+        mapperMap.put(User.class.getName(), new UserMapper(this));
+        mapperMap.put(Booking.class.getName(), new BookingMapper(this));
+    }
+
+
+    /**
+     * Returns singleton instance of MapperFactory.
+     *
+     * @return MapperFactory singleton
+     */
+    static MapperFactory getInstance() {
+        if (instance == null) instance = new MapperFactory();
+        return instance;
     }
 
     /**

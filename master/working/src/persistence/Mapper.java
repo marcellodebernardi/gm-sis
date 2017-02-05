@@ -14,27 +14,62 @@ import java.util.List;
  * @since 0.1
  */
 abstract class Mapper<E extends Criterion> {
-    protected final String SELECTSTRING = "SELECT * FROM ";
-    protected final String INSERTSTRING = "INSERT";
-    protected final String UPDATESTRING = "UPDATE";
-    protected final String DELETESTRING = "DELETE";
+    MapperFactory factory;
+    final String SELECTSTRING = "SELECT * FROM ";
+    final String INSERTSTRING = "INSERT";
+    final String UPDATESTRING = "UPDATE";
+    final String DELETESTRING = "DELETE";
     // todo fix these
 
+    Mapper(MapperFactory factory) {
+        this.factory = factory;
+    }
     /**
-     *
-     * @param criteria
-     * @return
+     * <p>
+     *     Parses the given list of Criterion objects into a logical expression of the form
+     * </p>
+     * <i>(attribute1 AND attribute3) OR (attribute1 AND attribute2)</i>
+     * <p>
+     *     embedded into a SELECT SQL statement.
+     * </p>
+     * @param criteria the criterion objects received from the logic layer
+     * @return SQL SELECT statement string
      */
     abstract String toSelectQuery(List<E> criteria);
 
+    /**
+     * <p>
+     *     Returns an SQL INSERT statement for the given item.
+     * </p>
+     * @param item item received from logic layer
+     * @return SQL INSERT statement string
+     */
     abstract String toInsertQuery(E item);
 
+    /**
+     * <p>
+     *     Returns an SQL UPDATE statement for the given item.
+     * </p>
+     * @param item item received from logic layer
+     * @return SQL UPDATE statement string
+     */
     abstract String toUpdateQuery(E item);
 
-    abstract String toDeleteQuery(E item);
     /**
-     *
-     * @return
+     * <p>
+     *     Returns an SQL DELETE statement for the given item.
+     * </p>
+     * @param item item received from logic layer
+     * @return SQL DELETE statement string
+     */
+    abstract String toDeleteQuery(E item);
+
+    /**
+     * <p>
+     *     Returns a list of business entities to be returned to logic layer from
+     *     the given ResultSet.
+     * </p>
+     * @return list of business entities
      */
     abstract List<E> toObjects(ResultSet results);
 }

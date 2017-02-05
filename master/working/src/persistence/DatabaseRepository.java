@@ -35,7 +35,7 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL);
-            factory = new MapperFactory();
+            factory = MapperFactory.getInstance();
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.toString());
         }

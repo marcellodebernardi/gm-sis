@@ -6,5 +6,6 @@ package entities;
  * @since 0.1
  */
 public enum UserType {
-    ADMINISTRATOR, NORMAL;
+    // only use NULL when creating anonymous user objects as search criteria
+    ADMINISTRATOR, NORMAL, NULL;
 }

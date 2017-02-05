@@ -1,8 +1,6 @@
 package entities;
 
 import java.util.Date;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * @author Marcello De Bernardi
