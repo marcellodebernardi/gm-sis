@@ -32,7 +32,7 @@ public class RepositoryTests {
      */
     @Test
     public void testJDBCSettings() {
-        final String DB_URL = "jdbc:sqlite:GM-SIS.db";
+        final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
         Connection connection;
 
         try {

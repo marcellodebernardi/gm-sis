@@ -19,7 +19,7 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
     private static DatabaseRepository instance;
 
     // todo setup connection correctly
-    private final String DB_URL = "jdbc:sqlite:GM-SIS.db";
+    private final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
     private Connection connection;
     private PreparedStatement statement;
     private MapperFactory factory;
