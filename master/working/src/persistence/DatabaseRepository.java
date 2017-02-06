@@ -19,10 +19,7 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
     private static DatabaseRepository instance;
 
     // todo setup connection correctly
-    private final String JDBC_DRIVER = null;
-    private final String DB_URL = null;
-    private final String DB_USER = null;
-    private final String DB_PASS = null;
+    private final String DB_URL = "jdbc:sqlite:GM-SIS.db";
     private Connection connection;
     private PreparedStatement statement;
     private MapperFactory factory;
@@ -33,10 +30,9 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
      */
     private DatabaseRepository() {
         try {
-            Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL);
             factory = MapperFactory.getInstance();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
