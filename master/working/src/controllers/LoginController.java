@@ -25,7 +25,7 @@ public class LoginController {
 
         AuthenticationSystem.checkLogin(username.getText(), password.getText());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/mainMenu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
         Parent menu = fxmlLoader.load();
         Stage stage = new Stage();
         stage.setTitle("Main Menu");
