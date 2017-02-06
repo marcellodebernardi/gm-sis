@@ -1,12 +1,12 @@
 package controllers;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logic.AuthenticationSystem;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import main.Main;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque
@@ -20,11 +20,12 @@ public class LoginController {
     public Button exitBtn;
     public TextArea username;
     public PasswordField password;
+    private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
-
+    @FXML
     public void handleButtonClick() throws Exception {
 
-        AuthenticationSystem.checkLogin(username.getText(), password.getText());
+        auth.login(username.getText(), password.getText());
         //Main.primaryStage.hide();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
         Parent menu = fxmlLoader.load();
@@ -36,6 +37,7 @@ public class LoginController {
 
     }
 
+    @FXML
     public void handleButtonClick2() {
         System.exit(0);
     }

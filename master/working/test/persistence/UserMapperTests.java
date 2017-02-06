@@ -1,7 +1,6 @@
 package persistence;
 
 import entities.Booking;
-import entities.DiagnosisRepairBooking;
 import entities.User;
 import entities.UserType;
 import org.junit.Test;
@@ -16,7 +15,7 @@ import static org.junit.Assert.*;
  * @version 0.1
  * @since 0.1
  */
-public class MapperTests {
+public class UserMapperTests {
     private MapperFactory factory = MapperFactory.getInstance();
 
 
@@ -29,7 +28,7 @@ public class MapperTests {
 
     /** Test SELECT statements returned by Mappers */
     @Test
-    public void testUserSelectQuery() {
+    public void testUserSELECTQuery() {
         List<User> userList = new ArrayList<>();
         userList.add(new User(
                 "gooby",
@@ -47,8 +46,35 @@ public class MapperTests {
         System.out.println(factory.getMapper(User.class).toSelectQuery(userList));
     }
 
-    /** Test SELECT statements returned by Mappers */
+    /**
+     * Test INSERT statement returned by UserMapper
+     */
     @Test
-    public void testBookingSelectQuery() {
+    public void testUserINSERTQuery() {
+        User user = new User(
+                "user",
+                "password",
+                "Uncle",
+                "Dolan",
+                UserType.ADMINISTRATOR);
+
+        assertTrue(factory.getMapper(User.class).toInsertQuery(user)
+                .equals("INSERT INTO User VALUES (user, password, Uncle, Dolan, ADMINISTRATOR);"));
+    }
+
+    /**
+     * Tests DELETE statement returned by UserMapper
+     */
+    @Test
+    public void testUserDELETEQUery() {
+        User user = new User(
+                "uniqueID",
+                null,
+                null,
+                null,
+                null
+        );
+        assertTrue(factory.getMapper(User.class).toDeleteQuery(user)
+                .equals("DELETE FROM User WHERE userID = 'uniqueID';"));
     }
 }

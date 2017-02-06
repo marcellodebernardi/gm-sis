@@ -25,7 +25,7 @@ class UserMapper extends Mapper<User> {
 
 
     String toSelectQuery(List<User> users) {
-        String query = SELECTSTRING + users.get(0).getClass().getName() + " WHERE ";
+        String query = SELECTSTRING + User.class.getName().substring(9) + " WHERE ";
 
         for(User user : users) {
             query = query + "(";
@@ -39,7 +39,7 @@ class UserMapper extends Mapper<User> {
                 query = query + "firstName = '" + user.getFirstName() + "' AND ";
             if (user.getSurname() != null)
                 query = query + "surname = '" + user.getSurname() + "' AND ";
-            if (user.getUserType() != UserType.NULL)
+            if (user.getUserType() != null)
                 query = query + "userType = '" + user.getUserType() + "' AND ";
 
             // remove unnecessary "AND" connective if present
@@ -58,11 +58,13 @@ class UserMapper extends Mapper<User> {
     }
 
     String toInsertQuery(User user) {
-        String query = INSERTSTRING;
-
-        // todo implement
-
-        return query;
+        return INSERTSTRING
+                + User.class.getName().substring(9) + " VALUES ("
+                + user.getUserID() + ", "
+                + user.getPassword() + ", "
+                + user.getFirstName() + ", "
+                + user.getSurname() + ", "
+                + user.getUserType().toString() + ");";
     }
 
     String toUpdateQuery(User user) {
@@ -74,11 +76,9 @@ class UserMapper extends Mapper<User> {
     }
 
     String toDeleteQuery(User user) {
-        String query = DELETESTRING;
-
-        // todo implement
-
-        return query;
+        return DELETESTRING
+                + User.class.getName().substring(9) + " WHERE "
+                + "userID = '" + user.getUserID() + "';";
     }
 
     List<User> toObjects(ResultSet results) {
@@ -86,11 +86,11 @@ class UserMapper extends Mapper<User> {
         try {
             while (results.next()) {
                 userList.add(new User(
-                        results.getString(0), // userID
-                        results.getString(1), // password
-                        results.getString(2), // firstName
-                        results.getString(3), // surname
-                        (results.getString(4).equals(UserType.ADMINISTRATOR.toString())
+                        results.getString(1), // userID
+                        results.getString(2), // password
+                        results.getString(3), // firstName
+                        results.getString(4), // surname
+                        (results.getString(5).equals(UserType.ADMINISTRATOR.toString())
                                 ? UserType.ADMINISTRATOR : UserType.NORMAL)));
             }
         }

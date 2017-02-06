@@ -16,9 +16,9 @@ import java.util.List;
 abstract class Mapper<E extends Criterion> {
     MapperFactory factory;
     final String SELECTSTRING = "SELECT * FROM ";
-    final String INSERTSTRING = "INSERT";
+    final String INSERTSTRING = "INSERT INTO ";
     final String UPDATESTRING = "UPDATE";
-    final String DELETESTRING = "DELETE";
+    final String DELETESTRING = "DELETE FROM ";
     // todo fix these
 
     Mapper(MapperFactory factory) {

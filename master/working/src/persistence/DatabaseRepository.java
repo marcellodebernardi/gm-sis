@@ -2,7 +2,6 @@ package persistence;
 
 import logic.Criterion;
 import logic.CriterionRepository;
-import logic.InconsistentCriteriaException;
 
 import java.sql.*;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-public class DatabaseRepository<E extends Criterion> implements CriterionRepository<E> {
+public class DatabaseRepository implements CriterionRepository {
     private static DatabaseRepository instance;
 
     // todo setup connection correctly
@@ -57,13 +56,9 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
     }
 
 
-    public List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria)
-            throws InconsistentCriteriaException {
+    public <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria) {
         // handle bad input
         if (criteria == null || criteria.size() == 0) throw new NullPointerException("No criteria given.");
-        for (Criterion crit : criteria) {
-            if (!eClass.getName().equals(crit.getClass().getName())) throw new InconsistentCriteriaException();
-        }
 
         // get requested objects using appropriate mapper
         try {
@@ -72,12 +67,12 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
         }
         catch(SQLException e) {
             // todo not necessarily a good way to handle error
-            System.err.print(e.toString());
+            System.err.print(e.getMessage());
             return null;
         }
     }
 
-    public boolean addItem(Class<E> eClass, E item) {
+    public <E extends Criterion> boolean addItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -88,12 +83,12 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
             return true;
         }
         catch (SQLException e) {
-            System.err.print(e.toString());
+            System.err.print(e.getMessage());
             return false;
         }
     }
 
-    public boolean updateItem(Class<E> eClass, E item) {
+    public <E extends Criterion> boolean updateItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -104,12 +99,12 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
             return true;
         }
         catch (SQLException e) {
-            System.err.print(e.toString());
+            System.err.print(e.getMessage());
             return false;
         }
     }
 
-    public boolean deleteItem(Class<E> eClass, E item) {
+    public <E extends Criterion> boolean deleteItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -120,8 +115,12 @@ public class DatabaseRepository<E extends Criterion> implements CriterionReposit
             return true;
         }
         catch (SQLException e) {
-            System.err.print(e.toString());
+            System.err.print(e.getMessage());
             return false;
         }
+    }
+
+    public <E extends Criterion> List<E> doSomething(Class<E> eClass, List<E> list) {
+        return null;
     }
 }

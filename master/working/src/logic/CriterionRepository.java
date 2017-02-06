@@ -14,7 +14,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-public interface CriterionRepository<E extends Criterion> {
+public interface CriterionRepository {
     /**
      * <p>
      * Takes any number of Criterion objects and returns a SortedSet of objects stored in the
@@ -45,8 +45,7 @@ public interface CriterionRepository<E extends Criterion> {
      * @param criteria        object defining set of criteria connected by AND logical connective
      * @return SortedSet of objects of same actual type as the passed working.logic.Criterion objects
      */
-    List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria)
-            throws InconsistentCriteriaException;
+    <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria);
 
 
 
@@ -66,7 +65,7 @@ public interface CriterionRepository<E extends Criterion> {
      * @param item Criterion objects to add to the database
      * @return true if add successful, false is add unsuccessful
      */
-    boolean addItem(Class<E> eClass, E item);
+    <E extends Criterion> boolean addItem(Class<E> eClass, E item);
 
     /**
      * /**
@@ -82,7 +81,7 @@ public interface CriterionRepository<E extends Criterion> {
      * @param item Criterion object to add to the database
      * @return true if update successful, false is update rejected
      */
-    boolean updateItem(Class<E> eClass, E item);
+    <E extends Criterion> boolean updateItem(Class<E> eClass, E item);
 
     /**
      * <p>
@@ -103,5 +102,5 @@ public interface CriterionRepository<E extends Criterion> {
      * @param criterion Criterion objects to define the objects to remove
      * @return true if successful, false if unsuccessful
      */
-    boolean deleteItem(Class<E> eClass, E criterion);
+    <E extends Criterion> boolean deleteItem(Class<E> eClass, E criterion);
 }
