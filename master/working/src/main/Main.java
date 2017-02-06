@@ -13,6 +13,9 @@ import javafx.scene.Scene;
  */
 public class Main extends Application {
 
+    public static Scene login;
+    public static Stage primaryStage;
+
     public static void main (String[] args)
     {
         Application.launch(args);
@@ -21,7 +24,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Pane mainPane = (Pane) FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
-        primaryStage.setScene(new Scene(mainPane));
+        login = new Scene(mainPane);
+
+        primaryStage.setScene(login);
         primaryStage.show();
 
     }

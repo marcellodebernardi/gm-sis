@@ -14,17 +14,19 @@ public class AuthenticationSystem {
 
     }
 
-    public static void checkLogin(String username, String password) {
+    public static boolean checkLogin(String username, String password) {
 
         System.out.println(username);
         System.out.println(password);
-        if (username.equals("hello") && password.equals("bye"))
+        if (username.equals("h") && password.equals("b"))
         {
             System.out.println("logged in");
+            return true;
         }
         else
         {
             System.out.println("wrong");
+            return false;
 
         }
     }

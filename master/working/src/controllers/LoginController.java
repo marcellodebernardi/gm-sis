@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import main.Main;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque
@@ -24,7 +25,7 @@ public class LoginController {
     public void handleButtonClick() throws Exception {
 
         AuthenticationSystem.checkLogin(username.getText(), password.getText());
-
+        //Main.primaryStage.hide();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
         Parent menu = fxmlLoader.load();
         Stage stage = new Stage();
