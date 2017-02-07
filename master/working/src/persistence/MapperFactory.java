@@ -1,5 +1,6 @@
 package persistence;
 
+import entities.Bill;
 import entities.Booking;
 import entities.User;
 import logic.Criterion;
@@ -22,6 +23,7 @@ class MapperFactory {
     private MapperFactory() {
         mapperMap.put(User.class.getName(), new UserMapper(this));
         mapperMap.put(Booking.class.getName(), new BookingMapper(this));
+        mapperMap.put(Bill.class.getName(), new BillMapper(this));
     }
 
 

@@ -43,7 +43,11 @@ public class UserMapperTests {
                 "De Bernardi",
                 UserType.ADMINISTRATOR ));
 
-        System.out.println(factory.getMapper(User.class).toSelectQuery(userList));
+        assertTrue(factory.getMapper(User.class).toSelectQuery(userList)
+                .equals("SELECT * FROM User WHERE (userID = 'gooby' AND password = 'dolan' "
+                        + "AND firstName = 'Ebube' AND surname = 'Abara' AND userType = 'NORMAL')"
+                        + " OR (userID = 'someUserID' AND password = 'somePassword' AND firstName = "
+                        + "'Marcello' AND surname = 'De Bernardi' AND userType = 'ADMINISTRATOR');"));
     }
 
     /**
@@ -60,6 +64,23 @@ public class UserMapperTests {
 
         assertTrue(factory.getMapper(User.class).toInsertQuery(user)
                 .equals("INSERT INTO User VALUES (user, password, Uncle, Dolan, ADMINISTRATOR);"));
+    }
+
+    /**
+     * Test UPDATE statement returned by UserMapper
+     */
+    @Test
+    public void testUserUPDATEQuery() {
+        User user = new User(
+                "user",
+                "password",
+                "Uncle",
+                "Dolan",
+                UserType.ADMINISTRATOR);
+
+        assertTrue(factory.getMapper(User.class).toUpdateQuery(user)
+                .equals("UPDATE User SET password = 'password', firstName = 'Uncle', "
+                + "surname = 'Dolan', userType = 'ADMINISTRATOR' WHERE userID = 'user';"));
     }
 
     /**

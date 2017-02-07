@@ -59,7 +59,7 @@ class UserMapper extends Mapper<User> {
 
     String toInsertQuery(User user) {
         return INSERTSTRING
-                + User.class.getName().substring(9) + " VALUES ("
+                + User.class.getSimpleName() + " VALUES ("
                 + user.getUserID() + ", "
                 + user.getPassword() + ", "
                 + user.getFirstName() + ", "
@@ -68,16 +68,17 @@ class UserMapper extends Mapper<User> {
     }
 
     String toUpdateQuery(User user) {
-        String query = UPDATESTRING;
-
-        // todo implement
-
-        return query;
+        return UPDATESTRING + User.class.getSimpleName() + " SET "
+                + "password = '" + user.getPassword() + "', "
+                + "firstName = '" + user.getFirstName() + "', "
+                + "surname = '" + user.getSurname() + "', "
+                + "userType = '" + user.getUserType().toString() + "' "
+                + "WHERE userID = '" + user.getUserID() + "';";
     }
 
     String toDeleteQuery(User user) {
         return DELETESTRING
-                + User.class.getName().substring(9) + " WHERE "
+                + User.class.getSimpleName() + " WHERE "
                 + "userID = '" + user.getUserID() + "';";
     }
 
