@@ -25,7 +25,9 @@ public class LoginController {
     @FXML
     public void handleButtonClick() throws Exception {
 
+        try{
         auth.login(username.getText(), password.getText());
+
         //Main.primaryStage.hide();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
         Parent menu = fxmlLoader.load();
@@ -33,7 +35,12 @@ public class LoginController {
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
         stage.showAndWait();
-        stage.close();
+        stage.close(); }
+        catch (Exception e)
+        {
+            System.out.println("The username and/or password is incorrect");
+            password.clear();
+        }
 
     }
 
