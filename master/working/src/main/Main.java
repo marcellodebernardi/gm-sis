@@ -14,7 +14,7 @@ import javafx.scene.Scene;
 public class Main extends Application {
 
     public static Scene login;
-    public static Stage primaryStage;
+    public static Pane mainPane;
 
     public static void main (String[] args)
     {
@@ -23,9 +23,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Pane mainPane = (Pane) FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+        mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
         login = new Scene(mainPane);
-
         primaryStage.setScene(login);
         primaryStage.show();
 

@@ -2,6 +2,13 @@ package logic;
 
 import entities.User;
 import persistence.DatabaseRepository;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import logic.AuthenticationSystem;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.Parent;
 
 import java.util.Collections;
 
@@ -27,7 +34,11 @@ public class AuthenticationSystem {
                 .get(0);
 
         return (result.getUserID().equals(username) && result.getPassword().equals(password));
+
+
     }
+
+
 
     /**
      * Returns the singleton instance of the authentication system.

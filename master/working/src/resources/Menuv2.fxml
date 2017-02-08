@@ -144,6 +144,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label layoutX="520.0" layoutY="10.0" text="ADMIN" />
+      <Label layoutX="520.0" layoutY="10.0" text="U" fx:id="UserT"  />
    </children>
 </AnchorPane>
