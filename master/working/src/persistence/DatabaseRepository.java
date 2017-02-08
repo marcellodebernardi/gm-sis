@@ -62,7 +62,7 @@ public class DatabaseRepository implements CriterionRepository {
 
         // get requested objects using appropriate mapper
         try {
-            statement = connection.prepareStatement(factory.getMapper(eClass).toSelectQuery(criteria));
+            statement = connection.prepareStatement(factory.getMapper(eClass).toSELECTQuery(criteria));
             return factory.getMapper(eClass).toObjects(statement.executeQuery());
         }
         catch(SQLException e) {
@@ -78,7 +78,7 @@ public class DatabaseRepository implements CriterionRepository {
 
         // todo implement so it prevents adding existing items
         try {
-            statement = connection.prepareStatement(factory.getMapper(eClass).toInsertQuery(item));
+            statement = connection.prepareStatement(factory.getMapper(eClass).toINSERTQuery(item));
             statement.executeUpdate();
             return true;
         }
@@ -94,7 +94,7 @@ public class DatabaseRepository implements CriterionRepository {
 
         // todo implement to prevent undesired updates
         try {
-            statement = connection.prepareStatement(factory.getMapper(eClass).toUpdateQuery(item));
+            statement = connection.prepareStatement(factory.getMapper(eClass).toUPDATEQuery(item));
             statement.executeUpdate();
             return true;
         }
@@ -110,7 +110,7 @@ public class DatabaseRepository implements CriterionRepository {
 
         // todo implement to prevent undesired deletes
         try {
-            statement = connection.prepareStatement(factory.getMapper(eClass).toDeleteQuery(item));
+            statement = connection.prepareStatement(factory.getMapper(eClass).toDELETEQuery(item));
             statement.executeUpdate();
             return true;
         }

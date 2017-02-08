@@ -2,16 +2,16 @@ package entities;
 
 import logic.Criterion;
 /**
- * Created by Muhammad Shakib Hoque on 07/02/2017.
+ * @author Muhammad Shakib Hoque on 07/02/2017.
  */
-public abstract class PartsAbstraction implements Criterion {
+public class PartAbstraction implements Criterion {
 
     private int partsID;
     private String partName;
     private String partDescription;
     private double partPrice;
 
-    public PartsAbstraction(int partsID, String partName, String partDescription, double partPrice){
+    public PartAbstraction(int partsID, String partName, String partDescription, double partPrice){
 
         this.partsID = partsID;
         this.partName = partName;

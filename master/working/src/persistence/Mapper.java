@@ -35,7 +35,7 @@ abstract class Mapper<E extends Criterion> {
      * @param criteria the criterion objects received from the logic layer
      * @return SQL SELECT statement string
      */
-    abstract String toSelectQuery(List<E> criteria);
+    abstract String toSELECTQuery(List<E> criteria);
 
     /**
      * <p>
@@ -44,7 +44,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL INSERT statement string
      */
-    abstract String toInsertQuery(E item);
+    abstract String toINSERTQuery(E item);
 
     /**
      * <p>
@@ -53,7 +53,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL UPDATE statement string
      */
-    abstract String toUpdateQuery(E item);
+    abstract String toUPDATEQuery(E item);
 
     /**
      * <p>
@@ -62,7 +62,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL DELETE statement string
      */
-    abstract String toDeleteQuery(E item);
+    abstract String toDELETEQuery(E item);
 
     /**
      * <p>

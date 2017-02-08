@@ -2,9 +2,6 @@ package persistence;
 
 import entities.Bill;
 import entities.DiagRepBooking;
-import entities.User;
-import entities.UserType;
-import logic.CriterionRepository;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -42,7 +39,7 @@ public class DiagRepMapperTests {
                 null,
                 null));
 
-        assertEquals(factory.getMapper(DiagRepBooking.class).toSelectQuery(bookingList),
+        assertEquals(factory.getMapper(DiagRepBooking.class).toSELECTQuery(bookingList),
                 "SELECT * FROM DiagRepBooking WHERE (bookingID = 23 AND customerID = 25) "
                         + "OR (bookingID = 56 AND bill = 12);");
     }

@@ -34,7 +34,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
      * @param bookings Criterion objects from which to generate SQL SELECT statement
      * @return SQL SELECT statement for given criteria
      */
-    String toSelectQuery(List<DiagRepBooking> bookings) {
+    String toSELECTQuery(List<DiagRepBooking> bookings) {
         String query = SELECTSTRING + DiagRepBooking.class.getSimpleName() + " WHERE ";
 
         for(DiagRepBooking booking: bookings) {
@@ -71,7 +71,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
      * @param booking booking to insert into database
      * @return SQL INSERT statement for given item
      */
-    String toInsertQuery(DiagRepBooking booking) {
+    String toINSERTQuery(DiagRepBooking booking) {
         return null;
     }
 
@@ -81,7 +81,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
      * @param booking item to update in database
      * @return SQL UPDATE statement for given item
      */
-    String toUpdateQuery(DiagRepBooking booking) {
+    String toUPDATEQuery(DiagRepBooking booking) {
         return UPDATESTRING + DiagRepBooking.class.getSimpleName() + " SET "
                 + "customerID = " + booking.getCustomerID() + ", "
                 + "vehicleRegNumber = '" + booking.getVehicleRegNumber() + "', "
@@ -99,7 +99,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
      * @param booking
      * @return
      */
-    String toDeleteQuery(DiagRepBooking booking) {
+    String toDELETEQuery(DiagRepBooking booking) {
         return DELETESTRING
                 + DiagRepBooking.class.getSimpleName() + " WHERE "
                 + "bookingID = " + booking.getBookingID() + ";";

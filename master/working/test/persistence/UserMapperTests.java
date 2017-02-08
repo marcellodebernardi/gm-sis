@@ -1,6 +1,7 @@
 package persistence;
 
 import entities.Booking;
+import entities.DiagRepBooking;
 import entities.User;
 import entities.UserType;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class UserMapperTests {
     @Test
     public void mapperFactoryTest() {
         assertTrue(factory.getMapper(User.class).getClass().equals(UserMapper.class) &&
-                (factory.getMapper(Booking.class).getClass().equals(DiagRepBookingMapper.class)));
+                (factory.getMapper(DiagRepBooking.class).getClass().equals(DiagRepBookingMapper.class)));
     }
 
     /** Test SELECT statements returned by Mappers */
@@ -43,7 +44,7 @@ public class UserMapperTests {
                 "De Bernardi",
                 UserType.ADMINISTRATOR ));
 
-        assertTrue(factory.getMapper(User.class).toSelectQuery(userList)
+        assertTrue(factory.getMapper(User.class).toSELECTQuery(userList)
                 .equals("SELECT * FROM User WHERE (userID = 'gooby' AND password = 'dolan' "
                         + "AND firstName = 'Ebube' AND surname = 'Abara' AND userType = 'NORMAL')"
                         + " OR (userID = 'someUserID' AND password = 'somePassword' AND firstName = "
@@ -62,7 +63,7 @@ public class UserMapperTests {
                 "Dolan",
                 UserType.ADMINISTRATOR);
 
-        assertTrue(factory.getMapper(User.class).toInsertQuery(user)
+        assertTrue(factory.getMapper(User.class).toINSERTQuery(user)
                 .equals("INSERT INTO User VALUES (user, password, Uncle, Dolan, ADMINISTRATOR);"));
     }
 
@@ -78,7 +79,7 @@ public class UserMapperTests {
                 "Dolan",
                 UserType.ADMINISTRATOR);
 
-        assertTrue(factory.getMapper(User.class).toUpdateQuery(user)
+        assertTrue(factory.getMapper(User.class).toUPDATEQuery(user)
                 .equals("UPDATE User SET password = 'password', firstName = 'Uncle', "
                 + "surname = 'Dolan', userType = 'ADMINISTRATOR' WHERE userID = 'user';"));
     }
@@ -95,7 +96,7 @@ public class UserMapperTests {
                 null,
                 null
         );
-        assertTrue(factory.getMapper(User.class).toDeleteQuery(user)
+        assertTrue(factory.getMapper(User.class).toDELETEQuery(user)
                 .equals("DELETE FROM User WHERE userID = 'uniqueID';"));
     }
 }

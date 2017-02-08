@@ -19,7 +19,7 @@ class BillMapper extends Mapper<Bill> {
     }
 
 
-    String toSelectQuery(List<Bill> bills) {
+    String toSELECTQuery(List<Bill> bills) {
         String query = SELECTSTRING + Bill.class.getSimpleName() + " WHERE ";
 
         for(Bill bill : bills) {
@@ -45,7 +45,7 @@ class BillMapper extends Mapper<Bill> {
         return query;
     }
 
-    String toInsertQuery(Bill bill) {
+    String toINSERTQuery(Bill bill) {
         return INSERTSTRING
                 + Bill.class.getSimpleName() + " VALUES ("
                 + bill.getBillID() + ", "
@@ -53,14 +53,14 @@ class BillMapper extends Mapper<Bill> {
                 + bill.isSettled() + ");";
     }
 
-    String toUpdateQuery(Bill bill) {
+    String toUPDATEQuery(Bill bill) {
         return UPDATESTRING + Bill.class.getSimpleName() + " SET "
                 + "amount = " + bill.getAmount() + ", "
                 + "settled = '" + bill.isSettled() + "' "
                 + "WHERE billID = " + bill.getBillID() + ";";
     }
 
-    String toDeleteQuery(Bill bill) {
+    String toDELETEQuery(Bill bill) {
         return DELETESTRING
                 + Bill.class.getSimpleName() + " WHERE "
                 + "billID = " + bill.getBillID() + ";";

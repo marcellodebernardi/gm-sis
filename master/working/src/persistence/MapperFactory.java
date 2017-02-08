@@ -1,9 +1,6 @@
 package persistence;
 
-import entities.Bill;
-import entities.Booking;
-import entities.DiagRepBooking;
-import entities.User;
+import entities.*;
 import logic.Criterion;
 
 import java.util.Map;
@@ -25,6 +22,7 @@ class MapperFactory {
         mapperMap.put(User.class.getName(), new UserMapper(this));
         mapperMap.put(DiagRepBooking.class.getName(), new DiagRepBookingMapper(this));
         mapperMap.put(Bill.class.getName(), new BillMapper(this));
+        mapperMap.put(PartAbstraction.class.getName(), new PartAbstractionMapper(this));
     }
 
 

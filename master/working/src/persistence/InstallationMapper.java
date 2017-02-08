@@ -5,6 +5,6 @@ package persistence;
  * @version 0.1
  * @since 0.1
  */
-class PartsMapper {
-    // todo implement Mapper
+public class InstallationMapper {
+    // todo extend Mapper and implement
 }

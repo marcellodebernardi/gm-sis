@@ -1,9 +1,6 @@
 package persistence;
 
 import entities.Bill;
-import entities.Booking;
-import entities.User;
-import entities.UserType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public class BillMapperTests {
                 100.0,
                 true));
 
-        assertEquals(factory.getMapper(Bill.class).toSelectQuery(billList), "SELECT * FROM Bill WHERE "
+        assertEquals(factory.getMapper(Bill.class).toSELECTQuery(billList), "SELECT * FROM Bill WHERE "
                 + "(billID = 123 AND amount = 200.0 AND settled = 'false') OR (billID = 145 AND amount = "
                 + "100.0 AND settled = 'true');");
     }
@@ -47,7 +44,7 @@ public class BillMapperTests {
                 200.0,
                 true);
 
-        assertTrue(factory.getMapper(Bill.class).toInsertQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toINSERTQuery(bill)
                 .equals("INSERT INTO Bill VALUES (123, 200.0, true);"));
     }
 
@@ -61,7 +58,7 @@ public class BillMapperTests {
                 200.0,
                 false);
 
-        assertTrue(factory.getMapper(Bill.class).toUpdateQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toUPDATEQuery(bill)
                 .equals("UPDATE Bill SET amount = 200.0, settled = 'false' "
                         + "WHERE billID = 123;"));
     }
@@ -73,7 +70,7 @@ public class BillMapperTests {
     public void testUserDELETEQUery() {
         Bill bill = new Bill(123, 1.0, false);
 
-        assertTrue(factory.getMapper(Bill.class).toDeleteQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toDELETEQuery(bill)
                 .equals("DELETE FROM Bill WHERE billID = 123;"));
     }
 }
