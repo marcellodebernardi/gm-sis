@@ -1,8 +1,9 @@
 package logic;
 
-import entities.DiagnosisRepairBooking;
+import entities.DiagRepBooking;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class BookingSystem {
      *
      * @return singleton instance of BookingSystem
      */
-    public BookingSystem getInstance(CriterionRepository persistence) {
+    public static BookingSystem getInstance(CriterionRepository persistence) {
         if (instance == null) instance = new BookingSystem(persistence);
         return instance;
     }
@@ -36,15 +37,15 @@ public class BookingSystem {
      *
      * @return List of diagnosis and repair bookings
      */
-    public List<DiagnosisRepairBooking> getBookingList() {
-        // List<Criterion> tempList = persistence.getByCriteria(false, new DiagnosisRepairBooking());
-        List<DiagnosisRepairBooking> finalList = new ArrayList<DiagnosisRepairBooking>();
+    public List<DiagRepBooking> getAllBookings() {
+        return persistence.getByCriteria(false, DiagRepBooking.class,
+                Collections.singletonList(new DiagRepBooking()));
+    }
 
-        // for (int i = 0; i < tempList.size(); i++) {
-           // finalList.set(i, (DiagnosisRepairBooking)tempList.get(i));
-        //}
-
-        return finalList;
+    public List<DiagRepBooking> getTodayBookings() {
+        // todo how to search database by date
+        List<DiagRepBooking> criteria = Arrays.asList();
+        return persistence.getByCriteria(false, DiagRepBooking.class, criteria);
     }
 
     /**
@@ -53,7 +54,8 @@ public class BookingSystem {
      * @return true if addition successful, false otherwise
      */
     public boolean addBooking() {
-        //return persistence.addItem(new DiagnosisRepairBooking());
+        // todo business logic: prevent bookings on invalid times
+        //return persistence.addItem(new DiagRepBooking());
         return false;
     }
 
@@ -62,9 +64,10 @@ public class BookingSystem {
      *
      * @return true if removal successful, false otherwise
      */
-    public boolean deleteBooking(String bookingID) {
-        // TODO: bookingID in booking constructor
-        // return persistence.deleteItem(false, new DiagnosisRepairBooking());
-        return false;
+    public boolean deleteBooking(int bookingID) {
+        // todo business logic: prevent deleting bookings that should not be deleted
+        return persistence.deleteItem(DiagRepBooking.class,
+                new DiagRepBooking(bookingID, -1, null,
+                        null, null, null, null, null));
     }
 }

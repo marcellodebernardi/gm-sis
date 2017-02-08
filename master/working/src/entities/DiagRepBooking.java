@@ -7,13 +7,21 @@ import java.util.Date;
  * @version 0.1
  * @since 0.1
  */
-public class DiagnosisRepairBooking extends Booking {
+public class DiagRepBooking extends Booking {
     private Date diagnosisDate;
     private Date repairDate;
     private Date repairEndDate;
     // todo private SpecialistRepairBooking spcBooking;
     // todo private List<Part> requiredPartsList;
 
+
+    /**
+     * Null constructor. Creates a booking with null in all fields. Only to be used for all-catching
+     * search criteria.
+     */
+    public DiagRepBooking() {
+        super(-1, -1, null, null, null);
+    }
 
     /**
      * Full constructor that allows manual setting of all fields.
@@ -27,60 +35,61 @@ public class DiagnosisRepairBooking extends Booking {
      * @param repairDate the Date on which the repair begins
      * @param repairEndDate the Date on which the repair ends, defines the repair duration
      */
-    public DiagnosisRepairBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                                  Bill bill, Date diagnosisDate, Date repairDate, Date repairEndDate) {
+    public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
+                          Bill bill, Date diagnosisDate, Date repairDate, Date repairEndDate) {
         super(bookingID, customerID, vehicleRegNumber, description, bill);
         this.diagnosisDate = diagnosisDate;
         this.repairDate = repairDate;
         this.repairEndDate = repairEndDate;
     }
 
-    @Override
+
     /**
      * Get unique ID of this booking.
      *
      * @return booking ID
      */
+    @Override
     public int getBookingID() {
         return super.getBookingID();
     }
 
-    @Override
     /**
      * Get unique ID of associated customer.
      *
      * @return customer ID
      */
+    @Override
     public int getCustomerID() {
         return super.getCustomerID();
     }
 
-    @Override
     /**
      * Get unique registration number of associated vehicle
      *
      * @return vehicle registration number
      */
+    @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
     }
 
-    @Override
     /**
      * Get description of booking as entered by some user.
      *
      * @return booking description
      */
+    @Override
     public String getDescription() {
         return super.getDescription();
     }
 
-    @Override
     /**
      * Get the bill associated with this booking.
      *
      * @return booking bill
      */
+    @Override
     public Bill getBill() {
         return super.getBill();
     }
@@ -112,18 +121,17 @@ public class DiagnosisRepairBooking extends Booking {
         return repairEndDate;
     }
 
-    @Override
     /**
      * Set the ID of the associated customer. Note that the reference variable in the
      * corresponding Customer object must also reflect any changes.
      *
      * @param customerID ID of new customer
      */
+    @Override
     public void setCustomerID(int customerID) {
         super.setCustomerID(customerID);
     }
 
-    @Override
     /**
      * Associate the booking to a different vehicle, by giving the registration number
      * of the new vehicle. Note that the list of bookings in the corresponding vehicles must also
@@ -131,27 +139,28 @@ public class DiagnosisRepairBooking extends Booking {
      *
      * @param vehicleRegNumber unique registration number of new vehicle to associate
      */
+    @Override
     public void setVehicleRegNumber(String vehicleRegNumber) {
         super.setVehicleRegNumber(vehicleRegNumber);
     }
 
-    @Override
     /**
      * Sets the description of the booking.
      *
      * @param description new description
      */
+    @Override
     public void setDescription(String description) {
         super.setDescription(description);
     }
 
-    @Override
     /**
      * Associates a new bill to the booking.
      * todo figure out if bill will have a reference ID to booking
      *
      * @param bill the new bill
      */
+    @Override
     public void setBill(Bill bill) {
         super.setBill(bill);
     }

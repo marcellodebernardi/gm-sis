@@ -77,6 +77,7 @@ class UserMapper extends Mapper<User> {
     }
 
     String toDeleteQuery(User user) {
+        // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + User.class.getSimpleName() + " WHERE "
                 + "userID = '" + user.getUserID() + "';";

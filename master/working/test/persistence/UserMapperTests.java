@@ -23,7 +23,7 @@ public class UserMapperTests {
     @Test
     public void mapperFactoryTest() {
         assertTrue(factory.getMapper(User.class).getClass().equals(UserMapper.class) &&
-                (factory.getMapper(Booking.class).getClass().equals(BookingMapper.class)));
+                (factory.getMapper(Booking.class).getClass().equals(DiagRepBookingMapper.class)));
     }
 
     /** Test SELECT statements returned by Mappers */

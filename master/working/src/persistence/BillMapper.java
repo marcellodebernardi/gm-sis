@@ -26,9 +26,9 @@ class BillMapper extends Mapper<Bill> {
             query = query + "(";
 
             // add WHERE clauses
-            query = query + "billID = " + bill.getBillID() + " AND ";
-            query = query + "amount = " + bill.getAmount() + " AND ";
-            query = query + "settled = '" + bill.isSettled() + "' AND ";
+            if (bill.getBillID() != -1) query = query + "billID = " + bill.getBillID() + " AND ";
+            if (bill.getAmount() != -1) query = query + "amount = " + bill.getAmount() + " AND ";
+            query = query + "settled = '" + bill.isSettled() + "' AND "; // todo: can't leave settled as null
 
             // remove unnecessary "AND" connective if present
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
