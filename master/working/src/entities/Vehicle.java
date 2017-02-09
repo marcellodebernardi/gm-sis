@@ -1,4 +1,5 @@
 package entities;
+import java.util.*;
 
 import logic.Criterion;
 
@@ -9,23 +10,30 @@ public class Vehicle implements Criterion
 {
     private String regNumber;
     private int customerID;
-    //private VehicleType vehicleType;
+    private VehicleType vehicleType;
     private String model;
     private String manufacturer;
     private double engineSize;
-    //private FuelType fuelType;
+    private FuelType fuelType;
     private String colour;
     private String mileage;
-    //private Date renewalDateMot;
-    //private Date dateLastServiced;
+    private Date renewalDateMot;
+    private Date dateLastServiced;
     private boolean coveredByWarranty;
     private String warrantyName;
     private String warrantyCompAddress;
-    //private Date WarrantyExpirationDate;
+    private Date warrantyExpirationDate;
 
-    public Vehicle()
+    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, String mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
-
+        this.regNumber = regNumber;
+        this.customerID = customerID;
+        this.vehicleType = vehicleType;
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.engineSize = engineSize;
+        this.fuelType = fuelType;
+        this.colour = colour;
     }
 
     public String getRegNumber() {
@@ -44,13 +52,13 @@ public class Vehicle implements Criterion
         this.customerID = customerID;
     }
 
-    //public VehicleType getVehicleType() {
-    //    return vehicleType;
-    //}
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
 
-    //public void setVehicleType(VehicleType vehicleType) {
-     //   this.vehicleType = vehicleType;
-    //}
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
 
     public String getModel() {
         return model;
@@ -76,13 +84,13 @@ public class Vehicle implements Criterion
         this.engineSize = engineSize;
     }
 
-    //public FuelType getFuelType() {
-     //   return fuelType;
-    //}
+    public FuelType getFuelType() {
+        return fuelType;
+    }
 
-    //public void setFuelType(FuelType fuelType) {
-      //  this.fuelType = fuelType;
-    //}
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
 
     public String getColour() {
         return colour;
@@ -100,21 +108,21 @@ public class Vehicle implements Criterion
         this.mileage = mileage;
     }
 
-    //public Date getRenewalDateMot() {
-    //    return renewalDateMot;
-    //}
+    public Date getRenewalDateMot() {
+        return renewalDateMot;
+    }
 
-    //public void setRenewalDateMot(Date renewalDateMot) {
-    //   this.renewalDateMot = renewalDateMot;
-    //}
+    public void setRenewalDateMot(Date renewalDateMot) {
+       this.renewalDateMot = renewalDateMot;
+    }
 
-    //public Date getDateLastServiced() {
-    //   return dateLastServiced;
-    //}
+    public Date getDateLastServiced() {
+       return dateLastServiced;
+    }
 
-    //public void setDateLastServiced(Date dateLastServiced) {
-    //   this.dateLastServiced = dateLastServiced;
-    //}
+    public void setDateLastServiced(Date dateLastServiced) {
+       this.dateLastServiced = dateLastServiced;
+    }
 
     public boolean isCoveredByWarranty() {
         return coveredByWarranty;
@@ -140,11 +148,11 @@ public class Vehicle implements Criterion
         this.warrantyCompAddress = warrantyCompAddress;
     }
 
-    //public Date getWarrantyExpirationDate() {
-    //   return WarrantyExpirationDate;
-    //}
+    public Date getWarrantyExpirationDate() {
+       return warrantyExpirationDate;
+    }
 
-    //public void setWarrantyExpirationDate(Date warrantyExpirationDate) {
-    //   WarrantyExpirationDate = warrantyExpirationDate;
-    //}
+    public void setWarrantyExpirationDate(Date warrantyExpirationDate) {
+        this.warrantyExpirationDate = warrantyExpirationDate;
+    }
 }
