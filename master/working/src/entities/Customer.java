@@ -15,6 +15,8 @@ public class Customer implements Criterion
     private String customerPhone;
     private String customerEmail;
     private CustomerType customerType;
+    // todo vehicle reference
+    // todo booking reference
 
     public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode, String cPhone, String cEmail, CustomerType cType)
     {

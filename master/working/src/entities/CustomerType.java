@@ -5,5 +5,4 @@ package entities;
  */
 public enum CustomerType {
     PRIVATE, BUSINESS;
-
 }
