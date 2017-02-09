@@ -34,6 +34,6 @@ public class SpecRepairSystem {
      */
     public List<SpecialistRepairCenter>getRepairCenterList(){
         ArrayList<SpecialistRepairCenter> arrayList = new ArrayList<SpecialistRepairCenter>();
-        return null;
+        return arrayList;
     }
 }
