@@ -13,4 +13,25 @@ package controllers;
  */
 public class MenuController {
 
+public Label UserT;
+
+public void setUserType()
+{
+
+        System.out.println("working");
+        try
+        {
+
+                UserT.setText("admin");
+
+        }
+
+        catch (Exception e)
+        {
+
+                System.out.println("cant set");
+
+        }
+}
+
 }

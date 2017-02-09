@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import main.Main;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque
@@ -20,6 +21,7 @@ public class LoginController {
     public Button exitBtn;
     public TextArea username;
     public PasswordField password;
+
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
     @FXML
@@ -32,6 +34,11 @@ public class LoginController {
         Stage stage = new Stage();
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
+        stage.show();
+        MenuController A = new MenuController();
+        A.setUserType();
+        //Main B = new Main();
+        //B.primaryStage.close();
 
         }
         catch (Exception e)
