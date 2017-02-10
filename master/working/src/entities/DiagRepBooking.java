@@ -36,7 +36,8 @@ public class DiagRepBooking extends Booking {
      * @param repairEndDate the Date on which the repair ends, defines the repair duration
      */
     public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, Date diagnosisDate, Date repairDate, Date repairEndDate) {
+                          Bill bill, Date diagnosisDate, Date repairDate, Date repairEndDate)
+    {
         super(bookingID, customerID, vehicleRegNumber, description, bill);
         this.diagnosisDate = diagnosisDate;
         this.repairDate = repairDate;

@@ -3,7 +3,7 @@ package logic;
 
 import entities.SpecialistRepairCenter;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Collections;
 /**
  * @author muradahmed
  */
@@ -23,7 +23,7 @@ public class SpecRepairSystem {
      *
      * @return singleton instance of SpecRepairSystem
      */
-    public SpecRepairSystem getInstance(CriterionRepository persistence) {
+    public static SpecRepairSystem getInstance(CriterionRepository persistence) {
         if (instance == null) instance = new SpecRepairSystem(persistence);
         return instance;
     }
@@ -33,7 +33,25 @@ public class SpecRepairSystem {
      * @return list of Specialist Repair Centers
      */
     public List<SpecialistRepairCenter>getRepairCenterList(){
-        ArrayList<SpecialistRepairCenter> arrayList = new ArrayList<SpecialistRepairCenter>();
-        return arrayList;
+        return persistence.getByCriteria(false, SpecialistRepairCenter.class,
+                Collections.singletonList(new SpecialistRepairCenter()));
     }
+
+    /**
+     * Adds a new specialist repair center to the system.
+     *
+     * @return true if adding of a repair center is successful.
+     */
+    public boolean addRepairCenter(String spcID, String name, String address, String phone, String email)
+    {
+        //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
+         SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email);
+        return persistence.addItem(SpecialistRepairCenter.class, add);
+    }
+
+    public boolean deleteRepairCenter(SpecialistRepairCenter delete)
+    {
+     return persistence.deleteItem(SpecialistRepairCenter.class, delete);
+    }
+
 }
