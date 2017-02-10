@@ -19,7 +19,6 @@ public class SpecialistRepairCenter implements Criterion
         private String email;
 
 
-        public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email)
     /**
      *
      * @param spcID Unique ID for a particular Specialist Repair Center
@@ -50,7 +49,7 @@ public class SpecialistRepairCenter implements Criterion
      *
      * @return spcID
      */
-    public String getSpcID() {
+    public int getSpcID() {
         return this.spcID;
     }
 
