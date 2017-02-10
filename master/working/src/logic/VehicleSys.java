@@ -1,6 +1,8 @@
 package logic;
 
+import entities.FuelType;
 import entities.Vehicle;
+import entities.VehicleType;
 import persistence.DatabaseRepository;
 import java.util.*;
 
@@ -22,20 +24,21 @@ public class VehicleSys {
         return arrayList;
     }
 
-    public List<Vehicle> searchVehicle() {
+    public Vehicle searchVehicle(String regNumber) {
 
-        /** TODO: create search method
-         *
-         */
 
-        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
-        return vehicleList;
+        Vehicle vehicleFound = persistence.getByCriteria(false, Vehicle.class,
+                Collections.singletonList(new Vehicle(regNumber, 0, null, null, null, 0,  null, null, 0,null,null, false, null, null, null)))
+                .get(0);
+        return vehicleFound;
 
     }
 
-    public boolean addVehicle(){
+    public boolean addVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
+    {
+        boolean result = persistence.addItem(Vehicle.class, (new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate)));
 
-        return false;
+        return result;
 
     }
 

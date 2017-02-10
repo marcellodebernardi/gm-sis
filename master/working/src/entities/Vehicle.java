@@ -16,7 +16,7 @@ public class Vehicle implements Criterion
     private double engineSize;
     private FuelType fuelType;
     private String colour;
-    private String mileage;
+    private int mileage;
     private Date renewalDateMot;
     private Date dateLastServiced;
     private boolean coveredByWarranty;
@@ -24,7 +24,7 @@ public class Vehicle implements Criterion
     private String warrantyCompAddress;
     private Date warrantyExpirationDate;
 
-    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, String mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
+    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
         this.regNumber = regNumber;
         this.customerID = customerID;
@@ -34,6 +34,13 @@ public class Vehicle implements Criterion
         this.engineSize = engineSize;
         this.fuelType = fuelType;
         this.colour = colour;
+        this.mileage = mileage;
+        this.renewalDateMot = renewalDateMot;
+        this.dateLastServiced = dateLastServiced;
+        this.coveredByWarranty = coveredByWarranty;
+        this.warrantyName = warrantyName;
+        this.warrantyCompAddress = warrantyCompAddress;
+        this. warrantyExpirationDate = warrantyExpirationDate;
     }
 
     public String getRegNumber() {
@@ -100,7 +107,7 @@ public class Vehicle implements Criterion
         this.colour = colour;
     }
 
-    public String getMileage() {
+    public int getMileage() {
         return mileage;
     }
 
