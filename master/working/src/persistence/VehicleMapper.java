@@ -98,9 +98,9 @@ class VehicleMapper extends Mapper<Vehicle> {
                       + ");";
     }
 
-    String toUPDATEQuery(User user) {
+    String toUPDATEQuery(Vehicle vehicle) {
         return UPDATESTRING
-                + User.class.getSimpleName() + " SET "
+                + Vehicle.class.getSimpleName() + " SET "
                 + "password = '" + user.getPassword() + "', "
                 + "firstName = '" + user.getFirstName() + "', "
                 + "surname = '" + user.getSurname() + "', "
@@ -108,18 +108,18 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "WHERE userID = '" + user.getUserID() + "';";
     }
 
-    String toDELETEQuery(User user) {
+    String toDELETEQuery(Vehicle vehicle) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
-                + User.class.getSimpleName() + " WHERE "
-                + "userID = '" + user.getUserID() + "';";
+                + Vehicle.class.getSimpleName() + " WHERE "
+                + "regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
     List<User> toObjects(ResultSet results) {
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<User> vehiclesList = new ArrayList<>();
         try {
             while (results.next()) {
-                userList.add(new User(
+                vehiclesList.add(Vehicle User(
                         results.getString(1), // userID
                         results.getString(2), // password
                         results.getString(3), // firstName
