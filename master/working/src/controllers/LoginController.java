@@ -21,9 +21,12 @@ public class LoginController {
     public Button exitBtn;
     public TextArea username;
     public PasswordField password;
-
+    public Stage stage;
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
+
+    public LoginController()
+    {}
     @FXML
     public void handleButtonClick() throws Exception {
 
@@ -31,7 +34,7 @@ public class LoginController {
         auth.login(username.getText(), password.getText());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
         Parent menu = fxmlLoader.load();
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
         stage.show();

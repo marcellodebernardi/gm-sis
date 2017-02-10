@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
     <children>
         <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -130,7 +130,7 @@
                         <Label layoutX="308.0" layoutY="180.0" text="warrantyName" />
                         <Label layoutX="279.0" layoutY="207.0" text="warrantyCompAddress" />
                         <Label layoutX="276.0" layoutY="234.0" text="warrantyExpirationDate" />
-                        <Button fx:id="addV" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" text="Add" />
+                        <Button fx:id="addV" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" text="Add" onAction="#addVehicle" />
                             </children>
                         </AnchorPane>
                     </content>

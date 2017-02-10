@@ -12,7 +12,7 @@ import java.util.*;
 public class VehicleSys {
 
     private static VehicleSys instance;
-    private CriterionRepository persistence = DatabaseRepository.getInstance();
+    private CriterionRepository persistence;
 
     private VehicleSys(CriterionRepository persistence) {
         this.persistence = persistence;

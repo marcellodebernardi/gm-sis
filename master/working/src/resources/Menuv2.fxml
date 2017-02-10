@@ -95,10 +95,10 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="600.0">
                           <items>
-                            <Button fx:id="addButton" mnemonicParsing="false" text="Add Vehicle" />
-                              <Button fx:id="editButton" mnemonicParsing="false" text="Edit Vehicle" />
-                              <Button fx:id="searchButton" mnemonicParsing="false" text="Search Vehicles" />
-                              <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete Vehicle" />
+                            <Button fx:id="addVButton" mnemonicParsing="false" text="Add Vehicle"   onAction="#handleButtonAdd"/>
+                              <Button fx:id="editVButton" mnemonicParsing="false" text="Edit Vehicle" />
+                              <Button fx:id="searchVButton" mnemonicParsing="false" text="Search Vehicles" />
+                              <Button fx:id="deleteVButton" mnemonicParsing="false" text="Delete Vehicle" />
                           </items>
                         </ToolBar>
                      </children>
