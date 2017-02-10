@@ -42,13 +42,18 @@ public class SpecRepairSystem {
      *
      * @return true if adding of a repair center is successful.
      */
-    public boolean addRepairCenter(String spcID, String name, String address, String phone, String email)
+    public boolean addRepairCenter(int spcID, String name, String address, String phone, String email)
     {
         //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
          SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email);
         return persistence.addItem(SpecialistRepairCenter.class, add);
     }
 
+    /**
+     * @param delete SRC that is being requested to be deleted
+     *
+     * @return true if deleting of SRC is successful.
+     */
     public boolean deleteRepairCenter(SpecialistRepairCenter delete)
     {
      return persistence.deleteItem(SpecialistRepairCenter.class, delete);

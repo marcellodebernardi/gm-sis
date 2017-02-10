@@ -45,7 +45,7 @@ public class SpecialistRepairCenter implements Criterion
     }
 
     /**
-     * Returns a String representing Specialist Repair Center ID
+     * Returns a int representing Specialist Repair Center ID
      *
      * @return spcID
      */
