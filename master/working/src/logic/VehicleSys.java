@@ -37,7 +37,7 @@ public class VehicleSys {
     public boolean addVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
         boolean result = persistence.addItem(Vehicle.class, (new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate)));
-
+        System.out.println("2");
         return result;
 
     }
@@ -53,7 +53,7 @@ public class VehicleSys {
 
     }
 
-    public VehicleSys getInstance(CriterionRepository persistence) {
+    public static VehicleSys getInstance(CriterionRepository persistence) {
         if (instance == null) instance = new VehicleSys(persistence);
         return instance;
     }

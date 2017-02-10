@@ -10,13 +10,19 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import entities.*;
+import java.text.*;
+
+import java.util.Date;
 
 /**
  * Created by DillonVaghela on 2/9/17.
  */
 public class VehicleController {
 
-    //private VehicleSys vSys = VehicleSys.getInstance();
+    CriterionRepository persistence;
+
+    private VehicleSys vSys = VehicleSys.getInstance(persistence);
     public TextField reg;
     public TextField cID;
     public TextField vType;
@@ -37,12 +43,38 @@ public class VehicleController {
     {
         try
         {
-            //boolean check = vSys.addVehicle(reg.getText(),cID.getText(),vType.getText(),mod.getText(),manuf.getText(), eSize.getText(),fType.getText(),col.getText(),mil.getText(),rDateMot.getText(),dLastServiced.getText(),cByWarranty.getText(),wName.getText(),wCompAddress.getText(),wExpirationDate.getText());
-            //System.out.println(check);
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Date reDateMot = df.parse(rDateMot.getText());
+            Date daLastServiced = df.parse(dLastServiced.getText());
+            Date waExpirationDate = df.parse(wExpirationDate.getText());
+            VehicleType vT;
+            if (vType.equals("Car"))
+            {
+                vT = VehicleType.Car;
+            }
+            else if (vType.equals("Van"))
+            {
+                vT = VehicleType.Van;
+            }
+            else
+            {
+                vT = VehicleType.Truck;
+            }
+            FuelType fT;
+            if (vType.equals("Diesel"))
+            {
+                fT = FuelType.diesel;
+            }
+            else
+            {
+                fT = FuelType.petrol;
+            }
+            boolean check = vSys.addVehicle(reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), reDateMot,daLastServiced,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),waExpirationDate);
+            System.out.println(check);
         }
         catch (Exception e)
         {
-            System.out.println("not working");
+            e.printStackTrace(  );
         }
     }
 }

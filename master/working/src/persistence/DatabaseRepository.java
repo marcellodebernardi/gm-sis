@@ -74,15 +74,20 @@ public class DatabaseRepository implements CriterionRepository {
 
     public <E extends Criterion> boolean addItem(Class<E> eClass, E item) {
         // handle bad input
-        if (item == null) throw new NullPointerException();
+        if (item == null) { System.out.println("nothing to add");
+        throw new NullPointerException();
+
+        }
 
         // todo implement so it prevents adding existing items
         try {
+            System.out.println("try");
             statement = connection.prepareStatement(factory.getMapper(eClass).toINSERTQuery(item));
             statement.executeUpdate();
             return true;
         }
         catch (SQLException e) {
+            System.out.println("catch");
             System.err.print(e.getMessage());
             return false;
         }
