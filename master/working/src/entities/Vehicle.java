@@ -111,7 +111,7 @@ public class Vehicle implements Criterion
         return mileage;
     }
 
-    public void setMileage(String mileage) {
+    public void setMileage(int mileage) {
         this.mileage = mileage;
     }
 
