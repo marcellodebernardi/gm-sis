@@ -95,8 +95,10 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="600.0">
                           <items>
-                            <Button mnemonicParsing="false" text="Add Vehicle" />
-                              <Button mnemonicParsing="false" text="Edit Vehicle" />
+                            <Button fx:id="addButton" mnemonicParsing="false" text="Add Vehicle" />
+                              <Button fx:id="editButton" mnemonicParsing="false" text="Edit Vehicle" />
+                              <Button fx:id="searchButton" mnemonicParsing="false" text="Search Vehicles" />
+                              <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete Vehicle" />
                           </items>
                         </ToolBar>
                      </children>
@@ -144,6 +146,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label layoutX="520.0" layoutY="10.0" text="U" fx:id="UserT"  />
+      <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="U" />
    </children>
 </AnchorPane>
