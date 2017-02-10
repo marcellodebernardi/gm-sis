@@ -10,12 +10,16 @@ import logic.Criterion;
 
 public class SpecialistRepairCenter implements Criterion
 {
-        private String spcID;
+
+
+        private int spcID;
         private String name;
         private String address;
         private String phone;
         private String email;
 
+
+        public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email)
     /**
      *
      * @param spcID Unique ID for a particular Specialist Repair Center
@@ -24,7 +28,7 @@ public class SpecialistRepairCenter implements Criterion
      * @param phone Phone number of a particular Specialist Repair Center
      * @param email Email address of a particular Specialist Repair Center
      */
-        public SpecialistRepairCenter(String spcID, String name, String address, String phone, String email)
+        public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email)
         {
             this.spcID = spcID;
             this.name = name;
@@ -38,6 +42,7 @@ public class SpecialistRepairCenter implements Criterion
      */
     public SpecialistRepairCenter()
     {
+        spcID = -1;
     }
 
     /**

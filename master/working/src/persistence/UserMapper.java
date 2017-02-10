@@ -60,11 +60,11 @@ class UserMapper extends Mapper<User> {
     String toINSERTQuery(User user) {
         return INSERTSTRING
                 + User.class.getSimpleName() + " VALUES ("
-                + user.getUserID() + ", "
-                + user.getPassword() + ", "
-                + user.getFirstName() + ", "
-                + user.getSurname() + ", "
-                + user.getUserType().toString() + ");";
+                + "'" + user.getUserID() + "', "
+                + "'" + user.getPassword() + "', "
+                + "'" + user.getFirstName() + "', "
+                + "'" + user.getSurname() + "', "
+                + "'" + user.getUserType().toString() + "');";
     }
 
     String toUPDATEQuery(User user) {

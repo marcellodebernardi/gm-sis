@@ -5,6 +5,6 @@ package persistence;
  * @version 0.1
  * @since 0.1
  */
-class PartOccurrenceMapper {
-    // todo extend and implement
+public class SRCMapperTests {
+    // todo
 }

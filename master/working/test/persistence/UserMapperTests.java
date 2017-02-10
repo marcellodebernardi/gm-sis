@@ -19,14 +19,6 @@ import static org.junit.Assert.*;
 public class UserMapperTests {
     private MapperFactory factory = MapperFactory.getInstance();
 
-
-    /** Tests that MapperFactory returns the correct Mapper instances */
-    @Test
-    public void mapperFactoryTest() {
-        assertTrue(factory.getMapper(User.class).getClass().equals(UserMapper.class) &&
-                (factory.getMapper(DiagRepBooking.class).getClass().equals(DiagRepBookingMapper.class)));
-    }
-
     /** Test SELECT statements returned by Mappers */
     @Test
     public void testUserSELECTQuery() {
@@ -64,7 +56,7 @@ public class UserMapperTests {
                 UserType.ADMINISTRATOR);
 
         assertTrue(factory.getMapper(User.class).toINSERTQuery(user)
-                .equals("INSERT INTO User VALUES (user, password, Uncle, Dolan, ADMINISTRATOR);"));
+                .equals("INSERT INTO User VALUES ('user', 'password', 'Uncle', 'Dolan', 'ADMINISTRATOR');"));
     }
 
     /**

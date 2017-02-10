@@ -10,7 +10,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-public class PartAbstractionMapper extends Mapper<PartAbstraction> {
+class PartAbstractionMapper extends Mapper<PartAbstraction> {
 
     PartAbstractionMapper(MapperFactory factory){
         super(factory);

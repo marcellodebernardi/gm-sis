@@ -23,6 +23,7 @@ class MapperFactory {
         mapperMap.put(DiagRepBooking.class.getName(), new DiagRepBookingMapper(this));
         mapperMap.put(Bill.class.getName(), new BillMapper(this));
         mapperMap.put(PartAbstraction.class.getName(), new PartAbstractionMapper(this));
+        mapperMap.put(SpecialistRepairCenter.class.getName(), new SRCMapper(this));
     }
 
 
