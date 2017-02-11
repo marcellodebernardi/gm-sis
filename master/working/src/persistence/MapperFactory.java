@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * Returns Mapper objects of appropriate type to handle object-relational mapping
  * for a particular type of entity.
  *
- * @author Marcello De Bernardi
+ * @author Marcello De Bernardi, Dillon Vaghela
  * @version 0.1
  * @since 0.1
  */
@@ -24,6 +24,7 @@ class MapperFactory {
         mapperMap.put(Bill.class.getName(), new BillMapper(this));
         mapperMap.put(PartAbstraction.class.getName(), new PartAbstractionMapper(this));
         mapperMap.put(SpecialistRepairCenter.class.getName(), new SRCMapper(this));
+        mapperMap.put(Vehicle.class.getName(), new VehicleMapper(this));
     }
 
 

@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import entities.*;
+import persistence.DatabaseRepository;
+
 import java.text.*;
 
 import java.util.Date;
@@ -20,9 +22,8 @@ import java.util.Date;
  */
 public class VehicleController {
 
-    CriterionRepository persistence;
 
-    private VehicleSys vSys = VehicleSys.getInstance(persistence);
+    private VehicleSys vSys = VehicleSys.getInstance();
     public TextField reg;
     public TextField cID;
     public TextField vType;
@@ -38,6 +39,11 @@ public class VehicleController {
     public TextField wName;
     public TextField wCompAddress;
     public TextField wExpirationDate;
+
+    public VehicleController()
+    {
+
+    }
 
     public void addVehicle()
     {
@@ -69,7 +75,7 @@ public class VehicleController {
             {
                 fT = FuelType.petrol;
             }
-            boolean check = vSys.addVehicle(reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), reDateMot,daLastServiced,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),waExpirationDate);
+            boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), reDateMot,daLastServiced,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),waExpirationDate);
             System.out.println(check);
         }
         catch (Exception e)

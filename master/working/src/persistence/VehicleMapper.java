@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Marcello De Bernardi
+ * @author Marcello De Bernardi, Dillon Vaghela
  * @version 0.1
  * @since 0.1
  */
