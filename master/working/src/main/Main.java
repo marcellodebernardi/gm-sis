@@ -24,6 +24,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+        //test.fxml
         login = new Scene(mainPane);
         primaryStage.setScene(login);
         primaryStage.show();

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+  <tabs>
+    <Tab text="Rest Of GUI">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+      </content>
+    </Tab>
+    <Tab text="Specialist Repair Center">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="+SRC Booking" />
+                  <TableView layoutX="12.0" layoutY="50.0" prefHeight="159.0" prefWidth="575.0">
+                    <columns>
+                      <TableColumn prefWidth="108.0" text="SPC  Repair ID:" />
+                      <TableColumn prefWidth="108.0" text="SPC ID:" />
+                        <TableColumn minWidth="5.0" prefWidth="111.0" text="Outgoing Date:" />
+                        <TableColumn minWidth="6.0" prefWidth="92.0" text="Return Date:" />
+                        <TableColumn minWidth="0.0" prefWidth="74.0" text="Cost:" />
+                        <TableColumn prefWidth="81.0" text="Item ID:" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="125.0" layoutY="14.0" mnemonicParsing="false" text="-SRC Booking" />
+                  <Button layoutX="392.0" layoutY="14.0" mnemonicParsing="false" text="+SRC" />
+                  <Button layoutX="455.0" layoutY="14.0" mnemonicParsing="false" text="-SRC" />
+                  <Button layoutX="235.0" layoutY="14.0" mnemonicParsing="false" text="Edit Booking" />
+                  <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" text="Edit SRC" />
+                  <Button layoutX="444.0" layoutY="223.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="143.0" text="Search SR Bookings" />
+                  <Button layoutX="14.0" layoutY="223.0" mnemonicParsing="false" text="Query All SRCs" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

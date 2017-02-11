@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public abstract class SpecRepBooking {
 
+
     private int spcRepID;
     private int spcID;
     private Date deliveryDate;
