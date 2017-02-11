@@ -1,5 +1,6 @@
 package persistence;
 
+import entities.UserType;
 import entities.Vehicle;
 import entities.VehicleType;
 import entities.FuelType;
@@ -15,14 +16,16 @@ import java.util.List;
  * @since 0.1
  */
 
-/**
+
 class VehicleMapper extends Mapper<Vehicle> {
 
+/**
      * Constructor for UserMapper. Takes reference to factory singleton.
      *
      * @param factory MapperFactory for accessing other mappers
+ *                     */
 
-    UserMapper(MapperFactory factory) {
+    VehicleMapper(MapperFactory factory) {
         super(factory);
     }
 
@@ -39,14 +42,14 @@ class VehicleMapper extends Mapper<Vehicle> {
             if (vehicle.getCustomerID() != 0)
                 query = query + "customerID = '" + vehicle.getCustomerID() + "' AND ";
             if (vehicle.getVehicleType() != null)
-                query = query + "vehicleTyoe = '" + vehicle.getVehicleType() + "' AND ";
+                query = query + "vehicleType = '" + vehicle.getVehicleType() + "' AND ";
             if (vehicle.getModel() != null)
                 query = query + "model = '" + vehicle.getModel() + "' AND ";
             if (vehicle.getManufacturer() != null)
                 query = query + "manufacturer = '" + vehicle.getManufacturer() + "' AND ";
             if (vehicle.getEngineSize() != 0)
                 query = query + "engineSize = '" + vehicle.getEngineSize() + "' AND ";
-            if (vehicle.getFuelType() != 0)
+            if (vehicle.getFuelType() != null)
                 query = query + "fuelType = '" + vehicle.getFuelType() + "' AND ";
             if (vehicle.getColour() != null)
                 query = query + "colour = '" + vehicle.getColour() + "' AND ";
@@ -54,6 +57,8 @@ class VehicleMapper extends Mapper<Vehicle> {
                 query = query + "mileage = '" + vehicle.getMileage() + "' AND ";
             if (vehicle.getRenewalDateMot() != null)
                 query = query + "renewalDateMot = '" + vehicle.getRenewalDateMot() + "' AND ";
+            if (vehicle.getDateLastServiced() != null)
+                query = query + "dateLastServiced = '" + vehicle.getDateLastServiced() + "' AND ";
             if (vehicle.isCoveredByWarranty() != false)
                 query = query + "coveredByWarranty = '" + vehicle.isCoveredByWarranty() + "' AND ";
             if (vehicle.getWarrantyName() != null)
@@ -85,27 +90,38 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + vehicle.getCustomerID() + ", "
                 + vehicle.getVehicleType().toString() + ", "
                 + vehicle.getModel() + ", "
-                + vehicle.getManufacturer(). + ", "
-                + vehicle.getEngineSize(). + ", "
-                + vehicle.getFuelType(). + ", "
-                + vehicle.getColour(). + ", "
-                + vehicle.getMileage(). + ", "
-                + vehicle.getRenewalDateMot(). + ", "
-                + vehicle.isCoveredByWarranty(). + ", "
-                + vehicle.getWarrantyName(). + ", "
-                + vehicle.getWarrantyCompAddress(). + ", "
-                + vehicle.getWarrantyExpirationDate().
+                + vehicle.getManufacturer() + ", "
+                + vehicle.getEngineSize() + ", "
+                + vehicle.getFuelType().toString() + ", "
+                + vehicle.getColour() + ", "
+                + vehicle.getMileage() + ", "
+                + vehicle.getRenewalDateMot() + ", "
+                + vehicle.getDateLastServiced() + ", "
+                + vehicle.isCoveredByWarranty() + ", "
+                + vehicle.getWarrantyName() + ", "
+                + vehicle.getWarrantyCompAddress() + ", "
+                + vehicle.getWarrantyExpirationDate()
                       + ");";
     }
 
     String toUPDATEQuery(Vehicle vehicle) {
         return UPDATESTRING
                 + Vehicle.class.getSimpleName() + " SET "
-                + "password = '" + user.getPassword() + "', "
-                + "firstName = '" + user.getFirstName() + "', "
-                + "surname = '" + user.getSurname() + "', "
-                + "userType = '" + user.getUserType().toString() + "' "
-                + "WHERE userID = '" + user.getUserID() + "';";
+                + "customerID = '" + vehicle.getCustomerID() + "', "
+                + "vehicleType = '" + vehicle.getVehicleType().toString() + "', "
+                + "model = '" + vehicle.getModel() + "', "
+                + "manufacturer = '" + vehicle.getManufacturer() + "' "
+                + "engineSize = '" + vehicle.getEngineSize() + "' "
+                + "fuelType = '" + vehicle.getFuelType().toString() + "' "
+                + "colour = '" + vehicle.getColour() + "' "
+                + "mileage = '" + vehicle.getMileage() + "' "
+                + "renewalDateMot = '" + vehicle.getRenewalDateMot() + "' "
+                + "dateLastServiced = '" + vehicle.getDateLastServiced() + "' "
+                + "coveredByWarranty = '" + vehicle.isCoveredByWarranty() + "' "
+                + "warrantyName = '" + vehicle.getWarrantyName() + "' "
+                + "warrantyCompAddress = '" + vehicle.getWarrantyCompAddress() + "' "
+                + "warrantyExpirationDate = '" + vehicle.getWarrantyExpirationDate() + "' "
+                + "WHERE regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
     String toDELETEQuery(Vehicle vehicle) {
@@ -115,24 +131,34 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
-    List<User> toObjects(ResultSet results) {
-        ArrayList<User> vehiclesList = new ArrayList<>();
+    List<Vehicle> toObjects(ResultSet results) {
+        ArrayList<Vehicle> vehiclesList = new ArrayList<>();
         try {
             while (results.next()) {
-                vehiclesList.add(Vehicle User(
-                        results.getString(1), // userID
-                        results.getString(2), // password
-                        results.getString(3), // firstName
-                        results.getString(4), // surname
-                        (results.getString(5).equals(UserType.ADMINISTRATOR.toString())
-                                ? UserType.ADMINISTRATOR : UserType.NORMAL)));
+                vehiclesList.add(new Vehicle(
+                        results.getString(1), // regNumber
+                        results.getInt(2), // customerID
+                        (results.getString(3).equals(VehicleType.Car.toString()) ? VehicleType.Car :(results.getString(3).equals(VehicleType.Van.toString()) ?  VehicleType.Van : VehicleType.Truck)), // vehicleType
+                        results.getString(4), // model
+                        results.getString(5), // manufacturer
+                        results.getInt(6), // engineSize
+                        (results.getString(7).equals(FuelType.diesel.toString()) ? FuelType.diesel : FuelType.petrol), // fuelType
+                        results.getString(8), // colour
+                        results.getInt(9), // mileage
+                        results.getDate(10), // renewalDateMot
+                        results.getDate(11), // dateLastServiced
+                        results.getBoolean(12), // coveredByWarranty
+                        results.getString(13), // warrantyName
+                        results.getString(14), // warrantyCompAddress
+                        results.getDate(15) // warrantyExpirationDate
+                        ));
             }
         }
         catch (SQLException e) {
             System.err.print(e.toString());
             return null;
         }
-        return userList;
+        return vehiclesList;
     }
 }
-        */
+
