@@ -1,14 +1,16 @@
 package entities;
 
 import java.util.Date;
+import entities.Vehicle;
 
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class VehicleRepair extends SpecRepBooking{
-    private String vehicleReg;
+public class VehicleRepair extends SpecRepBooking
+{
+    private Vehicle vehicle;
 
     /**
      * Constructor for creating a specialist repair booking for a vehicle.
@@ -18,14 +20,21 @@ public class VehicleRepair extends SpecRepBooking{
      * @param dD
      * @param rD
      * @param cost
-     * @param vehicleReg Represents the registration of the vehicle being sent to SRC
+     * @param vehicle Represents the vehicle being booked in for repair
      */
-    public VehicleRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, String vehicleReg)
+    public VehicleRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, Vehicle vehicle)
     {
         super(spcRepID,spcID, dD,rD, cost);
-        this.vehicleReg = vehicleReg;
+        this.vehicle = vehicle;
     }
 
+    @Override
+    /**
+     * Returns the registration number of the vehicle booked in for specialist repair center
+     */
+    public String getBookingItemID() {
+        return vehicle.getRegNumber();
+    }
 }
 
 

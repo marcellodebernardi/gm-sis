@@ -82,4 +82,12 @@ public abstract class SpecRepBooking {
             return this.cost;
     }
 
+    public String getBookingItemID()
+    {
+        return null;
+    }
+
+
+
+
 }
