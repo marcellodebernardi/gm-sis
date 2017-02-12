@@ -9,7 +9,7 @@
         <module name="GMSIS" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel target="1.8">
       <module name="GMSIS" target="1.7" />
     </bytecodeTargetLevel>
   </component>

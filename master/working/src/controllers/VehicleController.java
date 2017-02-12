@@ -15,6 +15,8 @@ import persistence.DatabaseRepository;
 
 import java.text.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -33,12 +35,12 @@ public class VehicleController {
     public TextField fType;
     public TextField col;
     public TextField mil;
-    public TextField rDateMot;
-    public TextField dLastServiced;
+    public DatePicker rDateMot;
+    public DatePicker dLastServiced;
     public TextField cByWarranty;
     public TextField wName;
     public TextField wCompAddress;
-    public TextField wExpirationDate;
+    public DatePicker wExpirationDate;
 
     public VehicleController()
     {
@@ -49,11 +51,11 @@ public class VehicleController {
     {
         try
         {
-            DateFormat df = new SimpleDateFormat("dd/MM/YYYY");
-            Date reDateMot =  (Date)df.parse(rDateMot.getText());
-            Date daLastServiced = df.parse(dLastServiced.getText());
-            Date waExpirationDate = df.parse(wExpirationDate.getText());
-            System.out.println(reDateMot.toString() + " "+daLastServiced+ " " +waExpirationDate);
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date rdm = format.parse(rDateMot.getPromptText());
+            Date dls = format.parse(dLastServiced.getPromptText());
+            Date wed = format.parse(wExpirationDate.getPromptText());
+            System.out.println(rdm+" "+dls+" "+wed+" "+rDateMot.getPromptText());
             VehicleType vT;
             if (vType.equals("Car"))
             {
@@ -76,8 +78,8 @@ public class VehicleController {
             {
                 fT = FuelType.petrol;
             }
-            boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), reDateMot,daLastServiced,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),waExpirationDate);
-            System.out.println(check);
+            //boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), format.parse(rDateMot.getValue().toString()),format.parse(dLastServiced.getValue().toString()),Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),wExpirationDate);
+            //System.out.println(check);
         }
         catch (Exception e)
         {

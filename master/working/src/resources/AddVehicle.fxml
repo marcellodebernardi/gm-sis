@@ -92,7 +92,7 @@
                 </Tab>
                 <Tab text="Vehicle">
                     <content>
-                        <AnchorPane fx:id="wExpirationDate" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <ToolBar prefHeight="40.0" prefWidth="600.0">
                                     <items>
@@ -131,7 +131,7 @@
                         <Button fx:id="addV" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
                         <DatePicker fx:id="rDateMot" layoutX="406.0" layoutY="94.0" />
                         <DatePicker fx:id="dLastServiced" layoutX="406.0" layoutY="121.0" />
-                        <DatePicker layoutX="412.0" layoutY="229.0" />
+                        <DatePicker fx:id="wExpirationDate" layoutX="412.0" layoutY="229.0" />
                             </children>
                         </AnchorPane>
                     </content>
