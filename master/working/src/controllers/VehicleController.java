@@ -49,10 +49,11 @@ public class VehicleController {
     {
         try
         {
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            Date reDateMot = df.parse(rDateMot.getText());
+            DateFormat df = new SimpleDateFormat("dd/MM/YYYY");
+            Date reDateMot =  (Date)df.parse(rDateMot.getText());
             Date daLastServiced = df.parse(dLastServiced.getText());
             Date waExpirationDate = df.parse(wExpirationDate.getText());
+            System.out.println(reDateMot.toString() + " "+daLastServiced+ " " +waExpirationDate);
             VehicleType vT;
             if (vType.equals("Car"))
             {
