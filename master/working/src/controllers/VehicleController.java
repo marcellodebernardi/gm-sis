@@ -35,12 +35,12 @@ public class VehicleController {
     public TextField fType;
     public TextField col;
     public TextField mil;
-    public DatePicker rDateMot;
-    public DatePicker dLastServiced;
+    public TextField rDateMot;
+    public TextField dLastServiced;
     public TextField cByWarranty;
     public TextField wName;
     public TextField wCompAddress;
-    public DatePicker wExpirationDate;
+    public TextField wExpirationDate;
 
     public VehicleController()
     {
@@ -52,10 +52,12 @@ public class VehicleController {
         try
         {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            Date rdm = format.parse(rDateMot.getPromptText());
-            Date dls = format.parse(dLastServiced.getPromptText());
-            Date wed = format.parse(wExpirationDate.getPromptText());
-            System.out.println(rdm+" "+dls+" "+wed+" "+rDateMot.getPromptText());
+            Date rdm = format.parse(rDateMot.getText());
+            String y = format.format(rdm);
+            Date d = format.parse(y);
+            Date dls = format.parse(dLastServiced.getText());
+            Date wed = format.parse(wExpirationDate.getText());
+            System.out.println(rdm+" "+dls+" "+wed + " " + y + " " + d);
             VehicleType vT;
             if (vType.equals("Car"))
             {
@@ -78,8 +80,8 @@ public class VehicleController {
             {
                 fT = FuelType.petrol;
             }
-            //boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), format.parse(rDateMot.getValue().toString()),format.parse(dLastServiced.getValue().toString()),Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),wExpirationDate);
-            //System.out.println(check);
+            boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), rdm,dls,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),wed);
+            System.out.println(check);
         }
         catch (Exception e)
         {

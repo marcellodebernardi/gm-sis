@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -129,9 +128,9 @@
                         <Label layoutX="279.0" layoutY="207.0" text="warrantyCompAddress" />
                         <Label layoutX="276.0" layoutY="234.0" text="warrantyExpirationDate" />
                         <Button fx:id="addV" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
-                        <DatePicker fx:id="rDateMot" layoutX="406.0" layoutY="94.0" />
-                        <DatePicker fx:id="dLastServiced" layoutX="406.0" layoutY="121.0" />
-                        <DatePicker fx:id="wExpirationDate" layoutX="412.0" layoutY="229.0" />
+                        <TextField fx:id="rDateMot" layoutX="420.0" layoutY="94.0" />
+                        <TextField fx:id="dLastServiced" layoutX="420.0" layoutY="121.0" />
+                        <TextField fx:id="wExpirationDate" layoutX="420.0" layoutY="229.0" />
                             </children>
                         </AnchorPane>
                     </content>
