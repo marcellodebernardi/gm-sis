@@ -98,8 +98,8 @@ public class VehicleMapperTests {
 
         System.out.println(factory.getMapper(Vehicle.class).toINSERTQuery(vehicle));
         assertTrue(factory.getMapper(Vehicle.class).toINSERTQuery(vehicle)
-                .equals("INSERT INTO Vehicle VALUES ('AAA BBB', 100, 'Car', 'Jazz', 'Honda', 200.0, 'diesel', "
-                        + "'Celeste', 30000, 100, 150, 'true', 'SomeCompany', 'Company Address 15', 200);"));
+                .equals("INSERT INTO Vehicle VALUES ('AAA BBB', 100, 'Car', 'Jazz', 'Honda', 200.0, 'Diesel', "
+                        + "'Celeste', 30000, 100, 150, 1, 'SomeCompany', 'Company Address 15', 200);"));
     }
 
     /**

@@ -104,13 +104,13 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "'" + vehicle.getFuelType().toString() + "', "
                 + "'" + vehicle.getColour() + "', "
                 + "" + vehicle.getMileage() + ", "
-                + "'" + vehicle.getRenewalDateMot().getTime() + "', "
-                + "'" + vehicle.getDateLastServiced().getTime() + "', "
+                + "" + vehicle.getRenewalDateMot().getTime() + ", "
+                + "" + vehicle.getDateLastServiced().getTime() + ", "
                 + "" + warranty + ", "
                 + "'" + vehicle.getWarrantyName() + "', "
                 + "'" + vehicle.getWarrantyCompAddress() + "', "
-                + "'" + vehicle.getWarrantyExpirationDate().getTime()
-                + "');";
+                + "" + vehicle.getWarrantyExpirationDate().getTime()
+                + ");";
     }
 
     String toUPDATEQuery(Vehicle vehicle) {
