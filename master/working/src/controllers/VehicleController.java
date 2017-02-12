@@ -54,8 +54,6 @@ public class VehicleController {
             Date rdm = format.parse(rDateMot.getText().trim() );
             Date dls = format.parse(dLastServiced.getText());
             Date wed = format.parse(wExpirationDate.getText());
-            String d = format.format(rdm);
-            System.out.println(d);
             VehicleType vT;
             if (vType.getText().equals("Car"))
             {
@@ -79,7 +77,7 @@ public class VehicleController {
                 fT = FuelType.petrol;
             }
             boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), rdm,dls,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),wed);
-            System.out.println(check);
+            System.out.println(check + "added");
         }
         catch (Exception e)
         {

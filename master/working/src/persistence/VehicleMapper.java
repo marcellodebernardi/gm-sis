@@ -7,7 +7,9 @@ import entities.FuelType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,6 +86,19 @@ class VehicleMapper extends Mapper<Vehicle> {
     }
 
     String toINSERTQuery(Vehicle vehicle) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String rdm = format.format(vehicle.getRenewalDateMot());
+        String dls = format.format(vehicle.getDateLastServiced());
+        String wed = format.format(vehicle.getWarrantyExpirationDate());
+        int warranty;
+        if (vehicle.isCoveredByWarranty())
+        {
+            warranty = 1;
+        }
+        else
+        {
+            warranty = 0;
+        }
         return INSERTSTRING
                 + Vehicle.class.getSimpleName() + " VALUES ("
                 + "'" + vehicle.getRegNumber() + "', "
@@ -95,12 +110,12 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "'" + vehicle.getFuelType().toString() + "', "
                 + "'" + vehicle.getColour() + "', "
                 + "" + vehicle.getMileage() + ", "
-                + "'" + vehicle.getRenewalDateMot() + "', "
-                + "'" + vehicle.getDateLastServiced() + "', "
-                + "" + vehicle.isCoveredByWarranty() + ", "
+                + "'" + rdm + "', "
+                + "'" + dls + "', "
+                + "" + warranty + ", "
                 + "'" + vehicle.getWarrantyName() + "', "
                 + "'" + vehicle.getWarrantyCompAddress() + "', "
-                + "'" + vehicle.getWarrantyExpirationDate()
+                + "'" + wed
                 + "');";
     }
 
