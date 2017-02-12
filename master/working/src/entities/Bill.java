@@ -13,17 +13,16 @@ public class Bill implements Criterion {
     private boolean settled;
 
 
-    public Bill(double amount) {
-        // TODO make persistence layer handle this
-        this.billID = 0;
-        this.amount = amount;
-        settled = false;
-    }
-
     public Bill(int billID, double amount, boolean settled) {
         this.billID = billID;
         this.amount = amount;
         this.settled = settled;
+    }
+
+    public Bill(int billID) {
+        this.billID = billID;
+        amount = -1;
+        settled = false;
     }
 
     /**

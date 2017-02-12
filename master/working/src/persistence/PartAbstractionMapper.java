@@ -22,17 +22,17 @@ class PartAbstractionMapper extends Mapper<PartAbstraction> {
     }
 
 
-    String toINSERTQuery(PartAbstraction partAbstraction) {
+    String toINSERTTransaction(PartAbstraction partAbstraction) {
         return null;
     }
 
 
-    String toUPDATEQuery(PartAbstraction partAbstraction) {
+    String toUPDATETransaction(PartAbstraction partAbstraction) {
         return null;
     }
 
 
-    String toDELETEQuery(PartAbstraction partAbstraction) {
+    String toDELETETransaction(PartAbstraction partAbstraction) {
         return null;
     }
 

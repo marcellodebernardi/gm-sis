@@ -1,7 +1,5 @@
 package persistence;
 
-import entities.Booking;
-import entities.DiagRepBooking;
 import entities.User;
 import entities.UserType;
 import org.junit.Test;
@@ -55,7 +53,7 @@ public class UserMapperTests {
                 "Dolan",
                 UserType.ADMINISTRATOR);
 
-        assertTrue(factory.getMapper(User.class).toINSERTQuery(user)
+        assertTrue(factory.getMapper(User.class).toINSERTTransaction(user)
                 .equals("INSERT INTO User VALUES ('user', 'password', 'Uncle', 'Dolan', 'ADMINISTRATOR');"));
     }
 
@@ -71,7 +69,7 @@ public class UserMapperTests {
                 "Dolan",
                 UserType.ADMINISTRATOR);
 
-        assertTrue(factory.getMapper(User.class).toUPDATEQuery(user)
+        assertTrue(factory.getMapper(User.class).toUPDATETransaction(user)
                 .equals("UPDATE User SET password = 'password', firstName = 'Uncle', "
                 + "surname = 'Dolan', userType = 'ADMINISTRATOR' WHERE userID = 'user';"));
     }
@@ -88,7 +86,7 @@ public class UserMapperTests {
                 null,
                 null
         );
-        assertTrue(factory.getMapper(User.class).toDELETEQuery(user)
+        assertTrue(factory.getMapper(User.class).toDELETETransaction(user)
                 .equals("DELETE FROM User WHERE userID = 'uniqueID';"));
     }
 }

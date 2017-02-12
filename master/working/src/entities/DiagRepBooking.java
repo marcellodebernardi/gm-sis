@@ -1,6 +1,9 @@
 package entities;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+import org.joda.time.MutableInterval;
+
+import java.util.List;
 
 /**
  * @author Marcello De Bernardi
@@ -8,40 +11,97 @@ import java.util.Date;
  * @since 0.1
  */
 public class DiagRepBooking extends Booking {
-    private Date diagnosisDate;
-    private Date repairDate;
-    private Date repairEndDate;
-    // todo private SpecialistRepairBooking spcBooking;
-    // todo private List<Part> requiredPartsList;
+    private MutableInterval diagnosisInterval;
+    private MutableInterval repairInterval;
+    private LocalDate diagnosisDate;
+    private LocalDate repairDate;
+    private SpecRepBooking specRepBooking;
+    private List<PartOccurrence> requiredPartsList;
 
 
     /**
-     * Null constructor. Creates a booking with null in all fields. Only to be used for all-catching
-     * search criteria.
+     * <p>
+     * Allows manual setting of all fields except the convenience date fields,
+     * which are inferred from the diagnosis and repair intervals.
+     * </p>
+     *
+     * @param bookingID         unique ID of this booking
+     * @param customerID        ID of the associated customer
+     * @param vehicleRegNumber  unique registration number of vehicle
+     * @param description       description of booking as entered by some user
+     * @param bill              the associated bill
+     * @param diagnosisInterval allotted time for diagnosis check
+     * @param repairInterval    allotted time for repair work
+     * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
-    public DiagRepBooking() {
-        super(-1, -1, null, null, null);
+    public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
+                          Bill bill, MutableInterval diagnosisInterval, MutableInterval repairInterval,
+                          SpecRepBooking specRepBooking) {
+        super(bookingID, customerID, vehicleRegNumber, description, bill);
+        this.diagnosisInterval = diagnosisInterval;
+        this.repairInterval = repairInterval;
+        this.specRepBooking = specRepBooking;
+        if (diagnosisInterval != null) diagnosisDate = diagnosisInterval.getStart().toLocalDate();
+        if (repairInterval != null) repairDate = repairInterval.getStart().toLocalDate();
     }
 
     /**
-     * Full constructor that allows manual setting of all fields.
+     * <p>
+     * Null constructor. Creates a booking with null in all fields. NOTE: only use as a
+     * Criterion when fetching all bookings from the database.
+     * </p>
+     */
+    public DiagRepBooking() {
+        super(-1, -1, null, null, null);
+        diagnosisInterval = null;
+        repairInterval = null;
+        diagnosisDate = null;
+        repairDate = null;
+        specRepBooking = null;
+        requiredPartsList = null;
+    }
+
+    /**
+     * <p>
+     * Allows construction of DiagRepBooking with specified bookingID, leaving all
+     * other fields null. Only for use when identifying a single booking in the persistence
+     * layer.
+     * </p>
      *
-     * @param bookingID unique ID of this booking
-     * @param customerID ID of the associated customer
+     * @param bookingID unique identification number of the booking
+     */
+    public DiagRepBooking(int bookingID) {
+        super(bookingID, -1, null, null, null);
+        diagnosisInterval = null;
+        repairInterval = null;
+        diagnosisDate = null;
+        repairDate = null;
+        specRepBooking = null;
+        requiredPartsList = null;
+    }
+
+    /**
+     * <p>
+     * Allows creation of booking object with unspecified booking times but specified booking
+     * dates. NOTE: should only be used as a Criterion.
+     * </p>
+     *
+     * @param bookingID        unique ID of this booking
+     * @param customerID       ID of the associated customer
      * @param vehicleRegNumber unique registration number of vehicle
-     * @param description description of booking as entered by some user
-     * @param bill the associated bill
-     * @param diagnosisDate the Date on which the diagnosis is carried out
-     * @param repairDate the Date on which the repair begins
-     * @param repairEndDate the Date on which the repair ends, defines the repair duration
+     * @param description      description of booking as entered by some user
+     * @param bill             the associated bill
+     * @param diagnosisDate    date on which diagnosis work takes place
+     * @param repairDate       date on which repair work takes place
+     * @param specRepBooking   specialist repair booking
      */
     public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, Date diagnosisDate, Date repairDate, Date repairEndDate)
-    {
+                          Bill bill, LocalDate diagnosisDate, LocalDate repairDate,
+                          SpecRepBooking specRepBooking) {
         super(bookingID, customerID, vehicleRegNumber, description, bill);
         this.diagnosisDate = diagnosisDate;
         this.repairDate = repairDate;
-        this.repairEndDate = repairEndDate;
+        this.specRepBooking = specRepBooking;
     }
 
 
@@ -100,26 +160,44 @@ public class DiagRepBooking extends Booking {
      *
      * @return date of diagnosis check
      */
-    public Date getDiagnosisDate() {
+    public MutableInterval getDiagnosisInterval() {
+        return diagnosisInterval;
+    }
+
+    /**
+     * Returns the allotted time slot for the repair.
+     *
+     * @return end of repair session
+     */
+    public MutableInterval getRepairInterval() {
+        return repairInterval;
+    }
+
+    /**
+     * Returns the date of the diagnosis work.
+     *
+     * @return the date (without the time) of the diagnosis
+     */
+    public LocalDate getDiagnosisDate() {
         return diagnosisDate;
     }
 
     /**
-     * Returns the date on which the repair session begins.
+     * Returns a LocalDate object representing
      *
-     * @return start of repair session
+     * @return the LocalDate of the repair
      */
-    public Date getRepairDate() {
+    public LocalDate getRepairDate() {
         return repairDate;
     }
 
     /**
-     * Returns the date on which the repair session ends.
+     * Returns a SpecRepairBooking object representing a specialist repair subcontract.
      *
-     * @return end of repair session
+     * @return a specialist repair booking
      */
-    public Date getRepairEndDate() {
-        return repairEndDate;
+    public SpecRepBooking getSpecRepBooking() {
+        return specRepBooking;
     }
 
     /**
@@ -169,25 +247,20 @@ public class DiagRepBooking extends Booking {
     /**
      * Sets the diagnosis date.
      */
-    public void setDiagnosisDate(Date diagnosisDate) {
-        this.diagnosisDate = diagnosisDate;
+    public void setDiagnosisInterval(MutableInterval diagnosisInterval) {
+        this.diagnosisInterval = diagnosisInterval;
+        diagnosisDate = diagnosisInterval.getStart().toLocalDate();
     }
 
     /**
      * Sets the start time of the repair session.
      *
-     * @param repairDate start of repair session
+     * @param repairInterval allotted time slot for repair work
      */
-    public void setRepairDate(Date repairDate) {
-        this.repairDate = repairDate;
+    public void setRepairInterval(MutableInterval repairInterval) {
+        this.repairInterval = repairInterval;
+        repairDate = diagnosisInterval.getStart().toLocalDate();
     }
 
-    /**
-     * Sets the end time of the repair session.
-     *
-     * @param repairEndDate end of repair session
-     */
-    public void setRepairEndDate(Date repairEndDate) {
-        this.repairEndDate = repairEndDate;
-    }
+    // todo methods for manipulating parts connected to repair
 }

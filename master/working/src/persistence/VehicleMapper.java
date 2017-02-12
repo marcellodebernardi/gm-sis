@@ -83,7 +83,7 @@ class VehicleMapper extends Mapper<Vehicle> {
         return query;
     }
 
-    String toINSERTQuery(Vehicle vehicle) {
+    String toINSERTTransaction(Vehicle vehicle) {
         int warranty;
         if (vehicle.isCoveredByWarranty())
         {
@@ -113,7 +113,7 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + ");";
     }
 
-    String toUPDATEQuery(Vehicle vehicle) {
+    String toUPDATETransaction(Vehicle vehicle) {
         return UPDATESTRING
                 + Vehicle.class.getSimpleName() + " SET "
                 + "customerID = '" + vehicle.getCustomerID() + "', "
@@ -133,7 +133,7 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "WHERE regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
-    String toDELETEQuery(Vehicle vehicle) {
+    String toDELETETransaction(Vehicle vehicle) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + Vehicle.class.getSimpleName() + " WHERE "

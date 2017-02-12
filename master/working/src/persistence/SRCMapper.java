@@ -51,7 +51,7 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
         return query;
     }
 
-    String toINSERTQuery(SpecialistRepairCenter center) {
+    String toINSERTTransaction(SpecialistRepairCenter center) {
         return INSERTSTRING
                 + SpecialistRepairCenter.class.getSimpleName() + " VALUES ("
                 + center.getSpcID() + ", "
@@ -61,7 +61,7 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
                 + "'" + center.getEmail() + "'); ";
     }
 
-    String toUPDATEQuery(SpecialistRepairCenter center) {
+    String toUPDATETransaction(SpecialistRepairCenter center) {
         return UPDATESTRING + SpecialistRepairCenter.class.getSimpleName() + " SET "
                 + "name = '" + center.getName() + "', "
                 + "address = '" + center.getAddress() + "', "
@@ -70,7 +70,7 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
                 + "WHERE spcID = " + center.getSpcID() + ";";
     }
 
-    String toDELETEQuery(SpecialistRepairCenter center) {
+    String toDELETETransaction(SpecialistRepairCenter center) {
         // todo what if Center object has no spcID? Then primary key is missing
         return DELETESTRING
                 + SpecialistRepairCenter.class.getSimpleName() + " WHERE "

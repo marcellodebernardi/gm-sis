@@ -44,7 +44,7 @@ public class BillMapperTests {
                 200.0,
                 true);
 
-        assertTrue(factory.getMapper(Bill.class).toINSERTQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toINSERTTransaction(bill)
                 .equals("INSERT INTO Bill VALUES (123, 200.0, true);"));
     }
 
@@ -58,7 +58,7 @@ public class BillMapperTests {
                 200.0,
                 false);
 
-        assertTrue(factory.getMapper(Bill.class).toUPDATEQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toUPDATETransaction(bill)
                 .equals("UPDATE Bill SET amount = 200.0, settled = 'false' "
                         + "WHERE billID = 123;"));
     }
@@ -70,7 +70,7 @@ public class BillMapperTests {
     public void testUserDELETEQUery() {
         Bill bill = new Bill(123, 1.0, false);
 
-        assertTrue(factory.getMapper(Bill.class).toDELETEQuery(bill)
+        assertTrue(factory.getMapper(Bill.class).toDELETETransaction(bill)
                 .equals("DELETE FROM Bill WHERE billID = 123;"));
     }
 }

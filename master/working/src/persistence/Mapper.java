@@ -19,7 +19,6 @@ abstract class Mapper<E extends Criterion> {
     final String INSERTSTRING = "INSERT INTO ";
     final String UPDATESTRING = "UPDATE ";
     final String DELETESTRING = "DELETE FROM ";
-    // todo fix these
 
     Mapper(MapperFactory factory) {
         this.factory = factory;
@@ -44,7 +43,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL INSERT statement string
      */
-    abstract String toINSERTQuery(E item);
+    abstract String toINSERTTransaction(E item);
 
     /**
      * <p>
@@ -53,7 +52,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL UPDATE statement string
      */
-    abstract String toUPDATEQuery(E item);
+    abstract String toUPDATETransaction(E item);
 
     /**
      * <p>
@@ -62,7 +61,7 @@ abstract class Mapper<E extends Criterion> {
      * @param item item received from logic layer
      * @return SQL DELETE statement string
      */
-    abstract String toDELETEQuery(E item);
+    abstract String toDELETETransaction(E item);
 
     /**
      * <p>

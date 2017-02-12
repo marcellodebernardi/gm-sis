@@ -57,7 +57,7 @@ class UserMapper extends Mapper<User> {
         return query;
     }
 
-    String toINSERTQuery(User user) {
+    String toINSERTTransaction(User user) {
         return INSERTSTRING
                 + User.class.getSimpleName() + " VALUES ("
                 + "'" + user.getUserID() + "', "
@@ -67,7 +67,7 @@ class UserMapper extends Mapper<User> {
                 + "'" + user.getUserType().toString() + "');";
     }
 
-    String toUPDATEQuery(User user) {
+    String toUPDATETransaction(User user) {
         return UPDATESTRING + User.class.getSimpleName() + " SET "
                 + "password = '" + user.getPassword() + "', "
                 + "firstName = '" + user.getFirstName() + "', "
@@ -76,7 +76,7 @@ class UserMapper extends Mapper<User> {
                 + "WHERE userID = '" + user.getUserID() + "';";
     }
 
-    String toDELETEQuery(User user) {
+    String toDELETETransaction(User user) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + User.class.getSimpleName() + " WHERE "
