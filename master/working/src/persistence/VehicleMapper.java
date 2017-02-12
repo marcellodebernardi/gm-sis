@@ -86,21 +86,21 @@ class VehicleMapper extends Mapper<Vehicle> {
     String toINSERTQuery(Vehicle vehicle) {
         return INSERTSTRING
                 + Vehicle.class.getSimpleName() + " VALUES ("
-                + vehicle.getRegNumber() + ", "
-                + vehicle.getCustomerID() + ", "
-                + vehicle.getVehicleType().toString() + ", "
-                + vehicle.getModel() + ", "
-                + vehicle.getManufacturer() + ", "
-                + vehicle.getEngineSize() + ", "
-                + vehicle.getFuelType().toString() + ", "
-                + vehicle.getColour() + ", "
-                + vehicle.getMileage() + ", "
-                + vehicle.getRenewalDateMot() + ", "
-                + vehicle.getDateLastServiced() + ", "
-                + vehicle.isCoveredByWarranty() + ", "
-                + vehicle.getWarrantyName() + ", "
-                + vehicle.getWarrantyCompAddress() + ", "
-                + vehicle.getWarrantyExpirationDate()
+                + "'" + vehicle.getRegNumber() + "', "
+                + "'" + vehicle.getCustomerID() + "', "
+                + "'" + vehicle.getVehicleType().toString() + "', "
+                + "'" + vehicle.getModel() + "', "
+                + "'" + vehicle.getManufacturer() + "', "
+                + "'" + vehicle.getEngineSize() + "', "
+                + "'" + vehicle.getFuelType().toString() + "', "
+                + "'" + vehicle.getColour() + "', "
+                + "'" + vehicle.getMileage() + "', "
+                + "'" + vehicle.getRenewalDateMot() + "', "
+                + "'" + vehicle.getDateLastServiced() + "', "
+                + "'" + vehicle.isCoveredByWarranty() + "', "
+                + "'" + vehicle.getWarrantyName() + "', "
+                + "'" + vehicle.getWarrantyCompAddress() + "', "
+                + "'" + vehicle.getWarrantyExpirationDate() + "', "
                       + ");";
     }
 

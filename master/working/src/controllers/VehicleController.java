@@ -18,6 +18,7 @@ import java.text.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -52,18 +53,16 @@ public class VehicleController {
         try
         {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            Date rdm = format.parse(rDateMot.getText());
-            String y = format.format(rdm);
-            Date d = format.parse(y);
+            format.setLenient(true);
+            Date rdm = format.parse(rDateMot.getText().trim() );
             Date dls = format.parse(dLastServiced.getText());
             Date wed = format.parse(wExpirationDate.getText());
-            System.out.println(rdm+" "+dls+" "+wed + " " + y + " " + d);
             VehicleType vT;
-            if (vType.equals("Car"))
+            if (vType.getText().equals("Car"))
             {
                 vT = VehicleType.Car;
             }
-            else if (vType.equals("Van"))
+            else if (vType.getText().equals("Van"))
             {
                 vT = VehicleType.Van;
             }
