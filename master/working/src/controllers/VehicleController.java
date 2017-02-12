@@ -53,10 +53,11 @@ public class VehicleController {
         try
         {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            format.setLenient(true);
             Date rdm = format.parse(rDateMot.getText().trim() );
             Date dls = format.parse(dLastServiced.getText());
             Date wed = format.parse(wExpirationDate.getText());
+            String d = format.format(rdm);
+            System.out.println(d);
             VehicleType vT;
             if (vType.getText().equals("Car"))
             {

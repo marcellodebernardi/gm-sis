@@ -100,8 +100,8 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "'" + vehicle.isCoveredByWarranty() + "', "
                 + "'" + vehicle.getWarrantyName() + "', "
                 + "'" + vehicle.getWarrantyCompAddress() + "', "
-                + "'" + vehicle.getWarrantyExpirationDate() + "', "
-                      + ");";
+                + "'" + vehicle.getWarrantyExpirationDate()
+                + "');";
     }
 
     String toUPDATEQuery(Vehicle vehicle) {
