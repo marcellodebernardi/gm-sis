@@ -1,9 +1,8 @@
 package persistence;
 
-import entities.UserType;
+import entities.FuelType;
 import entities.Vehicle;
 import entities.VehicleType;
-import entities.FuelType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,12 +20,11 @@ import java.util.List;
 
 class VehicleMapper extends Mapper<Vehicle> {
 
-/**
+    /**
      * Constructor for UserMapper. Takes reference to factory singleton.
      *
      * @param factory MapperFactory for accessing other mappers
- *                     */
-
+     */
     VehicleMapper(MapperFactory factory) {
         super(factory);
     }
@@ -35,7 +33,7 @@ class VehicleMapper extends Mapper<Vehicle> {
     String toSELECTQuery(List<Vehicle> vehicles) {
         String query = SELECTSTRING + Vehicle.class.getName().substring(9) + " WHERE ";
 
-        for(Vehicle vehicle : vehicles) {
+        for (Vehicle vehicle : vehicles) {
             query = query + "(";
 
             // add WHERE clauses
@@ -79,7 +77,7 @@ class VehicleMapper extends Mapper<Vehicle> {
         // todo check for WHERE clause with no conditions
 
         // remove unnecessary OR logical connective
-        query = query.substring(0, query.length()- 4);
+        query = query.substring(0, query.length() - 4);
         query = query + ";";
 
         return query;
@@ -153,7 +151,7 @@ class VehicleMapper extends Mapper<Vehicle> {
                 vehiclesList.add(new Vehicle(
                         results.getString(1), // regNumber
                         results.getInt(2), // customerID
-                        (results.getString(3).equals(VehicleType.Car.toString()) ? VehicleType.Car :(results.getString(3).equals(VehicleType.Van.toString()) ?  VehicleType.Van : VehicleType.Truck)), // vehicleType
+                        (results.getString(3).equals(VehicleType.Car.toString()) ? VehicleType.Car : (results.getString(3).equals(VehicleType.Van.toString()) ? VehicleType.Van : VehicleType.Truck)), // vehicleType
                         results.getString(4), // model
                         results.getString(5), // manufacturer
                         results.getInt(6), // engineSize
@@ -166,14 +164,12 @@ class VehicleMapper extends Mapper<Vehicle> {
                         results.getString(13), // warrantyName
                         results.getString(14), // warrantyCompAddress
                         results.getDate(15) // warrantyExpirationDate
-                        ));
+                ));
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.print(e.toString());
             return null;
         }
         return vehiclesList;
     }
 }
-
