@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import logic.AuthenticationSystem;
 import logic.CriterionRepository;
 import logic.VehicleSys;
@@ -10,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import entities.*;
 import persistence.DatabaseRepository;
 
@@ -24,42 +27,47 @@ import java.util.Locale;
 public class VehicleController {
 
 
+
     private VehicleSys vSys = VehicleSys.getInstance();
     public TextField reg;
     public TextField cID;
-    public TextField vType;
+    public ComboBox vType = new ComboBox();
     public TextField mod;
     public TextField manuf;
     public TextField eSize;
-    public TextField fType;
+    public ComboBox fType;
     public TextField col;
     public TextField mil;
     public TextField rDateMot;
     public TextField dLastServiced;
-    public TextField cByWarranty;
+    public ComboBox cByWarranty;
     public TextField wName;
     public TextField wCompAddress;
     public TextField wExpirationDate;
+
+
 
     public VehicleController()
     {
 
     }
 
+
+
     public void addVehicle()
     {
         try
         {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            Date rdm = format.parse(rDateMot.getText().trim() );
+            Date rdm = format.parse(rDateMot.getText());
             Date dls = format.parse(dLastServiced.getText());
             Date wed = format.parse(wExpirationDate.getText());
             VehicleType vT;
-            if (vType.getText().equals("Car"))
+            if (vType.getItems().get(0).equals("Car"))
             {
                 vT = VehicleType.Car;
             }
-            else if (vType.getText().equals("Van"))
+            else if (vType.getItems().get(1).equals("Van"))
             {
                 vT = VehicleType.Van;
             }
@@ -68,7 +76,7 @@ public class VehicleController {
                 vT = VehicleType.Truck;
             }
             FuelType fT;
-            if (vType.equals("Diesel"))
+            if (fType.getItems().get(0).equals("Diesel"))
             {
                 fT = FuelType.diesel;
             }
@@ -76,7 +84,17 @@ public class VehicleController {
             {
                 fT = FuelType.petrol;
             }
-            boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Integer.parseInt(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), rdm,dls,Boolean.parseBoolean(cByWarranty.getText()),wName.getText(),wCompAddress.getText(),wed);
+            Boolean W;
+            if (cByWarranty.getItems().get(0).equals("True"))
+            {
+                W = true;
+            }
+            else
+            {
+                W = false;
+            }
+
+            boolean check = vSys.addVehicle( reg.getText(),Integer.parseInt(cID.getText()), vT,mod.getText(),manuf.getText(), Double.parseDouble(eSize.getText()),fT,col.getText(),Integer.parseInt(mil.getText()), rdm,dls,W,wName.getText(),wCompAddress.getText(),wed);
             System.out.println(check + "added");
         }
         catch (Exception e)

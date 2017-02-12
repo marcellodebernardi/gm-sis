@@ -84,10 +84,6 @@ class VehicleMapper extends Mapper<Vehicle> {
     }
 
     String toINSERTQuery(Vehicle vehicle) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String rdm = format.format(vehicle.getRenewalDateMot());
-        String dls = format.format(vehicle.getDateLastServiced());
-        String wed = format.format(vehicle.getWarrantyExpirationDate());
         int warranty;
         if (vehicle.isCoveredByWarranty())
         {
@@ -108,12 +104,12 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "'" + vehicle.getFuelType().toString() + "', "
                 + "'" + vehicle.getColour() + "', "
                 + "" + vehicle.getMileage() + ", "
-                + "'" + rdm + "', "
-                + "'" + dls + "', "
+                + "'" + vehicle.getRenewalDateMot().getTime() + "', "
+                + "'" + vehicle.getDateLastServiced().getTime() + "', "
                 + "" + warranty + ", "
                 + "'" + vehicle.getWarrantyName() + "', "
                 + "'" + vehicle.getWarrantyCompAddress() + "', "
-                + "'" + wed
+                + "'" + vehicle.getWarrantyExpirationDate().getTime()
                 + "');";
     }
 
