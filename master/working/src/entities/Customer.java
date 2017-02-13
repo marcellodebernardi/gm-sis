@@ -15,10 +15,10 @@ public class Customer implements Criterion
     private String customerPhone;
     private String customerEmail;
     private CustomerType customerType;
-    // todo vehicle reference
-    // todo booking reference
+    private String vehicleRegistrationNumber;
+    private int bookingID;
 
-    public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode, String cPhone, String cEmail, CustomerType cType)
+    public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode, String cPhone, String cEmail, CustomerType cType, String vRegNumber, int bID)
     {
         customerID = cID;
         customerSurname = cSurname;
@@ -28,6 +28,8 @@ public class Customer implements Criterion
         customerPhone = cPhone;
         customerEmail = cEmail;
         customerType = cType;
+        vehicleRegistrationNumber = vRegNumber;
+        bookingID = bID;
     }
 
     //gets unique identifier for customer
@@ -124,6 +126,30 @@ public class Customer implements Criterion
     public void setCustomerType(CustomerType custType)
     {
         customerType = custType;
+    }
+
+    //get vehicle registration number from Vehicle class
+    public String getVehicleRegistrationNumber()
+    {
+        return vehicleRegistrationNumber;
+    }
+
+    //set vehicle registration number from Vehicle class
+    public void setVehicleRegistrationNumber(String vRegNumber)
+    {
+        vehicleRegistrationNumber = vRegNumber;
+    }
+
+    //get booking ID from Booking class
+    public int getBookingID()
+    {
+        return bookingID;
+    }
+
+    //set booking ID from Booking class
+    public void setBookingID(int bID)
+    {
+        bookingID = bID;
     }
 
 }
