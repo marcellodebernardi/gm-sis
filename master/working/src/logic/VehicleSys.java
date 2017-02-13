@@ -26,10 +26,16 @@ public class VehicleSys {
 
     public Vehicle searchVehicle(String regNumber) {
 
-
-        Vehicle result = persistence.getByCriteria(false, Vehicle.class,
-                Collections.singletonList(new Vehicle(regNumber, 0, null, null, null, 0,null,null,0,null,null,false, null,null,null)))
+        Vehicle result;
+        result = persistence.getByCriteria(false, Vehicle.class,
+                Collections.singletonList(new Vehicle(regNumber, -1, null, null, null, -1,null,null,-1,null,null,false, null,null,null)))
                 .get(0);
+        if (result == null)
+        {
+            result = persistence.getByCriteria(false, Vehicle.class,
+                    Collections.singletonList(new Vehicle(regNumber, -1, null, null, null, -1,null,null,-1,null,null,true, null,null,null)))
+                    .get(0);
+        }
 
         return result;
 
@@ -42,9 +48,12 @@ public class VehicleSys {
         return result;
     }
 
-    public boolean deleteVehicle(Vehicle delete){
-
-        return persistence.deleteItem(Vehicle.class, delete);
+    public boolean deleteVehicle(String regNumber){
+        if ((persistence.deleteItem(Vehicle.class,new Vehicle(regNumber,-1,null,null,null,-1,null,null,-1,null,null, false,null,null,null))))
+        {
+            return true;
+        }
+        return persistence.deleteItem(Vehicle.class, new Vehicle(regNumber,-1,null,null,null,-1,null,null,-1,null,null, true,null,null,null));
     }
 
     public boolean editVehicle(Vehicle delete){

@@ -17,6 +17,8 @@ public class MenuController {
 
         public Label UserT;
         public Button addVButton;
+        public Button deleteVButton;
+        public Button editVButton;
 
         @FXML
 public void handleButtonAdd() throws Exception {
@@ -38,6 +40,46 @@ public void handleButtonAdd() throws Exception {
                 }
 
 }
+        @FXML
+        public void handleButtonDelete() throws Exception {
+                try{
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteVehicle.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle("Delete Vehicle");
+                        stage.setScene(new Scene(menu));
+                        stage.show();
+                        LoginController A = new LoginController();
+                        A.stage.close();
+
+
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+
+        }
+
+        public void handleButtonEditSearch() throws Exception {
+                try{
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditSearchVehicle.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle("Edit Search Vehicle");
+                        stage.setScene(new Scene(menu));
+                        stage.show();
+                        LoginController A = new LoginController();
+                        A.stage.close();
+
+
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+
+        }
 
 public void setUserType()
 {

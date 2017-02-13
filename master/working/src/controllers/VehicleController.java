@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import entities.*;
 import persistence.DatabaseRepository;
 
+import javax.xml.soap.Text;
 import java.text.*;
 
 import java.util.Date;
@@ -29,6 +30,7 @@ public class VehicleController {
 
 
     private VehicleSys vSys = VehicleSys.getInstance();
+    public TextField vReg;
     public TextField reg;
     public TextField cID;
     public ComboBox vType = new ComboBox();
@@ -44,6 +46,9 @@ public class VehicleController {
     public TextField wName;
     public TextField wCompAddress;
     public TextField wExpirationDate;
+    public Button editV;
+    public TextField tVReg;
+    public Label Ereg;
 
 
 
@@ -102,4 +107,43 @@ public class VehicleController {
             e.printStackTrace(  );
         }
     }
+
+    public void deleteVehicle()
+    {
+        try
+        {
+            boolean check = vSys.deleteVehicle( vReg.getText());
+            System.out.println(check + "deleted");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(  );
+        }
+    }
+    public void VehicleEditB() throws Exception {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
+            Parent menu = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Edit Vehicle");
+            stage.setScene(new Scene(menu));
+            stage.show();
+            System.out.println(tVReg.getText());
+            System.out.println(vSys.searchVehicle(tVReg.getText()));
+
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("cant open");
+        }
+
+    }
+
+    public void setVehicleDetails(Vehicle A)
+    {
+        System.out.println(A.getRegNumber());
+        Ereg.setText(A.getRegNumber());
+    }
+
 }

@@ -63,12 +63,12 @@ public class VehicleMapperTests {
                         + " AND vehicleType = 'Car' AND model = 'Jazz' AND manufacturer = 'Honda'"
                         + " AND engineSize = 200.0 AND fuelType = 'diesel' AND colour = 'Celeste'"
                         + " AND mileage = 30000 AND renewalDateMot = 100 AND dateLastServiced = 150"
-                        + " AND coveredByWarranty = 'true' AND warrantyName = 'SomeCompany' AND "
+                        + " AND coveredByWarranty = 1 AND warrantyName = 'SomeCompany' AND "
                         + "warrantyCompName = 'Company Address 15' AND warrantyExpirationDate = 200)"
                         + " OR (regNumber = 'AAA BBB' AND customerID = 100 AND vehicleType = 'Car' "
                         + "AND model = 'Jazz' AND manufacturer = 'Honda' AND engineSize = 200.0 AND "
                         + "fuelType = 'diesel' AND colour = 'Celeste' AND mileage = 30000 AND "
-                        + "renewalDateMot = 100 AND dateLastServiced = 150 AND coveredByWarranty = 'true'"
+                        + "renewalDateMot = 100 AND dateLastServiced = 150 AND coveredByWarranty = 1"
                         + " AND warrantyName = 'SomeCompany' AND warrantyCompName = 'Company Address 15'"
                         + " AND warrantyExpirationDate = 200);"));
     }
@@ -131,7 +131,7 @@ public class VehicleMapperTests {
                 .equals("UPDATE Vehicle SET customerID = 100, vehicleType = 'Car', model = 'Jazz', "
                         + "manufacturer = 'Honda', engineSize = 200.0, fuelType = 'diesel', colour = 'Celeste',"
                         + " mileage = 30000, renewalDateMot = 100, dateLastServiced = 150, "
-                        + "coveredByWarranty = 'true', warrantyName = 'SomeCompany', "
+                        + "coveredByWarranty = 1, warrantyName = 'SomeCompany', "
                         + "warrantyCompAddress = 'Company Address 15', warrantyExpirationDate = 200"
                         + " WHERE regNumber = 'AAA BBB';"));
     }

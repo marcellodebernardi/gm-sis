@@ -32,41 +32,50 @@ class VehicleMapper extends Mapper<Vehicle> {
 
     String toSELECTQuery(List<Vehicle> vehicles) {
         String query = SELECTSTRING + Vehicle.class.getName().substring(9) + " WHERE ";
+        int warranty;
 
         for (Vehicle vehicle : vehicles) {
+            if (vehicle.isCoveredByWarranty())
+            {
+                warranty = 1;
+            }
+            else
+            {
+                warranty = 0;
+            }
             query = query + "(";
 
             // add WHERE clauses
             if (vehicle.getRegNumber() != null)
                 query = query + "regNumber = '" + vehicle.getRegNumber() + "' AND ";
             if (vehicle.getCustomerID() != 0)
-                query = query + "customerID = '" + vehicle.getCustomerID() + "' AND ";
+                query = query + "customerID = " + vehicle.getCustomerID() + " AND ";
             if (vehicle.getVehicleType() != null)
-                query = query + "vehicleType = '" + vehicle.getVehicleType() + "' AND ";
+                query = query + "vehicleType = '" + vehicle.getVehicleType().toString() + "' AND ";
             if (vehicle.getModel() != null)
                 query = query + "model = '" + vehicle.getModel() + "' AND ";
             if (vehicle.getManufacturer() != null)
                 query = query + "manufacturer = '" + vehicle.getManufacturer() + "' AND ";
             if (vehicle.getEngineSize() != 0)
-                query = query + "engineSize = '" + vehicle.getEngineSize() + "' AND ";
+                query = query + "engineSize = " + vehicle.getEngineSize() + " AND ";
             if (vehicle.getFuelType() != null)
-                query = query + "fuelType = '" + vehicle.getFuelType() + "' AND ";
+                query = query + "fuelType = '" + vehicle.getFuelType().toString() + "' AND ";
             if (vehicle.getColour() != null)
                 query = query + "colour = '" + vehicle.getColour() + "' AND ";
             if (vehicle.getMileage() != 0)
-                query = query + "mileage = '" + vehicle.getMileage() + "' AND ";
+                query = query + "mileage = " + vehicle.getMileage() + " AND ";
             if (vehicle.getRenewalDateMot() != null)
-                query = query + "renewalDateMot = '" + vehicle.getRenewalDateMot() + "' AND ";
+                query = query + "renewalDateMot = " + vehicle.getRenewalDateMot().getTime() + " AND ";
             if (vehicle.getDateLastServiced() != null)
-                query = query + "dateLastServiced = '" + vehicle.getDateLastServiced() + "' AND ";
+                query = query + "dateLastServiced = " + vehicle.getDateLastServiced().getTime() + " AND ";
             if (vehicle.isCoveredByWarranty() != false)
-                query = query + "coveredByWarranty = '" + vehicle.isCoveredByWarranty() + "' AND ";
+                query = query + "coveredByWarranty = " + warranty + " AND ";
             if (vehicle.getWarrantyName() != null)
                 query = query + "warrantyName = '" + vehicle.getWarrantyName() + "' AND ";
             if (vehicle.getWarrantyCompAddress() != null)
                 query = query + "warrantyCompName = '" + vehicle.getWarrantyCompAddress() + "' AND ";
             if (vehicle.getWarrantyExpirationDate() != null)
-                query = query + "warrantyExpirationDate = '" + vehicle.getWarrantyExpirationDate() + "' AND ";
+                query = query + "warrantyExpirationDate = " + vehicle.getWarrantyExpirationDate().getTime() + " AND ";
 
             // remove unnecessary "AND" connective if present
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
@@ -83,7 +92,7 @@ class VehicleMapper extends Mapper<Vehicle> {
         return query;
     }
 
-    String toINSERTTransaction(Vehicle vehicle) {
+    String toINSERTQuery(Vehicle vehicle) {
         int warranty;
         if (vehicle.isCoveredByWarranty())
         {
@@ -113,27 +122,36 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + ");";
     }
 
-    String toUPDATETransaction(Vehicle vehicle) {
+    String toUPDATEQuery(Vehicle vehicle) {
+        int warranty;
+        if (vehicle.isCoveredByWarranty())
+        {
+            warranty = 1;
+        }
+        else
+        {
+            warranty = 0;
+        }
         return UPDATESTRING
                 + Vehicle.class.getSimpleName() + " SET "
-                + "customerID = '" + vehicle.getCustomerID() + "', "
+                + "customerID = " + vehicle.getCustomerID() + ", "
                 + "vehicleType = '" + vehicle.getVehicleType().toString() + "', "
                 + "model = '" + vehicle.getModel() + "', "
                 + "manufacturer = '" + vehicle.getManufacturer() + "' "
-                + "engineSize = '" + vehicle.getEngineSize() + "' "
+                + "engineSize = " + vehicle.getEngineSize() + " "
                 + "fuelType = '" + vehicle.getFuelType().toString() + "' "
                 + "colour = '" + vehicle.getColour() + "' "
-                + "mileage = '" + vehicle.getMileage() + "' "
-                + "renewalDateMot = '" + vehicle.getRenewalDateMot() + "' "
-                + "dateLastServiced = '" + vehicle.getDateLastServiced() + "' "
-                + "coveredByWarranty = '" + vehicle.isCoveredByWarranty() + "' "
+                + "mileage = " + vehicle.getMileage() + " "
+                + "renewalDateMot = " + vehicle.getRenewalDateMot().getTime() + " "
+                + "dateLastServiced = " + vehicle.getDateLastServiced().getTime() + " "
+                + "coveredByWarranty = " + warranty + " "
                 + "warrantyName = '" + vehicle.getWarrantyName() + "' "
                 + "warrantyCompAddress = '" + vehicle.getWarrantyCompAddress() + "' "
-                + "warrantyExpirationDate = '" + vehicle.getWarrantyExpirationDate() + "' "
+                + "warrantyExpirationDate = " + vehicle.getWarrantyExpirationDate().getTime() + " "
                 + "WHERE regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
-    String toDELETETransaction(Vehicle vehicle) {
+    String toDELETEQuery(Vehicle vehicle) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + Vehicle.class.getSimpleName() + " WHERE "
