@@ -8,19 +8,46 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * * <p>
- * A Criterion object is used to interact with a <i>CriterionRepository</i>. It defines a set of
- * required attributes that may be matched to data in a persistence layer. For example:
- * </p>
- * <i>Criterion criteria = new MyClass("Birthday", null, null)</i>
  * <p>
- * creates a Criterion object that will match any persistent data entity with the string "Birthday"
- * in the corresponding field.
+ *     Criterion objects are used to interact with CriterionRepositories. They encapsulate criteria
+ *     by which entities in the persistence layer are identified. A Criterion is created like this:
  * </p>
  * <p>
- * Any object implementing this interface may be passed to an object implementing the interface
- * <i>PersistenceInterface</i>, with the values of its attributes representing the parameters of
- * the query being made to the persistence layer.
+ *     <i>new Criterion(MyClass.class, "attributeName", operator, value)</i>
+ * </p>
+ * <p>
+ *     where MyClass is the class of relevant objects (bookings, vehicles, etc), "attributeName" is
+ *     a string matching exactly the name of a field in said class, value is an object of valid type
+ *     for said field, and operator is one of the four operators defined in the CriterionOperator enum.
+ * </p>
+ * <p>
+ *     The four operators are LessThan, MoreThan, EqualTo and Regex. Regex can only be used when the
+ *     value object is of type String or type Pattern. The other operators can be used unrestrictedly.
+ * </p>
+ * <p>
+ *     More complex search criteria can be used with the append methods and(), or(), and setDiff().
+ *     These methods are called on an existing criterion, and are used to add a new set of criteria
+ *     to the Criterion with the same argument syntax used in the constructor, minus the class
+ *     specification. The new set of criteria is connected to the previous one with the logical
+ *     connective specified in the method name. For example,
+ * </p>
+ * <p>
+ *     <i>new Criterion<>(MyClass.class, "att", LessThan, 10).and("att", MoreThan, 5)</i>
+ * </p>
+ * <p>
+ *     defines the expression
+ * </p>
+ * <p>
+ *     <i>(att < 10) AND (att > 5)</i>
+ * </p>
+ * <p>
+ *     More complex queries can be formed by combining attributes, values and operators with the
+ *     provided logical connectives.
+ * </p>
+ * <p>
+ *     Note that several methods in this class throw CriterionException, which IS NOT A CHECKED
+ *     EXCEPTION. That is, you do not have to explicitly catch it; however, you need to ensure that
+ *     you write your criteria properly, so that it is not thrown.
  * </p>
  *
  * @author Marcello De Bernardi
