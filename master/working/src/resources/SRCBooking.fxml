@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SpecialistRepairController">
   <tabs>
     <Tab text="Rest Of GUI">
       <content>
@@ -18,8 +18,8 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="+SRC Booking" />
-                  <TableView layoutX="12.0" layoutY="50.0" prefHeight="159.0" prefWidth="575.0">
+                  <Button fx:id="btn_addBooking" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#addBookings" text="+SRC Booking" />
+                  <TableView fx:id="table_bookings" layoutX="12.0" layoutY="50.0" prefHeight="159.0" prefWidth="575.0">
                     <columns>
                       <TableColumn prefWidth="108.0" text="SPC  Repair ID:" />
                       <TableColumn prefWidth="108.0" text="SPC ID:" />
@@ -29,13 +29,13 @@
                         <TableColumn prefWidth="81.0" text="Item ID:" />
                     </columns>
                   </TableView>
-                  <Button layoutX="125.0" layoutY="14.0" mnemonicParsing="false" text="-SRC Booking" />
-                  <Button layoutX="392.0" layoutY="14.0" mnemonicParsing="false" text="+SRC" />
-                  <Button layoutX="455.0" layoutY="14.0" mnemonicParsing="false" text="-SRC" />
-                  <Button layoutX="235.0" layoutY="14.0" mnemonicParsing="false" text="Edit Booking" />
-                  <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" text="Edit SRC" />
-                  <Button layoutX="444.0" layoutY="223.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="143.0" text="Search SR Bookings" />
-                  <Button layoutX="14.0" layoutY="223.0" mnemonicParsing="false" text="Query All SRCs" />
+                  <Button fx:id="btn_deleteBooking" layoutX="125.0" layoutY="14.0" mnemonicParsing="false" onAction="#delete_Bookings" text="-SRC Booking" />
+                  <Button fx:id="btn_addSRC" layoutX="392.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_SRC" text="+SRC" />
+                  <Button fx:id="btn_deleteSRC" layoutX="455.0" layoutY="14.0" mnemonicParsing="false" onAction="#delete_SRC" text="-SRC" />
+                  <Button fx:id="btn_editBooking" layoutX="235.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_Booking" text="Edit Booking" />
+                  <Button fx:id="btn_editSRC" layoutX="514.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_SRC" text="Edit SRC" />
+                  <Button fx:id="btn_searchBookings" layoutX="444.0" layoutY="223.0" mnemonicParsing="false" onAction="#searchBookings" prefHeight="19.0" prefWidth="143.0" text="Search SR Bookings" />
+                  <Button fx:id="btn_searchAllSRC" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#displayAllSRC" text="Query All SRCs" />
                </children></AnchorPane>
       </content>
     </Tab>

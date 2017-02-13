@@ -41,7 +41,11 @@ public class SpecialistRepairCenter implements Searchable
      */
     public SpecialistRepairCenter()
     {
-        spcID = -1;
+        this.spcID = -1;
+        this.name = null;
+        this.address = null;
+        this.phone = null;
+        this.email = null;
     }
 
     /**

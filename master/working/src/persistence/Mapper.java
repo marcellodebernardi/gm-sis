@@ -59,7 +59,7 @@ abstract class Mapper<E extends Searchable> {
      * <p>
      *     Returns an SQL DELETE statement for the given item.
      * </p>
-     * @param item item received from logic layer
+     * @param item received from logic layer
      * @return SQL DELETE statement string
      */
     abstract String toDELETETransaction(Criterion<E> criteria);

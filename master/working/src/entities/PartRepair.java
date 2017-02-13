@@ -9,7 +9,7 @@ import entities.PartAbstraction;
  */
 public class PartRepair extends SpecRepBooking
 {
-    private PartAbstraction part;
+    private PartOccurrence part;
 
     /**
      * Constructor for creating a specialist repair booking for a part
@@ -21,7 +21,7 @@ public class PartRepair extends SpecRepBooking
      * @param cost
      * @param part represents the part being sent off to the SRC
      */
-    public PartRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, PartAbstraction part)
+    public PartRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, PartOccurrence part)
     {
         super(spcRepID,spcID, dD,rD, cost);
         this.part = part;
@@ -34,6 +34,7 @@ public class PartRepair extends SpecRepBooking
     @Override
     public String getBookingItemID()
     {
-        return Integer.toString(part.getPartsID());
+        return null;
+       //return Integer.toString(part.());
     }
 }
