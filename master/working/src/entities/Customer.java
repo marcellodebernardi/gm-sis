@@ -1,6 +1,8 @@
 package entities;
 import logic.Criterion;
 
+import java.util.List;
+
 /**
  * Created by EBUBECHUKWU on 08/02/2017.
  */
@@ -15,10 +17,13 @@ public class Customer implements Criterion
     private String customerPhone;
     private String customerEmail;
     private CustomerType customerType;
-    private String vehicleRegistrationNumber;
-    private int bookingID;
 
-    public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode, String cPhone, String cEmail, CustomerType cType, String vRegNumber, int bID)
+    // direction reversal in database todo implement
+    private List<Booking> bookings;
+    private List<Vehicle> vehicles;
+
+    public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode,
+                    String cPhone, String cEmail, CustomerType cType)
     {
         customerID = cID;
         customerSurname = cSurname;
@@ -28,8 +33,6 @@ public class Customer implements Criterion
         customerPhone = cPhone;
         customerEmail = cEmail;
         customerType = cType;
-        vehicleRegistrationNumber = vRegNumber;
-        bookingID = bID;
     }
 
     //gets unique identifier for customer
@@ -126,30 +129,6 @@ public class Customer implements Criterion
     public void setCustomerType(CustomerType custType)
     {
         customerType = custType;
-    }
-
-    //get vehicle registration number from Vehicle class
-    public String getVehicleRegistrationNumber()
-    {
-        return vehicleRegistrationNumber;
-    }
-
-    //set vehicle registration number from Vehicle class
-    public void setVehicleRegistrationNumber(String vRegNumber)
-    {
-        vehicleRegistrationNumber = vRegNumber;
-    }
-
-    //get booking ID from Booking class
-    public int getBookingID()
-    {
-        return bookingID;
-    }
-
-    //set booking ID from Booking class
-    public void setBookingID(int bID)
-    {
-        bookingID = bID;
     }
 
 }

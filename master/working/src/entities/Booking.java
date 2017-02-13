@@ -8,28 +8,33 @@ import logic.Criterion;
  * @since 0.1
  */
 public abstract class Booking implements Criterion {
-    // todo make persistence layer assign new ID
     private int bookingID;
     private int customerID;
     private String vehicleRegNumber;
     private String description;
+
+    // application-level references
     private Bill bill;
+    private Mechanic mechanic;
 
     /**
      * Full constructor which allows setting all fields manually.
      *
-     * @param bookingID unique ID of this booking
-     * @param customerID ID of the associated customer
+     * @param bookingID        unique ID of this booking
+     * @param customerID       ID of the associated customer
      * @param vehicleRegNumber unique registration number of vehicle
-     * @param description description of booking as entered by some user
-     * @param bill the associated bill
+     * @param description      description of booking as entered by some user
+     * @param bill             the associated bill
+     * @param mechanic         the associated mechanic
      */
-    public Booking(int bookingID, int customerID, String vehicleRegNumber, String description, Bill bill){
+    public Booking(int bookingID, int customerID, String vehicleRegNumber, String description,
+                   Bill bill, Mechanic mechanic) {
         this.bookingID = bookingID;
         this.customerID = customerID;
         this.vehicleRegNumber = vehicleRegNumber;
         this.description = description;
         this.bill = bill;
+        this.mechanic = mechanic;
     }
 
     /**
@@ -78,6 +83,15 @@ public abstract class Booking implements Criterion {
     }
 
     /**
+     * Get the ID of the mechanic performing this booking work.
+     *
+     * @return mechanic ID
+     */
+    public Mechanic getMechanic() {
+        return mechanic;
+    }
+
+    /**
      * Set the ID of the associated customer. Note that the reference variable in the
      * corresponding Customer object must also reflect any changes.
      *
@@ -109,11 +123,19 @@ public abstract class Booking implements Criterion {
 
     /**
      * Associates a new bill to the booking.
-     * todo figure out if bill will have a reference ID to booking
      *
      * @param bill the new bill
      */
     public void setBill(Bill bill) {
         this.bill = bill;
+    }
+
+    /**
+     * Sets the ID of the mechanic performing the work for this booking.
+     *
+     * @param mechanic new mechanic tasked on this booking
+     */
+    public void setMechanic(Mechanic mechanic) {
+        this.mechanic = mechanic;
     }
 }

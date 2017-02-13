@@ -11,6 +11,8 @@ public class PartAbstraction implements Criterion {
     private String partDescription;
     private double partPrice;
 
+    //
+
     public PartAbstraction(int partsID, String partName, String partDescription, double partPrice){
 
         this.partsID = partsID;

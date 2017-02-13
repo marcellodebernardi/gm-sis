@@ -35,9 +35,9 @@ public class DiagRepBooking extends Booking {
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
     public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, MutableInterval diagnosisInterval, MutableInterval repairInterval,
+                          Bill bill, Mechanic mechanic, MutableInterval diagnosisInterval, MutableInterval repairInterval,
                           SpecRepBooking specRepBooking) {
-        super(bookingID, customerID, vehicleRegNumber, description, bill);
+        super(bookingID, customerID, vehicleRegNumber, description, bill, mechanic);
         this.diagnosisInterval = diagnosisInterval;
         this.repairInterval = repairInterval;
         this.specRepBooking = specRepBooking;
@@ -45,64 +45,6 @@ public class DiagRepBooking extends Booking {
         if (repairInterval != null) repairDate = repairInterval.getStart().toLocalDate();
     }
 
-    /**
-     * <p>
-     * Null constructor. Creates a booking with null in all fields. NOTE: only use as a
-     * Criterion when fetching all bookings from the database.
-     * </p>
-     */
-    public DiagRepBooking() {
-        super(-1, -1, null, null, null);
-        diagnosisInterval = null;
-        repairInterval = null;
-        diagnosisDate = null;
-        repairDate = null;
-        specRepBooking = null;
-        requiredPartsList = null;
-    }
-
-    /**
-     * <p>
-     * Allows construction of DiagRepBooking with specified bookingID, leaving all
-     * other fields null. Only for use when identifying a single booking in the persistence
-     * layer.
-     * </p>
-     *
-     * @param bookingID unique identification number of the booking
-     */
-    public DiagRepBooking(int bookingID) {
-        super(bookingID, -1, null, null, null);
-        diagnosisInterval = null;
-        repairInterval = null;
-        diagnosisDate = null;
-        repairDate = null;
-        specRepBooking = null;
-        requiredPartsList = null;
-    }
-
-    /**
-     * <p>
-     * Allows creation of booking object with unspecified booking times but specified booking
-     * dates. NOTE: should only be used as a Criterion.
-     * </p>
-     *
-     * @param bookingID        unique ID of this booking
-     * @param customerID       ID of the associated customer
-     * @param vehicleRegNumber unique registration number of vehicle
-     * @param description      description of booking as entered by some user
-     * @param bill             the associated bill
-     * @param diagnosisDate    date on which diagnosis work takes place
-     * @param repairDate       date on which repair work takes place
-     * @param specRepBooking   specialist repair booking
-     */
-    public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, LocalDate diagnosisDate, LocalDate repairDate,
-                          SpecRepBooking specRepBooking) {
-        super(bookingID, customerID, vehicleRegNumber, description, bill);
-        this.diagnosisDate = diagnosisDate;
-        this.repairDate = repairDate;
-        this.specRepBooking = specRepBooking;
-    }
 
 
     /**

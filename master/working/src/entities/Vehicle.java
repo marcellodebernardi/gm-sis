@@ -9,7 +9,7 @@ import logic.Criterion;
 public class Vehicle implements Criterion
 {
     private String regNumber;
-    private int customerID;
+    private int customerID; // todo remove?
     private VehicleType vehicleType;
     private String model;
     private String manufacturer;
@@ -23,6 +23,9 @@ public class Vehicle implements Criterion
     private String warrantyName;
     private String warrantyCompAddress;
     private Date warrantyExpirationDate;
+
+    // direction reversal in database todo implement
+    // private List<Installation> installationList;
 
     public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {

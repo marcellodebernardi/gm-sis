@@ -22,6 +22,7 @@ public class DatabaseRepository implements CriterionRepository {
 
     // todo setup connection correctly
     private final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
+    private final String PK_RETURN = "SELECT last_insert_rowid()";
     private Connection connection;
     private PreparedStatement statement;
     private MapperFactory factory;
@@ -127,7 +128,7 @@ public class DatabaseRepository implements CriterionRepository {
         if (item == null) throw new NullPointerException();
 
         try {
-            //set up transaction mode
+            // set up transaction mode
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
