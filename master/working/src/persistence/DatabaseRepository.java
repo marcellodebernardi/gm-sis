@@ -128,16 +128,18 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    public <E extends Searchable> boolean deleteItem(Class<E> eClass, E item) {
+    public <E extends Searchable> boolean deleteItem(Criterion<E> criteria) {
         // handle bad input
-        if (item == null) throw new NullPointerException();
+        if (criteria == null) throw new NullPointerException();
 
         try {
             // set up transaction mode
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            String[] statements = factory.getMapper(eClass).toDELETETransaction(item).split("~~~");
+            String[] statements = factory.getMapper(criteria.getCriterionClass())
+                    .toDELETETransaction(criteria)
+                    .split("~~~");
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }

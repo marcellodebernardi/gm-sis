@@ -5,8 +5,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import static logic.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi
@@ -64,32 +64,19 @@ public class BookingSystem {
      * @return List of diagnosis and repair bookings
      */
     public List<DiagRepBooking> getAllBookings() {
-        return persistence.getByCriteria(false, DiagRepBooking.class,
-                Collections.singletonList(new DiagRepBooking()));
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, null, null, null));
     }
 
     public List<DiagRepBooking> getTodayBookings() {
-        List<DiagRepBooking> criteria = new ArrayList<>();
-        criteria.add(new DiagRepBooking(
-                -1,
-                -1,
-                null,
-                null,
-                null,
-                new LocalDate(),
-                null,
-                null));
-        criteria.add(new DiagRepBooking(
-                -1,
-                -1,
-                null,
-                null,
-                null,
-                null,
-                new LocalDate(),
-                null));
-
-        return persistence.getByCriteria(false, DiagRepBooking.class, criteria);
+        try {
+            return persistence.getByCriteria(
+                    new Criterion<>(DiagRepBooking.class, "diagnosisDate", EqualTo, new LocalDate())
+                            .or("repairDate", EqualTo, new LocalDate()));
+        }
+        catch(CriterionException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -130,9 +117,9 @@ public class BookingSystem {
      */
     public boolean deleteBooking(int bookingID) {
         // todo same as above
-        return persistence.deleteItem(DiagRepBooking.class,
-                new DiagRepBooking(bookingID));
+        return persistence.deleteItem(new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID));
     }
+
 
     /* Checks time validity in terms of opening and closing hours as well as weekdays. */
     private boolean isWithinOpenHours(DiagRepBooking booking) {

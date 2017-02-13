@@ -93,8 +93,8 @@ public interface CriterionRepository {
      * as regular expressions.
      * </p>
      *
-     * @param criterion Criterion objects to define the objects to remove
+     * @param criteria Criterion objects to define the objects to remove
      * @return true if successful, false if unsuccessful
      */
-    <E extends Searchable> boolean deleteItem(Class<E> eClass, E criterion);
+    <E extends Searchable> boolean deleteItem(Criterion<E> criteria);
 }

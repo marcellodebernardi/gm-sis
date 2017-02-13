@@ -4,6 +4,8 @@ package logic;
 import entities.SpecialistRepairCenter;
 import java.util.List;
 import java.util.Collections;
+import static logic.CriterionOperator.*;
+
 /**
  * @author muradahmed
  */
@@ -33,8 +35,7 @@ public class SpecRepairSystem {
      * @return list of Specialist Repair Centers
      */
     public List<SpecialistRepairCenter>getRepairCenterList(){
-        return persistence.getByCriteria(false, SpecialistRepairCenter.class,
-                Collections.singletonList(new SpecialistRepairCenter()));
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, null, null, null));
     }
 
     /**
@@ -56,7 +57,7 @@ public class SpecRepairSystem {
      */
     public boolean deleteRepairCenter(SpecialistRepairCenter delete)
     {
-     return persistence.deleteItem(SpecialistRepairCenter.class, delete);
+     return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete.getSpcID()));
     }
 
 }

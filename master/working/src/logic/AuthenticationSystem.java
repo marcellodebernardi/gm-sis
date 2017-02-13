@@ -2,6 +2,7 @@ package logic;
 
 import entities.User;
 import persistence.DatabaseRepository;
+import static logic.CriterionOperator.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logic.AuthenticationSystem;
@@ -29,13 +30,8 @@ public class AuthenticationSystem {
 
     // currently only accepted userID is "team31", password "hello"
     public boolean login(String username, String password) {
-        User result = persistence.getByCriteria(false, User.class,
-                Collections.singletonList(new User(username, password, null, null, null)))
-                .get(0);
-
-        return (result.getUserID().equals(username) && result.getPassword().equals(password));
-
-
+        return persistence.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, username)
+                .and("password", EqualTo, password)).size() != 0;
     }
 
 

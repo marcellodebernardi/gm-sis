@@ -34,6 +34,7 @@ public class Criterion<E extends Searchable> {
     private List<CriterionOperator> operators;
     private List<Object> values;
     private List<String> logicalConnectives;
+    // todo add immutable flag, and constructor that allows for null fields
 
 
     /**
@@ -79,7 +80,7 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion and(String attribute, CriterionOperator operator, Object value)
+    public Criterion<E> and(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
         if (!operatorIsCompatible(operator, value)) throw new CriterionException();
@@ -107,7 +108,7 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion or(String attribute, CriterionOperator operator, Object value)
+    public Criterion<E> or(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
         if (!operatorIsCompatible(operator, value)) throw new CriterionException();
@@ -135,7 +136,7 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion setDiff(String attribute, CriterionOperator operator, Object value)
+    public Criterion<E> setDiff(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
         if (!operatorIsCompatible(operator, value)) throw new CriterionException();
