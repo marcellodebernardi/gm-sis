@@ -69,6 +69,8 @@ public class UserMapperTests {
                 "Dolan",
                 UserType.ADMINISTRATOR);
 
+        System.out.println(factory.getMapper(User.class).toUPDATETransaction(user));
+
         assertTrue(factory.getMapper(User.class).toUPDATETransaction(user)
                 .equals("UPDATE User SET password = 'password', firstName = 'Uncle', "
                 + "surname = 'Dolan', userType = 'ADMINISTRATOR' WHERE userID = 'user';"));

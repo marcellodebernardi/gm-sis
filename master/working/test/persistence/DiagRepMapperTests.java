@@ -18,6 +18,7 @@ public class DiagRepMapperTests {
     MapperFactory factory = MapperFactory.getInstance();
 
 
+
     @Test
     public void testDiagRepSELECTQuery() {
         List<DiagRepBooking> bookingList = new ArrayList<>();
