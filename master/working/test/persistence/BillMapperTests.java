@@ -29,7 +29,7 @@ public class BillMapperTests {
                 100.0,
                 true));
 
-        assertEquals(factory.getMapper(Bill.class).toSELECTQuery(billList), "SELECT * FROM Bill WHERE "
+        assertEquals(factory.getMapper(Bill.class).toSELECTQuery(null), "SELECT * FROM Bill WHERE "
                 + "(billID = 123 AND amount = 200.0 AND settled = 'false') OR (billID = 145 AND amount = "
                 + "100.0 AND settled = 'true');");
     }
@@ -70,7 +70,7 @@ public class BillMapperTests {
     public void testUserDELETEQUery() {
         Bill bill = new Bill(123, 1.0, false);
 
-        assertTrue(factory.getMapper(Bill.class).toDELETETransaction(bill)
+        assertTrue(factory.getMapper(Bill.class).toDELETETransaction(null)
                 .equals("DELETE FROM Bill WHERE billID = 123;"));
     }
 }

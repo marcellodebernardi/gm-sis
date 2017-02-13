@@ -5,8 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import persistence.DatabaseRepository;
-
-import java.util.Collections;
+import static logic.CriterionOperator.*;
 
 
 /**
@@ -26,13 +25,7 @@ public class PersistenceTests {
 
     @Test
     public void getUserFromDatabase() {
-        User user = persistenceLayer.getByCriteria(false, User.class,
-                Collections.singletonList(new User(
-                        "team31",
-                        "hello",
-                        null,
-                        null,
-                        null))).get(0);
+        User user = persistenceLayer.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, "foo")).get(0);
         assertNotNull(user);
     }
 }

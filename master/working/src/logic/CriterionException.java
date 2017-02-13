@@ -8,6 +8,4 @@ class CriterionException extends RuntimeException {
     CriterionException(String message) {
         super(message);
     }
-
-    CriterionException(){}
 }

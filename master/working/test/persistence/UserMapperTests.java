@@ -34,7 +34,7 @@ public class UserMapperTests {
                 "De Bernardi",
                 UserType.ADMINISTRATOR ));
 
-        assertTrue(factory.getMapper(User.class).toSELECTQuery(userList)
+        assertTrue(factory.getMapper(User.class).toSELECTQuery(null)
                 .equals("SELECT * FROM User WHERE (userID = 'gooby' AND password = 'dolan' "
                         + "AND firstName = 'Ebube' AND surname = 'Abara' AND userType = 'NORMAL')"
                         + " OR (userID = 'someUserID' AND password = 'somePassword' AND firstName = "
@@ -88,7 +88,7 @@ public class UserMapperTests {
                 null,
                 null
         );
-        assertTrue(factory.getMapper(User.class).toDELETETransaction(user)
+        assertTrue(factory.getMapper(User.class).toDELETETransaction(null)
                 .equals("DELETE FROM User WHERE userID = 'uniqueID';"));
     }
 }

@@ -122,13 +122,13 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
     /**
      * Returns an SQL DELETE query for given item.
      *
-     * @param booking
+     * @param criteria
      * @return
      */
-    String toDELETETransaction(DiagRepBooking booking) {
+    String toDELETETransaction(Criterion<DiagRepBooking> criteria) {
         return DELETESTRING
                 + DiagRepBooking.class.getSimpleName() + " WHERE "
-                + "bookingID = " + booking.getBookingID() + ";";
+                + "bookingID = " + criteria + ";";
     }
 
     List<DiagRepBooking> toObjects(ResultSet results) {

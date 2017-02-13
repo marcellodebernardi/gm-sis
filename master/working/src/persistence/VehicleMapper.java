@@ -153,11 +153,11 @@ class VehicleMapper extends Mapper<Vehicle> {
                 + "WHERE regNumber = '" + vehicle.getRegNumber() + "';";
     }
 
-    String toDELETETransaction(Vehicle vehicle) {
+    String toDELETETransaction(Criterion<Vehicle> criteria) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + Vehicle.class.getSimpleName() + " WHERE "
-                + "regNumber = '" + vehicle.getRegNumber() + "';";
+                + "regNumber = '" + criteria + "';";
     }
 
     List<Vehicle> toObjects(ResultSet results) {

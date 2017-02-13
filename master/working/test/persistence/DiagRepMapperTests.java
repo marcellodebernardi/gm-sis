@@ -21,27 +21,7 @@ public class DiagRepMapperTests {
 
     @Test
     public void testDiagRepSELECTQuery() {
-        List<DiagRepBooking> bookingList = new ArrayList<>();
-        bookingList.add(new DiagRepBooking(
-                23,
-                25,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null));
-        bookingList.add(new DiagRepBooking(
-                56,
-                -1,
-                null,
-                null,
-                new Bill(12, 200, false),
-                null,
-                null,
-                null));
-
-        assertEquals(factory.getMapper(DiagRepBooking.class).toSELECTQuery(bookingList),
+        assertEquals(factory.getMapper(DiagRepBooking.class).toSELECTQuery(null),
                 "SELECT * FROM DiagRepBooking WHERE (bookingID = 23 AND customerID = 25) "
                         + "OR (bookingID = 56 AND bill = 12);");
     }

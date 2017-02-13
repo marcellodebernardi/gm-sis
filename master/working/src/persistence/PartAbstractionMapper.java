@@ -33,7 +33,7 @@ class PartAbstractionMapper extends Mapper<PartAbstraction> {
     }
 
 
-    String toDELETETransaction(PartAbstraction partAbstraction) {
+    String toDELETETransaction(Criterion<PartAbstraction> criterion) {
         return null;
     }
 

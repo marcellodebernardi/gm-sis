@@ -57,8 +57,8 @@ public class VehicleMapperTests {
                 new Date(200)
         ));
 
-        System.out.println(factory.getMapper(Vehicle.class).toSELECTQuery(vehicleList));
-        assertTrue(factory.getMapper(Vehicle.class).toSELECTQuery(vehicleList)
+        System.out.println(factory.getMapper(Vehicle.class).toSELECTQuery(null));
+        assertTrue(factory.getMapper(Vehicle.class).toSELECTQuery(null)
                 .equals("SELECT * FROM Vehicle WHERE (regNumber = 'AAA BBB' AND customerID = 100"
                         + " AND vehicleType = 'Car' AND model = 'Jazz' AND manufacturer = 'Honda'"
                         + " AND engineSize = 200.0 AND fuelType = 'diesel' AND colour = 'Celeste'"
@@ -159,9 +159,9 @@ public class VehicleMapperTests {
                 null
         );
 
-        System.out.println(factory.getMapper(Vehicle.class).toDELETETransaction(vehicle));
+        System.out.println(factory.getMapper(Vehicle.class).toDELETETransaction(null));
 
-        assertTrue(factory.getMapper(Vehicle.class).toDELETETransaction(vehicle)
+        assertTrue(factory.getMapper(Vehicle.class).toDELETETransaction(null)
                 .equals("DELETE FROM Vehicle WHERE regNumber = 'AAA BBB';"));
     }
 }

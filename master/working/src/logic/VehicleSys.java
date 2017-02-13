@@ -5,6 +5,7 @@ import entities.Vehicle;
 import entities.VehicleType;
 import persistence.DatabaseRepository;
 import java.util.*;
+import static logic.CriterionOperator.*;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -25,19 +26,11 @@ public class VehicleSys {
     }
 
     public Vehicle searchVehicle(String regNumber) {
+        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
+                "regNumber", EqualTo, regNumber));
 
-        Vehicle result;
-        result = persistence.getByCriteria(false, Vehicle.class,
-                Collections.singletonList(new Vehicle(regNumber, -1, null, null, null, -1,null,null,-1,null,null,false, null,null,null)))
-                .get(0);
-        if (result == null)
-        {
-            result = persistence.getByCriteria(false, Vehicle.class,
-                    Collections.singletonList(new Vehicle(regNumber, -1, null, null, null, -1,null,null,-1,null,null,true, null,null,null)))
-                    .get(0);
-        }
-
-        return result;
+        // todo - placeholder to make it compile :)
+        return results.size() == 0 ? null : results.get(0);
 
     }
 
@@ -49,11 +42,7 @@ public class VehicleSys {
     }
 
     public boolean deleteVehicle(String regNumber){
-        if ((persistence.deleteItem(Vehicle.class,new Vehicle(regNumber,-1,null,null,null,-1,null,null,-1,null,null, false,null,null,null))))
-        {
-            return true;
-        }
-        return persistence.deleteItem(Vehicle.class, new Vehicle(regNumber,-1,null,null,null,-1,null,null,-1,null,null, true,null,null,null));
+        return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
     }
 
     public boolean editVehicle(Vehicle delete){

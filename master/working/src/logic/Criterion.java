@@ -9,45 +9,45 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- *     Criterion objects are used to interact with CriterionRepositories. They encapsulate criteria
- *     by which entities in the persistence layer are identified. A Criterion is created like this:
+ * Criterion objects are used to interact with CriterionRepositories. They encapsulate criteria
+ * by which entities in the persistence layer are identified. A Criterion is created like this:
  * </p>
  * <p>
- *     <i>new Criterion(MyClass.class, "attributeName", operator, value)</i>
+ * <i>new Criterion(MyClass.class, "attributeName", operator, value)</i>
  * </p>
  * <p>
- *     where MyClass is the class of relevant objects (bookings, vehicles, etc), "attributeName" is
- *     a string matching exactly the name of a field in said class, value is an object of valid type
- *     for said field, and operator is one of the four operators defined in the CriterionOperator enum.
+ * where MyClass is the class of relevant objects (bookings, vehicles, etc), "attributeName" is
+ * a string matching exactly the name of a field in said class, value is an object of valid type
+ * for said field, and operator is one of the four operators defined in the CriterionOperator enum.
  * </p>
  * <p>
- *     The four operators are LessThan, MoreThan, EqualTo and Regex. Regex can only be used when the
- *     value object is of type String or type Pattern. The other operators can be used unrestrictedly.
+ * The four operators are LessThan, MoreThan, EqualTo and Regex. Regex can only be used when the
+ * value object is of type String or type Pattern. The other operators can be used unrestrictedly.
  * </p>
  * <p>
- *     More complex search criteria can be used with the append methods and(), or(), and setDiff().
- *     These methods are called on an existing criterion, and are used to add a new set of criteria
- *     to the Criterion with the same argument syntax used in the constructor, minus the class
- *     specification. The new set of criteria is connected to the previous one with the logical
- *     connective specified in the method name. For example,
+ * More complex search criteria can be used with the append methods and(), or(), and setDiff().
+ * These methods are called on an existing criterion, and are used to add a new set of criteria
+ * to the Criterion with the same argument syntax used in the constructor, minus the class
+ * specification. The new set of criteria is connected to the previous one with the logical
+ * connective specified in the method name. For example,
  * </p>
  * <p>
- *     <i>new Criterion<>(MyClass.class, "att", LessThan, 10).and("att", MoreThan, 5)</i>
+ * <i>new Criterion<>(MyClass.class, "att", LessThan, 10).and("att", MoreThan, 5)</i>
  * </p>
  * <p>
- *     defines the expression
+ * defines the expression
  * </p>
  * <p>
- *     <i>(att < 10) AND (att > 5)</i>
+ * <i>(att < 10) AND (att > 5)</i>
  * </p>
  * <p>
- *     More complex queries can be formed by combining attributes, values and operators with the
- *     provided logical connectives.
+ * More complex queries can be formed by combining attributes, values and operators with the
+ * provided logical connectives.
  * </p>
  * <p>
- *     Note that several methods in this class throw CriterionException, which IS NOT A CHECKED
- *     EXCEPTION. That is, you do not have to explicitly catch it; however, you need to ensure that
- *     you write your criteria properly, so that it is not thrown.
+ * Note that several methods in this class throw CriterionException, which IS NOT A CHECKED
+ * EXCEPTION. That is, you do not have to explicitly catch it; however, you need to ensure that
+ * you write your criteria properly, so that it is not thrown.
  * </p>
  *
  * @author Marcello De Bernardi
@@ -62,6 +62,7 @@ public class Criterion<E extends Searchable> {
     private List<Object> values;
     private List<String> logicalConnectives;
     // todo add immutable flag, and constructor that allows for null fields
+    // todo add overloaded methods for inner criteria of different type?
 
 
     /**
@@ -69,20 +70,24 @@ public class Criterion<E extends Searchable> {
      * in return. The attribute string has to match one of the non-inherited fields in
      * the class, and the value must be an object of the type of the field in the class
      * (a wrapper object in case the field is primitive).
+     * <p>
+     * If a CriterionException is throws, use CriterionException.getMessage() to view the
+     * cause of the error.
      *
+     * @param eClass    class of the objects to be expected in return
      * @param attribute object variable used as search criterion
      * @param operator  operator applied to value
      * @param value     value for search variable
-     * @throws CriterionException
+     * @throws CriterionException if criteria are incorrectly specified
      */
     public Criterion(Class<E> eClass, String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value)) throw new CriterionException();
+        if (!operatorIsCompatible(operator, value)) throw new CriterionException("CONSTRUCTOR: operator incompatible.");
 
         // extract fields and check if arguments are compatible
         this.eClass = eClass;
-        fields = Arrays.asList(this.eClass.getFields());
+        fields = Arrays.asList(this.eClass.getDeclaredFields());
         for (Field f : fields) {
             if (f.getName().equals(attribute) && (value.getClass().equals(f.getType()))) {
                 attributes = Collections.singletonList(attribute);
@@ -92,10 +97,10 @@ public class Criterion<E extends Searchable> {
                 return;
             }
         }
-
         // throw error if criteria not acceptable
-        throw new CriterionException();
+        throw new CriterionException("CONSTRUCTOR: no such field, or value type does not match field type.");
     }
+
 
     /**
      * Adds a criterion to the Criterion object, connected to previous criteria by an AND
@@ -110,7 +115,8 @@ public class Criterion<E extends Searchable> {
     public Criterion<E> and(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value)) throw new CriterionException();
+        if (!operatorIsCompatible(operator, value))
+            throw new CriterionException("AND (" + attribute + "): operator incompatible.");
 
         // check criteria if acceptable
         if (isClassCompatible(attribute, value)) {
@@ -122,7 +128,8 @@ public class Criterion<E extends Searchable> {
         }
 
         // throw error if criteria not acceptable
-        throw new CriterionException();
+        throw new CriterionException("AND (" + attribute + "): no such field, or value type "
+                + "does not match field type.");
     }
 
     /**
@@ -138,7 +145,8 @@ public class Criterion<E extends Searchable> {
     public Criterion<E> or(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value)) throw new CriterionException();
+        if (!operatorIsCompatible(operator, value))
+            throw new CriterionException("OR (" + attribute + "): operator incompatible.");
 
         // check criteria if acceptable
         if (isClassCompatible(attribute, value)) {
@@ -150,7 +158,8 @@ public class Criterion<E extends Searchable> {
         }
 
         // throw error if criteria not acceptable
-        throw new CriterionException();
+        throw new CriterionException("OR (" + attribute + "): no such field, or value type "
+                + "does not match field type.");
     }
 
     /**
@@ -166,7 +175,8 @@ public class Criterion<E extends Searchable> {
     public Criterion<E> setDiff(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value)) throw new CriterionException();
+        if (!operatorIsCompatible(operator, value))
+            throw new CriterionException("SET DIFF (" + attribute + "): operator incompatible.");
 
         // check criteria if acceptable
         if (isClassCompatible(attribute, value)) {
@@ -178,38 +188,39 @@ public class Criterion<E extends Searchable> {
         }
 
         // throw error if criteria not acceptable
-        throw new CriterionException();
+        throw new CriterionException("SET DIFF (" + attribute + "): no such field, or value type "
+                + "does not match field type.");
     }
 
     /**
      * <p>
-     *     Returns a string representing the collected criteria in the following form:
+     * Returns a string representing the collected criteria in the following form:
      * </p>
      * <p>
-     *     <i>ATTRIBUTE1 OPERATOR VALUE</i>    - for a single criterion
+     * <i>ATTRIBUTE1 OPERATOR VALUE</i>    - for a single criterion
      * </p>
      * <p>
-     *     <i>(ATTRIBUTE1 OPERATOR VALUE) CONNECTIVE (ATTRIBUTE2 OPERATOR VALUE)</i>
-     *     - for multiple criteria
+     * <i>(ATTRIBUTE1 OPERATOR VALUE) CONNECTIVE (ATTRIBUTE2 OPERATOR VALUE)</i>
+     * - for multiple criteria
      * </p>
      * <p>
-     *     Mostly intended for use by the persistence layer, but can also be used to
-     *     check validity of criteria.
+     * Mostly intended for use by the persistence layer, but can also be used to
+     * check validity of criteria.
      * </p>
+     *
      * @return String representing search criteria
      */
     public String toString() {
         String returnString = "" + attributes.get(0) + " " + operators.get(0) + " "
                 + values.get(0);
 
-        if (attributes.size() > 0) {
+        if (attributes.size() > 1) {
             returnString = "(" + returnString + ")";
             for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
                 returnString += " " + logicalConnectives.get(j) + " (" + attributes.get(i) + " "
                         + operators.get(i) + ")";
             }
         }
-
         return returnString;
     }
 
@@ -221,6 +232,7 @@ public class Criterion<E extends Searchable> {
     public Class<E> getCriterionClass() {
         return eClass;
     }
+
 
     // returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {

@@ -72,11 +72,11 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
                 + "WHERE spcID = " + center.getSpcID() + ";";
     }
 
-    String toDELETETransaction(SpecialistRepairCenter center) {
+    String toDELETETransaction(Criterion<SpecialistRepairCenter> criteria) {
         // todo what if Center object has no spcID? Then primary key is missing
         return DELETESTRING
                 + SpecialistRepairCenter.class.getSimpleName() + " WHERE "
-                + "spcID = " + center.getSpcID() + ";";
+                + "spcID = " + criteria + ";";
     }
 
     List<SpecialistRepairCenter> toObjects(ResultSet results) {

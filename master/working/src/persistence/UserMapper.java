@@ -78,11 +78,11 @@ class UserMapper extends Mapper<User> {
                 + "WHERE userID = '" + user.getUserID() + "';";
     }
 
-    String toDELETETransaction(User user) {
+    String toDELETETransaction(Criterion<User> criteria) {
         // todo what if User object has no userID? Then primary key is missing
         return DELETESTRING
                 + User.class.getSimpleName() + " WHERE "
-                + "userID = '" + user.getUserID() + "';";
+                + "userID = '" + criteria + "';";
     }
 
     List<User> toObjects(ResultSet results) {

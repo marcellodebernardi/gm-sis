@@ -62,10 +62,10 @@ class BillMapper extends Mapper<Bill> {
                 + "WHERE billID = " + bill.getBillID() + ";";
     }
 
-    String toDELETETransaction(Bill bill) {
+    String toDELETETransaction(Criterion<Bill> criteria) {
         return DELETESTRING
                 + Bill.class.getSimpleName() + " WHERE "
-                + "billID = " + bill.getBillID() + ";";
+                + "billID = " + criteria + ";";
     }
 
     List<Bill> toObjects(ResultSet results) {
