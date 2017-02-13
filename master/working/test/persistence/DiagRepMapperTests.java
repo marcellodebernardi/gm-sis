@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class DiagRepMapperTests {
     MapperFactory factory = MapperFactory.getInstance();
 
+
     @Test
     public void testDiagRepSELECTQuery() {
         List<DiagRepBooking> bookingList = new ArrayList<>();
@@ -43,4 +44,5 @@ public class DiagRepMapperTests {
                 "SELECT * FROM DiagRepBooking WHERE (bookingID = 23 AND customerID = 25) "
                         + "OR (bookingID = 56 AND bill = 12);");
     }
+
 }

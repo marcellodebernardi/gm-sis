@@ -96,8 +96,8 @@ public class VehicleMapperTests {
                 new Date(200)
         );
 
-        System.out.println(factory.getMapper(Vehicle.class).toINSERTQuery(vehicle));
-        assertTrue(factory.getMapper(Vehicle.class).toINSERTQuery(vehicle)
+        System.out.println(factory.getMapper(Vehicle.class).toINSERTTransaction(vehicle));
+        assertTrue(factory.getMapper(Vehicle.class).toINSERTTransaction(vehicle)
                 .equals("INSERT INTO Vehicle VALUES ('AAA BBB', 100, 'Car', 'Jazz', 'Honda', 200.0, 'diesel', "
                         + "'Celeste', 30000, 100, 150, 1, 'SomeCompany', 'Company Address 15', 200);"));
     }
@@ -125,9 +125,9 @@ public class VehicleMapperTests {
                 new Date(200)
         );
 
-        System.out.println(factory.getMapper(Vehicle.class).toUPDATEQuery(vehicle));
+        System.out.println(factory.getMapper(Vehicle.class).toUPDATETransaction(vehicle));
 
-        assertTrue(factory.getMapper(Vehicle.class).toUPDATEQuery(vehicle)
+        assertTrue(factory.getMapper(Vehicle.class).toUPDATETransaction(vehicle)
                 .equals("UPDATE Vehicle SET customerID = 100, vehicleType = 'Car', model = 'Jazz', "
                         + "manufacturer = 'Honda', engineSize = 200.0, fuelType = 'diesel', colour = 'Celeste',"
                         + " mileage = 30000, renewalDateMot = 100, dateLastServiced = 150, "
@@ -140,7 +140,7 @@ public class VehicleMapperTests {
      * Tests DELETE statement returned by UserMapper
      */
     @Test
-    public void testVehicleDELETEQUery() {
+    public void testVehicleDELETEQuery() {
         Vehicle vehicle = new Vehicle(
                 "AAA BBB",
                 -1,
@@ -159,9 +159,9 @@ public class VehicleMapperTests {
                 null
         );
 
-        System.out.println(factory.getMapper(Vehicle.class).toDELETEQuery(vehicle));
+        System.out.println(factory.getMapper(Vehicle.class).toDELETETransaction(vehicle));
 
-        assertTrue(factory.getMapper(Vehicle.class).toDELETEQuery(vehicle)
+        assertTrue(factory.getMapper(Vehicle.class).toDELETETransaction(vehicle)
                 .equals("DELETE FROM Vehicle WHERE regNumber = 'AAA BBB';"));
     }
 }
