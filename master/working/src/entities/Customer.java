@@ -1,5 +1,6 @@
 package entities;
 import logic.Criterion;
+import logic.Searchable;
 
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by EBUBECHUKWU on 08/02/2017.
  */
 
-public class Customer implements Criterion
+public class Customer implements Searchable
 {
     private int customerID;
     private String customerSurname;

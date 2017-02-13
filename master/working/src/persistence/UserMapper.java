@@ -2,6 +2,7 @@ package persistence;
 
 import entities.User;
 import entities.UserType;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,10 +25,11 @@ class UserMapper extends Mapper<User> {
     }
 
 
-    String toSELECTQuery(List<User> users) {
+    String toSELECTQuery(Criterion<User> criteria) {
         String query = SELECTSTRING + User.class.getName().substring(9) + " WHERE ";
 
-        for(User user : users) {
+        // todo rewrite
+        /* for(User user : criteria) {
             query = query + "(";
 
             // add WHERE clauses
@@ -46,7 +48,7 @@ class UserMapper extends Mapper<User> {
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
                 query = query.substring(0, query.length() - 5);
             query = query + ") OR ";
-        }
+        } */
 
         // todo check for WHERE clause with no conditions
 

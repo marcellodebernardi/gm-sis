@@ -1,6 +1,7 @@
 package entities;
 
 import logic.Criterion;
+import logic.Searchable;
 
 import java.util.SortedMap;
 
@@ -9,7 +10,7 @@ import java.util.SortedMap;
  * @version 1.0
  * @since 0.1
  */
-public class User implements Criterion {
+public class User implements Searchable {
     private String userID;
     private String password;
     private String firstName;

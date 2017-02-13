@@ -2,6 +2,7 @@ package persistence;
 
 import entities.*;
 import logic.Criterion;
+import logic.Searchable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +17,7 @@ import java.util.TreeMap;
  */
 class MapperFactory {
     private static MapperFactory instance;
-    private Map<String, Mapper<? extends Criterion>> mapperMap = new TreeMap<>();
+    private Map<String, Mapper<? extends Searchable>> mapperMap = new TreeMap<>();
 
     private MapperFactory() {
         mapperMap.put(User.class.getName(), new UserMapper(this));
@@ -46,7 +47,7 @@ class MapperFactory {
      * @param <E> extends Criterion
      * @return Mapper for desired class
      */
-    <E extends Criterion> Mapper<E> getMapper(Class<E> eClass) {
+    <E extends Searchable> Mapper<E> getMapper(Class<E> eClass) {
         // todo ensure this cannot break
         return (Mapper<E>)mapperMap.get(eClass.getName());
     }

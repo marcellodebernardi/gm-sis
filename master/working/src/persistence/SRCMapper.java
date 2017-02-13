@@ -1,6 +1,7 @@
 package persistence;
 
 import entities.SpecialistRepairCenter;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,10 +19,11 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
         super(factory);
     }
 
-    String toSELECTQuery(List<SpecialistRepairCenter> centers) {
+    String toSELECTQuery(Criterion<SpecialistRepairCenter> criteria) {
         String query = SELECTSTRING + SpecialistRepairCenter.class.getSimpleName() + " WHERE ";
 
-        for(SpecialistRepairCenter center : centers) {
+        // todo rewrite
+        /* for(SpecialistRepairCenter center : criteria) {
             query = query + "(";
 
             // add WHERE clauses
@@ -40,7 +42,7 @@ class SRCMapper extends Mapper<SpecialistRepairCenter> {
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
                 query = query.substring(0, query.length() - 5);
             query = query + ") OR ";
-        }
+        } */
 
         // todo check for WHERE clause with no conditions
 

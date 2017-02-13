@@ -1,6 +1,7 @@
 package persistence;
 
 import entities.Bill;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +20,11 @@ class BillMapper extends Mapper<Bill> {
     }
 
 
-    String toSELECTQuery(List<Bill> bills) {
+    String toSELECTQuery(Criterion<Bill> criteria) {
         String query = SELECTSTRING + Bill.class.getSimpleName() + " WHERE ";
 
-        for(Bill bill : bills) {
+        // todo rewrite
+        /* for(Bill bill : criteria) {
             query = query + "(";
 
             // add WHERE clauses
@@ -34,7 +36,7 @@ class BillMapper extends Mapper<Bill> {
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
                 query = query.substring(0, query.length() - 5);
             query = query + ") OR ";
-        }
+        } */
 
         // todo check for WHERE clause with no conditions
 

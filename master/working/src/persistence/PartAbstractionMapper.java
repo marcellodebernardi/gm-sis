@@ -1,6 +1,7 @@
 package persistence;
 
 import entities.PartAbstraction;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -17,7 +18,7 @@ class PartAbstractionMapper extends Mapper<PartAbstraction> {
     }
 
 
-    String toSELECTQuery(List<PartAbstraction> partAbstractions) {
+    String toSELECTQuery(Criterion<PartAbstraction> criteria) {
         return null;
     }
 

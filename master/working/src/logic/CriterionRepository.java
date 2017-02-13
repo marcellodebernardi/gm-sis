@@ -37,15 +37,13 @@ public interface CriterionRepository {
      * to be returned. For example, if the calling code expects vehicles in return, the arguments
      * would be:</p>
      * <p>
-     *     <i>getByCriteria(false, Vehicle.class, ...)</i>
+     * <i>getByCriteria(false, Vehicle.class, ...)</i>
      * </p>
      *
-     * @param patternMatching true for regular expression interpretation
-     * @param eClass          Class of objects expected in return, e.g. Vehicle.class
-     * @param criteria        object defining set of criteria connected by AND logical connective
+     * @param criteria object defining set of criteria connected by AND logical connective
      * @return SortedSet of objects of same actual type as the passed working.logic.Criterion objects
      */
-    <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria);
+    <E extends Searchable> List<E> getByCriteria(Criterion<E> criteria);
 
     /**
      * <p>
@@ -61,7 +59,7 @@ public interface CriterionRepository {
      * @param item Criterion objects to add to the database
      * @return true if add successful, false is add unsuccessful
      */
-    <E extends Criterion> boolean addItem(Class<E> eClass, E item);
+    <E extends Searchable> boolean addItem(Class<E> eClass, E item);
 
     /**
      * /**
@@ -77,7 +75,7 @@ public interface CriterionRepository {
      * @param item Criterion object to add to the database
      * @return true if update successful, false is update rejected
      */
-    <E extends Criterion> boolean updateItem(Class<E> eClass, E item);
+    <E extends Searchable> boolean updateItem(Class<E> eClass, E item);
 
     /**
      * <p>
@@ -98,5 +96,5 @@ public interface CriterionRepository {
      * @param criterion Criterion objects to define the objects to remove
      * @return true if successful, false if unsuccessful
      */
-    <E extends Criterion> boolean deleteItem(Class<E> eClass, E criterion);
+    <E extends Searchable> boolean deleteItem(Class<E> eClass, E criterion);
 }

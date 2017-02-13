@@ -3,6 +3,7 @@ package persistence;
 import entities.FuelType;
 import entities.Vehicle;
 import entities.VehicleType;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,11 +31,12 @@ class VehicleMapper extends Mapper<Vehicle> {
     }
 
 
-    String toSELECTQuery(List<Vehicle> vehicles) {
+    String toSELECTQuery(Criterion<Vehicle> criteria) {
         String query = SELECTSTRING + Vehicle.class.getName().substring(9) + " WHERE ";
         int warranty;
 
-        for (Vehicle vehicle : vehicles) {
+        // todo rewrite
+        /* for (Vehicle vehicle : criteria) {
             if (vehicle.isCoveredByWarranty())
             {
                 warranty = 1;
@@ -81,7 +83,7 @@ class VehicleMapper extends Mapper<Vehicle> {
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
                 query = query.substring(0, query.length() - 5);
             query = query + ") OR ";
-        }
+        } */
 
         // todo check for WHERE clause with no conditions
 

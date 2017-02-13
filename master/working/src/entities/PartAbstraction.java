@@ -1,10 +1,11 @@
 package entities;
 
-import logic.Criterion;
+import logic.Searchable;
+
 /**
  * @author Muhammad Shakib Hoque on 07/02/2017.
  */
-public class PartAbstraction implements Criterion {
+public class PartAbstraction implements Searchable {
 
     private int partsID;
     private String partName;

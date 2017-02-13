@@ -1,14 +1,11 @@
 package persistence;
 
-import entities.Bill;
 import entities.DiagRepBooking;
-import entities.SpecRepBooking;
-import org.joda.time.MutableInterval;
+import logic.Criterion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,13 +30,14 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
     /**
      * Returns SQL selection query for diagnosis and repair bookings based on given criteria
      *
-     * @param bookings Criterion objects from which to generate SQL SELECT statement
+     * @param criteria Criterion objects from which to generate SQL SELECT statement
      * @return SQL SELECT statement for given criteria
      */
-    String toSELECTQuery(List<DiagRepBooking> bookings) {
+    String toSELECTQuery(Criterion<DiagRepBooking> criteria) {
         String query = SELECTSTRING + DiagRepBooking.class.getSimpleName() + " WHERE ";
 
-        for (DiagRepBooking booking : bookings) {
+        // todo rewrite
+        /* for (DiagRepBooking booking : criteria) {
             query = query + "(";
 
             // add WHERE clauses
@@ -68,7 +66,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
                 query = query.substring(0, query.length() - 5);
             query = query + ") OR ";
-        }
+        } */
 
         // todo check for WHERE clause with no conditions
         // remove unnecessary OR logical connective
@@ -137,19 +135,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
         ArrayList<DiagRepBooking> bookingList = new ArrayList<>();
         try {
             while (results.next()) {
-                bookingList.add(new DiagRepBooking(
-                        results.getInt(1),                              // bookingID
-                        results.getInt(2),                              // customerID
-                        results.getString(3),                           // vehicleRegNumber
-                        results.getString(4),                           // description
-                        DatabaseRepository.getInstance().getByCriteria(
-                                false,
-                                Bill.class,
-                                Collections.singletonList(new Bill(results.getInt(5)))).get(0),          // bill
-                        new MutableInterval(results.getInt(6), results.getInt(7)), // diagnosisInterval
-                        new MutableInterval(results.getInt(8), results.getInt(9)),
-                        null // todo fix this up
-                        ));
+                // todo implement
             }
         } catch (SQLException e) {
             System.err.print(e.toString());

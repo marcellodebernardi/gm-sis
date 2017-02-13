@@ -1,6 +1,6 @@
 package entities;
 
-import logic.Criterion;
+import logic.Searchable;
 
 /**
  * @author muradahmed
@@ -8,7 +8,7 @@ import logic.Criterion;
  * @since : 0.1
  */
 
-public class SpecialistRepairCenter implements Criterion
+public class SpecialistRepairCenter implements Searchable
 {
 
 

@@ -1,13 +1,12 @@
 package entities;
 import java.util.*;
 
-import logic.Criterion;
+import logic.Searchable;
 
 /**
- * Created by DillonVaghela on 2/9/17.
+ * @author Dillon Vaghela on 2/9/17.
  */
-public class Vehicle implements Criterion
-{
+public class Vehicle implements Searchable {
     private String regNumber;
     private int customerID; // todo remove?
     private VehicleType vehicleType;

@@ -1,13 +1,13 @@
 package entities;
 
-import logic.Criterion;
+import logic.Searchable;
 
 /**
  * @author Marcello De Bernardi
  * @version 0.1
  * @since 0.1
  */
-public class Bill implements Criterion {
+public class Bill implements Searchable {
     private int billID;
     private double amount;
     private boolean settled;

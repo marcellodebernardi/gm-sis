@@ -1,13 +1,14 @@
 package entities;
 
 import logic.Criterion;
+import logic.Searchable;
 
 /**
  * @author Marcello De Bernardi
  * @version 0.1
  * @since 0.1
  */
-public abstract class Booking implements Criterion {
+public abstract class Booking implements Searchable {
     private int bookingID;
     private int customerID;
     private String vehicleRegNumber;

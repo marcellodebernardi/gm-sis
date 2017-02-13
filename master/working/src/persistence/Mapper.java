@@ -1,6 +1,7 @@
 package persistence;
 
 import logic.Criterion;
+import logic.Searchable;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-abstract class Mapper<E extends Criterion> {
+abstract class Mapper<E extends Searchable> {
     MapperFactory factory;
     final String SELECTSTRING = "SELECT * FROM ";
     final String INSERTSTRING = "INSERT INTO ";
@@ -34,7 +35,7 @@ abstract class Mapper<E extends Criterion> {
      * @param criteria the criterion objects received from the logic layer
      * @return SQL SELECT statement string
      */
-    abstract String toSELECTQuery(List<E> criteria);
+    abstract String toSELECTQuery(Criterion<E> criteria);
 
     /**
      * <p>

@@ -1,7 +1,11 @@
 package persistence;
 
+import entities.User;
+import entities.Vehicle;
 import logic.Criterion;
+import logic.CriterionOperator;
 import logic.CriterionRepository;
+import logic.Searchable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,6 +44,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
+
     /**
      * Gets singleton instance of DatabaseRepository.
      *
@@ -60,14 +65,14 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
 
-    public <E extends Criterion> List<E> getByCriteria(boolean patternMatching, Class<E> eClass, List<E> criteria) {
+    public <E extends Searchable> List<E> getByCriteria(Criterion<E> criteria) {
         // handle bad input
-        if (criteria == null || criteria.size() == 0) throw new NullPointerException("No criteria given.");
+        if (criteria == null) throw new NullPointerException("No criteria given.");
 
         // get requested objects using appropriate mapper
         try {
-            statement = connection.prepareStatement(factory.getMapper(eClass).toSELECTQuery(criteria));
-            return factory.getMapper(eClass).toObjects(statement.executeQuery());
+            statement = connection.prepareStatement(factory.getMapper(criteria.getCriterionClass()).toSELECTQuery(criteria));
+            return factory.getMapper(criteria.getCriterionClass()).toObjects(statement.executeQuery());
         } catch (SQLException e) {
             // todo not necessarily a good way to handle error
             System.err.print(e.getMessage());
@@ -75,7 +80,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    public <E extends Criterion> boolean addItem(Class<E> eClass, E item) {
+    public <E extends Searchable> boolean addItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -99,7 +104,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    public <E extends Criterion> boolean updateItem(Class<E> eClass, E item) {
+    public <E extends Searchable> boolean updateItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -123,7 +128,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    public <E extends Criterion> boolean deleteItem(Class<E> eClass, E item) {
+    public <E extends Searchable> boolean deleteItem(Class<E> eClass, E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
