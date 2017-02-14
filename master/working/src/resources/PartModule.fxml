@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
@@ -11,9 +12,9 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PartsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PartsController">
    <children>
-      <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="554.0" prefWidth="994.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Other Modules">
             <content>
@@ -26,31 +27,66 @@
           </Tab>
           <Tab text="Parts">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="433.0" prefWidth="742.0">
                      <children>
-                        <ToolBar prefHeight="10.0" prefWidth="600.0">
+                        <ToolBar prefHeight="39.0" prefWidth="994.0">
                           <items>
-                            <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#addPartButtonClick" text="Add Part" />
+                            <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#addPartButtonClick" text="Add Stock" />
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
-                              <Button fx:id="withdrawBtn" mnemonicParsing="false" onAction="#withdrawButtonClick" text="Withdrawls" />
+                              <Button fx:id="withdrawBtn" mnemonicParsing="false" onAction="#withdrawButtonClick" text="Withdraw Stock" />
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
-                              <TextField fx:id="searchBtn" promptText="Search..." />
-                              <Separator layoutX="86.0" layoutY="10.0" orientation="VERTICAL" prefHeight="10.0" />
                           </items>
                         </ToolBar>
-                        <TableView layoutX="16.0" layoutY="73.0" prefHeight="118.0" prefWidth="569.0">
+                        <TableView layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="665.0">
                           <columns>
                             <TableColumn fx:id="partAbstractionID" prefWidth="75.0" text="Part ID" />
-                            <TableColumn fx:id="partName" prefWidth="75.0" text="Name" />
-                              <TableColumn fx:id="partDescription" prefWidth="270.0" text="Description" />
-                              <TableColumn fx:id="partPrice" prefWidth="57.0" text="Price" />
-                              <TableColumn fx:id="partStockLevel" prefWidth="90.0" text="Stock Level" />
+                            <TableColumn fx:id="partName" prefWidth="150.42332458496094" text="Name" />
+                              <TableColumn fx:id="partDescription" prefWidth="251.54949951171875" text="Description" />
+                              <TableColumn fx:id="partPrice" minWidth="0.0" prefWidth="76.78375244140625" text="Price" />
+                              <TableColumn fx:id="partStockLevel" minWidth="7.0" prefWidth="107.8692626953125" text="Stock Level" />
                           </columns>
                         </TableView>
-                        <Button fx:id="editPartBtn" layoutX="421.0" layoutY="273.0" mnemonicParsing="false" text="Edit Part" />
-                        <Button fx:id="deletePartBtn" layoutX="498.0" layoutY="273.0" mnemonicParsing="false" text="Delete Part" />
-                        <Label layoutX="16.0" layoutY="46.0" text="Currently available in garage:" />
-                        <Separator layoutX="-6.0" layoutY="199.0" prefHeight="16.0" prefWidth="611.0" />
+                        <Label layoutX="8.0" layoutY="55.0" text="Currently available in garage:" />
+                        <TextField fx:id="searchBtn" layoutX="206.0" layoutY="50.0" prefHeight="27.0" prefWidth="467.0" promptText="Search Parts..." />
+                        <TableView layoutX="14.0" layoutY="340.0" prefHeight="162.0" prefWidth="851.0">
+                           <columns>
+                              <TableColumn prefWidth="79.30229377746582" text="Booking ID" />
+                              <TableColumn prefWidth="79.32534790039062" text="Vehicle ID" />
+                              <TableColumn minWidth="0.0" prefWidth="80.67462158203125" text="Reg No" />
+                              <TableColumn prefWidth="94.046142578125" text="Name" />
+                              <TableColumn prefWidth="97.2322998046875" text="Surname" />
+                              <TableColumn minWidth="0.0" prefWidth="87.76779174804688" text="Part Name" />
+                              <TableColumn prefWidth="93.18609619140625" text="Description" />
+                              <TableColumn prefWidth="115.81390380859375" text="Installation Date" />
+                              <TableColumn prefWidth="121.0" text="Warranty Expiry" />
+                           </columns>
+                        </TableView>
+                        <Separator layoutX="3.0" layoutY="283.0" prefHeight="12.0" prefWidth="994.0" />
+                        <Button layoutX="870.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Add to list" />
+                        <Button layoutX="871.0" layoutY="380.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Edit list" />
+                        <Button layoutX="871.0" layoutY="417.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Delete from list" />
+                        <Label layoutX="20.0" layoutY="310.0" text="Part Installation History:" />
+                        <Separator layoutX="679.0" layoutY="41.0" orientation="VERTICAL" prefHeight="243.0" prefWidth="6.0" />
+                        <ChoiceBox layoutX="197.0" layoutY="303.0" prefHeight="27.0" prefWidth="200.0" />
+                        <TextField layoutX="403.0" layoutY="302.0" prefHeight="27.0" prefWidth="463.0" promptText="Search by regisration number or customer name" />
+                        <Label layoutX="777.0" layoutY="47.0" text="Parts Bill Calculator" />
+                        <Label layoutX="709.0" layoutY="76.0" text="Part ID" />
+                        <ChoiceBox layoutX="686.0" layoutY="98.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="686.0" layoutY="134.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="687.0" layoutY="168.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="687.0" layoutY="203.0" prefHeight="27.0" prefWidth="90.0" />
+                        <Label layoutX="821.0" layoutY="76.0" text="Price" />
+                        <Label layoutX="908.0" layoutY="76.0" text="Quantity" />
+                        <TextField layoutX="791.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="792.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="792.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="792.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="890.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="891.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="891.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="891.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
+                        <Button layoutX="687.0" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Calculate" />
+                        <TextField layoutX="792.0" layoutY="247.0" prefHeight="27.0" prefWidth="190.0" text="Total Bill" />
                      </children>
                   </AnchorPane>
             </content>
