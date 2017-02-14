@@ -29,8 +29,8 @@ class BillMapper extends Mapper<Bill> {
 
             // add WHERE clauses
             if (bill.getBillID() != -1) query = query + "billID = " + bill.getBillID() + " AND ";
-            if (bill.getAmount() != -1) query = query + "amount = " + bill.getAmount() + " AND ";
-            query = query + "settled = '" + bill.isSettled() + "' AND "; // todo: can't leave settled as null
+            if (bill.getBillAmount() != -1) query = query + "amount = " + bill.getBillAmount() + " AND ";
+            query = query + "settled = '" + bill.isBillSettled() + "' AND "; // todo: can't leave settled as null
 
             // remove unnecessary "AND" connective if present
             if (query.substring(query.length() - 4, query.length()).equals("AND "))
@@ -51,14 +51,14 @@ class BillMapper extends Mapper<Bill> {
         return INSERTSTRING
                 + Bill.class.getSimpleName() + " VALUES ("
                 + bill.getBillID() + ", "
-                + bill.getAmount() + ", "
-                + bill.isSettled() + ");";
+                + bill.getBillAmount() + ", "
+                + bill.isBillSettled() + ");";
     }
 
     String toUPDATETransaction(Bill bill) {
         return UPDATESTRING + Bill.class.getSimpleName() + " SET "
-                + "amount = " + bill.getAmount() + ", "
-                + "settled = '" + bill.isSettled() + "' "
+                + "amount = " + bill.getBillAmount() + ", "
+                + "settled = '" + bill.isBillSettled() + "' "
                 + "WHERE billID = " + bill.getBillID() + ";";
     }
 

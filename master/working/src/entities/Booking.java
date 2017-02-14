@@ -1,22 +1,22 @@
 package entities;
 
-import logic.Criterion;
 import logic.Searchable;
 
 /**
  * @author Marcello De Bernardi
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public abstract class Booking implements Searchable {
     private int bookingID;
-    private int customerID;
-    private String vehicleRegNumber;
     private String description;
 
-    // application-level references
+    // inverse hierarchical database links
+    private int customerID;
+    private String vehicleRegNumber;
     private Bill bill;
-    private Mechanic mechanic;
+    private int mechanicID;
+
 
     /**
      * Full constructor which allows setting all fields manually.
@@ -26,17 +26,18 @@ public abstract class Booking implements Searchable {
      * @param vehicleRegNumber unique registration number of vehicle
      * @param description      description of booking as entered by some user
      * @param bill             the associated bill
-     * @param mechanic         the associated mechanic
+     * @param mechanicID       the ID of the associated mechanic
      */
     public Booking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                   Bill bill, Mechanic mechanic) {
+                   Bill bill, int mechanicID) {
         this.bookingID = bookingID;
         this.customerID = customerID;
         this.vehicleRegNumber = vehicleRegNumber;
         this.description = description;
         this.bill = bill;
-        this.mechanic = mechanic;
+        this.mechanicID = mechanicID;
     }
+
 
     /**
      * Get unique ID of this booking.
@@ -88,8 +89,8 @@ public abstract class Booking implements Searchable {
      *
      * @return mechanic ID
      */
-    public Mechanic getMechanic() {
-        return mechanic;
+    public int getMechanicID() {
+        return mechanicID;
     }
 
     /**
@@ -134,9 +135,9 @@ public abstract class Booking implements Searchable {
     /**
      * Sets the ID of the mechanic performing the work for this booking.
      *
-     * @param mechanic new mechanic tasked on this booking
+     * @param mechanicID new mechanic tasked on this booking
      */
-    public void setMechanic(Mechanic mechanic) {
-        this.mechanic = mechanic;
+    public void setMechanicID(int mechanicID) {
+        this.mechanicID = mechanicID;
     }
 }

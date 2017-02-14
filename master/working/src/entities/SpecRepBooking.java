@@ -10,10 +10,13 @@ public abstract class SpecRepBooking {
 
 
     private int spcRepID;
-    private int spcID;
     private Date deliveryDate;
     private Date returnDate;
     private double cost;
+
+    // inverse hierarchical database links
+    private int spcID;
+    private int bookingID;
 
     /**
      * Constructor to create a specialist repair booking
@@ -24,7 +27,6 @@ public abstract class SpecRepBooking {
      * @param cost Double representing the total cost of the SR booking
      */
     public SpecRepBooking(int spcRepID, int spcID, Date dD, Date rD, double cost){
-
         this.spcRepID = spcRepID;
         this.spcID = spcID;
         this.deliveryDate = dD;

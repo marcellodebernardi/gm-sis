@@ -122,7 +122,7 @@
                         <Label layoutX="15.0" layoutY="129.0" text="Description" />
                         <TextArea fx:id="partDescription" layoutX="93.0" layoutY="129.0" prefHeight="67.0" prefWidth="200.0" />
                         <TextField fx:id="partName" layoutX="93.0" layoutY="94.0" prefHeight="27.0" prefWidth="199.0" />
-                        <ComboBox fx:id="partID" layoutX="93.0" layoutY="52.0" prefHeight="27.0" prefWidth="199.0" />
+                        <ComboBox fx:id="partAbstractionID" layoutX="93.0" layoutY="52.0" prefHeight="27.0" prefWidth="199.0" />
                      </children>
                   </AnchorPane>
               </content>

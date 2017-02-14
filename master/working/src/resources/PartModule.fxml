@@ -40,7 +40,7 @@
                         </ToolBar>
                         <TableView layoutX="16.0" layoutY="73.0" prefHeight="118.0" prefWidth="569.0">
                           <columns>
-                            <TableColumn fx:id="partID" prefWidth="75.0" text="Part ID" />
+                            <TableColumn fx:id="partAbstractionID" prefWidth="75.0" text="Part ID" />
                             <TableColumn fx:id="partName" prefWidth="75.0" text="Name" />
                               <TableColumn fx:id="partDescription" prefWidth="270.0" text="Description" />
                               <TableColumn fx:id="partPrice" prefWidth="57.0" text="Price" />

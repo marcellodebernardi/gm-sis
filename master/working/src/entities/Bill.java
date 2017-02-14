@@ -4,69 +4,44 @@ import logic.Searchable;
 
 /**
  * @author Marcello De Bernardi
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class Bill implements Searchable {
-    private int billID;
-    private double amount;
-    private boolean settled;
+    private double billAmount;
+    private boolean billSettled;
 
 
-    public Bill(int billID, double amount, boolean settled) {
-        this.billID = billID;
-        this.amount = amount;
-        this.settled = settled;
+    public Bill(double billAmount, boolean billSettled) {
+        this.billAmount = billAmount;
+        this.billSettled = billSettled;
     }
 
-    public Bill(int billID) {
-        this.billID = billID;
-        amount = -1;
-        settled = false;
-    }
 
     /**
-     * Returns the identification number of the bill.
+     * Returns the billAmount the customer has to pay.
      *
-     * @return bill ID
+     * @return billAmount for customer to pay
      */
-    public int getBillID() {
-        return billID;
-    }
-
-    /**
-     * Returns the amount the customer has to pay.
-     *
-     * @return amount for customer to pay
-     */
-    public double getAmount() {
-        return amount;
+    public double getBillAmount() {
+        return billAmount;
     }
 
     /**
      * Returns the settlement status of the bill.
      *
-     * @return true if bill is settled, false otherwise
+     * @return true if bill is billSettled, false otherwise
      */
-    public boolean isSettled() {
-        return settled;
-    }
-
-    /**
-     * Sets the amount of the bill to pay.
-     *
-     * @param amount amount to pay
-     */
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public boolean isBillSettled() {
+        return billSettled;
     }
 
     /**
      * Sets the settlement status of the bill.
      *
-     * @param settled true if customer has paid, false if not.
+     * @param billSettled true if customer has paid, false if not.
      */
-    public void setSettled(boolean settled) {
-        this.settled = settled;
+    public void setBillSettled(boolean billSettled) {
+        this.billSettled = billSettled;
     }
 }

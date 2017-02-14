@@ -13,8 +13,8 @@ import java.util.List;
 public class DiagRepBooking extends Booking {
     private MutableInterval diagnosisInterval;
     private MutableInterval repairInterval;
-    private LocalDate diagnosisDate;
-    private LocalDate repairDate;
+
+    // direction inversion in database
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
 
@@ -35,16 +35,13 @@ public class DiagRepBooking extends Booking {
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
     public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, Mechanic mechanic, MutableInterval diagnosisInterval, MutableInterval repairInterval,
+                          Bill bill, int mechanicID, MutableInterval diagnosisInterval, MutableInterval repairInterval,
                           SpecRepBooking specRepBooking) {
-        super(bookingID, customerID, vehicleRegNumber, description, bill, mechanic);
+        super(bookingID, customerID, vehicleRegNumber, description, bill, mechanicID);
         this.diagnosisInterval = diagnosisInterval;
         this.repairInterval = repairInterval;
         this.specRepBooking = specRepBooking;
-        if (diagnosisInterval != null) diagnosisDate = diagnosisInterval.getStart().toLocalDate();
-        if (repairInterval != null) repairDate = repairInterval.getStart().toLocalDate();
     }
-
 
 
     /**
@@ -116,24 +113,6 @@ public class DiagRepBooking extends Booking {
     }
 
     /**
-     * Returns the date of the diagnosis work.
-     *
-     * @return the date (without the time) of the diagnosis
-     */
-    public LocalDate getDiagnosisDate() {
-        return diagnosisDate;
-    }
-
-    /**
-     * Returns a LocalDate object representing
-     *
-     * @return the LocalDate of the repair
-     */
-    public LocalDate getRepairDate() {
-        return repairDate;
-    }
-
-    /**
      * Returns a SpecRepairBooking object representing a specialist repair subcontract.
      *
      * @return a specialist repair booking
@@ -177,7 +156,6 @@ public class DiagRepBooking extends Booking {
 
     /**
      * Associates a new bill to the booking.
-     * todo figure out if bill will have a reference ID to booking
      *
      * @param bill the new bill
      */
@@ -191,7 +169,6 @@ public class DiagRepBooking extends Booking {
      */
     public void setDiagnosisInterval(MutableInterval diagnosisInterval) {
         this.diagnosisInterval = diagnosisInterval;
-        diagnosisDate = diagnosisInterval.getStart().toLocalDate();
     }
 
     /**
@@ -201,7 +178,6 @@ public class DiagRepBooking extends Booking {
      */
     public void setRepairInterval(MutableInterval repairInterval) {
         this.repairInterval = repairInterval;
-        repairDate = diagnosisInterval.getStart().toLocalDate();
     }
 
     // todo methods for manipulating parts connected to repair

@@ -1,5 +1,4 @@
 package entities;
-import logic.Criterion;
 import logic.Searchable;
 
 import java.util.List;
@@ -11,15 +10,15 @@ import java.util.List;
 public class Customer implements Searchable
 {
     private int customerID;
-    private String customerSurname;
     private String customerFirstname;
+    private String customerSurname;
     private String customerAddress;
     private String customerPostcode;
     private String customerPhone;
     private String customerEmail;
     private CustomerType customerType;
 
-    // direction reversal in database todo implement
+    // inverse hierarchical database links
     private List<Booking> bookings;
     private List<Vehicle> vehicles;
 

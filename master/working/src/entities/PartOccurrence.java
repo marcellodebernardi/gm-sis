@@ -4,35 +4,31 @@ package entities;
  *
  */
 public class PartOccurrence {
-    // private Installation installation todo implement
-    // ... and other fields todo implement
+    private int partOccurrenceID;
 
-    private int partInstanceID;
-    private int partID;
-    private String installationID;
+    // inverse hierarchical database links todo finish up
+    private int partAbstractionID;
+    private int installationID;
+    private int bookingID;
+    private int specRepID;
 
-    private PartOccurrence(int partInstanceID, int partID, String installationID){
 
-        this.partInstanceID = partInstanceID;
-        this.partID = partID;
+    public PartOccurrence(int partOccurrenceID, int partAbstractionID, int installationID){
+        this.partOccurrenceID = partOccurrenceID;
+        this.partAbstractionID = partAbstractionID;
         this.installationID = installationID;
-
     }
 
-    private int getPartInstanceID(){
 
-        return partInstanceID;
-    }
-    private int getPartID(){
-
-        return partID;
+    public int getPartOccurrenceID(){
+        return partOccurrenceID;
     }
 
-    private String getInstallationID(){
+    public int getPartAbstractionID(){
+        return partAbstractionID;
+    }
 
+    public int getInstallationID(){
         return installationID;
-
     }
-
-
 }

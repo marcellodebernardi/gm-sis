@@ -89,13 +89,13 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
                 + "" + booking.getCustomerID() + ", "
                 + "'" + booking.getVehicleRegNumber() + "', "
                 + "'" + booking.getDescription() + "', "
-                + "" + booking.getBill().getBillID() + ", "
+        //        + "" + booking.getBill().getBillID() + ", "
                 + "" + booking.getDiagnosisInterval().getStartMillis() + ", "
                 + "" + booking.getDiagnosisInterval().getEndMillis() + ", "
                 + "" + booking.getRepairInterval().getStartMillis() + ", "
                 + "" + booking.getRepairInterval().getEndMillis() + ", "
-                + "'" + booking.getDiagnosisDate().toString() + "', "
-                + "'" + booking.getRepairDate().toString() + "', "
+        //        + "'" + booking.getDiagnosisDate().toString() + "', "
+        //        + "'" + booking.getRepairDate().toString() + "', "
                 + "" + booking.getSpecRepBooking().getSpcRepID() + ");";
         // todo parts list
         // todo additional transaction parts
@@ -112,7 +112,7 @@ class DiagRepBookingMapper extends Mapper<DiagRepBooking> {
                 + "customerID = " + booking.getCustomerID() + ", "
                 + "vehicleRegNumber = '" + booking.getVehicleRegNumber() + "', "
                 + "description = '" + booking.getDescription() + "', "
-                + "bill = " + booking.getBill().getBillID() + ", "
+                //+ "bill = " + booking.getBill().getBillID() + ", "
                 //+ "diagnosisDate = " + booking.getDiagnosisDate().getTime() + ", "
                 //+ "repairDate = " + booking.getRepairDate().getTime() + ", "
                 //+ "repairEndDate = " + booking.getRepairEndDate().getTime() + ", "

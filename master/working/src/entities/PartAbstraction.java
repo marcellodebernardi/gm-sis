@@ -2,20 +2,25 @@ package entities;
 
 import logic.Searchable;
 
+import java.util.List;
+
 /**
  * @author Muhammad Shakib Hoque on 07/02/2017.
  */
 public class PartAbstraction implements Searchable {
 
-    private int partsID;
+    private int partAbstractionID;
     private String partName;
     private String partDescription;
     private double partPrice;
     private int partStockLevel;
 
-    public PartAbstraction(int partsID, String partName, String partDescription, double partPrice, int partStockLevel){
+    // inverse hierarchical database links
+    private List<PartOccurrence> occurrenceList;
 
-        this.partsID = partsID;
+    public PartAbstraction(int partAbstractionID, String partName, String partDescription, double partPrice, int partStockLevel){
+
+        this.partAbstractionID = partAbstractionID;
         this.partName = partName;
         this.partDescription = partDescription;
         this.partPrice = partPrice;
@@ -24,8 +29,7 @@ public class PartAbstraction implements Searchable {
     }
 
     public int getPartsID(){
-
-        return partsID;
+        return partAbstractionID;
     }
 
     public String getPartName(){

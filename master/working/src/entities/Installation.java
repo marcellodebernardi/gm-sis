@@ -10,18 +10,17 @@ public class Installation {
     private int installationID;
     private Date installationDate;
     private Date endWarrantyDate;
-    private String vehicleRegNumber;
-    private String customerSurname;
-    private String customerFirstName;
 
-    private Installation(int installationID, Date installationDate, Date endWarrantyDate, String vehicleRegNumber, String customerSurname, String customerFirstName){
+    // inverse hierarchical database links todo finish up
+    private String vehicleRegNumber;
+    private PartOccurrence partOccurrence;
+    private int partAbstractionID;
+
+    private Installation(int installationID, Date installationDate, Date endWarrantyDate, String vehicleRegNumber){
         this.installationID = installationID;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
-        this.customerSurname = customerSurname;
-        this.customerFirstName = customerFirstName;
-
     }
 
     private int installationID(){
@@ -36,13 +35,4 @@ public class Installation {
     private String vehicleRegNumber(){
         return vehicleRegNumber;
     }
-    private String customerSurname(){
-        return customerSurname();
-    }
-    private String customerFirstName(){
-        return customerFirstName;
-    }
-
-
-
 }

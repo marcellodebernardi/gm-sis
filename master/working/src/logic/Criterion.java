@@ -1,9 +1,9 @@
 package logic;
 
+import javax.naming.OperationNotSupportedException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -90,10 +90,13 @@ public class Criterion<E extends Searchable> {
         fields = Arrays.asList(this.eClass.getDeclaredFields());
         for (Field f : fields) {
             if (f.getName().equals(attribute) && (value.getClass().equals(f.getType()))) {
-                attributes = Collections.singletonList(attribute);
-                operators = Collections.singletonList(operator);
-                values = Collections.singletonList(value);
+                attributes = new ArrayList<>();
+                operators = new ArrayList<>();
+                values = new ArrayList<>();
                 logicalConnectives = new ArrayList<>();
+                attributes.add(attribute);
+                operators.add(operator);
+                values.add(value);
                 return;
             }
         }
@@ -130,6 +133,31 @@ public class Criterion<E extends Searchable> {
         // throw error if criteria not acceptable
         throw new CriterionException("AND (" + attribute + "): no such field, or value type "
                 + "does not match field type.");
+    }
+
+    /**
+     * Allows adding a new criterion of a different type to the sequence of criteria. This entails
+     * providing the class of the sub-criterion, the name by which it is identified within the
+     * parent criterion, and the attributes within the sub-criterion that are to be searched.
+     * <p>
+     * In SQL terms, it allows subqueries.
+     *
+     * @param eClass    class of subcriterion
+     * @param identity  attribute name by which complex attribute is identified in parent class
+     * @param attribute attribute in child class that is to be examin
+     * @param operator  operator applying to the attribute
+     * @param value     value to use for the attribute
+     * @return a new Criterion with the added search criteria
+     * @throws CriterionException if poorly specified arguments
+     */
+    @Deprecated
+    public Criterion<E> and(Class<? extends Searchable> eClass, String identity, String attribute,
+                            CriterionOperator operator, Object value) throws CriterionException {
+        // check value and operator compatibility
+        if (!operatorIsCompatible(operator, value))
+            throw new CriterionException("AND (" + attribute + "): operator incompatible.");
+        // todo implement
+        return null;
     }
 
     /**
@@ -215,10 +243,9 @@ public class Criterion<E extends Searchable> {
                 + values.get(0);
 
         if (attributes.size() > 1) {
-            returnString = "(" + returnString + ")";
             for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
-                returnString += " " + logicalConnectives.get(j) + " (" + attributes.get(i) + " "
-                        + operators.get(i) + ")";
+                returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i) + " "
+                        + operators.get(i) + " " + values.get(j);
             }
         }
         return returnString;
@@ -240,6 +267,10 @@ public class Criterion<E extends Searchable> {
             if (f.getName().equals(attribute) && (value.getClass().equals(f.getType())))
                 return true;
         }
+        return false;
+    }
+
+    private boolean isClassCompatible() {
         return false;
     }
 
