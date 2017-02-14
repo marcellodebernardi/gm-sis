@@ -1,12 +1,14 @@
 package entities;
 
 
+import logic.Searchable;
+
 import java.util.Date;
 
 /**
  * Created by shakib on 14/02/2017.
  */
-public class Installation {
+public class Installation implements Searchable {
 
     private int installationID;
     private Date installationDate;
@@ -19,8 +21,13 @@ public class Installation {
     private String vehicleRegNumber;
     private int partAbstractionID;
 
-    private Installation(int installationID, Date installationDate, Date endWarrantyDate, String vehicleRegNumber,
-                         int partAbstractionID, @Complex(tableName = "PartOccurrence") PartOccurrence partOccurrence){
+    private Installation(@Simple(name = "installationID") int installationID,
+                         @Simple(name = "installationDate") Date installationDate,
+                         @Simple(name = "endWarrantyDate") Date endWarrantyDate,
+                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
+                         @Simple(name = "partAbstractionID") int partAbstractionID,
+                         @Complex(baseType = PartOccurrence.class, key = "installationID")
+                                 PartOccurrence partOccurrence){
         this.installationID = installationID;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;

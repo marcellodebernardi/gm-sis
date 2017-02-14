@@ -1,6 +1,6 @@
 package entities;
 
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.joda.time.MutableInterval;
 
 import java.util.List;
@@ -11,6 +11,10 @@ import java.util.List;
  * @since 0.1
  */
 public class DiagRepBooking extends Booking {
+    private DateTime diagnosisStart;
+    private DateTime diagnosisEnd;
+    private DateTime repairStart;
+    private DateTime repairEnd;
     private MutableInterval diagnosisInterval;
     private MutableInterval repairInterval;
 
@@ -29,17 +33,35 @@ public class DiagRepBooking extends Booking {
      * @param customerID        ID of the associated customer
      * @param vehicleRegNumber  unique registration number of vehicle
      * @param description       description of booking as entered by some user
-     * @param bill              the associated bill
-     * @param diagnosisInterval allotted time for diagnosis check
-     * @param repairInterval    allotted time for repair work
+     * @param billAmount        the associated bill's cost
+     * @param billSettled       whether the bill has already been settled by customer
+     * @param mechanicID        id of mechanic doing booking
+     * @param diagnosisStart    start time of diagnosis
+     * @param diagnosisEnd      end time of diagnosis
+     * @param repairStart       start time of diagnosis
+     * @param repairEnd         end time of diagnosis
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
-    public DiagRepBooking(int bookingID, int customerID, String vehicleRegNumber, String description,
-                          Bill bill, int mechanicID, MutableInterval diagnosisInterval, MutableInterval repairInterval,
-                          SpecRepBooking specRepBooking) {
-        super(bookingID, customerID, vehicleRegNumber, description, bill, mechanicID);
-        this.diagnosisInterval = diagnosisInterval;
-        this.repairInterval = repairInterval;
+    public DiagRepBooking(@Simple(name = "bookingID") int bookingID,
+                          @Simple(name = "customerID") int customerID,
+                          @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
+                          @Simple(name = "description") String description,
+                          @Simple(name = "billAmount") double billAmount,
+                          @Simple(name = "billSettled") boolean billSettled,
+                          @Simple(name = "mechanicID") int mechanicID,
+                          @Simple(name = "diagnosisStart") DateTime diagnosisStart,
+                          @Simple(name = "diagnosisEnd") DateTime diagnosisEnd,
+                          @Simple(name = "repairStart") DateTime repairStart,
+                          @Simple(name = "repairEnd") DateTime repairEnd,
+                          @Complex(baseType = SpecRepBooking.class, key = "bookingID")
+                                  SpecRepBooking specRepBooking) {
+        super(bookingID, customerID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
+        this.diagnosisStart = diagnosisStart;
+        this.diagnosisEnd = diagnosisEnd;
+        this.diagnosisInterval = new MutableInterval(diagnosisStart, diagnosisEnd);
+        this.repairStart = repairStart;
+        this.repairEnd = repairEnd;
+        this.repairInterval = new MutableInterval(repairStart, repairEnd);
         this.specRepBooking = specRepBooking;
     }
 

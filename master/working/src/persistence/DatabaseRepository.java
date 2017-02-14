@@ -1,5 +1,7 @@
 package persistence;
 
+import entities.Complex;
+import entities.Simple;
 import entities.User;
 import entities.Vehicle;
 import logic.Criterion;
@@ -7,11 +9,14 @@ import logic.CriterionOperator;
 import logic.CriterionRepository;
 import logic.Searchable;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static logic.CriterionOperator.EqualTo;
 
 
 /**
@@ -75,7 +80,6 @@ public class DatabaseRepository implements CriterionRepository {
             statement = connection.prepareStatement(toSELECTQuery(criteria));
             return toObjects(criteria.getCriterionClass(), statement.executeQuery());
         } catch (SQLException e) {
-            // todo not necessarily a good way to handle error
             System.err.print(e.getMessage());
             return null;
         }
@@ -154,63 +158,105 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     /* Converts criterion to SQL SELECT query */
-    private <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
-        return SELECTSTRING + criteria.getCriterionClass() + " WHERE " + criteria.toString() + ";";
+    <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
+        return SELECTSTRING + criteria.getCriterionClass().getSimpleName() + " WHERE "
+                + criteria.toString() + ";";
     }
 
     /* Converts an entity into an insertion transaction */
-    private <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
+    <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
         // todo implement
         return null;
     }
 
     /* Converts an entity into an update transaction */
-    private <E extends Searchable> String toUPDATETransaction(Class<E> eClass, E item) {
+    <E extends Searchable> String toUPDATETransaction(Class<E> eClass, E item) {
         // todo implement
         return null;
     }
 
     /* Converts a criterion into a deletion transaction */
-    private <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
+    <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
         // todo implement
         return null;
     }
 
+    /* Converts a ResultSet into a List<E> of objects */
     private <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
         List<E> returnList = new ArrayList<>();
 
-        try {
-            // column number and column names
-            int columnNumber = results.getMetaData().getColumnCount();
-            String[] columnNames = new String[columnNumber];
-            for (int i = 0; i < columnNumber; i++) {
-                columnNames[i] = results.getMetaData().getColumnName(i);
-            }
+        // reflection class data
+        Constructor<E> constructor;
+        Annotation[][] constructorAnnotations;
+        Class<?>[] constructorArgumentTypes;
 
-            // select full constructor and get parameter list
-            Constructor<?>[] constructors = eClass.getConstructors();
-            Class<?>[] argumentTypes = new Class<?>[0];
-            for (int i = 0; i < constructors.length; i++) {
-                if (constructors[i].getParameterTypes().length > argumentTypes.length) {
-                    argumentTypes = constructors[i].getParameterTypes();
+        // results metadata
+        int columnNumber;
+        List<String> columnNames;
+
+        // obtain results metadata
+        try {
+            columnNumber = results.getMetaData().getColumnCount();
+            columnNames = new ArrayList<>();
+            for (int i = 0; i < columnNumber; i++)
+                columnNames.add(results.getMetaData().getColumnName(i));
+        }
+        catch (SQLException e) {
+            System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
+            return null;
+        }
+
+        // obtain reflection data
+        try {
+            constructorArgumentTypes = new Class<?>[0];
+            for (Constructor<?> c : eClass.getConstructors()) {
+                if (c.getParameterTypes().length > constructorArgumentTypes.length) {
+                    constructorArgumentTypes = c.getParameterTypes();
                 }
             }
-            Constructor<E> constructor = eClass.getConstructor(argumentTypes);
+            constructor = eClass.getConstructor(constructorArgumentTypes);
+            constructorAnnotations = constructor.getParameterAnnotations();
+        }
+        catch(NoSuchMethodException e) {
+            System.err.print(e.getMessage() + " - Failed to obtain constructor and parameters.");
+            return null;
+        }
 
-            // iterate over rows
+        // map results to objects and add
+        try {
+            // rows of ResultSet
             while (results.next()) {
-                Object[] initArgs = new Object[columnNumber];
-                // iterate over columns and extract attribute complexity
-                for (int i = 0; i < columnNumber; i++) {
+                Object[] initArgs = new Object[constructorAnnotations.length];
 
+                // columns of ResultSet (constructor arguments)
+                for (int i = 0; i < constructorAnnotations.length; i++) {
+                    Annotation annotation = constructorAnnotations[i][0];
+
+                    if (annotation.annotationType().equals(Simple.class)) {
+                        Simple metadata = (Simple)annotation;
+                        String columnName = metadata.name();
+                        int columnIndex = columnNames.indexOf(columnName) + 1;
+                        initArgs[i] = results.getObject(columnIndex); // todo might not work
+                    }
+                    else if (annotation.annotationType().equals(Complex.class)) {
+                        Complex metadata = (Complex)annotation;
+                        initArgs[i] = getByCriteria(new Criterion<>(metadata.baseType(), metadata.key(), EqualTo,
+                                results.getObject(1)));
+                    }
+                    else {
+                        System.out.println("Annotation type not detected");
+                    }
                 }
                 returnList.add(constructor.newInstance(initArgs));
             }
             return returnList;
         }
-        catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException
-                | NoSuchMethodException e) {
-            System.err.print(e.getMessage());
+        catch (SQLException e) {
+            System.err.print(e.getMessage() + " - Failed to map results to object.");
+            return null;
+        }
+        catch(InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            System.err.print(e.getMessage() + " - Failed to create object instance.");
             return null;
         }
     }

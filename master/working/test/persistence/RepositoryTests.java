@@ -1,5 +1,8 @@
 package persistence;
 
+import entities.User;
+import logic.Criterion;
+import logic.CriterionOperator;
 import logic.CriterionRepository;
 
 import org.junit.Test;
@@ -42,5 +45,11 @@ public class RepositoryTests {
         catch (SQLException e) {
             System.out.println(e.toString());
         }
+    }
+
+    @Test
+    public void testSELECTQuery() {
+        System.out.println(DatabaseRepository.getInstance().toSELECTQuery(new Criterion<>(User.class, "userID",
+                CriterionOperator.EqualTo, "foo").and("password", CriterionOperator.EqualTo, "bar")));
     }
 }

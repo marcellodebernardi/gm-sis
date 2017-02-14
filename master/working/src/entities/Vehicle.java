@@ -29,10 +29,23 @@ public class Vehicle implements Searchable {
     private int customerID;
 
 
-    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer,
-                   double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot,
-                   Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress,
-                   Date warrantyExpirationDate, @Complex(tableName = "Installation") List<Installation> installationList)
+    public Vehicle(@Simple(name = "regNumber") String regNumber,
+                   @Simple(name = "customerID") int customerID,
+                   @Simple(name = "vehicleType") VehicleType vehicleType,
+                   @Simple(name = "model") String model,
+                   @Simple(name = "manufacturer") String manufacturer,
+                   @Simple(name = "engineSize") double engineSize,
+                   @Simple(name = "fuelType") FuelType fuelType,
+                   @Simple(name = "colour") String colour,
+                   @Simple(name = "mileage") int mileage,
+                   @Simple(name = "renewalDateMot") Date renewalDateMot,
+                   @Simple(name = "dateLastServiced") Date dateLastServiced,
+                   @Simple(name = "coveredByWarranty") boolean coveredByWarranty,
+                   @Simple(name = "warrantyName") String warrantyName,
+                   @Simple(name = "warrantyCompAddress") String warrantyCompAddress,
+                   @Simple(name = "warrantyExpirationDate") Date warrantyExpirationDate,
+                   @Complex(baseType = Installation.class, key = "regNumber")
+                           List<Installation> installationList)
     {
         this.regNumber = regNumber;
         this.customerID = customerID;

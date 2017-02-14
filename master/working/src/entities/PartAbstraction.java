@@ -18,10 +18,13 @@ public class PartAbstraction implements Searchable {
     // hierarchical links
     private List<PartOccurrence> occurrenceList;
 
-    public PartAbstraction(int partAbstractionID, String partName, String partDescription, double partPrice,
-                           int partStockLevel,
-                           @Complex(tableName = "PartOccurrence") List<PartOccurrence> occurrenceList){
-
+    public PartAbstraction(@Simple(name = "partAbstractionID") int partAbstractionID,
+                           @Simple(name = "partName") String partName,
+                           @Simple(name = "partDescription") String partDescription,
+                           @Simple(name = "partPrice") double partPrice,
+                           @Simple(name = "partStockLevel") int partStockLevel,
+                           @Complex(baseType = PartOccurrence.class, key = "partAbstractionID")
+                                   List<PartOccurrence> occurrenceList){
         this.partAbstractionID = partAbstractionID;
         this.partName = partName;
         this.partDescription = partDescription;

@@ -1,9 +1,11 @@
 package entities;
 
+import logic.Searchable;
+
 /**
  *
  */
-public class PartOccurrence {
+public class PartOccurrence implements Searchable {
     private int partOccurrenceID;
 
     // inverse hierarchical database links todo finish up
@@ -13,7 +15,9 @@ public class PartOccurrence {
     private int specRepID;
 
 
-    public PartOccurrence(int partOccurrenceID, int partAbstractionID, int installationID){
+    public PartOccurrence(@Simple(name = "partOccurrenceID") int partOccurrenceID,
+                          @Simple(name = "partAbstractionID") int partAbstractionID,
+                          @Simple(name = "installationID") int installationID){
         this.partOccurrenceID = partOccurrenceID;
         this.partAbstractionID = partAbstractionID;
         this.installationID = installationID;

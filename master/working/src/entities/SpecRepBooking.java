@@ -1,12 +1,14 @@
 package entities;
 
 
+import logic.Searchable;
+
 import java.util.Date;
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
  * project: SE31
  */
-public abstract class SpecRepBooking {
+public abstract class SpecRepBooking implements Searchable {
 
 
     private int spcRepID;
@@ -22,16 +24,22 @@ public abstract class SpecRepBooking {
      * Constructor to create a specialist repair booking
      * @param spcRepID ID representing a unique SRC booking
      * @param spcID ID representing the unique ID of the SRC to which this part is being sent to
-     * @param dD Date representing the date on which the part or vehicle is being sent
-     * @param rD Date representing the date on which the part or vehicle is expected to return
+     * @param deliveryDate Date representing the date on which the part or vehicle is being sent
+     * @param returnDate Date representing the date on which the part or vehicle is expected to return
      * @param cost Double representing the total cost of the SR booking
      */
-    public SpecRepBooking(int spcRepID, int spcID, Date dD, Date rD, double cost){
+    public SpecRepBooking(@Simple(name = "spcRepID") int spcRepID,
+                          @Simple(name = "spcID") int spcID,
+                          @Simple(name = "deliveryDate") Date deliveryDate,
+                          @Simple(name = "returnDate") Date returnDate,
+                          @Simple(name = "cost") double cost,
+                          @Simple(name = "bookingID") int bookingID ){
         this.spcRepID = spcRepID;
         this.spcID = spcID;
-        this.deliveryDate = dD;
-        this.returnDate = rD;
+        this.deliveryDate = deliveryDate;
+        this.returnDate = returnDate;
         this.cost = cost;
+        this.bookingID = bookingID;
     }
 
     /**

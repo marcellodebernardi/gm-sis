@@ -38,13 +38,13 @@ public class CustomerSystem {
 
     public boolean addCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer add = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType);
+        Customer add = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
         return persistence.addItem(Customer.class, add);
     }
 
     public boolean editCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer edit = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType);
+        Customer edit = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
         return persistence.updateItem(Customer.class, edit);
     }
 

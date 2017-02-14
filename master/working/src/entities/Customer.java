@@ -22,10 +22,16 @@ public class Customer implements Searchable
     private List<Booking> bookings;
     private List<Vehicle> vehicles;
 
-    public Customer(int customerID, String customerSurname, String customerFirstname, String customerAddress,
-                    String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType,
-                    @Complex(tableName = "DiagRepBooking") List<Booking> bookings,
-                    @Complex(tableName = "Vehicle") List<Vehicle> vehicles)
+    public Customer(@Simple(name = "customerID") int customerID,
+                    @Simple(name = "customerSurname") String customerSurname,
+                    @Simple(name = "customerFirstname") String customerFirstname,
+                    @Simple(name = "customerAddress") String customerAddress,
+                    @Simple(name = "customerPostcode") String customerPostcode,
+                    @Simple(name = "customerPhone") String customerPhone,
+                    @Simple(name = "customerEmail") String customerEmail,
+                    @Simple(name = "customerType") CustomerType customerType,
+                    @Complex(baseType = DiagRepBooking.class, key = "customerID") List<Booking> bookings,
+                    @Complex(baseType = Vehicle.class, key="customerID") List<Vehicle> vehicles)
     {
         this.customerID = customerID;
         this.customerSurname = customerSurname;

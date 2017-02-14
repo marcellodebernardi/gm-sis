@@ -26,8 +26,11 @@ public class User implements Searchable {
      * @param surname user's surname
      * @param userType user's type (administrator / normal)
      */
-    public User(String userID, String password, String firstName, String surname, UserType userType) {
-        // todo get unreserved id from database
+    public User(@Simple(name = "userID") String userID,
+                @Simple(name = "password") String password,
+                @Simple(name = "firstName") String firstName,
+                @Simple(name = "surname") String surname,
+                @Simple(name = "userType") UserType userType) {
         this.userID = userID;
         this.password = password;
         this.firstName = firstName;

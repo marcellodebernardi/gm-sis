@@ -28,8 +28,13 @@ public class SpecialistRepairCenter implements Searchable {
      * @param phone   Phone number of a particular Specialist Repair Center
      * @param email   Email address of a particular Specialist Repair Center
      */
-    public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email,
-                                  @Complex(tableName = "SpecRepairBooking") List<SpecRepBooking> bookings) {
+    public SpecialistRepairCenter(@Simple(name = "spcID") int spcID,
+                                  @Simple(name = "name") String name,
+                                  @Simple(name = "address") String address,
+                                  @Simple(name = "phone") String phone,
+                                  @Simple(name = "email") String email,
+                                  @Complex(baseType = SpecRepBooking.class, key = "spcID")
+                                          List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
         this.address = address;
