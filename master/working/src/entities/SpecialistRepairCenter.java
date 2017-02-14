@@ -17,7 +17,7 @@ public class SpecialistRepairCenter implements Searchable {
     private String phone;
     private String email;
 
-    // inverse hierarchical database links
+    // hierarchical links todo getter and setter
     private List<SpecRepBooking> bookings;
 
 
@@ -28,12 +28,14 @@ public class SpecialistRepairCenter implements Searchable {
      * @param phone   Phone number of a particular Specialist Repair Center
      * @param email   Email address of a particular Specialist Repair Center
      */
-    public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email) {
+    public SpecialistRepairCenter(int spcID, String name, String address, String phone, String email,
+                                  @Complex(tableName = "SpecRepairBooking") List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.email = email;
+        this.bookings = bookings;
     }
 
     /**
@@ -91,6 +93,5 @@ public class SpecialistRepairCenter implements Searchable {
     public String getEmail() {
         return this.email;
     }
-
 }
 

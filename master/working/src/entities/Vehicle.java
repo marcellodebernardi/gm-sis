@@ -22,11 +22,17 @@ public class Vehicle implements Searchable {
     private String warrantyCompAddress;
     private Date warrantyExpirationDate;
 
+    // hierarchical links
+    private List<Installation> installationList; // todo getter setter
+
     // inverse hierarchical database links
     private int customerID;
-    private List<Installation> installationList;
 
-    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
+
+    public Vehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer,
+                   double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot,
+                   Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress,
+                   Date warrantyExpirationDate, @Complex(tableName = "Installation") List<Installation> installationList)
     {
         this.regNumber = regNumber;
         this.customerID = customerID;
@@ -43,6 +49,7 @@ public class Vehicle implements Searchable {
         this.warrantyName = warrantyName;
         this.warrantyCompAddress = warrantyCompAddress;
         this. warrantyExpirationDate = warrantyExpirationDate;
+        this.installationList = installationList;
     }
 
     public String getRegNumber() {

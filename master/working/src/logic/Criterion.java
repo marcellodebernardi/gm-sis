@@ -1,6 +1,5 @@
 package logic;
 
-import javax.naming.OperationNotSupportedException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,13 +238,45 @@ public class Criterion<E extends Searchable> {
      * @return String representing search criteria
      */
     public String toString() {
-        String returnString = "" + attributes.get(0) + " " + operators.get(0) + " "
-                + values.get(0);
+        String returnString = "" + attributes.get(0);
+
+        switch(operators.get(0)) {
+            case EqualTo:
+                returnString += " = '" + values.get(0) + "'";
+                break;
+            case LessThan:
+                returnString += " < '" + values.get(0) + "'";
+                break;
+            case MoreThan:
+                returnString += " > '" + values.get(0) + "'";
+                break;
+            case Regex:
+                returnString += " LIKE '" + values.get(0) + "'";
+                break;
+            default:
+                break;
+        }
 
         if (attributes.size() > 1) {
             for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
-                returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i) + " "
-                        + operators.get(i) + " " + values.get(j);
+                returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i);
+
+                switch(operators.get(0)) {
+                    case EqualTo:
+                        returnString += " = '" + values.get(i) + "'";
+                        break;
+                    case LessThan:
+                        returnString += " < '" + values.get(i) + "'";
+                        break;
+                    case MoreThan:
+                        returnString += " > '" + values.get(i) + "'";
+                        break;
+                    case Regex:
+                        returnString += " LIKE '" + values.get(i) + "'";
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         return returnString;

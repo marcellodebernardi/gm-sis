@@ -46,7 +46,7 @@ public class SpecRepairSystem {
     public boolean addRepairCenter(int spcID, String name, String address, String phone, String email)
     {
         //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
-         SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email);
+         SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email, null);
         return persistence.addItem(SpecialistRepairCenter.class, add);
     }
 

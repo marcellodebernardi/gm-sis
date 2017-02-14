@@ -7,10 +7,10 @@ import logic.CriterionOperator;
 import logic.CriterionRepository;
 import logic.Searchable;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,10 +26,13 @@ public class DatabaseRepository implements CriterionRepository {
 
     // todo setup connection correctly
     private final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
-    private final String PK_RETURN = "SELECT last_insert_rowid()";
     private Connection connection;
     private PreparedStatement statement;
-    private MapperFactory factory;
+
+    private final String SELECTSTRING = "SELECT * FROM ";
+    private final String INSERTSTRING = "INSERT INTO ";
+    private final String UPDATESTRING = "UPDATE ";
+    private final String DELETESTRING = "DELETE FROM ";
 
 
     /**
@@ -38,12 +41,10 @@ public class DatabaseRepository implements CriterionRepository {
     private DatabaseRepository() {
         try {
             connection = DriverManager.getConnection(DB_URL);
-            factory = MapperFactory.getInstance();
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
-
 
     /**
      * Gets singleton instance of DatabaseRepository.
@@ -71,8 +72,8 @@ public class DatabaseRepository implements CriterionRepository {
 
         // get requested objects using appropriate mapper
         try {
-            statement = connection.prepareStatement(factory.getMapper(criteria.getCriterionClass()).toSELECTQuery(criteria));
-            return factory.getMapper(criteria.getCriterionClass()).toObjects(statement.executeQuery());
+            statement = connection.prepareStatement(toSELECTQuery(criteria));
+            return toObjects(criteria.getCriterionClass(), statement.executeQuery());
         } catch (SQLException e) {
             // todo not necessarily a good way to handle error
             System.err.print(e.getMessage());
@@ -89,7 +90,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue statements for transaction
-            String[] statements = factory.getMapper(eClass).toINSERTTransaction(item).split("~~~");
+            String[] statements = toINSERTTransaction(eClass, item).split("~~~");
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -113,7 +114,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            String[] statements = factory.getMapper(eClass).toUPDATETransaction(item).split("~~~");
+            String[] statements = toUPDATETransaction(eClass, item).split("~~~");
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -137,9 +138,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            String[] statements = factory.getMapper(criteria.getCriterionClass())
-                    .toDELETETransaction(criteria)
-                    .split("~~~");
+            String[] statements = toDELETETransaction(criteria).split("~~~");
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -151,6 +150,68 @@ public class DatabaseRepository implements CriterionRepository {
         } catch (SQLException e) {
             System.err.print(e.getMessage());
             return false;
+        }
+    }
+
+    /* Converts criterion to SQL SELECT query */
+    private <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
+        return SELECTSTRING + criteria.getCriterionClass() + " WHERE " + criteria.toString() + ";";
+    }
+
+    /* Converts an entity into an insertion transaction */
+    private <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
+        // todo implement
+        return null;
+    }
+
+    /* Converts an entity into an update transaction */
+    private <E extends Searchable> String toUPDATETransaction(Class<E> eClass, E item) {
+        // todo implement
+        return null;
+    }
+
+    /* Converts a criterion into a deletion transaction */
+    private <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
+        // todo implement
+        return null;
+    }
+
+    private <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
+        List<E> returnList = new ArrayList<>();
+
+        try {
+            // column number and column names
+            int columnNumber = results.getMetaData().getColumnCount();
+            String[] columnNames = new String[columnNumber];
+            for (int i = 0; i < columnNumber; i++) {
+                columnNames[i] = results.getMetaData().getColumnName(i);
+            }
+
+            // select full constructor and get parameter list
+            Constructor<?>[] constructors = eClass.getConstructors();
+            Class<?>[] argumentTypes = new Class<?>[0];
+            for (int i = 0; i < constructors.length; i++) {
+                if (constructors[i].getParameterTypes().length > argumentTypes.length) {
+                    argumentTypes = constructors[i].getParameterTypes();
+                }
+            }
+            Constructor<E> constructor = eClass.getConstructor(argumentTypes);
+
+            // iterate over rows
+            while (results.next()) {
+                Object[] initArgs = new Object[columnNumber];
+                // iterate over columns and extract attribute complexity
+                for (int i = 0; i < columnNumber; i++) {
+
+                }
+                returnList.add(constructor.newInstance(initArgs));
+            }
+            return returnList;
+        }
+        catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException
+                | NoSuchMethodException e) {
+            System.err.print(e.getMessage());
+            return null;
         }
     }
 }

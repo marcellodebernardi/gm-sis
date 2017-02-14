@@ -14,7 +14,7 @@ public class CriterionTests {
     public void testSingleCriterion() {
         try {
             System.out.println(new Criterion<>(User.class, "userID", EqualTo, "foo")
-                    .and("password", EqualTo, "dolan"));
+                    .setDiff("password", EqualTo, "dolan"));
         }
         catch (CriterionException e) {
             System.out.println(e.getMessage());

@@ -1,5 +1,6 @@
 package entities;
 
+
 import java.util.Date;
 
 /**
@@ -11,18 +12,24 @@ public class Installation {
     private Date installationDate;
     private Date endWarrantyDate;
 
-    // inverse hierarchical database links todo finish up
-    private String vehicleRegNumber;
+    // hierarchical links
     private PartOccurrence partOccurrence;
+
+    // inverse hierarchical database links
+    private String vehicleRegNumber;
     private int partAbstractionID;
 
-    private Installation(int installationID, Date installationDate, Date endWarrantyDate, String vehicleRegNumber){
+    private Installation(int installationID, Date installationDate, Date endWarrantyDate, String vehicleRegNumber,
+                         int partAbstractionID, @Complex(tableName = "PartOccurrence") PartOccurrence partOccurrence){
         this.installationID = installationID;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
+        this.partAbstractionID = partAbstractionID;
+        this.partOccurrence = partOccurrence;
     }
 
+    // todo getters and setters
     private int installationID(){
         return installationID;
     };

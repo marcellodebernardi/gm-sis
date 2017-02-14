@@ -15,19 +15,22 @@ public class PartAbstraction implements Searchable {
     private double partPrice;
     private int partStockLevel;
 
-    // inverse hierarchical database links
+    // hierarchical links
     private List<PartOccurrence> occurrenceList;
 
-    public PartAbstraction(int partAbstractionID, String partName, String partDescription, double partPrice, int partStockLevel){
+    public PartAbstraction(int partAbstractionID, String partName, String partDescription, double partPrice,
+                           int partStockLevel,
+                           @Complex(tableName = "PartOccurrence") List<PartOccurrence> occurrenceList){
 
         this.partAbstractionID = partAbstractionID;
         this.partName = partName;
         this.partDescription = partDescription;
         this.partPrice = partPrice;
         this.partStockLevel = partStockLevel;
-
+        this.occurrenceList = occurrenceList;
     }
 
+    // todo getters and setters
     public int getPartsID(){
         return partAbstractionID;
     }

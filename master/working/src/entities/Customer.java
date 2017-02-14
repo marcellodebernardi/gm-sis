@@ -10,7 +10,7 @@ import java.util.List;
 public class Customer implements Searchable
 {
     private int customerID;
-    private String customerFirstName;
+    private String customerFirstname;
     private String customerSurname;
     private String customerAddress;
     private String customerPostcode;
@@ -18,21 +18,23 @@ public class Customer implements Searchable
     private String customerEmail;
     private CustomerType customerType;
 
-    // inverse hierarchical database links
+    // hierarchical ownership links
     private List<Booking> bookings;
     private List<Vehicle> vehicles;
 
-    public Customer(int cID, String cSurname, String cFirstName, String cAddress, String cPostcode,
-                    String cPhone, String cEmail, CustomerType cType)
+    public Customer(int customerID, String customerSurname, String customerFirstname, String customerAddress,
+                    String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType,
+                    @Complex(tableName = "DiagRepBooking") List<Booking> bookings,
+                    @Complex(tableName = "Vehicle") List<Vehicle> vehicles)
     {
-        customerID = cID;
-        customerSurname = cSurname;
-        customerFirstName = cFirstName;
-        customerAddress = cAddress;
-        customerPostcode = cPostcode;
-        customerPhone = cPhone;
-        customerEmail = cEmail;
-        customerType = cType;
+        this.customerID = customerID;
+        this.customerSurname = customerSurname;
+        this.customerFirstname = customerFirstname;
+        this.customerAddress = customerAddress;
+        this.customerPostcode = customerPostcode;
+        this.customerPhone = customerPhone;
+        this.customerEmail = customerEmail;
+        this.customerType = customerType;
     }
 
     //gets unique identifier for customer
@@ -62,13 +64,13 @@ public class Customer implements Searchable
     //gets customer's first name
     public String getCustomerFirstname()
     {
-        return customerFirstName;
+        return customerFirstname;
     }
 
     //sets customer's first name
     public void setCustomerFirstname(String custFirstname)
     {
-        customerFirstName = custFirstname;
+        customerFirstname = custFirstname;
     }
 
     //gets customer's address
