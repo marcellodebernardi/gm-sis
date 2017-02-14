@@ -2,6 +2,7 @@ package logic;
 
 import entities.Customer;
 import entities.CustomerType;
+import entities.Vehicle;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import java.util.*;
@@ -16,9 +17,9 @@ public class CustomerSystem {
     private CriterionRepository persistence;
 
 
-    private CustomerSystem(CriterionRepository persistence)
+    private CustomerSystem(CriterionRepository p)
     {
-        this.persistence = persistence;
+        persistence = p;
     }
 
     public static CustomerSystem getInstance(CriterionRepository persistence)
@@ -28,6 +29,49 @@ public class CustomerSystem {
             instance = new CustomerSystem(persistence);
         }
         return instance;
+    }
+
+    public List<Customer> getAllCustomers()
+    {
+        return persistence.getByCriteria(new Criterion<>(Customer.class,null,null,null));
+    }
+
+    public boolean addCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
+    {
+        Customer add = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType);
+        return persistence.addItem(Customer.class, add);
+    }
+
+    public boolean editCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
+    {
+        Customer edit = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType);
+        return persistence.updateItem(Customer.class, edit);
+    }
+
+    //public boolean deleteCustomer()
+    //{}
+
+    public Customer searchCustomer(String customerFirstName, String customerSurname, String regNumber)
+    {
+        if(customerFirstName!="")
+        {
+            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstName", EqualTo, customerFirstName));
+            return customerDetails.get(0);
+        }
+        else if(customerSurname!="")
+        {
+            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerSurname", EqualTo, customerSurname));
+            return customerDetails.get(0);
+        }
+        //else if(regNumber!="")
+        //{
+        //    int customerIDFromRegNumber = Vehicle.getCustomerID();
+        //    List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerIDFromRegNumber));
+        //}
+        else
+        {
+            return null;
+        }
     }
 
 }

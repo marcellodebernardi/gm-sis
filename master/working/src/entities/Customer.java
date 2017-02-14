@@ -10,7 +10,7 @@ import java.util.List;
 public class Customer implements Searchable
 {
     private int customerID;
-    private String customerFirstname;
+    private String customerFirstName;
     private String customerSurname;
     private String customerAddress;
     private String customerPostcode;
@@ -22,12 +22,12 @@ public class Customer implements Searchable
     private List<Booking> bookings;
     private List<Vehicle> vehicles;
 
-    public Customer(int cID, String cSurname, String cFirstname, String cAddress, String cPostcode,
+    public Customer(int cID, String cSurname, String cFirstName, String cAddress, String cPostcode,
                     String cPhone, String cEmail, CustomerType cType)
     {
         customerID = cID;
         customerSurname = cSurname;
-        customerFirstname = cFirstname;
+        customerFirstName = cFirstName;
         customerAddress = cAddress;
         customerPostcode = cPostcode;
         customerPhone = cPhone;
@@ -62,13 +62,13 @@ public class Customer implements Searchable
     //gets customer's first name
     public String getCustomerFirstname()
     {
-        return customerFirstname;
+        return customerFirstName;
     }
 
     //sets customer's first name
     public void setCustomerFirstname(String custFirstname)
     {
-        customerFirstname = custFirstname;
+        customerFirstName = custFirstname;
     }
 
     //gets customer's address
