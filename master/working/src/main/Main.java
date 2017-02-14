@@ -23,11 +23,15 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+        //testing my parts GUI for now, you can change it (SHAKIB)
+
+        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
         //test.fxml
         login = new Scene(mainPane);
         primaryStage.setScene(login);
         primaryStage.show();
 
     }
+
+
 }
