@@ -36,26 +36,26 @@ public class CustomerSystem {
         return persistence.getByCriteria(new Criterion<>(Customer.class,null,null,null));
     }
 
-    public boolean addCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
+    public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer add = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
+        Customer add = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
         return persistence.addItem(Customer.class, add);
     }
 
-    public boolean editCustomer(int customerID, String customerFirstName, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
+    public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer edit = new Customer(customerID, customerFirstName, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
+        Customer edit = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
         return persistence.updateItem(Customer.class, edit);
     }
 
     //public boolean deleteCustomer()
     //{}
 
-    public Customer searchCustomer(String customerFirstName, String customerSurname, String regNumber)
+    public Customer searchCustomer(String customerFirstname, String customerSurname, String regNumber)
     {
-        if(customerFirstName!="")
+        if(customerFirstname!="")
         {
-            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstName", EqualTo, customerFirstName));
+            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", EqualTo, customerFirstname));
             return customerDetails.get(0);
         }
         else if(customerSurname!="")
