@@ -73,6 +73,7 @@
                     <items>
                       <Button mnemonicParsing="false" text="Add Customer" />
                         <Button mnemonicParsing="false" text="Edit Customer" />
+                        <Button mnemonicParsing="false" text="Search Customer" />
                     </items>
                   </ToolBar>
                </content>
