@@ -23,7 +23,7 @@ public class PartRepair extends SpecRepBooking
      */
     public PartRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, PartOccurrence part)
     {
-        super(spcRepID,spcID, dD,rD, cost);
+        super(spcRepID,spcID, dD,rD, cost, 0);
         this.part = part;
     }
 

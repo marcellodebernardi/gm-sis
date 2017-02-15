@@ -2,12 +2,16 @@ package entities;
 
 import logic.Searchable;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Annotates an entity attribute which needs to be fetched from another table. Contains
  *
  *
  * @author Marcello De Bernardi
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Complex {
     Class<? extends Searchable> baseType();
     String key();

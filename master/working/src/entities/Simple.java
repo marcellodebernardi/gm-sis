@@ -1,5 +1,8 @@
 package entities;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Marks a constructor parameter which can be mapped directly to a single data element
  * in the persistence layer. That is, any parameters of primite types, Strings etc should
@@ -7,6 +10,7 @@ package entities;
  *
  * @author Marcello De Bernardi
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Simple {
     String name();
 }

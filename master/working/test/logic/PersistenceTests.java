@@ -25,7 +25,9 @@ public class PersistenceTests {
 
     @Test
     public void getUserFromDatabase() {
-        User user = persistenceLayer.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, "foo")).get(0);
+
+        User user = persistenceLayer.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, "00000").
+                and("password", EqualTo, "password")).get(0);
         assertNotNull(user);
     }
 }

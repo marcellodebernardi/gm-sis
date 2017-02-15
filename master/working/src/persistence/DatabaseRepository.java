@@ -1,9 +1,6 @@
 package persistence;
 
-import entities.Complex;
-import entities.Simple;
-import entities.User;
-import entities.Vehicle;
+import entities.*;
 import logic.Criterion;
 import logic.CriterionOperator;
 import logic.CriterionRepository;
@@ -198,7 +195,7 @@ public class DatabaseRepository implements CriterionRepository {
         try {
             columnNumber = results.getMetaData().getColumnCount();
             columnNames = new ArrayList<>();
-            for (int i = 0; i < columnNumber; i++)
+            for (int i = 1; i <= columnNumber; i++)
                 columnNames.add(results.getMetaData().getColumnName(i));
         }
         catch (SQLException e) {
@@ -236,7 +233,48 @@ public class DatabaseRepository implements CriterionRepository {
                         Simple metadata = (Simple)annotation;
                         String columnName = metadata.name();
                         int columnIndex = columnNames.indexOf(columnName) + 1;
-                        initArgs[i] = results.getObject(columnIndex); // todo might not work
+
+                        /* This procedure is vulnerable to changes in the names of
+                        enumerated types used in the software, as well as to changes
+                        in the classes used in the program. If problems arise, make
+                        sure all expected data types have a switch case below.
+                        todo make more elegant by changing to something without switch
+                         */
+                        switch(constructorArgumentTypes[i].getSimpleName()) {
+                            case "String":
+                                initArgs[i] = results.getString(columnIndex);
+                                break;
+                            case "Integer":
+                                initArgs[i] = results.getInt(columnIndex);
+                                break;
+                            case "Double":
+                                initArgs[i] = results.getDouble(columnIndex);
+                                break;
+                            case "Float":
+                                initArgs[i] = results.getFloat(columnIndex);
+                                break;
+                            case "Boolean":
+                                initArgs[i] = results.getBoolean(columnIndex);
+                                break;
+                            case "CustomerType":
+                                initArgs[i] = CustomerType.valueOf(results.getString(columnIndex));
+                                break;
+                            case "FuelType":
+                                initArgs[i] = FuelType.valueOf(results.getString(columnIndex));
+                                break;
+                            case "UserType":
+                                initArgs[i] = UserType.valueOf(results.getString(columnIndex));
+                                break;
+                            case "VehicleType":
+                                initArgs[i] = VehicleType.valueOf(results.getString(columnIndex));
+                                break;
+                            default:
+                                System.err.print("Data type of database cell could not be identified. "
+                                        + "Check DatabaseRepository.toObjects for missing switch cases.");
+                                return null;
+                        }
+
+                        System.out.println(initArgs[i].getClass().getName());
                     }
                     else if (annotation.annotationType().equals(Complex.class)) {
                         Complex metadata = (Complex)annotation;

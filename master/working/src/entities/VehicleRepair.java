@@ -24,7 +24,7 @@ public class VehicleRepair extends SpecRepBooking
      */
     public VehicleRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, Vehicle vehicle)
     {
-        super(spcRepID,spcID, dD,rD, cost);
+        super(spcRepID,spcID, dD,rD, cost, 0);
         this.vehicle = vehicle;
     }
 
