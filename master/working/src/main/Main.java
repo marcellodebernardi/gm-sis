@@ -1,5 +1,6 @@
 package main;
 
+import controllers.MenuController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -25,11 +26,13 @@ public class Main extends Application {
 
         //testing my parts GUI for now, you can change it (SHAKIB)
 
-        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
+
+        mainPane = FXMLLoader.load(getClass().getResource("/resources/Menuv2.fxml"));
         //test.fxml
         login = new Scene(mainPane);
         primaryStage.setScene(login);
         primaryStage.show();
+
 
     }
 

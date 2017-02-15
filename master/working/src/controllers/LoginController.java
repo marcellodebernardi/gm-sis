@@ -38,8 +38,6 @@ public class LoginController {
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
         stage.show();
-        MenuController A = new MenuController();
-        A.setUserType();
         //Main B = new Main();
         //B.primaryStage.close();
 

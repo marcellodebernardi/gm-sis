@@ -23,7 +23,7 @@
       <Label layoutX="303.0" layoutY="146.0" text="warrantyName" />
       <Label layoutX="277.0" layoutY="179.0" text="warrantyCompAddress" />
       <Label layoutX="273.0" layoutY="212.0" text="warrantyExpirationDate" />
-      <Button fx:id="addV" layoutX="327.0" layoutY="241.0" mnemonicParsing="false" onAction="#addVehicle" text="Edit" />
+      <Button fx:id="addV" layoutX="327.0" layoutY="241.0" mnemonicParsing="false" onAction="#addVehicle" text="Search" />
       <TextField layoutX="95.0" layoutY="48.0" />
       <TextField layoutX="95.0" layoutY="80.0" />
       <TextField layoutX="95.0" layoutY="110.0" />

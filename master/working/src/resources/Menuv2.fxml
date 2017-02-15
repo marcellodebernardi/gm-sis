@@ -100,7 +100,7 @@
                           <items>
                             <Button fx:id="addVButton" mnemonicParsing="false" onAction="#handleButtonAdd" text="Add Vehicle" />
                               <Button fx:id="editVButton" mnemonicParsing="false" onAction="#handleButtonEditSearch" text="Edit Vehicle" />
-                              <Button fx:id="searchVButton" mnemonicParsing="false" text="Search Vehicles" />
+                              <Button fx:id="searchVButton" mnemonicParsing="false" onAction="#handleButtonSearch" text="Search Vehicles" />
                               <Button fx:id="deleteVButton" mnemonicParsing="false" onAction="#handleButtonDelete" text="Delete Vehicle" />
                           </items>
                         </ToolBar>
