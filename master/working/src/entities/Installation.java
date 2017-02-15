@@ -21,6 +21,7 @@ public class Installation implements Searchable {
     private String vehicleRegNumber;
     private int partAbstractionID;
 
+    @Reflective
     private Installation(@Simple(name = "installationID") int installationID,
                          @Simple(name = "installationDate") Date installationDate,
                          @Simple(name = "endWarrantyDate") Date endWarrantyDate,

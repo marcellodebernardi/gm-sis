@@ -156,7 +156,8 @@ public class DatabaseRepository implements CriterionRepository {
 
     /* Converts criterion to SQL SELECT query */
     <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
-        return SELECTSTRING + criteria.getCriterionClass().getSimpleName() + " WHERE "
+        return SELECTSTRING + criteria.getCriterionClass().getSimpleName()
+                + (criteria.toString().equals("") ? "" : " WHERE ")
                 + criteria.toString() + ";";
     }
 
@@ -207,8 +208,9 @@ public class DatabaseRepository implements CriterionRepository {
         try {
             constructorArgumentTypes = new Class<?>[0];
             for (Constructor<?> c : eClass.getConstructors()) {
-                if (c.getParameterTypes().length > constructorArgumentTypes.length) {
+                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                     constructorArgumentTypes = c.getParameterTypes();
+                    break;
                 }
             }
             constructor = eClass.getConstructor(constructorArgumentTypes);
@@ -221,7 +223,7 @@ public class DatabaseRepository implements CriterionRepository {
 
         // map results to objects and add
         try {
-            // rows of ResultSet
+            // for each row of resultset,
             while (results.next()) {
                 Object[] initArgs = new Object[constructorAnnotations.length];
 
@@ -244,16 +246,16 @@ public class DatabaseRepository implements CriterionRepository {
                             case "String":
                                 initArgs[i] = results.getString(columnIndex);
                                 break;
-                            case "Integer":
+                            case "int":
                                 initArgs[i] = results.getInt(columnIndex);
                                 break;
-                            case "Double":
+                            case "double":
                                 initArgs[i] = results.getDouble(columnIndex);
                                 break;
-                            case "Float":
+                            case "float":
                                 initArgs[i] = results.getFloat(columnIndex);
                                 break;
-                            case "Boolean":
+                            case "boolean":
                                 initArgs[i] = results.getBoolean(columnIndex);
                                 break;
                             case "CustomerType":
@@ -273,13 +275,14 @@ public class DatabaseRepository implements CriterionRepository {
                                         + "Check DatabaseRepository.toObjects for missing switch cases.");
                                 return null;
                         }
-
-                        System.out.println(initArgs[i].getClass().getName());
                     }
                     else if (annotation.annotationType().equals(Complex.class)) {
                         Complex metadata = (Complex)annotation;
+
+                        // todo problem: criterion constructor rejects metadata.key() if it is an inherited field
+
                         initArgs[i] = getByCriteria(new Criterion<>(metadata.baseType(), metadata.key(), EqualTo,
-                                results.getObject(1)));
+                                results.getObject(1).getClass().cast(results.getObject(1))));
                     }
                     else {
                         System.out.println("Annotation type not detected");

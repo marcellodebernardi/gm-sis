@@ -18,6 +18,7 @@ public class PartAbstraction implements Searchable {
     // hierarchical links
     private List<PartOccurrence> occurrenceList;
 
+    @Reflective
     public PartAbstraction(@Simple(name = "partAbstractionID") int partAbstractionID,
                            @Simple(name = "partName") String partName,
                            @Simple(name = "partDescription") String partDescription,

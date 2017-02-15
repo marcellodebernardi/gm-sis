@@ -22,6 +22,7 @@ public class Customer implements Searchable
     private List<Booking> bookings;
     private List<Vehicle> vehicles;
 
+    @Reflective
     public Customer(@Simple(name = "customerID") int customerID,
                     @Simple(name = "customerSurname") String customerSurname,
                     @Simple(name = "customerFirstname") String customerFirstname,

@@ -42,6 +42,7 @@ public class DiagRepBooking extends Booking {
      * @param repairEnd         end time of diagnosis
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
+    @Reflective
     public DiagRepBooking(@Simple(name = "bookingID") int bookingID,
                           @Simple(name = "customerID") int customerID,
                           @Simple(name = "vehicleRegNumber") String vehicleRegNumber,

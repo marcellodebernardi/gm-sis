@@ -14,7 +14,7 @@ public class PartOccurrence implements Searchable {
     private int bookingID;
     private int specRepID;
 
-
+    @Reflective
     public PartOccurrence(@Simple(name = "partOccurrenceID") int partOccurrenceID,
                           @Simple(name = "partAbstractionID") int partAbstractionID,
                           @Simple(name = "installationID") int installationID){

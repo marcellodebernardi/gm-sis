@@ -10,6 +10,7 @@ public class Mechanic {
     private String surname;
     private double hourlyRate;
 
+    @Reflective
     public Mechanic(@Simple(name = "mechanicID") int mechanicID,
                     @Simple(name = "firstName") String firstName,
                     @Simple(name = "surname") String surname,

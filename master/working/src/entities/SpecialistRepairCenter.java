@@ -28,6 +28,7 @@ public class SpecialistRepairCenter implements Searchable {
      * @param phone   Phone number of a particular Specialist Repair Center
      * @param email   Email address of a particular Specialist Repair Center
      */
+    @Reflective
     public SpecialistRepairCenter(@Simple(name = "spcID") int spcID,
                                   @Simple(name = "name") String name,
                                   @Simple(name = "address") String address,

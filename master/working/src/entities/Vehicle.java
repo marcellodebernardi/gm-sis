@@ -28,7 +28,7 @@ public class Vehicle implements Searchable {
     // inverse hierarchical database links
     private int customerID;
 
-
+    @Reflective
     public Vehicle(@Simple(name = "regNumber") String regNumber,
                    @Simple(name = "customerID") int customerID,
                    @Simple(name = "vehicleType") VehicleType vehicleType,
@@ -45,8 +45,7 @@ public class Vehicle implements Searchable {
                    @Simple(name = "warrantyCompAddress") String warrantyCompAddress,
                    @Simple(name = "warrantyExpirationDate") Date warrantyExpirationDate,
                    @Complex(baseType = Installation.class, key = "regNumber")
-                           List<Installation> installationList)
-    {
+                           List<Installation> installationList) {
         this.regNumber = regNumber;
         this.customerID = customerID;
         this.vehicleType = vehicleType;

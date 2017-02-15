@@ -26,6 +26,7 @@ public class User implements Searchable {
      * @param surname user's surname
      * @param userType user's type (administrator / normal)
      */
+    @Reflective
     public User(@Simple(name = "userID") String userID,
                 @Simple(name = "password") String password,
                 @Simple(name = "firstName") String firstName,

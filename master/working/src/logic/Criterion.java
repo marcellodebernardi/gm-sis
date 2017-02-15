@@ -1,5 +1,11 @@
 package logic;
 
+import entities.Reflective;
+import entities.Simple;
+
+import javax.lang.model.type.PrimitiveType;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,12 +61,10 @@ import java.util.regex.Pattern;
  */
 public class Criterion<E extends Searchable> {
     private Class<E> eClass;
-    private List<Field> fields;
     private List<String> attributes;
     private List<CriterionOperator> operators;
     private List<Object> values;
     private List<String> logicalConnectives;
-    // todo add immutable flag, and constructor that allows for null fields
     // todo add overloaded methods for inner criteria of different type?
 
 
@@ -81,26 +85,40 @@ public class Criterion<E extends Searchable> {
      */
     public Criterion(Class<E> eClass, String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
+        if (attribute == null || operator == null || value == null) {
+            throw new CriterionException("CONSTRUCTOR: null value in required field. Use single-arg "
+                    + "constructor for empty criterion");
+        }
         // check compatibility of operator and value
         if (!operatorIsCompatible(operator, value)) throw new CriterionException("CONSTRUCTOR: operator incompatible.");
 
         // extract fields and check if arguments are compatible
         this.eClass = eClass;
-        fields = Arrays.asList(this.eClass.getDeclaredFields());
-        for (Field f : fields) {
-            if (f.getName().equals(attribute) && (value.getClass().equals(f.getType()))) {
-                attributes = new ArrayList<>();
-                operators = new ArrayList<>();
-                values = new ArrayList<>();
-                logicalConnectives = new ArrayList<>();
-                attributes.add(attribute);
-                operators.add(operator);
-                values.add(value);
-                return;
-            }
+        if (isClassCompatible(attribute, value)) {
+            attributes = new ArrayList<>();
+            operators = new ArrayList<>();
+            values = new ArrayList<>();
+            logicalConnectives = new ArrayList<>();
+            attributes.add(attribute);
+            operators.add(operator);
+            values.add(value);
+            return;
         }
         // throw error if criteria not acceptable
         throw new CriterionException("CONSTRUCTOR: no such field, or value type does not match field type.");
+    }
+
+    /**
+     * Creates a criterion object specifying no criteria whatsoever. Is used when all objects of class
+     *
+     * @param eClass
+     */
+    public Criterion(Class<E> eClass) {
+        this.eClass = eClass;
+        attributes = new ArrayList<>();
+        operators = new ArrayList<>();
+        values = new ArrayList<>();
+        logicalConnectives = new ArrayList<>();
     }
 
 
@@ -238,9 +256,11 @@ public class Criterion<E extends Searchable> {
      * @return String representing search criteria
      */
     public String toString() {
-        String returnString = "" + attributes.get(0);
+        if (attributes.size() == 0) return "";
 
-        switch(operators.get(0)) {
+        // first element
+        String returnString = "" + attributes.get(0);
+        switch (operators.get(0)) {
             case EqualTo:
                 returnString += " = '" + values.get(0) + "'";
                 break;
@@ -257,11 +277,12 @@ public class Criterion<E extends Searchable> {
                 break;
         }
 
+        // additional elements
         if (attributes.size() > 1) {
             for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
                 returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i);
 
-                switch(operators.get(0)) {
+                switch (operators.get(0)) {
                     case EqualTo:
                         returnString += " = '" + values.get(i) + "'";
                         break;
@@ -294,15 +315,40 @@ public class Criterion<E extends Searchable> {
 
     // returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {
-        for (Field f : fields) {
-            if (f.getName().equals(attribute) && (value.getClass().equals(f.getType())))
-                return true;
-        }
-        return false;
-    }
+        // argument types of reflective constructor
+        Class<?>[] constructorArgumentTypes = new Class<?>[0];
 
-    private boolean isClassCompatible() {
-        return false;
+        for (Constructor<?> c : eClass.getConstructors()) {
+            if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                constructorArgumentTypes = c.getParameterTypes();
+                break;
+            }
+        }
+
+        // get reflective constructor and check:
+        // 1. a parameter is annotated as Simple(name = "attribute")
+        // 2. the same parameter is of the same class as value
+        try {
+            Constructor<E> constructor = eClass.getConstructor(constructorArgumentTypes);
+            Annotation[][] annotations = constructor.getParameterAnnotations();
+
+            for (int i = 0; i < annotations.length; i++) {
+                if (annotations[i][0].annotationType().equals(Simple.class)) {
+                    Simple metadata = (Simple)annotations[i][0];
+                    if (metadata.name().equals(attribute)) {
+                        return constructorArgumentTypes[i].isPrimitive() ?
+                                constructorArgumentTypes[i].toString().substring(0,1)
+                                        .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))
+                                : constructorArgumentTypes[i].getClass().equals(value.getClass());
+                    }
+                }
+            }
+            return false;
+        }
+        catch (NoSuchMethodException e) {
+            System.err.print(e.getMessage());
+            return false;
+        }
     }
 
     // returns true if operator and value are compatible
