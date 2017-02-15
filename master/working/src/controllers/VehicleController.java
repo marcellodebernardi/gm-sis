@@ -48,7 +48,8 @@ public class VehicleController {
     public TextField wExpirationDate;
     public Button editV;
     public TextField tVReg;
-    public Label Ereg;
+    @FXML
+    public TextField Ereg;
 
 
 
@@ -120,6 +121,8 @@ public class VehicleController {
             e.printStackTrace(  );
         }
     }
+
+    @FXML
     public void VehicleEditB() throws Exception {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
@@ -128,14 +131,19 @@ public class VehicleController {
             stage.setTitle("Edit Vehicle");
             stage.setScene(new Scene(menu));
             stage.show();
-            System.out.println(tVReg.getText());
-            System.out.println(vSys.searchVehicle(tVReg.getText()));
-
-
+            System.out.println("c");
+            Vehicle A = vSys.searchVehicle(tVReg.getText());
+            System.out.println("c");
+            if (A == null)
+            {
+                System.out.println("not working");
+            }
+            System.out.println(A.getRegNumber());
+            Ereg.setText(A.getRegNumber() +" test");
         }
         catch (Exception e)
         {
-            System.out.println("cant open");
+            System.out.println("cant open a");
         }
 
     }
