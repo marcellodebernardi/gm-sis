@@ -5,6 +5,7 @@ import logic.Criterion;
 import logic.CriterionOperator;
 import logic.CriterionRepository;
 import logic.Searchable;
+import org.joda.time.DateTime;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -270,8 +271,15 @@ public class DatabaseRepository implements CriterionRepository {
                             case "VehicleType":
                                 initArgs[i] = VehicleType.valueOf(results.getString(columnIndex));
                                 break;
+                            case "Date":
+                                initArgs[i] = new Date(results.getLong(columnIndex));
+                                break;
+                            case "DateTime":
+                                initArgs[i] = new DateTime(results.getLong(columnIndex));
+                                break;
                             default:
-                                System.err.print("Data type of database cell (" + i + ") could not be identified. "
+                                System.err.print("\nORM toObjects(): data type of constructor argument for database column "
+                                        + "(" + columnIndex + ", " +  columnName + ") could not be identified."
                                         + "Check DatabaseRepository.toObjects for missing switch cases.");
                                 return null;
                         }

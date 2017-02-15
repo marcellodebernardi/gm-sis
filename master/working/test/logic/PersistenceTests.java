@@ -1,9 +1,6 @@
 package logic;
 
-import entities.Customer;
-import entities.PartOccurrence;
-import entities.User;
-import entities.Vehicle;
+import entities.*;
 import logic.Criterion;
 import logic.CriterionRepository;
 import org.junit.Test;
@@ -46,6 +43,10 @@ public class PersistenceTests {
 
         for(Customer c : customers) {
             System.out.println(c.getCustomerID() + " " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
+            System.out.println("Vehicles: " + c.getVehicles().size());
+            if (c.getVehicles().size() > 0) {
+                System.out.println(c.getVehicles().get(0).getDateLastServiced());
+            }
         }
         assertNotNull(customers);
     }
@@ -64,6 +65,16 @@ public class PersistenceTests {
 
         for (Vehicle v : vehicles) {
             System.out.println(v.getRegNumber() + " " + v.getCustomerID());
+        }
+    }
+
+    @Test
+    public void getAllBookings() {
+        List<DiagRepBooking> bookings = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
+
+        for (DiagRepBooking b : bookings) {
+            System.out.println(b.getBookingID() + ", " + b.getCustomerID() + ", " + b.getVehicleRegNumber()
+                    + ", " + b.getRepairInterval());
         }
     }
 }
