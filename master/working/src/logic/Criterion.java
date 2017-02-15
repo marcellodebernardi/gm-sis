@@ -318,8 +318,11 @@ public class Criterion<E extends Searchable> {
         // argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
 
+        System.out.println("Criterion class: " + eClass.getSimpleName());
+
         for (Constructor<?> c : eClass.getConstructors()) {
             if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                System.out.println("Reflective constructor identified.");
                 constructorArgumentTypes = c.getParameterTypes();
                 break;
             }
@@ -335,11 +338,14 @@ public class Criterion<E extends Searchable> {
             for (int i = 0; i < annotations.length; i++) {
                 if (annotations[i][0].annotationType().equals(Simple.class)) {
                     Simple metadata = (Simple)annotations[i][0];
+
+                    System.out.println("Simple annotation found: " + metadata.name());
+
                     if (metadata.name().equals(attribute)) {
                         return constructorArgumentTypes[i].isPrimitive() ?
                                 constructorArgumentTypes[i].toString().substring(0,1)
                                         .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))
-                                : constructorArgumentTypes[i].getClass().equals(value.getClass());
+                                : constructorArgumentTypes[i].getSimpleName().equals(value.getClass().getSimpleName());
                     }
                 }
             }

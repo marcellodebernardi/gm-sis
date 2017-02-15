@@ -271,16 +271,13 @@ public class DatabaseRepository implements CriterionRepository {
                                 initArgs[i] = VehicleType.valueOf(results.getString(columnIndex));
                                 break;
                             default:
-                                System.err.print("Data type of database cell could not be identified. "
+                                System.err.print("Data type of database cell (" + i + ") could not be identified. "
                                         + "Check DatabaseRepository.toObjects for missing switch cases.");
                                 return null;
                         }
                     }
                     else if (annotation.annotationType().equals(Complex.class)) {
                         Complex metadata = (Complex)annotation;
-
-                        // todo problem: criterion constructor rejects metadata.key() if it is an inherited field
-
                         initArgs[i] = getByCriteria(new Criterion<>(metadata.baseType(), metadata.key(), EqualTo,
                                 results.getObject(1).getClass().cast(results.getObject(1))));
                     }

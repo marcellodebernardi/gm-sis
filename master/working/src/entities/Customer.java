@@ -42,6 +42,8 @@ public class Customer implements Searchable
         this.customerPhone = customerPhone;
         this.customerEmail = customerEmail;
         this.customerType = customerType;
+        this.bookings = bookings;
+        this.vehicles = vehicles;
     }
 
     //gets unique identifier for customer
@@ -72,6 +74,10 @@ public class Customer implements Searchable
     public String getCustomerFirstname()
     {
         return customerFirstname;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
     }
 
     //sets customer's first name
