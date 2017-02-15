@@ -34,7 +34,7 @@ public class SpecialistRepairCenter implements Searchable {
                                   @Simple(name = "address") String address,
                                   @Simple(name = "phone") String phone,
                                   @Simple(name = "email") String email,
-                                  @Complex(baseType = SpecRepBooking.class, key = "spcID")
+                                  @Complex(baseType = SpecRepBooking.class, specTypes = SpecRepBooking.class, key = "spcID")
                                           List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
@@ -44,16 +44,6 @@ public class SpecialistRepairCenter implements Searchable {
         this.bookings = bookings;
     }
 
-    /**
-     * No argument constructor, use for querying database for specialist repair centers without any specific details
-     */
-    public SpecialistRepairCenter() {
-        this.spcID = -1;
-        this.name = null;
-        this.address = null;
-        this.phone = null;
-        this.email = null;
-    }
 
     /**
      * Returns a int representing Specialist Repair Center ID

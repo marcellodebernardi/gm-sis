@@ -9,22 +9,28 @@ import entities.PartAbstraction;
  */
 public class PartRepair extends SpecRepBooking
 {
-    private PartOccurrence part;
+    private int partOccurrenceID;
 
     /**
      * Constructor for creating a specialist repair booking for a part
      *
      * @param spcRepID
      * @param spcID
-     * @param dD
-     * @param rD
+     * @param deliveryDate
+     * @param returnDate
      * @param cost
-     * @param part represents the part being sent off to the SRC
+     * @param partOccurrenceID represents the part being sent off to the SRC
      */
-    public PartRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, PartOccurrence part)
-    {
-        super(spcRepID,spcID, dD,rD, cost, 0);
-        this.part = part;
+    @Reflective
+    public PartRepair(@Simple(name = "spcRepID") int spcRepID,
+                      @Simple(name = "spcID") int spcID,
+                      @Simple(name = "deliveryDate") Date deliveryDate,
+                      @Simple(name = "returnDate") Date returnDate,
+                      @Simple(name = "cost") double cost,
+                      @Simple(name = "bookingID") int bookingID,
+                      @Simple(name = "partOccurrenceID") int partOccurrenceID) {
+        super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
+        this.partOccurrenceID = partOccurrenceID;
     }
 
 

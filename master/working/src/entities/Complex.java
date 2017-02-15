@@ -14,5 +14,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Complex {
     Class<? extends Searchable> baseType();
+    Class<? extends Searchable>[] specTypes();
     String key();
 }

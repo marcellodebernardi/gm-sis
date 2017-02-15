@@ -27,7 +27,7 @@ public class Installation implements Searchable {
                          @Simple(name = "endWarrantyDate") Date endWarrantyDate,
                          @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
                          @Simple(name = "partAbstractionID") int partAbstractionID,
-                         @Complex(baseType = PartOccurrence.class, key = "installationID")
+                         @Complex(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence){
         this.installationID = installationID;
         this.installationDate = installationDate;

@@ -31,9 +31,10 @@ public class Customer implements Searchable
                     @Simple(name = "customerPhone") String customerPhone,
                     @Simple(name = "customerEmail") String customerEmail,
                     @Simple(name = "customerType") CustomerType customerType,
-                    @Complex(baseType = DiagRepBooking.class, key = "customerID") List<Booking> bookings,
-                    @Complex(baseType = Vehicle.class, key="customerID") List<Vehicle> vehicles)
-    {
+                    @Complex(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
+                                List<Booking> bookings,
+                    @Complex(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+                                List<Vehicle> vehicles) {
         this.customerID = customerID;
         this.customerSurname = customerSurname;
         this.customerFirstname = customerFirstname;

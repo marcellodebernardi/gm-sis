@@ -2,7 +2,6 @@ package persistence;
 
 import entities.*;
 import logic.Criterion;
-import logic.CriterionOperator;
 import logic.CriterionRepository;
 import logic.Searchable;
 import org.joda.time.DateTime;
@@ -12,6 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static logic.CriterionOperator.EqualTo;
@@ -180,7 +180,7 @@ public class DatabaseRepository implements CriterionRepository {
         return null;
     }
 
-    /* Converts a ResultSet into a List<E> of objects */
+    /* Converts a ResultSet into a List<E> of objects todo break down into helper method */
     private <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
         List<E> returnList = new ArrayList<>();
 
@@ -286,8 +286,37 @@ public class DatabaseRepository implements CriterionRepository {
                     }
                     else if (annotation.annotationType().equals(Complex.class)) {
                         Complex metadata = (Complex)annotation;
-                        initArgs[i] = getByCriteria(new Criterion<>(metadata.baseType(), metadata.key(), EqualTo,
-                                results.getObject(1).getClass().cast(results.getObject(1))));
+
+                        // the complex attribute is a list of some form
+                        if (constructorArgumentTypes[i].isAssignableFrom(List.class)) {
+
+                            List<Object> finalResult = new ArrayList<>();
+
+                            // fetch complex attribute data
+                            for (Class<? extends Searchable> type : metadata.specTypes()) {
+                                List<? extends Searchable> result = getByCriteria(new Criterion<>(type, metadata.key(),
+                                        EqualTo, results.getObject(1).getClass().cast(results.getObject(1))));
+
+                                if (result.size() > 0) {
+                                    finalResult.addAll(result);
+                                }
+                            }
+                            initArgs[i] = finalResult;
+                        }
+                        // the complex attribute is not a list
+                        else {
+                            for (Class<? extends Searchable> type : metadata.specTypes()) {
+                                List<? extends Searchable> result = getByCriteria(new Criterion<>(type, metadata.key(),
+                                        EqualTo, results.getObject(1).getClass().cast(results.getObject(1))));
+
+                                // stop searching when single attribute is found
+                                if (result.size() == 0) initArgs[i] = null;
+                                else {
+                                    initArgs[i] = result.get(0);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     else {
                         System.out.println("Annotation type not detected");

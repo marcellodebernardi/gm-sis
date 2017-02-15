@@ -24,7 +24,7 @@ public class PartAbstraction implements Searchable {
                            @Simple(name = "partDescription") String partDescription,
                            @Simple(name = "partPrice") double partPrice,
                            @Simple(name = "partStockLevel") int partStockLevel,
-                           @Complex(baseType = PartOccurrence.class, key = "partAbstractionID")
+                           @Complex(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
                                    List<PartOccurrence> occurrenceList){
         this.partAbstractionID = partAbstractionID;
         this.partName = partName;

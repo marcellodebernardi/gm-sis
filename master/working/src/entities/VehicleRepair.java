@@ -8,32 +8,38 @@ import entities.Vehicle;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class VehicleRepair extends SpecRepBooking
-{
-    private Vehicle vehicle;
+public class VehicleRepair extends SpecRepBooking {
+    private String vehicleRegNumber;
 
     /**
      * Constructor for creating a specialist repair booking for a vehicle.
      *
      * @param spcRepID
      * @param spcID
-     * @param dD
-     * @param rD
+     * @param deliveryDate
+     * @param returnDate
      * @param cost
-     * @param vehicle Represents the vehicle being booked in for repair
+     * @param vehicleRegNumber Represents the vehicle being booked in for repair
      */
-    public VehicleRepair(int spcRepID, int spcID, Date dD, Date rD, double cost, Vehicle vehicle)
-    {
-        super(spcRepID,spcID, dD,rD, cost, 0);
-        this.vehicle = vehicle;
+    @Reflective
+    public VehicleRepair(@Simple(name = "spcRepID") int spcRepID,
+                         @Simple(name = "spcID") int spcID,
+                         @Simple(name = "deliveryDate") Date deliveryDate,
+                         @Simple(name = "returnDate") Date returnDate,
+                         @Simple(name = "cost") double cost,
+                         @Simple(name = "bookingID") int bookingID,
+                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
+        super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
+        this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    @Override
+
     /**
      * Returns the registration number of the vehicle booked in for specialist repair center
      */
+    @Override
     public String getBookingItemID() {
-        return vehicle.getRegNumber();
+        return vehicleRegNumber;
     }
 }
 

@@ -44,7 +44,7 @@ public class Vehicle implements Searchable {
                    @Simple(name = "warrantyName") String warrantyName,
                    @Simple(name = "warrantyCompAddress") String warrantyCompAddress,
                    @Simple(name = "warrantyExpirationDate") Date warrantyExpirationDate,
-                   @Complex(baseType = Installation.class, key = "vehicleRegNumber")
+                   @Complex(baseType = Installation.class, specTypes = Installation.class, key = "vehicleRegNumber")
                            List<Installation> installationList) {
         this.regNumber = regNumber;
         this.customerID = customerID;

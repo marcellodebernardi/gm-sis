@@ -54,7 +54,7 @@ public class DiagRepBooking extends Booking {
                           @Simple(name = "diagnosisEnd") DateTime diagnosisEnd,
                           @Simple(name = "repairStart") DateTime repairStart,
                           @Simple(name = "repairEnd") DateTime repairEnd,
-                          @Complex(baseType = SpecRepBooking.class, key = "bookingID")
+                          @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                   SpecRepBooking specRepBooking) {
         super(bookingID, customerID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;

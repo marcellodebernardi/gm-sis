@@ -72,9 +72,11 @@ public class PersistenceTests {
     public void getAllBookings() {
         List<DiagRepBooking> bookings = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
 
+        if (bookings.get(0).getSpecRepBooking() == null) System.out.println("No spc booking");
+
         for (DiagRepBooking b : bookings) {
             System.out.println(b.getBookingID() + ", " + b.getCustomerID() + ", " + b.getVehicleRegNumber()
-                    + ", " + b.getRepairInterval());
+                    + ", " + b.getRepairInterval() + ", spc " + b.getSpecRepBooking().getSpcRepID());
         }
     }
 }

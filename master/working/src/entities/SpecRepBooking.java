@@ -28,7 +28,7 @@ public abstract class SpecRepBooking implements Searchable {
      * @param returnDate Date representing the date on which the part or vehicle is expected to return
      * @param cost Double representing the total cost of the SR booking
      */
-    @Reflective
+    @Reflective // todo remove reflective ability and Searchable?
     public SpecRepBooking(@Simple(name = "spcRepID") int spcRepID,
                           @Simple(name = "spcID") int spcID,
                           @Simple(name = "deliveryDate") Date deliveryDate,
