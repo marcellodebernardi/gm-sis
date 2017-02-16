@@ -27,8 +27,6 @@ import java.util.Locale;
  */
 public class VehicleController {
 
-
-
     private VehicleSys vSys = VehicleSys.getInstance();
     public TextField vReg;
     public TextField reg;
@@ -49,7 +47,8 @@ public class VehicleController {
     public Button editV;
     public TextField tVReg;
     @FXML
-    public TextField Ereg;
+    public TextField eVR;
+    public TextField eCID;
 
 
 
@@ -125,13 +124,8 @@ public class VehicleController {
     @FXML
     public void VehicleEditB() throws Exception {
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
-            Parent menu = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Edit Vehicle");
-            stage.setScene(new Scene(menu));
-            stage.show();
-
+            Vehicle vehicle = vSys.searchVehicle(tVReg.getText());
+            setVehicleDets(vehicle);
         }
         catch (Exception e)
         {
@@ -141,6 +135,10 @@ public class VehicleController {
 
     }
 
+    public void setVehicleDets(Vehicle vehicle)
+    {
+        eVR.setText(vehicle.getRegNumber());
+    }
 
 
 

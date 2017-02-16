@@ -139,7 +139,7 @@ public void handleButtonAdd() throws Exception {
                                         editSearchStage.setAlwaysOnTop(true);
                                         return; }
                         }
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditSearchVehicle.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         editSearchStage = new Stage();
                         editSearchStage.setTitle("Edit Search Vehicle");

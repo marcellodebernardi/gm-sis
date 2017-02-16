@@ -5,38 +5,41 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="274.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleEditController">
-    <children>
-      <TextField fx:id="Ereg" layoutX="97.0" layoutY="15.0" prefHeight="27.0" prefWidth="167.0" />
-      <Label layoutX="35.0" layoutY="18.0" text="reg" />
-      <Label layoutX="15.0" layoutY="53.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
-      <Label layoutX="15.0" layoutY="85.0" text="VehicleType" />
-      <Label layoutX="37.0" layoutY="115.0" text="model" />
-      <Label layoutX="12.0" layoutY="146.0" text="manufacturer" />
-      <Label layoutX="12.0" layoutY="179.0" text="engineSize" />
-      <Label layoutX="26.0" layoutY="213.0" text="fuelType" />
-      <Label layoutX="34.0" layoutY="246.0" text="colour" />
-      <Label layoutX="324.0" layoutY="19.0" text="mileage" />
-      <Label layoutX="298.0" layoutY="53.0" text="renewalDateMot" />
-      <Label layoutX="295.0" layoutY="85.0" text="dateLastServiced" />
-      <Label layoutX="287.0" layoutY="115.0" text="coveredByWarranty" />
-      <Label layoutX="303.0" layoutY="146.0" text="warrantyName" />
-      <Label layoutX="277.0" layoutY="179.0" text="warrantyCompAddress" />
-      <Label layoutX="273.0" layoutY="212.0" text="warrantyExpirationDate" />
-      <Button fx:id="addV" layoutX="327.0" layoutY="241.0" mnemonicParsing="false"  text="Edit" />
-      <TextField fx:id="cID" layoutX="95.0" layoutY="48.0" />
-      <TextField fx:id="vT" layoutX="95.0" layoutY="80.0" />
-      <TextField fx:id="model" layoutX="95.0" layoutY="110.0" />
-      <TextField fx:id="manu" layoutX="95.0" layoutY="141.0" />
-      <TextField fx:id="eSize" layoutX="95.0" layoutY="174.0" />
-      <TextField fx:id="fType" layoutX="95.0" layoutY="207.0" />
-      <TextField fx:id="colour" layoutX="95.0" layoutY="241.0" />
-      <TextField fx:id="mileage" layoutX="419.0" layoutY="15.0" />
-      <TextField fx:id="rDM" layoutX="419.0" layoutY="48.0" />
-      <TextField fx:id="dLS" layoutX="419.0" layoutY="80.0" />
-      <TextField fx:id="cBW" layoutX="419.0" layoutY="110.0" />
-      <TextField fx:id="wN" layoutX="419.0" layoutY="141.0" />
-      <TextField fx:id="wCA" layoutX="419.0" layoutY="174.0" />
-      <TextField fx:id="wED" layoutX="419.0" layoutY="208.0" />
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+   <children>
+      <TextField fx:id="tVReg" layoutX="105.0" layoutY="21.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Vehicle Reg" />
+      <Label layoutX="42.0" layoutY="26.0" text="reg" />
+      <Button fx:id="editV" layoutX="431.0" layoutY="21.0" mnemonicParsing="false" onAction="#VehicleEditB" text="Edit" />
+      <TextField fx:id="eVR" layoutX="98.0" layoutY="97.0" prefHeight="27.0" prefWidth="167.0" />
+      <Label layoutX="36.0" layoutY="100.0" text="reg" />
+      <Label layoutX="16.0" layoutY="135.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
+      <Label layoutX="16.0" layoutY="167.0" text="VehicleType" />
+      <Label layoutX="38.0" layoutY="197.0" text="model" />
+      <Label layoutX="13.0" layoutY="228.0" text="manufacturer" />
+      <Label layoutX="13.0" layoutY="261.0" text="engineSize" />
+      <Label layoutX="27.0" layoutY="295.0" text="fuelType" />
+      <Label layoutX="35.0" layoutY="328.0" text="colour" />
+      <Label layoutX="325.0" layoutY="101.0" text="mileage" />
+      <Label layoutX="299.0" layoutY="135.0" text="renewalDateMot" />
+      <Label layoutX="296.0" layoutY="167.0" text="dateLastServiced" />
+      <Label layoutX="288.0" layoutY="197.0" text="coveredByWarranty" />
+      <Label layoutX="304.0" layoutY="228.0" text="warrantyName" />
+      <Label layoutX="278.0" layoutY="261.0" text="warrantyCompAddress" />
+      <Label layoutX="274.0" layoutY="294.0" text="warrantyExpirationDate" />
+      <Button fx:id="eEV" layoutX="328.0" layoutY="323.0" mnemonicParsing="false" text="Edit" />
+      <TextField fx:id="eCID" layoutX="96.0" layoutY="130.0" />
+      <TextField fx:id="eVT" layoutX="96.0" layoutY="162.0" />
+      <TextField fx:id="eModel" layoutX="96.0" layoutY="192.0" />
+      <TextField fx:id="eM" layoutX="96.0" layoutY="223.0" />
+      <TextField fx:id="eES" layoutX="96.0" layoutY="256.0" />
+      <TextField fx:id="eFT" layoutX="96.0" layoutY="289.0" />
+      <TextField fx:id="eC" layoutX="96.0" layoutY="323.0" />
+      <TextField fx:id="eM" layoutX="420.0" layoutY="97.0" />
+      <TextField fx:id="eRDM" layoutX="420.0" layoutY="130.0" />
+      <TextField fx:id="eDLS" layoutX="420.0" layoutY="162.0" />
+      <TextField fx:id="eCBW" layoutX="420.0" layoutY="192.0" />
+      <TextField fx:id="eWN" layoutX="420.0" layoutY="223.0" />
+      <TextField fx:id="eWCA" layoutX="420.0" layoutY="256.0" />
+      <TextField fx:id="eWED" layoutX="420.0" layoutY="290.0" />
+   </children>
 </AnchorPane>
