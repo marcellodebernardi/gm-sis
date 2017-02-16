@@ -64,7 +64,7 @@ public class BookingSystem {
      * @return List of diagnosis and repair bookings
      */
     public List<DiagRepBooking> getAllBookings() {
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, null, null, null));
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
     }
 
     public List<DiagRepBooking> getTodayBookings() {

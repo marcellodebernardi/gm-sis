@@ -52,4 +52,9 @@ public class RepositoryTests {
         System.out.println(DatabaseRepository.getInstance().toSELECTQuery(new Criterion<>(User.class, "userID",
                 CriterionOperator.EqualTo, "foo").and("password", CriterionOperator.EqualTo, "bar")));
     }
+
+    @Test
+    public void testDELETETransaction() {
+        System.out.println(DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(User.class)));
+    }
 }

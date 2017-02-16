@@ -11,7 +11,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static logic.CriterionOperator.EqualTo;
@@ -165,11 +164,10 @@ public class DatabaseRepository implements CriterionRepository {
     /* Converts an entity into an insertion transaction */
     <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
         // reflection class data
-        Constructor<E> constructor;
         Annotation[][] constructorAnnotations;
         Class<?>[] constructorArgumentTypes;
 
-        // obtain reflection data
+        // obtain constructor annotations and argument types
         try {
             constructorArgumentTypes = new Class<?>[0];
             for (Constructor<?> c : eClass.getConstructors()) {
@@ -178,12 +176,12 @@ public class DatabaseRepository implements CriterionRepository {
                     break;
                 }
             }
-            constructor = eClass.getConstructor(constructorArgumentTypes);
-            constructorAnnotations = constructor.getParameterAnnotations();
+            constructorAnnotations = eClass.getConstructor(constructorArgumentTypes).getParameterAnnotations();
         }
         catch (NoSuchMethodException e) {
             System.err.print(e.getMessage() + " - Failed to obtain reflective constructor.");
         }
+
 
         /* todo generate INSERT string as follows:
         Iterate over constructor parameters. For each simple parameter, look at the
@@ -202,9 +200,11 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     /* Converts a criterion into a deletion transaction */
+    // todo implement cascading
     <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
-        // todo implement silimar to INSERT
-        return null;
+        return DELETESTRING + criteria.getCriterionClass().getSimpleName()
+                + (criteria.toString().equals("") ? "" : " WHERE ")
+                + criteria.toString() + ";";
     }
 
     /* Converts a ResultSet into a List<E> of objects todo break down into helper method */
@@ -359,6 +359,21 @@ public class DatabaseRepository implements CriterionRepository {
         }
         catch(InvocationTargetException | InstantiationException | IllegalAccessException e) {
             System.err.print(e.getMessage() + " - Failed to create object instance.");
+            return null;
+        }
+    }
+
+    private <E extends Searchable> boolean exists(E item) {
+        return false;
+    }
+
+    /* Allows running a raw SQL query on the database. Consider minimal use */
+    private ResultSet runSQL(String query) {
+        try {
+            return connection.prepareStatement(query).executeQuery();
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
             return null;
         }
     }
