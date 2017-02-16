@@ -8,7 +8,7 @@ import entities.Vehicle;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class VehicleRepair extends SpecRepBooking {
+public class VehicleSpecialistRepair extends SpecRepBooking {
     private String vehicleRegNumber;
 
     /**
@@ -22,7 +22,7 @@ public class VehicleRepair extends SpecRepBooking {
      * @param vehicleRegNumber Represents the vehicle being booked in for repair
      */
     @Reflective
-    public VehicleRepair(@Simple(name = "spcRepID") int spcRepID,
+    public VehicleSpecialistRepair(@Simple(name = "spcRepID") int spcRepID,
                          @Simple(name = "spcID") int spcID,
                          @Simple(name = "deliveryDate") Date deliveryDate,
                          @Simple(name = "returnDate") Date returnDate,
@@ -48,7 +48,6 @@ public class VehicleRepair extends SpecRepBooking {
         return super.getDeliveryDate();
     }
 
-    @Simple(name = "returnDate")
     public Date getReturnDate() {
         return super.getReturnDate();
     }

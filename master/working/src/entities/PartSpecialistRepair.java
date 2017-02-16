@@ -7,7 +7,7 @@ import entities.PartAbstraction;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class PartRepair extends SpecRepBooking
+public class PartSpecialistRepair extends SpecRepBooking
 {
     private int partOccurrenceID;
 
@@ -22,7 +22,7 @@ public class PartRepair extends SpecRepBooking
      * @param partOccurrenceID represents the part being sent off to the SRC
      */
     @Reflective
-    public PartRepair(@Simple(name = "spcRepID") int spcRepID,
+    public PartSpecialistRepair(@Simple(name = "spcRepID") int spcRepID,
                       @Simple(name = "spcID") int spcID,
                       @Simple(name = "deliveryDate") Date deliveryDate,
                       @Simple(name = "returnDate") Date returnDate,
