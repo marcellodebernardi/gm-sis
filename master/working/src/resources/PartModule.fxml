@@ -37,7 +37,7 @@
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
                           </items>
                         </ToolBar>
-                        <TableView layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="665.0">
+                        <TableView fx:id="PartsTable" editable="true" layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="665.0">
                           <columns>
                             <TableColumn fx:id="partAbstractionID" prefWidth="75.0" text="Part ID" />
                             <TableColumn fx:id="partName" prefWidth="150.42332458496094" text="Name" />
@@ -47,7 +47,7 @@
                           </columns>
                         </TableView>
                         <Label layoutX="8.0" layoutY="55.0" text="Currently available in garage:" />
-                        <TextField fx:id="searchBtn" layoutX="206.0" layoutY="50.0" prefHeight="27.0" prefWidth="467.0" promptText="Search Parts..." />
+                        <TextField fx:id="searchBtn" layoutX="206.0" layoutY="50.0" prefHeight="27.0" prefWidth="327.0" promptText="Search Parts..." />
                         <TableView layoutX="14.0" layoutY="340.0" prefHeight="162.0" prefWidth="851.0">
                            <columns>
                               <TableColumn prefWidth="79.30229377746582" text="Booking ID" />
@@ -87,6 +87,7 @@
                         <TextField layoutX="891.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
                         <Button layoutX="687.0" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Calculate" />
                         <TextField layoutX="792.0" layoutY="247.0" prefHeight="27.0" prefWidth="190.0" text="Total Bill" />
+                        <Button fx:id="updateBtn" layoutX="549.0" layoutY="49.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="121.0" text="Update Table" />
                      </children>
                   </AnchorPane>
             </content>
