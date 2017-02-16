@@ -1,67 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="247.0" prefWidth="847.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
     <children>
-                        <TextField fx:id="reg" layoutX="97.0" layoutY="9.0" promptText="Enter Vehicle Reg" />
-                        <TextField fx:id="cID" layoutX="97.0" layoutY="40.0" promptText="Enter Customer ID" />
-                        <TextField fx:id="mod" layoutX="97.0" layoutY="94.0" prefHeight="28.0" prefWidth="167.0" promptText="Enter model" />
-                        <TextField fx:id="manuf" layoutX="97.0" layoutY="121.0" promptText="Enter Manufacturer" />
-                        <TextField fx:id="eSize" layoutX="97.0" layoutY="149.0" promptText="Enter Engine Size" />
-                        <TextField fx:id="wName" layoutX="419.0" layoutY="121.0" promptText="Enter Name" />
-                        <TextField fx:id="mil" layoutX="419.0" layoutY="9.0" promptText="Enter Mileage" />
-                        <TextField fx:id="wCompAddress" layoutX="420.0" layoutY="148.0" promptText="Enter Address" />
-                        <TextField fx:id="col" layoutX="97.0" layoutY="202.0" promptText="Enter Colour" />
-                        <Label layoutX="31.0" layoutY="14.0" text="reg" />
-                        <Label layoutX="9.0" layoutY="45.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
-                        <Label layoutX="8.0" layoutY="72.0" text="VehicleType" />
-                        <Label layoutX="23.0" layoutY="99.0" text="model" />
-                        <Label layoutX="6.0" layoutY="126.0" text="manufacturer" />
-                        <Label layoutX="18.0" layoutY="153.0" text="engineSize" />
-                        <Label layoutX="25.0" layoutY="180.0" text="fuelType" />
-                        <Label layoutX="28.0" layoutY="207.0" text="colour" />
-                        <Label layoutX="324.0" layoutY="14.0" text="mileage" />
-                        <Label layoutX="302.0" layoutY="45.0" text="renewalDateMot" />
-                        <Label layoutX="299.0" layoutY="72.0" text="dateLastServiced" />
-                        <Label layoutX="292.0" layoutY="100.0" text="coveredByWarranty" />
-                        <Label layoutX="308.0" layoutY="126.0" text="warrantyName" />
-                        <Label layoutX="278.0" layoutY="154.0" text="warrantyCompAddress" />
-                        <Label layoutX="276.0" layoutY="180.0" text="warrantyExpirationDate" />
-                        <Button fx:id="addV" layoutX="363.0" layoutY="202.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
-                        <TextField fx:id="rDateMot" layoutX="420.0" layoutY="40.0" promptText="Enter renewal Date Mot" />
-                        <TextField fx:id="dLastServiced" layoutX="419.0" layoutY="67.0" promptText="Enter Date" />
-                        <TextField fx:id="wExpirationDate" layoutX="420.0" layoutY="175.0" promptText="Enter Date" />
-                        <ComboBox fx:id="vType" layoutX="97.0" layoutY="67.0" prefHeight="27.0" prefWidth="167.0" promptText="pick Vehicle">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Car" />
-                                        <String fx:value="Van" />
-                                        <String fx:value="Truck" />
-                                    </FXCollections>
-                                </items>
-                        </ComboBox>
-                        <ComboBox fx:id="fType" layoutX="97.0" layoutY="175.0" prefHeight="27.0" prefWidth="167.0" promptText="pick Fuel">
-                           <items>
-                              <FXCollections fx:factory="observableArrayList">
-                                 <String fx:value="Diesel" />
-                                 <String fx:value="Petrol" />
-                              </FXCollections>
-                           </items>
-                        </ComboBox>
-                        <ComboBox fx:id="cByWarranty" layoutX="420.0" layoutY="95.0" prefHeight="27.0" prefWidth="167.0" promptText="Pick True/False">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="True" />
-                                        <String fx:value="False" />
-                                    </FXCollections>
-                                </items>
-                        </ComboBox>
+        <TableView fx:id="TBooking" layoutX="8.0" layoutY="14.0" prefHeight="229.0" prefWidth="832.0">
+            <columns>
+                <TableColumn fx:id="BookingID" prefWidth="75.0" text="BookingID" />
+                <TableColumn fx:id="customerID" prefWidth="81.0" text="customerID" />
+                <TableColumn fx:id="vRegNumber" prefWidth="92.0" text="VRegNumber" />
+                <TableColumn fx:id="Description" prefWidth="82.0" text="Description" />
+                <TableColumn fx:id="mechanicID" prefWidth="79.0" text="mechanicID" />
+                <TableColumn fx:id="billAmount" prefWidth="73.0" text="billAmount" />
+                <TableColumn fx:id="billSettled" prefWidth="77.0" text="billSettled" />
+                <TableColumn fx:id="DIagStart" prefWidth="65.0" text="DiagStart" />
+                <TableColumn fx:id="DiagEnd" prefWidth="60.0" text="DiagEnd" />
+                <TableColumn fx:id="repStart" prefWidth="62.0" text="repStart" />
+                <TableColumn fx:id="repEnd" prefWidth="51.0" text="repEnd" />
+                <TableColumn fx:id="SRB" prefWidth="35.0" text="SRB" />
+            </columns>
+        </TableView>
     </children>
 </AnchorPane>

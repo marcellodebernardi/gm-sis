@@ -173,7 +173,7 @@ public void handleButtonAdd() throws Exception {
                                 {
                                         showAlert();
                                         addBStage.setAlwaysOnTop(true);
-                                        addBStage.setFullScreen(true);
+                                        //addBStage.setFullScreen(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/addBooking.fxml"));

@@ -15,7 +15,7 @@
                         <Label layoutX="33.0" layoutY="95.0" text="description" />
                         <Label layoutX="28.0" layoutY="158.0" text="MechanicID" />
                         <Label layoutX="38.0" layoutY="189.0" text="billAmount" />
-                        <Button fx:id="addB" layoutX="529.0" layoutY="109.0" mnemonicParsing="false" onAction="#addBooking" text="Add" />
+                        <Button fx:id="editB" layoutX="529.0" layoutY="109.0" mnemonicParsing="false" onAction="#editBooking" text="Edit" />
       <TextField fx:id="vReg" layoutX="133.0" layoutY="62.0" promptText="enter reg" />
       <TextField fx:id="description" layoutX="129.0" layoutY="90.0" prefHeight="62.0" prefWidth="348.0" promptText="enter description" />
       <TextField fx:id="Bill" layoutX="121.0" layoutY="184.0" promptText="enter bill" />
