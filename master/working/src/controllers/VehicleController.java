@@ -127,31 +127,27 @@ public class VehicleController {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
             Parent menu = fxmlLoader.load();
+
             Stage stage = new Stage();
             stage.setTitle("Edit Vehicle");
             stage.setScene(new Scene(menu));
             stage.show();
-            System.out.println("c");
-            Vehicle A = vSys.searchVehicle(tVReg.getText());
-            System.out.println("c");
-            if (A == null)
-            {
-                System.out.println("not working");
-            }
-            System.out.println(A.getRegNumber());
-            Ereg.setText(A.getRegNumber() +" test");
+            //Vehicle vehicle = vSys.searchVehicle(tVReg.getText());
+            setVehicleDetails();
         }
         catch (Exception e)
         {
             System.out.println("cant open a");
+            System.out.println(e);
         }
 
     }
 
-    public void setVehicleDetails(Vehicle A)
+    public void setVehicleDetails()
     {
-        System.out.println(A.getRegNumber());
-        Ereg.setText(A.getRegNumber());
+        Ereg.setText("hello");
     }
+
+
 
 }

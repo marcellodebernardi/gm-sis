@@ -25,8 +25,7 @@ public class LoginController {
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
 
-    public LoginController()
-    {}
+
     @FXML
     public void handleButtonClick() throws Exception {
 
@@ -38,8 +37,7 @@ public class LoginController {
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
         stage.show();
-        //Main B = new Main();
-        //B.primaryStage.close();
+
 
         }
         catch (Exception e)
@@ -49,6 +47,8 @@ public class LoginController {
         }
 
     }
+
+
 
     @FXML
     public void handleButtonClick2() {

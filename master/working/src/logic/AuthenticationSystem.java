@@ -28,7 +28,7 @@ public class AuthenticationSystem {
 
     }
 
-    // currently only accepted userID is "team31", password "hello"
+    // currently only accepted userID is "00000", password "password"
     public boolean login(String username, String password) {
         return persistence.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, username)
                 .and("password", EqualTo, password)).size() != 0;

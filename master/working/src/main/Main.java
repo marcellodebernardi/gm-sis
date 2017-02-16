@@ -32,9 +32,12 @@ public class Main extends Application {
         login = new Scene(mainPane);
         primaryStage.setScene(login);
         primaryStage.show();
+        //primaryStage.setFullScreen(true);
 
 
     }
+
+
 
 
 }

@@ -5,6 +5,7 @@ package controllers;
         import javafx.fxml.FXML;
         import javafx.geometry.Pos;
         import javafx.scene.control.*;
+        import javafx.scene.layout.AnchorPane;
         import javafx.scene.layout.VBox;
         import javafx.stage.Modality;
         import javafx.stage.WindowEvent;
@@ -29,6 +30,17 @@ public class MenuController {
         Stage deleteStage;
         Stage editSearchStage;
         Stage searchStage;
+        Stage primaryStage;
+        public void initialize() throws Exception {
+                //setStage();
+                setUserType();
+        }
+
+        public void setStage()
+        {
+                primaryStage =   (Stage) UserT.getScene().getWindow();
+        }
+
 
         @FXML
         public void handleButtonSearch() throws Exception {
@@ -39,12 +51,13 @@ public class MenuController {
                                 {
                                         showAlert();
                                         searchStage.setAlwaysOnTop(true);
+                                        searchStage.setFullScreen(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         searchStage = new Stage();
-                        searchStage.setTitle("Add Vehicle");
+                        searchStage.setTitle("Search Vehicle");
                         searchStage.setScene(new Scene(menu));
                         searchStage.show();
                 }
@@ -139,6 +152,12 @@ public void handleButtonAdd() throws Exception {
                 }
 
         }
+
+        public void setUserT()
+        {
+                UserT.setText("admin");
+        }
+
 
 
 
