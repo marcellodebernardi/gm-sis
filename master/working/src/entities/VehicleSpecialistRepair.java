@@ -23,12 +23,12 @@ public class VehicleSpecialistRepair extends SpecRepBooking {
      */
     @Reflective
     public VehicleSpecialistRepair(@Simple(name = "spcRepID") int spcRepID,
-                         @Simple(name = "spcID") int spcID,
-                         @Simple(name = "deliveryDate") Date deliveryDate,
-                         @Simple(name = "returnDate") Date returnDate,
-                         @Simple(name = "cost") double cost,
-                         @Simple(name = "bookingID") int bookingID,
-                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
+                                   @Simple(name = "spcID") int spcID,
+                                   @Simple(name = "deliveryDate") Date deliveryDate,
+                                   @Simple(name = "returnDate") Date returnDate,
+                                   @Simple(name = "cost") double cost,
+                                   @Simple(name = "bookingID") int bookingID,
+                                   @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.vehicleRegNumber = vehicleRegNumber;
     }

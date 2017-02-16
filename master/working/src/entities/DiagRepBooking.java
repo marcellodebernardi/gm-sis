@@ -1,7 +1,6 @@
 package entities;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.MutableInterval;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class DiagRepBooking extends Booking {
                           @Simple(name = "diagnosisEnd") DateTime diagnosisEnd,
                           @Simple(name = "repairStart") DateTime repairStart,
                           @Simple(name = "repairEnd") DateTime repairEnd,
-                          @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+                          @Complex(baseType = SpecRepBooking.class, specTypes = {PartSpecialistRepair.class, VehicleSpecialistRepair.class}, key = "bookingID")
                                   SpecRepBooking specRepBooking) {
         super(bookingID, customerID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
@@ -212,7 +211,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return a specialist repair booking
      */
-    @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+    @Complex(baseType = SpecRepBooking.class, specTypes = {PartSpecialistRepair.class, VehicleSpecialistRepair.class}, key = "bookingID")
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }
