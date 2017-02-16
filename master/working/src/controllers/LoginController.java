@@ -44,10 +44,17 @@ public class LoginController {
         }
         catch (Exception e)
         {
-            System.out.println("The username and/or password is incorrect");
+            showAlert();
             password.clear();
         }
 
+    }
+    public void showAlert()
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("The username and/or password is incorrect");
+        alert.showAndWait();
     }
 
 

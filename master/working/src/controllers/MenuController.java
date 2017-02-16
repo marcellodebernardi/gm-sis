@@ -32,18 +32,10 @@ public class MenuController {
         Stage deleteStage;
         Stage editSearchStage;
         Stage searchStage;
-        Stage primaryStage;
+
         public void initialize() throws Exception {
-                //setStage();
                 setUserType();
         }
-
-        public void setStage()
-        {
-                primaryStage =   (Stage) UserT.getScene().getWindow();
-                primaryStage.close();
-        }
-
 
         @FXML
         public void handleButtonSearch() throws Exception {
