@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
@@ -118,15 +117,8 @@
                         <ToolBar prefHeight="40.0" prefWidth="600.0">
                           <items>
                             <Button fx:id="addPartBtn" mnemonicParsing="false" text="Add part" />
-                              <Button fx:id="editPartBtn" mnemonicParsing="false" text="Edit part" />
                           </items>
                         </ToolBar>
-                        <Label layoutX="16.0" layoutY="57.0" text="Part ID" />
-                        <Label layoutX="14.0" layoutY="99.0" text="Name" />
-                        <Label layoutX="15.0" layoutY="129.0" text="Description" />
-                        <TextArea fx:id="partDescription" layoutX="93.0" layoutY="129.0" prefHeight="67.0" prefWidth="200.0" />
-                        <TextField fx:id="partName" layoutX="93.0" layoutY="94.0" prefHeight="27.0" prefWidth="199.0" />
-                        <ComboBox fx:id="partAbstractionID" layoutX="93.0" layoutY="52.0" prefHeight="27.0" prefWidth="199.0" />
                      </children>
                   </AnchorPane>
               </content>

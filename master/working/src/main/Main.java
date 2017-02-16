@@ -27,7 +27,7 @@ public class Main extends Application {
         //testing my parts GUI for now, you can change it (SHAKIB)
 
 
-        mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
         //test.fxml
         login = new Scene(mainPane);
         primaryStage.setScene(login);

@@ -37,17 +37,16 @@
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
                           </items>
                         </ToolBar>
-                        <TableView fx:id="PartsTable" editable="true" layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="665.0">
+                        <TableView fx:id="PartsTable" editable="true" layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="691.0">
                           <columns>
-                            <TableColumn fx:id="partAbstractionID" prefWidth="75.0" text="Part ID" />
-                            <TableColumn fx:id="partName" prefWidth="150.42332458496094" text="Name" />
-                              <TableColumn fx:id="partDescription" prefWidth="251.54949951171875" text="Description" />
-                              <TableColumn fx:id="partPrice" minWidth="0.0" prefWidth="76.78375244140625" text="Price" />
-                              <TableColumn fx:id="partStockLevel" minWidth="7.0" prefWidth="107.8692626953125" text="Stock Level" />
+                            <TableColumn fx:id="partAbstractionID" prefWidth="63.56888771057129" text="Part ID" />
+                            <TableColumn fx:id="partName" prefWidth="166.57223510742188" text="Name" />
+                              <TableColumn fx:id="partDescription" prefWidth="307.4277648925781" text="Description" />
+                              <TableColumn fx:id="partPrice" minWidth="0.0" prefWidth="64.276611328125" text="Price" />
+                              <TableColumn fx:id="partStockLevel" minWidth="7.0" prefWidth="85.85107421875" text="Stock Level" />
                           </columns>
                         </TableView>
-                        <Label layoutX="8.0" layoutY="55.0" text="Currently available in garage:" />
-                        <TextField fx:id="searchBtn" layoutX="206.0" layoutY="50.0" prefHeight="27.0" prefWidth="327.0" promptText="Search Parts..." />
+                        <Label layoutX="179.0" layoutY="54.0" text="Currently available in garage:" />
                         <TableView layoutX="14.0" layoutY="340.0" prefHeight="162.0" prefWidth="851.0">
                            <columns>
                               <TableColumn prefWidth="79.30229377746582" text="Booking ID" />
@@ -66,28 +65,29 @@
                         <Button layoutX="871.0" layoutY="380.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Edit list" />
                         <Button layoutX="871.0" layoutY="417.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Delete from list" />
                         <Label layoutX="20.0" layoutY="310.0" text="Part Installation History:" />
-                        <Separator layoutX="679.0" layoutY="41.0" orientation="VERTICAL" prefHeight="243.0" prefWidth="6.0" />
+                        <Separator layoutX="705.0" layoutY="43.0" orientation="VERTICAL" prefHeight="243.0" prefWidth="6.0" />
                         <ChoiceBox layoutX="197.0" layoutY="303.0" prefHeight="27.0" prefWidth="200.0" />
                         <TextField layoutX="403.0" layoutY="302.0" prefHeight="27.0" prefWidth="463.0" promptText="Search by regisration number or customer name" />
-                        <Label layoutX="777.0" layoutY="47.0" text="Parts Bill Calculator" />
-                        <Label layoutX="709.0" layoutY="76.0" text="Part ID" />
-                        <ChoiceBox layoutX="686.0" layoutY="98.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="686.0" layoutY="134.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="687.0" layoutY="168.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="687.0" layoutY="203.0" prefHeight="27.0" prefWidth="90.0" />
-                        <Label layoutX="821.0" layoutY="76.0" text="Price" />
-                        <Label layoutX="908.0" layoutY="76.0" text="Quantity" />
-                        <TextField layoutX="791.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="792.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="792.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="792.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="890.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="891.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="891.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField layoutX="891.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
-                        <Button layoutX="687.0" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Calculate" />
-                        <TextField layoutX="792.0" layoutY="247.0" prefHeight="27.0" prefWidth="190.0" text="Total Bill" />
-                        <Button fx:id="updateBtn" layoutX="549.0" layoutY="49.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="121.0" text="Update Table" />
+                        <Label layoutX="798.0" layoutY="47.0" text="Parts Bill Calculator" />
+                        <Label layoutX="743.0" layoutY="76.0" text="Part ID" />
+                        <ChoiceBox layoutX="720.0" layoutY="98.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="720.0" layoutY="134.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="721.0" layoutY="168.0" prefHeight="27.0" prefWidth="90.0" />
+                        <ChoiceBox layoutX="721.0" layoutY="203.0" prefHeight="27.0" prefWidth="90.0" />
+                        <Label layoutX="847.0" layoutY="76.0" text="Price" />
+                        <Label layoutX="923.0" layoutY="76.0" text="Quantity" />
+                        <TextField layoutX="817.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="818.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="818.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="818.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField layoutX="917.0" layoutY="98.0" prefHeight="27.0" prefWidth="65.0" />
+                        <TextField layoutX="918.0" layoutY="134.0" prefHeight="27.0" prefWidth="65.0" />
+                        <TextField layoutX="918.0" layoutY="169.0" prefHeight="27.0" prefWidth="65.0" />
+                        <TextField layoutX="918.0" layoutY="203.0" prefHeight="27.0" prefWidth="65.0" />
+                        <Button layoutX="721.0" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Calculate" />
+                        <TextField layoutX="820.0" layoutY="247.0" prefHeight="27.0" prefWidth="162.0" text="Total Bill" />
+                        <Button fx:id="updateBtn" layoutX="11.0" layoutY="50.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="150.0" text="Display Parts" />
+                        <TextField fx:id="searchParts" layoutX="368.0" layoutY="51.0" onAction="#quickSearch" prefHeight="27.0" prefWidth="330.0" />
                      </children>
                   </AnchorPane>
             </content>
