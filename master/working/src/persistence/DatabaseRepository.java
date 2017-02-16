@@ -164,19 +164,46 @@ public class DatabaseRepository implements CriterionRepository {
 
     /* Converts an entity into an insertion transaction */
     <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
-        // todo implement
+        // reflection class data
+        Constructor<E> constructor;
+        Annotation[][] constructorAnnotations;
+        Class<?>[] constructorArgumentTypes;
+
+        // obtain reflection data
+        try {
+            constructorArgumentTypes = new Class<?>[0];
+            for (Constructor<?> c : eClass.getConstructors()) {
+                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                    constructorArgumentTypes = c.getParameterTypes();
+                    break;
+                }
+            }
+            constructor = eClass.getConstructor(constructorArgumentTypes);
+            constructorAnnotations = constructor.getParameterAnnotations();
+        }
+        catch (NoSuchMethodException e) {
+            System.err.print(e.getMessage() + " - Failed to obtain reflective constructor.");
+        }
+
+        /* todo generate INSERT string as follows:
+        Iterate over constructor parameters. For each simple parameter, look at the
+        parameter name and type and add a clause to the INSERT string. For complex parameters,
+        perform a recursive call and add the results of said calls to the end. Separate each
+        query obtain like this with the ~~~ separator. Then return. At the top level, the
+        string is split by " ~~~ ", and each string becomes its own transaction.
+         */
         return null;
     }
 
     /* Converts an entity into an update transaction */
     <E extends Searchable> String toUPDATETransaction(Class<E> eClass, E item) {
-        // todo implement
+        // todo implement similar to INSERT
         return null;
     }
 
     /* Converts a criterion into a deletion transaction */
     <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
-        // todo implement
+        // todo implement silimar to INSERT
         return null;
     }
 

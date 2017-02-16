@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * value object is of type String or type Pattern. The other operators can be used unrestrictedly.
  * </p>
  * <p>
- * More complex search criteria can be used with the append methods and(), or(), and setDiff().
+ * More complex search criteria can be used with the append methods and(), or(), and except().
  * These methods are called on an existing criterion, and are used to add a new set of criteria
  * to the Criterion with the same argument syntax used in the constructor, minus the class
  * specification. The new set of criteria is connected to the previous one with the logical
@@ -217,25 +217,25 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion<E> setDiff(String attribute, CriterionOperator operator, Object value)
+    /* public Criterion<E> except(String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         // check compatibility of operator and value
         if (!operatorIsCompatible(operator, value))
-            throw new CriterionException("SET DIFF (" + attribute + "): operator incompatible.");
+            throw new CriterionException("EXCEPT (" + attribute + "): operator incompatible.");
 
         // check criteria if acceptable
         if (isClassCompatible(attribute, value)) {
             attributes.add(attribute);
             operators.add(operator);
             values.add(value);
-            logicalConnectives.add("MINUS");
+            logicalConnectives.add("EXCEPT");
             return this;
         }
 
         // throw error if criteria not acceptable
-        throw new CriterionException("SET DIFF (" + attribute + "): no such field, or value type "
+        throw new CriterionException("EXCEPT (" + attribute + "): no such field, or value type "
                 + "does not match field type.");
-    }
+    } */
 
     /**
      * <p>
