@@ -1,5 +1,6 @@
 package controllers;
 
+        import entities.UserType;
         import javafx.event.ActionEvent;
         import javafx.event.EventHandler;
         import javafx.fxml.FXML;
@@ -153,9 +154,14 @@ public void handleButtonAdd() throws Exception {
 
         }
 
-        public void setUserT()
+        public void setUserType()
         {
-                UserT.setText("admin");
+                if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
+                        UserT.setText("admin");
+                }
+                else {
+                        UserT.setText("User");
+                }
         }
 
 
