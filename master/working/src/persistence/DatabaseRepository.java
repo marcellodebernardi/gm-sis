@@ -388,8 +388,8 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     private <E extends Searchable> boolean exists(E item) {
-        // todo implement
-        return true;
+        return false;
+        // return getByCriteria(new Criterion<>(item.getClass(), item.))
     }
 
     /* Allows running a raw SQL query on the database. Consider minimal use */
