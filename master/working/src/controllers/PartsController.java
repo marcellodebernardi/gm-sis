@@ -15,7 +15,7 @@ public class PartsController {
 
     private Button addPartBtn;
     private TextField searchBtn;
-    private TableColumn<?, ?> partID;
+    private TableColumn<?, ?> partAbstractionID;
     private TableColumn<?, ?> partName;
     private TableColumn<?, ?> partDescription;
     private TableColumn<?, ?> partPrice;

@@ -5,10 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="494.0" text="To remove a part from the system (for repairs) please select a part ID below:" />
+      <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="494.0" text="To withdraw a part from the system (for repairs) please select a part ID below:" />
       <Label layoutX="70.0" layoutY="59.0" text="Part ID" />
       <ChoiceBox layoutX="137.0" layoutY="54.0" prefHeight="27.0" prefWidth="322.0" />
       <Button layoutX="210.0" layoutY="121.0" mnemonicParsing="false" text="Withdraw Part" />
