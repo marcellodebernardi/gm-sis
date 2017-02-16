@@ -7,7 +7,7 @@ import entities.PartAbstraction;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class PartSpecialistRepair extends SpecRepBooking
+public class PartRepair extends SpecRepBooking
 {
     private int partOccurrenceID;
 
@@ -22,7 +22,7 @@ public class PartSpecialistRepair extends SpecRepBooking
      * @param partOccurrenceID represents the part being sent off to the SRC
      */
     @Reflective
-    public PartSpecialistRepair(@Simple(name = "spcRepID") int spcRepID,
+    public PartRepair(@Simple(name = "spcRepID", primary = true) int spcRepID,
                       @Simple(name = "spcID") int spcID,
                       @Simple(name = "deliveryDate") Date deliveryDate,
                       @Simple(name = "returnDate") Date returnDate,
@@ -42,7 +42,7 @@ public class PartSpecialistRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "spcID")
+    @Simple(name = "spcID", primary = true)
     public int getspcID() {
         return super.getSpcID();
     }

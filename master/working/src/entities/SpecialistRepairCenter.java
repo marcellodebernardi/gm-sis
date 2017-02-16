@@ -17,7 +17,7 @@ public class SpecialistRepairCenter implements Searchable {
     private String phone;
     private String email;
 
-    // hierarchical links todo getter and setter
+    // hierarchical links
     private List<SpecRepBooking> bookings;
 
 
@@ -29,7 +29,7 @@ public class SpecialistRepairCenter implements Searchable {
      * @param email   Email address of a particular Specialist Repair Center
      */
     @Reflective
-    public SpecialistRepairCenter(@Simple(name = "spcID") int spcID,
+    public SpecialistRepairCenter(@Simple(name = "spcID", primary = true) int spcID,
                                   @Simple(name = "name") String name,
                                   @Simple(name = "address") String address,
                                   @Simple(name = "phone") String phone,
@@ -50,7 +50,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcID
      */
-    @Simple(name = "spcID")
+    @Simple(name = "spcID", primary = true)
     public int getSpcID() {
         return this.spcID;
     }

@@ -8,7 +8,7 @@ import entities.Vehicle;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a SRC.
  */
-public class VehicleSpecialistRepair extends SpecRepBooking {
+public class VehicleRepair extends SpecRepBooking {
     private String vehicleRegNumber;
 
     /**
@@ -22,18 +22,18 @@ public class VehicleSpecialistRepair extends SpecRepBooking {
      * @param vehicleRegNumber Represents the vehicle being booked in for repair
      */
     @Reflective
-    public VehicleSpecialistRepair(@Simple(name = "spcRepID") int spcRepID,
-                                   @Simple(name = "spcID") int spcID,
-                                   @Simple(name = "deliveryDate") Date deliveryDate,
-                                   @Simple(name = "returnDate") Date returnDate,
-                                   @Simple(name = "cost") double cost,
-                                   @Simple(name = "bookingID") int bookingID,
-                                   @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
+    public VehicleRepair(@Simple(name = "spcRepID", primary = true) int spcRepID,
+                         @Simple(name = "spcID") int spcID,
+                         @Simple(name = "deliveryDate") Date deliveryDate,
+                         @Simple(name = "returnDate") Date returnDate,
+                         @Simple(name = "cost") double cost,
+                         @Simple(name = "bookingID") int bookingID,
+                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    @Simple(name = "spcRepID")
+    @Simple(name = "spcRepID", primary = true)
     public int getSpcRepID() {
         return super.getSpcRepID();
     }
@@ -48,6 +48,7 @@ public class VehicleSpecialistRepair extends SpecRepBooking {
         return super.getDeliveryDate();
     }
 
+    @Simple(name = "returnDate")
     public Date getReturnDate() {
         return super.getReturnDate();
     }
@@ -67,6 +68,3 @@ public class VehicleSpecialistRepair extends SpecRepBooking {
         return vehicleRegNumber;
     }
 }
-
-
-

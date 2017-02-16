@@ -11,7 +11,7 @@ public class Mechanic {
     private double hourlyRate;
 
     @Reflective
-    public Mechanic(@Simple(name = "mechanicID") int mechanicID,
+    public Mechanic(@Simple(name = "mechanicID", primary = true) int mechanicID,
                     @Simple(name = "firstName") String firstName,
                     @Simple(name = "surname") String surname,
                     @Simple(name = "hourlyRate") double hourlyRate) {
@@ -21,7 +21,7 @@ public class Mechanic {
         this.hourlyRate = hourlyRate;
     }
 
-    @Simple(name = "mechanicID")
+    @Simple(name = "mechanicID", primary = true)
     public int getMechanicID() {
         return mechanicID;
     }

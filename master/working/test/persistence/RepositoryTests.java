@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -56,5 +57,15 @@ public class RepositoryTests {
     @Test
     public void testDELETETransaction() {
         System.out.println(DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(User.class)));
+    }
+
+    @Test
+    public void testINSERTTransaction() {
+        User user = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(User.class)).get(0);
+        List<String> result = DatabaseRepository.getInstance().toINSERTTransaction(User.class, user);
+
+        for (String s : result) {
+            System.out.println(s);
+        }
     }
 }

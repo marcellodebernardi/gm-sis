@@ -23,7 +23,7 @@ public class Customer implements Searchable
     private List<Vehicle> vehicles;
 
     @Reflective
-    public Customer(@Simple(name = "customerID") int customerID,
+    public Customer(@Simple(name = "customerID", primary = true) int customerID,
                     @Simple(name = "customerSurname") String customerSurname,
                     @Simple(name = "customerFirstname") String customerFirstname,
                     @Simple(name = "customerAddress") String customerAddress,
@@ -48,13 +48,11 @@ public class Customer implements Searchable
     }
 
     //gets unique identifier for customer
-    @Simple(name = "customerID")
+    @Simple(name = "customerID", primary = true)
     public int getCustomerID()
     {
         return customerID;
     }
-
-    // todo ID setter?
 
     //gets customer's surname
     @Simple(name = "customerSurname")

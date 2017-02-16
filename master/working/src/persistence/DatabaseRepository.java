@@ -9,8 +9,11 @@ import org.joda.time.DateTime;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static logic.CriterionOperator.EqualTo;
@@ -91,7 +94,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue statements for transaction
-            String[] statements = toINSERTTransaction(eClass, item).split("~~~");
+            List<String> statements = toINSERTTransaction(eClass, item);
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -115,7 +118,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            String[] statements = toUPDATETransaction(eClass, item).split("~~~");
+            List<String> statements = toUPDATETransaction(eClass, item);
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -139,7 +142,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            String[] statements = toDELETETransaction(criteria).split("~~~");
+            List<String> statements = toDELETETransaction(criteria);
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -162,49 +165,70 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     /* Converts an entity into an insertion transaction */
-    <E extends Searchable> String toINSERTTransaction(Class<E> eClass, E item) {
-        // reflection class data
-        Annotation[][] constructorAnnotations;
-        Class<?>[] constructorArgumentTypes;
+    <E extends Searchable> List<String> toINSERTTransaction(Class<E> eClass, E item) {
+        List<String> queries = new ArrayList<>();
+        String columnString = "(";
+        String valueString = "VALUES (";
+        String delim = "";
 
-        // obtain constructor annotations and argument types
-        try {
-            constructorArgumentTypes = new Class<?>[0];
-            for (Constructor<?> c : eClass.getConstructors()) {
-                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
-                    constructorArgumentTypes = c.getParameterTypes();
-                    break;
+        // getters and annotations
+        List<Method> simpleGetters = new ArrayList<>();
+        List<Method> complexGetters = new ArrayList<>();
+        List<Annotation> simpleAnnotations = new ArrayList<>();
+        List<Annotation> complexAnnotations = new ArrayList<>();
+
+        // gets annotated getters fixme assumes reflection annotation is first
+        for (Method m : eClass.getDeclaredMethods()) {
+            if (Modifier.isPublic(m.getModifiers()) && m.getDeclaredAnnotations().length != 0) {
+                if (m.getDeclaredAnnotations()[0].annotationType().equals(Simple.class)) {
+                    simpleGetters.add(m);
+                    simpleAnnotations.add(m.getDeclaredAnnotations()[0]);
+                }
+                else if (m.getDeclaredAnnotations()[0].annotationType().equals(Complex.class)) {
+                    complexGetters.add(m);
+                    complexAnnotations.add(m.getDeclaredAnnotations()[0]);
                 }
             }
-            constructorAnnotations = eClass.getConstructor(constructorArgumentTypes).getParameterAnnotations();
-        }
-        catch (NoSuchMethodException e) {
-            System.err.print(e.getMessage() + " - Failed to obtain reflective constructor.");
         }
 
+        // add simple attributes into INSERT query
+        for (int i = 0; i < simpleGetters.size(); i++) {
+            try {
+                if (simpleGetters.get(i).invoke(item) != null) {
+                    columnString += delim + ((Simple)simpleAnnotations.get(i)).name();
+                    valueString += delim + simpleGetters.get(i).invoke(item);
+                    delim = ", ";
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
+                System.err.print(e.getMessage());
+            }
+        }
+        columnString += ") ";
+        valueString += ")";
+        queries.add(INSERTSTRING + columnString + valueString);
 
-        /* todo generate INSERT string as follows:
-        Iterate over constructor parameters. For each simple parameter, look at the
-        parameter name and type and add a clause to the INSERT string. For complex parameters,
-        perform a recursive call and add the results of said calls to the end. Separate each
-        query obtain like this with the ~~~ separator. Then return. At the top level, the
-        string is split by " ~~~ ", and each string becomes its own transaction.
-         */
-        return null;
+        // recursively get complex attributes
+        for (int i = 0; i < complexGetters.size(); i++) {}
+
+        return queries;
     }
 
     /* Converts an entity into an update transaction */
-    <E extends Searchable> String toUPDATETransaction(Class<E> eClass, E item) {
+    <E extends Searchable> List<String> toUPDATETransaction(Class<E> eClass, E item) {
         // todo implement similar to INSERT
         return null;
     }
 
     /* Converts a criterion into a deletion transaction */
     // todo implement cascading
-    <E extends Searchable> String toDELETETransaction(Criterion<E> criteria) {
-        return DELETESTRING + criteria.getCriterionClass().getSimpleName()
+    <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria) {
+        List<String> query = new ArrayList<>();
+
+        query.add(DELETESTRING + criteria.getCriterionClass().getSimpleName()
                 + (criteria.toString().equals("") ? "" : " WHERE ")
-                + criteria.toString() + ";";
+                + criteria.toString() + ";");
+        return query;
     }
 
     /* Converts a ResultSet into a List<E> of objects todo break down into helper method */
@@ -364,7 +388,8 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     private <E extends Searchable> boolean exists(E item) {
-        return false;
+        // todo implement
+        return true;
     }
 
     /* Allows running a raw SQL query on the database. Consider minimal use */

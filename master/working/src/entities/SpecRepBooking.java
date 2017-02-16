@@ -29,7 +29,7 @@ public abstract class SpecRepBooking implements Searchable {
      * @param cost Double representing the total cost of the SR booking
      */
     @Reflective // todo remove reflective ability and Searchable?
-    public SpecRepBooking(@Simple(name = "spcRepID") int spcRepID,
+    public SpecRepBooking(@Simple(name = "spcRepID", primary = true) int spcRepID,
                           @Simple(name = "spcID") int spcID,
                           @Simple(name = "deliveryDate") Date deliveryDate,
                           @Simple(name = "returnDate") Date returnDate,
@@ -42,12 +42,6 @@ public abstract class SpecRepBooking implements Searchable {
         this.cost = cost;
         this.bookingID = bookingID;
     }
-
-    /**
-     * 0 argument constructor to allow a search of bookings
-     */
-    public SpecRepBooking()
-    {}
 
     /**
      *

@@ -43,7 +43,7 @@ public class DiagRepBooking extends Booking {
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
     @Reflective
-    public DiagRepBooking(@Simple(name = "bookingID") int bookingID,
+    public DiagRepBooking(@Simple(name = "bookingID", primary = true) int bookingID,
                           @Simple(name = "customerID") int customerID,
                           @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
                           @Simple(name = "description") String description,
@@ -72,7 +72,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking ID
      */
-    @Simple(name = "bookingID")
+    @Simple(name = "bookingID", primary = true)
     @Override
     public int getBookingID() {
         return super.getBookingID();

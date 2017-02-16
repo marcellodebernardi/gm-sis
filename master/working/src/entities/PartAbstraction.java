@@ -19,7 +19,7 @@ public class PartAbstraction implements Searchable {
     private List<PartOccurrence> occurrenceList;
 
     @Reflective
-    public PartAbstraction(@Simple(name = "partAbstractionID") int partAbstractionID,
+    public PartAbstraction(@Simple(name = "partAbstractionID", primary = true) int partAbstractionID,
                            @Simple(name = "partName") String partName,
                            @Simple(name = "partDescription") String partDescription,
                            @Simple(name = "partPrice") double partPrice,
@@ -34,7 +34,7 @@ public class PartAbstraction implements Searchable {
         this.occurrenceList = occurrenceList;
     }
 
-    @Simple(name = "partAbstractionID")
+    @Simple(name = "partAbstractionID", primary = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
     }

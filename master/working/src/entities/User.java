@@ -27,7 +27,7 @@ public class User implements Searchable {
      * @param userType user's type (administrator / normal)
      */
     @Reflective
-    public User(@Simple(name = "userID") String userID,
+    public User(@Simple(name = "userID", primary = true) String userID,
                 @Simple(name = "password") String password,
                 @Simple(name = "firstName") String firstName,
                 @Simple(name = "surname") String surname,
@@ -44,7 +44,7 @@ public class User implements Searchable {
      *
      * @return user identification string
      */
-    @Simple(name = "userID")
+    @Simple(name = "userID", primary = true)
     public String getUserID() {
         return userID;
     }

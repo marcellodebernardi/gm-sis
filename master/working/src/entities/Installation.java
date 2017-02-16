@@ -22,7 +22,7 @@ public class Installation implements Searchable {
     private int partAbstractionID;
 
     @Reflective
-    public Installation(@Simple(name = "installationID") int installationID,
+    public Installation(@Simple(name = "installationID", primary = true) int installationID,
                          @Simple(name = "installationDate") Date installationDate,
                          @Simple(name = "endWarrantyDate") Date endWarrantyDate,
                          @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
@@ -37,7 +37,7 @@ public class Installation implements Searchable {
         this.partOccurrence = partOccurrence;
     }
 
-    @Simple(name = "installationID")
+    @Simple(name = "installationID", primary = true)
     public int getInstallationID() {
         return installationID;
     }

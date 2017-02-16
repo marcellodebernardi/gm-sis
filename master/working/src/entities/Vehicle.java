@@ -29,7 +29,7 @@ public class Vehicle implements Searchable {
     private int customerID;
 
     @Reflective
-    public Vehicle(@Simple(name = "regNumber") String regNumber,
+    public Vehicle(@Simple(name = "regNumber", primary = true) String regNumber,
                    @Simple(name = "customerID") int customerID,
                    @Simple(name = "vehicleType") VehicleType vehicleType,
                    @Simple(name = "model") String model,
@@ -65,7 +65,7 @@ public class Vehicle implements Searchable {
     }
 
 
-    @Simple(name = "regNumber")
+    @Simple(name = "regNumber", primary = true)
     public String getRegNumber() {
         return regNumber;
     }

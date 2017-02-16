@@ -15,7 +15,7 @@ public class PartOccurrence implements Searchable {
     private int specRepID;
 
     @Reflective
-    public PartOccurrence(@Simple(name = "partOccurrenceID") int partOccurrenceID,
+    public PartOccurrence(@Simple(name = "partOccurrenceID", primary = true) int partOccurrenceID,
                           @Simple(name = "partAbstractionID") int partAbstractionID,
                           @Simple(name = "installationID") int installationID,
                           @Simple(name = "bookingID") int bookingID,
@@ -27,7 +27,7 @@ public class PartOccurrence implements Searchable {
         this.specRepID = specRepID;
     }
 
-    @Simple(name = "partOccurrenceID")
+    @Simple(name = "partOccurrenceID", primary = true)
     public int getPartOccurrenceID() {
         return partOccurrenceID;
     }
