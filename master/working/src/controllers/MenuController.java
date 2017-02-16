@@ -27,6 +27,7 @@ public class MenuController {
         public Button addVButton;
         public Button deleteVButton;
         public Button editVButton;
+        public Tab userTab;
         Stage addStage;
         Stage deleteStage;
         Stage editSearchStage;
@@ -34,12 +35,13 @@ public class MenuController {
         Stage primaryStage;
         public void initialize() throws Exception {
                 //setStage();
-                // setUserType();
+                setUserType();
         }
 
         public void setStage()
         {
                 primaryStage =   (Stage) UserT.getScene().getWindow();
+                primaryStage.close();
         }
 
 
@@ -161,6 +163,7 @@ public void handleButtonAdd() throws Exception {
                 }
                 else {
                         UserT.setText("User");
+                        userTab.setDisable(true);
                 }
         }
 

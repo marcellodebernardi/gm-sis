@@ -174,7 +174,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Users">
+            <Tab fx:id="userTab" text="Users">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
