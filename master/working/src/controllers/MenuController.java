@@ -1,5 +1,6 @@
 package controllers;
 
+        import javafx.event.ActionEvent;
         import javafx.event.EventHandler;
         import javafx.fxml.FXML;
         import javafx.geometry.Pos;
@@ -36,7 +37,8 @@ public class MenuController {
                         {
                                 if (searchStage.isShowing())
                                 {
-                                        System.out.println("Window is already open");
+                                        showAlert();
+                                        searchStage.setAlwaysOnTop(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
@@ -63,8 +65,10 @@ public void handleButtonAdd() throws Exception {
                         {
                                 if (addStage.isShowing())
                                 {
-                                System.out.println("Window is already open");
-                                return; }
+                                        showAlert();
+                                        addStage.setAlwaysOnTop(true);
+                                        return;
+                                }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
@@ -77,8 +81,16 @@ public void handleButtonAdd() throws Exception {
                 {
                         System.out.println("cant open");
                 }
+        }
 
-}
+        public void showAlert()
+        {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("This window is already open, press ok and your window will show on top");
+                alert.showAndWait();
+        }
+
         @FXML
         public void handleButtonDelete() throws Exception {
                 try{
@@ -86,7 +98,8 @@ public void handleButtonAdd() throws Exception {
                         {
                                 if (deleteStage.isShowing())
                                 {
-                                        System.out.println("Window is already open");
+                                        showAlert();
+                                        deleteStage.setAlwaysOnTop(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteVehicle.fxml"));
@@ -109,7 +122,8 @@ public void handleButtonAdd() throws Exception {
                         {
                                 if (editSearchStage.isShowing())
                                 {
-                                        System.out.println("Window is already open");
+                                        showAlert();
+                                        editSearchStage.setAlwaysOnTop(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditSearchVehicle.fxml"));
