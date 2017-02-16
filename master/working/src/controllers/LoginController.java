@@ -37,6 +37,7 @@ public class LoginController {
         stage.setTitle("Main Menu");
         stage.setScene(new Scene(menu));
         stage.show();
+        // code to get stage
         Stage primaryStage =   (Stage) loginBtn.getScene().getWindow();
         primaryStage.close();
 

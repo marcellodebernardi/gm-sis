@@ -84,8 +84,11 @@
                      <children>
                         <ToolBar layoutX="1.0" prefHeight="40.0" prefWidth="600.0">
                           <items>
-                            <Button mnemonicParsing="false" text="Making Booking" />
-                              <Button mnemonicParsing="false" text="Edit booking" />
+                            <Button fx:id="addBookig" mnemonicParsing="false" onAction="#addBooking" text="Add booking" />
+                              <Button mnemonicParsing="false" onAction="#editBooking" text="Edit booking" />
+                              <Button mnemonicParsing="false" onAction="#deleteBooking" text="Delete Booking" />
+                              <Button mnemonicParsing="false" onAction="#todayBooking" text="Todays bookings" />
+                              <Button mnemonicParsing="false" onAction="#allBooking" text="All Bookings" />
                           </items>
                         </ToolBar>
                      </children>
@@ -181,6 +184,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="U" />
+      <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="UserType" />
    </children>
 </AnchorPane>

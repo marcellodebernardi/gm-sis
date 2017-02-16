@@ -2,13 +2,17 @@ package controllers;
 
 import entities.Vehicle;
 import javafx.scene.control.TextField;
+import logic.CriterionRepository;
 import logic.VehicleSys;
+import persistence.DatabaseRepository;
+
 import javax.xml.soap.Text;
 
 /**
  * Created by DillonVaghela on 2/16/17.
  */
 public class VehicleEditController {
+    private static VehicleEditController instance;
     public TextField Ereg;
     public TextField cID;
     public TextField vT;
@@ -24,9 +28,11 @@ public class VehicleEditController {
     public TextField wN;
     public TextField wCA;
     public TextField wED;
+    public Vehicle vehicle;
 
     public void initialize() throws Exception {
-        Vehicle vehicle = VehicleSys.getInstance().getVehicle();
+
+
         if (vehicle != null)
         {
         System.out.println(vehicle.getRegNumber());
@@ -37,6 +43,8 @@ public class VehicleEditController {
         //Ereg.setText(vehicle.getRegNumber());
 
     }
+
+
 
 
 }

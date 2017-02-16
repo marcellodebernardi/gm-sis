@@ -32,6 +32,11 @@ public class MenuController {
         Stage deleteStage;
         Stage editSearchStage;
         Stage searchStage;
+        Stage addBStage;
+        Stage deletebStage;
+        Stage editBStage;
+        Stage todayBStage;
+        Stage allBStage;
 
         public void initialize() throws Exception {
                 setUserType();
@@ -46,7 +51,7 @@ public class MenuController {
                                 {
                                         showAlert();
                                         searchStage.setAlwaysOnTop(true);
-                                        searchStage.setFullScreen(true);
+                                        //searchStage.setFullScreen(true);
                                         return; }
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
@@ -159,7 +164,129 @@ public void handleButtonAdd() throws Exception {
                 }
         }
 
+        public void addBooking()
+        {
+                try{
+                        if (addBStage != null)
+                        {
+                                if (addBStage.isShowing())
+                                {
+                                        showAlert();
+                                        addBStage.setAlwaysOnTop(true);
+                                        addBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/addBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        addBStage = new Stage();
+                        addBStage.setTitle("Add Booking");
+                        addBStage.setScene(new Scene(menu));
+                        addBStage.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
 
+        public void editBooking()
+        {
+                try{
+                        if (editBStage != null)
+                        {
+                                if (editBStage.isShowing())
+                                {
+                                        showAlert();
+                                        editBStage.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/editSBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        editBStage = new Stage();
+                        editBStage.setTitle("Edit Booking");
+                        editBStage.setScene(new Scene(menu));
+                        editBStage.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
 
+        public void deleteBooking()
+        {
+                try{
+                        if (deletebStage != null)
+                        {
+                                if (deletebStage.isShowing())
+                                {
+                                        showAlert();
+                                        deletebStage.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/deleteBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        deletebStage = new Stage();
+                        deletebStage.setTitle("Delete Booking");
+                        deletebStage.setScene(new Scene(menu));
+                        deletebStage.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
+
+        public void todayBooking()
+        {
+                try{
+                        if (todayBStage != null)
+                        {
+                                if (todayBStage.isShowing())
+                                {
+                                        showAlert();
+                                        todayBStage.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/todayBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        todayBStage = new Stage();
+                        todayBStage.setTitle("Today's Bookings");
+                        todayBStage.setScene(new Scene(menu));
+                        todayBStage.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
+
+        public void allBooking()
+        {
+                try{
+                        if (allBStage != null)
+                        {
+                                if (allBStage.isShowing())
+                                {
+                                        showAlert();
+                                        allBStage.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/allBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        allBStage = new Stage();
+                        allBStage.setTitle("All Bookings");
+                        allBStage.setScene(new Scene(menu));
+                        allBStage.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
 
 }

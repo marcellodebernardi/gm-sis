@@ -131,7 +131,6 @@ public class VehicleController {
             stage.setTitle("Edit Vehicle");
             stage.setScene(new Scene(menu));
             stage.show();
-            vehicle = vSys.searchVehicle(tVReg.getText());
 
         }
         catch (Exception e)
