@@ -30,5 +30,7 @@
       <TextField fx:id="rStart" layoutX="467.0" layoutY="153.0" promptText="repair start" />
       <TextField fx:id="rEnd" layoutX="467.0" layoutY="184.0" promptText="repair end" />
       <TextField fx:id="SRB" layoutX="467.0" layoutY="207.0" promptText="Spec rep booking?" />
+      <Label layoutX="47.0" layoutY="212.0" text="billSettled" />
+      <TextField fx:id="BillSettled" layoutX="121.0" layoutY="214.0" promptText="Is Bill Settled?" />
     </children>
 </AnchorPane>
