@@ -1,7 +1,10 @@
 package logic;
 
 
+import entities.SpecRepBooking;
 import entities.SpecialistRepairCenter;
+import persistence.DatabaseRepository;
+
 import java.util.List;
 import java.util.Collections;
 import static logic.CriterionOperator.*;
@@ -12,7 +15,7 @@ import static logic.CriterionOperator.*;
 public class SpecRepairSystem {
 
     private static SpecRepairSystem instance;
-    private CriterionRepository persistence;
+    private CriterionRepository persistence = DatabaseRepository.getInstance();
 
 
     private SpecRepairSystem(CriterionRepository persistence) {
@@ -58,6 +61,11 @@ public class SpecRepairSystem {
     public boolean deleteRepairCenter(SpecialistRepairCenter delete)
     {
      return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete.getSpcID()));
+    }
+
+    public boolean editRepairCentre(SpecialistRepairCenter edit)
+    {
+        return persistence.updateItem(SpecialistRepairCenter.class, edit);
     }
 
 }

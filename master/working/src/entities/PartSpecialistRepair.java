@@ -83,8 +83,8 @@ public class PartRepair extends SpecRepBooking
         return super.getBookingID();
     }
 
-    public void setBookingID() {
-        // todo implement
+    public void setBookingID(int bookingID) {
+        super.setBookingID(bookingID);
     }
 
     @Simple(name = "partOccurrenceID")
