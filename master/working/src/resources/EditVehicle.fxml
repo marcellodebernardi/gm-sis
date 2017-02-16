@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="274.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="274.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleEditController">
     <children>
       <TextField fx:id="Ereg" layoutX="97.0" layoutY="15.0" prefHeight="27.0" prefWidth="167.0" />
       <Label layoutX="35.0" layoutY="18.0" text="reg" />
@@ -23,20 +23,20 @@
       <Label layoutX="303.0" layoutY="146.0" text="warrantyName" />
       <Label layoutX="277.0" layoutY="179.0" text="warrantyCompAddress" />
       <Label layoutX="273.0" layoutY="212.0" text="warrantyExpirationDate" />
-      <Button fx:id="addV" layoutX="327.0" layoutY="241.0" mnemonicParsing="false" onAction="#setVehicleDetails" text="Edit" />
-      <TextField layoutX="95.0" layoutY="48.0" />
-      <TextField layoutX="95.0" layoutY="80.0" />
-      <TextField layoutX="95.0" layoutY="110.0" />
-      <TextField layoutX="95.0" layoutY="141.0" />
-      <TextField layoutX="95.0" layoutY="174.0" />
-      <TextField layoutX="95.0" layoutY="207.0" />
-      <TextField layoutX="95.0" layoutY="241.0" />
-      <TextField layoutX="419.0" layoutY="15.0" />
-      <TextField layoutX="419.0" layoutY="48.0" />
-      <TextField layoutX="419.0" layoutY="80.0" />
-      <TextField layoutX="419.0" layoutY="110.0" />
-      <TextField layoutX="419.0" layoutY="141.0" />
-      <TextField layoutX="419.0" layoutY="174.0" />
-      <TextField layoutX="419.0" layoutY="208.0" />
+      <Button fx:id="addV" layoutX="327.0" layoutY="241.0" mnemonicParsing="false"  text="Edit" />
+      <TextField fx:id="cID" layoutX="95.0" layoutY="48.0" />
+      <TextField fx:id="vT" layoutX="95.0" layoutY="80.0" />
+      <TextField fx:id="model" layoutX="95.0" layoutY="110.0" />
+      <TextField fx:id="manu" layoutX="95.0" layoutY="141.0" />
+      <TextField fx:id="eSize" layoutX="95.0" layoutY="174.0" />
+      <TextField fx:id="fType" layoutX="95.0" layoutY="207.0" />
+      <TextField fx:id="colour" layoutX="95.0" layoutY="241.0" />
+      <TextField fx:id="mileage" layoutX="419.0" layoutY="15.0" />
+      <TextField fx:id="rDM" layoutX="419.0" layoutY="48.0" />
+      <TextField fx:id="dLS" layoutX="419.0" layoutY="80.0" />
+      <TextField fx:id="cBW" layoutX="419.0" layoutY="110.0" />
+      <TextField fx:id="wN" layoutX="419.0" layoutY="141.0" />
+      <TextField fx:id="wCA" layoutX="419.0" layoutY="174.0" />
+      <TextField fx:id="wED" layoutX="419.0" layoutY="208.0" />
     </children>
 </AnchorPane>

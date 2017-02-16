@@ -127,13 +127,12 @@ public class VehicleController {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
             Parent menu = fxmlLoader.load();
-
             Stage stage = new Stage();
             stage.setTitle("Edit Vehicle");
             stage.setScene(new Scene(menu));
             stage.show();
-            //Vehicle vehicle = vSys.searchVehicle(tVReg.getText());
-            setVehicleDetails();
+            vehicle = vSys.searchVehicle(tVReg.getText());
+
         }
         catch (Exception e)
         {
@@ -143,10 +142,6 @@ public class VehicleController {
 
     }
 
-    public void setVehicleDetails()
-    {
-        Ereg.setText("hello");
-    }
 
 
 

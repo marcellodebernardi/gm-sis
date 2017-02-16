@@ -14,6 +14,7 @@ public class VehicleSys {
 
     private static VehicleSys instance;
     private CriterionRepository persistence = DatabaseRepository.getInstance();
+    private Vehicle vehicle;
 
     private VehicleSys() {
 
@@ -28,11 +29,11 @@ public class VehicleSys {
     public Vehicle searchVehicle(String regNumber) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
                 "regNumber", EqualTo, regNumber));
-
-        // todo - placeholder to make it compile :)
         return results.size() == 0 ? null : results.get(0);
 
     }
+
+
 
     public boolean addVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
