@@ -50,6 +50,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcID
      */
+    @Simple(name = "spcID")
     public int getSpcID() {
         return this.spcID;
     }
@@ -59,6 +60,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcName
      */
+    @Simple(name = "name")
     public String getName() {
         return name;
     }
@@ -68,6 +70,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcAddress
      */
+    @Simple(name = "address")
     public String getAddress() {
         return this.address;
     }
@@ -77,6 +80,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcPhone
      */
+    @Simple(name = "phone")
     public String getPhone() {
         return this.phone;
     }
@@ -86,8 +90,8 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcEmail
      */
+    @Simple(name = "email")
     public String getEmail() {
         return this.email;
     }
 }
-

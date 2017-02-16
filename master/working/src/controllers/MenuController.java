@@ -33,7 +33,7 @@ public class MenuController {
         Stage primaryStage;
         public void initialize() throws Exception {
                 //setStage();
-                setUserType();
+                // setUserType();
         }
 
         public void setStage()

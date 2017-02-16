@@ -21,20 +21,39 @@ public class Mechanic {
         this.hourlyRate = hourlyRate;
     }
 
-
+    @Simple(name = "mechanicID")
     public int getMechanicID() {
         return mechanicID;
     }
 
+    public void setMechanicID(int mechanicID) {
+        this.mechanicID = mechanicID;
+    }
+
+    @Simple(name = "firstName")
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Simple(name = "surname")
     public String getSurname() {
         return surname;
     }
 
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    @Simple(name = "hourlyRate")
     public double getHourlyRate() {
         return hourlyRate;
+    }
+
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 }

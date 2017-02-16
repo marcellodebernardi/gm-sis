@@ -33,12 +33,38 @@ public class VehicleRepair extends SpecRepBooking {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
+    @Simple(name = "spcRepID")
+    public int getSpcRepID() {
+        return super.getSpcRepID();
+    }
 
-    /**
-     * Returns the registration number of the vehicle booked in for specialist repair center
-     */
-    @Override
-    public String getBookingItemID() {
+    @Simple(name = "spcID")
+    public int getSpcID() {
+        return super.getSpcID();
+    }
+
+    @Simple(name = "deliveryDate")
+    public Date getDeliveryDate() {
+        return super.getDeliveryDate();
+    }
+
+    @Simple(name = "returnDate")
+    public Date getReturnDate() {
+        return super.getReturnDate();
+    }
+
+    @Simple(name = "cost")
+    public double getCost() {
+        return super.getCost();
+    }
+
+    @Simple(name = "bookingID")
+    public int getBookingID() {
+        return super.getBookingID();
+    }
+
+    @Simple(name = "vehicleRegNumber")
+    public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
 }

@@ -34,30 +34,57 @@ public class PartAbstraction implements Searchable {
         this.occurrenceList = occurrenceList;
     }
 
-    // todo getters and setters
-    public int getPartsID(){
+    @Simple(name = "partAbstractionID")
+    public int getPartAbstractionID() {
         return partAbstractionID;
     }
 
-    public String getPartName(){
+    public void setPartAbstractionID(int partAbstractionID) {
+        this.partAbstractionID = partAbstractionID;
+    }
 
+    @Simple(name = "partName")
+    public String getPartName() {
         return partName;
     }
 
-    public String getPartDescription(){
+    public void setPartName(String partName) {
+        this.partName = partName;
+    }
 
+    @Simple(name = "partDescription")
+    public String getPartDescription() {
         return partDescription;
-
     }
 
-    public double getPartPrice(){
+    public void setPartDescription(String partDescription) {
+        this.partDescription = partDescription;
+    }
 
+    @Simple(name = "partPrice")
+    public double getPartPrice() {
         return partPrice;
-
     }
-    public int getPartStockLevel() {
 
+    public void setPartPrice(double partPrice) {
+        this.partPrice = partPrice;
+    }
+
+    @Simple(name = "partStockLevel")
+    public int getPartStockLevel() {
         return partStockLevel;
     }
 
+    public void setPartStockLevel(int partStockLevel) {
+        this.partStockLevel = partStockLevel;
+    }
+
+    @Complex(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
+    public List<PartOccurrence> getOccurrenceList() {
+        return occurrenceList;
+    }
+
+    public void setOccurrenceList(List<PartOccurrence> occurrenceList) {
+        this.occurrenceList = occurrenceList;
+    }
 }

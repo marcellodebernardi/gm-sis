@@ -94,12 +94,11 @@ public abstract class SpecRepBooking implements Searchable {
             return this.cost;
     }
 
-    public String getBookingItemID()
-    {
-        return null;
+    public int getBookingID() {
+        return bookingID;
     }
 
-
-
-
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
 }

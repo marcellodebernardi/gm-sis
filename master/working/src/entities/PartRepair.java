@@ -33,14 +33,66 @@ public class PartRepair extends SpecRepBooking
         this.partOccurrenceID = partOccurrenceID;
     }
 
+    @Simple(name = "spcRepID")
+    public int getSpcRepID() {
+        return super.getSpcRepID();
+    }
 
-    /**
-     * Returns the ID of the part booked in for the Specialist Repair Center
-     */
-    @Override
-    public String getBookingItemID()
-    {
-        return null;
-       //return Integer.toString(part.());
+    public void setSpcRepID() {
+        // todo implement
+    }
+
+    @Simple(name = "spcID")
+    public int getspcID() {
+        return super.getSpcID();
+    }
+
+    public void setSpcID() {
+        // todo implement
+    }
+
+    @Simple(name = "deliveryDate")
+    public Date getDeliveryDate() {
+        return super.getDeliveryDate();
+    }
+
+    public void setDeliveryDate() {
+        // todo implement
+    }
+
+    @Simple(name = "returnDate")
+    public Date getReturnDate() {
+        return super.getReturnDate();
+    }
+
+    public void setReturnDate() {
+        // todo implement
+    }
+
+    @Simple(name = "cost")
+    public double getCost() {
+        return super.getCost();
+    }
+
+    public void setCost() {
+        // todo implement
+    }
+
+    @Simple(name = "bookingID")
+    public int getBookingID() {
+        return super.getBookingID();
+    }
+
+    public void setBookingID() {
+        // todo implement
+    }
+
+    @Simple(name = "partOccurrenceID")
+    public int getPartOccurrenceID() {
+        return partOccurrenceID;
+    }
+
+    public void setPartOccurrenceID(int partOccurrenceID) {
+        this.partOccurrenceID = partOccurrenceID;
     }
 }

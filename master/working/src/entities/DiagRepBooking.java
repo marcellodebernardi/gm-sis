@@ -1,6 +1,7 @@
 package entities;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.MutableInterval;
 
 import java.util.List;
@@ -72,6 +73,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking ID
      */
+    @Simple(name = "bookingID")
     @Override
     public int getBookingID() {
         return super.getBookingID();
@@ -82,6 +84,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return customer ID
      */
+    @Simple(name = "customerID")
     @Override
     public int getCustomerID() {
         return super.getCustomerID();
@@ -92,6 +95,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return vehicle registration number
      */
+    @Simple(name = "vehicleRegNumber")
     @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
@@ -102,19 +106,87 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking description
      */
+    @Simple(name = "description")
     @Override
     public String getDescription() {
         return super.getDescription();
     }
 
     /**
-     * Get the bill associated with this booking.
+     * Get the bill amount associated with this booking.
      *
      * @return booking bill
      */
-    @Override
+    @Simple(name = "billAmount")
+    public double getBillAmount() {
+        return super.getBill().getBillAmount();
+    }
+
+    /**
+     * Get the settling status of the bill associated with this booking
+     * @return
+     */
+    @Simple(name = "billSettled")
+    public boolean getBillSettled() {
+        return super.getBill().isBillSettled();
+    }
+
+    /**
+     * Returns the ID of the mechanic associated with this booking
+     *
+     * @return ID of mechanic
+     */
+    @Simple(name = "mechanidID")
+    public int getMechanicID() {
+        return super.getMechanicID();
+    }
+
+    /**
+     * Returns the start time of the diagnosis booking.
+     *
+     * @return start time of diagnosis
+     */
+    @Simple(name = "diagnosisStart")
+    public DateTime getDiagnosisStart() {
+        return diagnosisStart;
+    }
+
+    /**
+     * Returns the end time of the diagnosis booking.
+     *
+     * @return end time of diagnosis
+     */
+    @Simple(name = "diagnosisEnd")
+    public DateTime getDiagnosisEnd() {
+        return diagnosisEnd;
+    }
+
+    /**
+     * Returns the start time of the repair booking.
+     *
+     * @return start time of repair
+     */
+    @Simple(name = "repairStart")
+    public DateTime getRepairStart() {
+        return diagnosisStart;
+    }
+
+    /**
+     * Returns the end time of the repair booking.
+     *
+     * @return end time of repair
+     */
+    @Simple(name = "repairEnd")
+    public DateTime getRepairEnd() {
+        return diagnosisEnd;
+    }
+
+    /**
+     * Returns the bill associated with this booking.
+     * @return
+     */
     public Bill getBill() {
-        return super.getBill();
+        return getBill();
     }
 
     /**
@@ -140,9 +212,12 @@ public class DiagRepBooking extends Booking {
      *
      * @return a specialist repair booking
      */
+    @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }
+
+
 
     /**
      * Set the ID of the associated customer. Note that the reference variable in the

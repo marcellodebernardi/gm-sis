@@ -64,6 +64,8 @@ public class Vehicle implements Searchable {
         this.installationList = installationList;
     }
 
+
+    @Simple(name = "regNumber")
     public String getRegNumber() {
         return regNumber;
     }
@@ -72,14 +74,7 @@ public class Vehicle implements Searchable {
         this.regNumber = regNumber;
     }
 
-    public int getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
-    }
-
+    @Simple(name = "vehicleType")
     public VehicleType getVehicleType() {
         return vehicleType;
     }
@@ -88,6 +83,7 @@ public class Vehicle implements Searchable {
         this.vehicleType = vehicleType;
     }
 
+    @Simple(name = "model")
     public String getModel() {
         return model;
     }
@@ -96,6 +92,7 @@ public class Vehicle implements Searchable {
         this.model = model;
     }
 
+    @Simple(name = "manufacturer")
     public String getManufacturer() {
         return manufacturer;
     }
@@ -104,6 +101,7 @@ public class Vehicle implements Searchable {
         this.manufacturer = manufacturer;
     }
 
+    @Simple(name = "engineSize")
     public double getEngineSize() {
         return engineSize;
     }
@@ -112,6 +110,7 @@ public class Vehicle implements Searchable {
         this.engineSize = engineSize;
     }
 
+    @Simple(name = "fuelType")
     public FuelType getFuelType() {
         return fuelType;
     }
@@ -120,6 +119,7 @@ public class Vehicle implements Searchable {
         this.fuelType = fuelType;
     }
 
+    @Simple(name = "colour")
     public String getColour() {
         return colour;
     }
@@ -128,6 +128,7 @@ public class Vehicle implements Searchable {
         this.colour = colour;
     }
 
+    @Simple(name = "mileage")
     public int getMileage() {
         return mileage;
     }
@@ -136,22 +137,25 @@ public class Vehicle implements Searchable {
         this.mileage = mileage;
     }
 
+    @Simple(name = "renewalDateMot")
     public Date getRenewalDateMot() {
         return renewalDateMot;
     }
 
     public void setRenewalDateMot(Date renewalDateMot) {
-       this.renewalDateMot = renewalDateMot;
+        this.renewalDateMot = renewalDateMot;
     }
 
+    @Simple(name = "dateLastServiced")
     public Date getDateLastServiced() {
-       return dateLastServiced;
+        return dateLastServiced;
     }
 
     public void setDateLastServiced(Date dateLastServiced) {
-       this.dateLastServiced = dateLastServiced;
+        this.dateLastServiced = dateLastServiced;
     }
 
+    @Simple(name = "coveredByWarranty")
     public boolean isCoveredByWarranty() {
         return coveredByWarranty;
     }
@@ -160,6 +164,7 @@ public class Vehicle implements Searchable {
         this.coveredByWarranty = coveredByWarranty;
     }
 
+    @Simple(name = "warrantyName")
     public String getWarrantyName() {
         return warrantyName;
     }
@@ -168,6 +173,7 @@ public class Vehicle implements Searchable {
         this.warrantyName = warrantyName;
     }
 
+    @Simple(name = "warrantyCompAddress")
     public String getWarrantyCompAddress() {
         return warrantyCompAddress;
     }
@@ -176,11 +182,30 @@ public class Vehicle implements Searchable {
         this.warrantyCompAddress = warrantyCompAddress;
     }
 
+    @Simple(name = "warrantyExpirationDate")
     public Date getWarrantyExpirationDate() {
-       return warrantyExpirationDate;
+        return warrantyExpirationDate;
     }
 
     public void setWarrantyExpirationDate(Date warrantyExpirationDate) {
         this.warrantyExpirationDate = warrantyExpirationDate;
+    }
+
+    @Complex(baseType = Installation.class, specTypes = Installation.class, key = "vehicleID")
+    public List<Installation> getInstallationList() {
+        return installationList;
+    }
+
+    public void setInstallationList(List<Installation> installationList) {
+        this.installationList = installationList;
+    }
+
+    @Simple(name = "customerID")
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 }

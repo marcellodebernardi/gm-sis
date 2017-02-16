@@ -44,6 +44,7 @@ public class User implements Searchable {
      *
      * @return user identification string
      */
+    @Simple(name = "userID")
     public String getUserID() {
         return userID;
     }
@@ -53,6 +54,7 @@ public class User implements Searchable {
      *
      * @return password string
      */
+    @Simple(name = "password")
     public String getPassword() {
         return password;
     }
@@ -62,6 +64,7 @@ public class User implements Searchable {
      *
      * @return first name string
      */
+    @Simple(name = "firstName")
     public String getFirstName() {
         return firstName;
     }
@@ -71,6 +74,7 @@ public class User implements Searchable {
      *
      * @return surname string
      */
+    @Simple(name = "surname")
     public String getSurname() {
         return surname;
     }
@@ -80,6 +84,7 @@ public class User implements Searchable {
      *
      * @return UserType enum
      */
+    @Simple(name = "userType")
     public UserType getUserType() {
         return userType;
     }

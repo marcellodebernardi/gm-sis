@@ -19,7 +19,7 @@ public class Customer implements Searchable
     private CustomerType customerType;
 
     // hierarchical ownership links
-    private List<Booking> bookings;
+    private List<DiagRepBooking> bookings;
     private List<Vehicle> vehicles;
 
     @Reflective
@@ -32,7 +32,7 @@ public class Customer implements Searchable
                     @Simple(name = "customerEmail") String customerEmail,
                     @Simple(name = "customerType") CustomerType customerType,
                     @Complex(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
-                                List<Booking> bookings,
+                                List<DiagRepBooking> bookings,
                     @Complex(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
                                 List<Vehicle> vehicles) {
         this.customerID = customerID;
@@ -48,103 +48,106 @@ public class Customer implements Searchable
     }
 
     //gets unique identifier for customer
+    @Simple(name = "customerID")
     public int getCustomerID()
     {
         return customerID;
     }
 
-    //sets unique identifier for customer
-    public void setCustomerID(int custID)
-    {
-        customerID = custID;
-    }
+    // todo ID setter?
 
     //gets customer's surname
+    @Simple(name = "customerSurname")
     public String getCustomerSurname()
     {
         return customerSurname;
     }
 
-    //sets customer's surname
-    public void setCustomerSurname(String custSurname)
-    {
-        customerSurname = custSurname;
+    public void setCustomerSurname(String customerSurname) {
+        this.customerSurname = customerSurname;
     }
 
     //gets customer's first name
+    @Simple(name = "customerFirstname")
     public String getCustomerFirstname()
     {
         return customerFirstname;
     }
 
-    public List<Vehicle> getVehicles() {
-        return vehicles;
-    }
-
-    //sets customer's first name
-    public void setCustomerFirstname(String custFirstname)
-    {
-        customerFirstname = custFirstname;
+    public void setCustomerFirstname(String customerFirstname) {
+        this.customerFirstname = customerFirstname;
     }
 
     //gets customer's address
+    @Simple(name = "customerAddress")
     public String getCustomerAddress()
     {
         return customerAddress;
     }
 
-    //sets customer's address
-    public void setCustomerAddress(String custAddress)
-    {
-        customerAddress = custAddress;
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
     }
 
     //gets customer's postcode
+    @Simple(name = "customerPostcode")
     public String getCustomerPostcode()
     {
         return customerPostcode;
     }
 
-    //sets customer's postcode
-    public void setCustomerPostcode(String custPostcode)
-    {
-        customerPostcode = custPostcode;
+    public void setCustomerPostcode(String customerPostcode) {
+        this.customerPostcode = customerPostcode;
     }
 
     //gets customer's phone number
+    @Simple(name = "customerPhone")
     public String getCustomerPhone()
     {
         return customerPhone;
     }
 
-    //sets customer's phone number
-    public void setCustomerPhone(String custPhone)
-    {
-        customerPhone = custPhone;
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 
     //gets customer's email address
+    @Simple(name = "customerEmail")
     public String getCustomerEmail()
     {
         return customerEmail;
     }
 
-    //sets customer's email address
-    public void setCustomerEmail(String custEmail)
-    {
-        customerEmail = custEmail;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     //gets customer type (private or business)
+    @Simple(name = "customerType")
     public CustomerType getCustomerType()
     {
         return customerType;
     }
 
-    //sets customer type (private or business)
-    public void setCustomerType(CustomerType custType)
-    {
-        customerType = custType;
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 
+    @Complex(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
+    @Complex(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
+    public List<DiagRepBooking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<DiagRepBooking> bookings) {
+        this.bookings = bookings;
+    }
 }

@@ -286,7 +286,7 @@ public class DatabaseRepository implements CriterionRepository {
                             case "boolean":
                                 initArgs[i] = results.getBoolean(columnIndex);
                                 break;
-                            case "CustomerType":
+                            case "CustomerType": // todo fall-through behavior with Enum.valueOf
                                 initArgs[i] = CustomerType.valueOf(results.getString(columnIndex));
                                 break;
                             case "FuelType":
