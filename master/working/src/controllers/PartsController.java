@@ -20,6 +20,8 @@ import java.util.List;
 import java.lang.*;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 
 
@@ -38,22 +40,27 @@ public class PartsController {
     @FXML private Button updateBtn;
     @FXML private TextField searchParts;
 
-    Stage AddPartStage;
-    Stage WithdrawPartStage;
+    private Stage AddPartStage;
+    private Stage WithdrawPartStage;
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
     final ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
-    private List<PartAbstraction>   List;
+    private List<PartAbstraction> List;
 
     public void updateTable(){
 
-        Criterion c = new Criterion(PartAbstraction.class);
+        Criterion c=new Criterion<>(PartAbstraction.class);
 
         List = instance.getByCriteria(c); //the data from Parts DB stored in this list
 
-        System.out.println(List.get(0).getPartName());
-        System.out.println(List.get(0).getPartDescription());
-        System.out.println(List.size());
+        /** test list
+         *
+         *
+         * // System.out.println(List.get(0).getPartName());
+         * // System.out.println(List.get(1).getPartName());
+         * /System.out.println(List.get(0).getPartDescription());
+         * // System.out.println(List.size());
+         **/
 
         tableEntries.removeAll(tableEntries);
 
