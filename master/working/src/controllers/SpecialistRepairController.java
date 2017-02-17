@@ -116,7 +116,7 @@ DatabaseRepository db = DatabaseRepository.getInstance();
                 Vehicle vehicle = vehicles.get(0);
                 SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
                 VehicleRepair vehicleRepair = new VehicleRepair(specialistRepairCenter.getSpcID(),null,null,20,-1,vehicle.getRegNumber());
-                db.addItem(SpecRepBooking.class, vehicleRepair);
+                db.commitItem( vehicleRepair);
             }
             else
             {
@@ -124,7 +124,7 @@ DatabaseRepository db = DatabaseRepository.getInstance();
                 PartOccurrence partOccurrence = partOccurrences.get(0);
                 SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
                 PartRepair partRepair = new PartRepair(specialistRepairCenter.getSpcID(),null,null,20,-1,partOccurrence.getPartOccurrenceID());
-                db.addItem(SpecRepBooking.class, partRepair);
+                db.commitItem(partRepair);
             }
         }
 

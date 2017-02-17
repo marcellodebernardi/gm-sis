@@ -18,6 +18,8 @@ package controllers;
         import logic.VehicleSys;
         import controllers.LoginController;
 
+        import java.io.Console;
+
 /**
  * Created by DillonVaghela on 2/8/17.
  */
@@ -28,6 +30,9 @@ public class MenuController {
         public Button deleteVButton;
         public Button editVButton;
         public Tab userTab;
+        public Button addSRBooking;
+        public Button editSRBooking;
+        public Button deleteSRBooking;
         Stage addStage;
         Stage deleteStage;
         Stage editSearchStage;
@@ -37,6 +42,7 @@ public class MenuController {
         Stage editBStage;
         Stage todayBStage;
         Stage allBStage;
+        Stage addSpecialistBooking;
 
         public void initialize() throws Exception {
                 setUserType();
@@ -294,20 +300,21 @@ public void handleButtonAdd() throws Exception {
 
         }
 
+        @FXML
         public void addSRCBooking() throws Exception
         {
-                try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCBooking.fxml"));
-                        Parent menu = fxmlLoader.load();
-                        todayBStage = new Stage();
-                        todayBStage.setTitle("Add Specialist Booking");
-                        todayBStage.setScene(new Scene(menu));
-                        todayBStage.show();
-                }
-                catch(Exception e)
-                {
-                        //todo relevant error message
-                }
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addSRCBooking"));
+                Parent menu = fxmlLoader.load();
+                addSpecialistBooking = new Stage();
+                addSpecialistBooking.setTitle("Add Specialist Booking");
+                addSpecialistBooking.setScene(new Scene(menu));
+                addSpecialistBooking.show();
+            }
+            catch (Exception e) {
+                System.out.println("ERROR IN OPENING WINDOW");
+            }
+
         }
 
         public void deleteSRCBooking()
