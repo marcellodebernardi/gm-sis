@@ -43,18 +43,18 @@ public class DiagRepBooking extends Booking {
      * @param specRepBooking    reference to a connected specialist repair booking, can be null
      */
     @Reflective
-    public DiagRepBooking(@Simple(name = "bookingID", primary = true) int bookingID,
-                          @Simple(name = "customerID") int customerID,
-                          @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
-                          @Simple(name = "description") String description,
-                          @Simple(name = "billAmount") double billAmount,
-                          @Simple(name = "billSettled") boolean billSettled,
-                          @Simple(name = "mechanicID") int mechanicID,
-                          @Simple(name = "diagnosisStart") DateTime diagnosisStart,
-                          @Simple(name = "diagnosisEnd") DateTime diagnosisEnd,
-                          @Simple(name = "repairStart") DateTime repairStart,
-                          @Simple(name = "repairEnd") DateTime repairEnd,
-                          @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+    public DiagRepBooking(@Column(name = "bookingID", primary = true) int bookingID,
+                          @Column(name = "customerID") int customerID,
+                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
+                          @Column(name = "description") String description,
+                          @Column(name = "billAmount") double billAmount,
+                          @Column(name = "billSettled") boolean billSettled,
+                          @Column(name = "mechanicID") int mechanicID,
+                          @Column(name = "diagnosisStart") DateTime diagnosisStart,
+                          @Column(name = "diagnosisEnd") DateTime diagnosisEnd,
+                          @Column(name = "repairStart") DateTime repairStart,
+                          @Column(name = "repairEnd") DateTime repairEnd,
+                          @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                   SpecRepBooking specRepBooking) {
         super(bookingID, customerID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
@@ -72,7 +72,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking ID
      */
-    @Simple(name = "bookingID", primary = true)
+    @Column(name = "bookingID", primary = true)
     @Override
     public int getBookingID() {
         return super.getBookingID();
@@ -83,7 +83,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return customer ID
      */
-    @Simple(name = "customerID")
+    @Column(name = "customerID")
     @Override
     public int getCustomerID() {
         return super.getCustomerID();
@@ -94,7 +94,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return vehicle registration number
      */
-    @Simple(name = "vehicleRegNumber")
+    @Column(name = "vehicleRegNumber")
     @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
@@ -105,7 +105,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking description
      */
-    @Simple(name = "description")
+    @Column(name = "description")
     @Override
     public String getDescription() {
         return super.getDescription();
@@ -116,7 +116,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return booking bill
      */
-    @Simple(name = "billAmount")
+    @Column(name = "billAmount")
     public double getBillAmount() {
         return super.getBill().getBillAmount();
     }
@@ -125,7 +125,7 @@ public class DiagRepBooking extends Booking {
      * Get the settling status of the bill associated with this booking
      * @return
      */
-    @Simple(name = "billSettled")
+    @Column(name = "billSettled")
     public boolean getBillSettled() {
         return super.getBill().isBillSettled();
     }
@@ -135,7 +135,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return ID of mechanic
      */
-    @Simple(name = "mechanidID")
+    @Column(name = "mechanidID")
     public int getMechanicID() {
         return super.getMechanicID();
     }
@@ -145,7 +145,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return start time of diagnosis
      */
-    @Simple(name = "diagnosisStart")
+    @Column(name = "diagnosisStart")
     public DateTime getDiagnosisStart() {
         return diagnosisStart;
     }
@@ -155,7 +155,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return end time of diagnosis
      */
-    @Simple(name = "diagnosisEnd")
+    @Column(name = "diagnosisEnd")
     public DateTime getDiagnosisEnd() {
         return diagnosisEnd;
     }
@@ -165,7 +165,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return start time of repair
      */
-    @Simple(name = "repairStart")
+    @Column(name = "repairStart")
     public DateTime getRepairStart() {
         return diagnosisStart;
     }
@@ -175,7 +175,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return end time of repair
      */
-    @Simple(name = "repairEnd")
+    @Column(name = "repairEnd")
     public DateTime getRepairEnd() {
         return diagnosisEnd;
     }
@@ -211,7 +211,7 @@ public class DiagRepBooking extends Booking {
      *
      * @return a specialist repair booking
      */
-    @Complex(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+    @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }

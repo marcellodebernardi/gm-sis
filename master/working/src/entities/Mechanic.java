@@ -11,17 +11,17 @@ public class Mechanic {
     private double hourlyRate;
 
     @Reflective
-    public Mechanic(@Simple(name = "mechanicID", primary = true) int mechanicID,
-                    @Simple(name = "firstName") String firstName,
-                    @Simple(name = "surname") String surname,
-                    @Simple(name = "hourlyRate") double hourlyRate) {
+    public Mechanic(@Column(name = "mechanicID", primary = true) int mechanicID,
+                    @Column(name = "firstName") String firstName,
+                    @Column(name = "surname") String surname,
+                    @Column(name = "hourlyRate") double hourlyRate) {
         this.mechanicID = mechanicID;
         this.firstName = firstName;
         this.surname = surname;
         this.hourlyRate = hourlyRate;
     }
 
-    @Simple(name = "mechanicID", primary = true)
+    @Column(name = "mechanicID", primary = true)
     public int getMechanicID() {
         return mechanicID;
     }
@@ -30,7 +30,7 @@ public class Mechanic {
         this.mechanicID = mechanicID;
     }
 
-    @Simple(name = "firstName")
+    @Column(name = "firstName")
     public String getFirstName() {
         return firstName;
     }
@@ -39,7 +39,7 @@ public class Mechanic {
         this.firstName = firstName;
     }
 
-    @Simple(name = "surname")
+    @Column(name = "surname")
     public String getSurname() {
         return surname;
     }
@@ -48,7 +48,7 @@ public class Mechanic {
         this.surname = surname;
     }
 
-    @Simple(name = "hourlyRate")
+    @Column(name = "hourlyRate")
     public double getHourlyRate() {
         return hourlyRate;
     }

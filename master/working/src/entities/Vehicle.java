@@ -23,28 +23,28 @@ public class Vehicle implements Searchable {
     private Date warrantyExpirationDate;
 
     // hierarchical links
-    private List<Installation> installationList; // todo getter setter
+    private List<Installation> installationList;
 
     // inverse hierarchical database links
     private int customerID;
 
     @Reflective
-    public Vehicle(@Simple(name = "regNumber", primary = true) String regNumber,
-                   @Simple(name = "customerID") int customerID,
-                   @Simple(name = "vehicleType") VehicleType vehicleType,
-                   @Simple(name = "model") String model,
-                   @Simple(name = "manufacturer") String manufacturer,
-                   @Simple(name = "engineSize") double engineSize,
-                   @Simple(name = "fuelType") FuelType fuelType,
-                   @Simple(name = "colour") String colour,
-                   @Simple(name = "mileage") int mileage,
-                   @Simple(name = "renewalDateMot") Date renewalDateMot,
-                   @Simple(name = "dateLastServiced") Date dateLastServiced,
-                   @Simple(name = "coveredByWarranty") boolean coveredByWarranty,
-                   @Simple(name = "warrantyName") String warrantyName,
-                   @Simple(name = "warrantyCompAddress") String warrantyCompAddress,
-                   @Simple(name = "warrantyExpirationDate") Date warrantyExpirationDate,
-                   @Complex(baseType = Installation.class, specTypes = Installation.class, key = "vehicleRegNumber")
+    public Vehicle(@Column(name = "regNumber", primary = true) String regNumber,
+                   @Column(name = "customerID") int customerID,
+                   @Column(name = "vehicleType") VehicleType vehicleType,
+                   @Column(name = "model") String model,
+                   @Column(name = "manufacturer") String manufacturer,
+                   @Column(name = "engineSize") double engineSize,
+                   @Column(name = "fuelType") FuelType fuelType,
+                   @Column(name = "colour") String colour,
+                   @Column(name = "mileage") int mileage,
+                   @Column(name = "renewalDateMot") Date renewalDateMot,
+                   @Column(name = "dateLastServiced") Date dateLastServiced,
+                   @Column(name = "coveredByWarranty") boolean coveredByWarranty,
+                   @Column(name = "warrantyName") String warrantyName,
+                   @Column(name = "warrantyCompAddress") String warrantyCompAddress,
+                   @Column(name = "warrantyExpirationDate") Date warrantyExpirationDate,
+                   @TableReference(baseType = Installation.class, specTypes = Installation.class, key = "vehicleRegNumber")
                            List<Installation> installationList) {
         this.regNumber = regNumber;
         this.customerID = customerID;
@@ -65,7 +65,7 @@ public class Vehicle implements Searchable {
     }
 
 
-    @Simple(name = "regNumber", primary = true)
+    @Column(name = "regNumber", primary = true)
     public String getRegNumber() {
         return regNumber;
     }
@@ -74,7 +74,7 @@ public class Vehicle implements Searchable {
         this.regNumber = regNumber;
     }
 
-    @Simple(name = "vehicleType")
+    @Column(name = "vehicleType")
     public VehicleType getVehicleType() {
         return vehicleType;
     }
@@ -83,7 +83,7 @@ public class Vehicle implements Searchable {
         this.vehicleType = vehicleType;
     }
 
-    @Simple(name = "model")
+    @Column(name = "model")
     public String getModel() {
         return model;
     }
@@ -92,7 +92,7 @@ public class Vehicle implements Searchable {
         this.model = model;
     }
 
-    @Simple(name = "manufacturer")
+    @Column(name = "manufacturer")
     public String getManufacturer() {
         return manufacturer;
     }
@@ -101,7 +101,7 @@ public class Vehicle implements Searchable {
         this.manufacturer = manufacturer;
     }
 
-    @Simple(name = "engineSize")
+    @Column(name = "engineSize")
     public double getEngineSize() {
         return engineSize;
     }
@@ -110,7 +110,7 @@ public class Vehicle implements Searchable {
         this.engineSize = engineSize;
     }
 
-    @Simple(name = "fuelType")
+    @Column(name = "fuelType")
     public FuelType getFuelType() {
         return fuelType;
     }
@@ -119,7 +119,7 @@ public class Vehicle implements Searchable {
         this.fuelType = fuelType;
     }
 
-    @Simple(name = "colour")
+    @Column(name = "colour")
     public String getColour() {
         return colour;
     }
@@ -128,7 +128,7 @@ public class Vehicle implements Searchable {
         this.colour = colour;
     }
 
-    @Simple(name = "mileage")
+    @Column(name = "mileage")
     public int getMileage() {
         return mileage;
     }
@@ -137,7 +137,7 @@ public class Vehicle implements Searchable {
         this.mileage = mileage;
     }
 
-    @Simple(name = "renewalDateMot")
+    @Column(name = "renewalDateMot")
     public Date getRenewalDateMot() {
         return renewalDateMot;
     }
@@ -146,7 +146,7 @@ public class Vehicle implements Searchable {
         this.renewalDateMot = renewalDateMot;
     }
 
-    @Simple(name = "dateLastServiced")
+    @Column(name = "dateLastServiced")
     public Date getDateLastServiced() {
         return dateLastServiced;
     }
@@ -155,7 +155,7 @@ public class Vehicle implements Searchable {
         this.dateLastServiced = dateLastServiced;
     }
 
-    @Simple(name = "coveredByWarranty")
+    @Column(name = "coveredByWarranty")
     public boolean isCoveredByWarranty() {
         return coveredByWarranty;
     }
@@ -164,7 +164,7 @@ public class Vehicle implements Searchable {
         this.coveredByWarranty = coveredByWarranty;
     }
 
-    @Simple(name = "warrantyName")
+    @Column(name = "warrantyName")
     public String getWarrantyName() {
         return warrantyName;
     }
@@ -173,7 +173,7 @@ public class Vehicle implements Searchable {
         this.warrantyName = warrantyName;
     }
 
-    @Simple(name = "warrantyCompAddress")
+    @Column(name = "warrantyCompAddress")
     public String getWarrantyCompAddress() {
         return warrantyCompAddress;
     }
@@ -182,7 +182,7 @@ public class Vehicle implements Searchable {
         this.warrantyCompAddress = warrantyCompAddress;
     }
 
-    @Simple(name = "warrantyExpirationDate")
+    @Column(name = "warrantyExpirationDate")
     public Date getWarrantyExpirationDate() {
         return warrantyExpirationDate;
     }
@@ -191,7 +191,7 @@ public class Vehicle implements Searchable {
         this.warrantyExpirationDate = warrantyExpirationDate;
     }
 
-    @Complex(baseType = Installation.class, specTypes = Installation.class, key = "vehicleID")
+    @TableReference(baseType = Installation.class, specTypes = Installation.class, key = "vehicleID")
     public List<Installation> getInstallationList() {
         return installationList;
     }
@@ -200,7 +200,7 @@ public class Vehicle implements Searchable {
         this.installationList = installationList;
     }
 
-    @Simple(name = "customerID")
+    @Column(name = "customerID")
     public int getCustomerID() {
         return customerID;
     }

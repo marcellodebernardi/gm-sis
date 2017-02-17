@@ -1,12 +1,11 @@
 package logic;
 
 
-import entities.SpecRepBooking;
 import entities.SpecialistRepairCenter;
 import persistence.DatabaseRepository;
 
 import java.util.List;
-import java.util.Collections;
+
 import static logic.CriterionOperator.*;
 
 /**
@@ -50,7 +49,7 @@ public class SpecRepairSystem {
     {
         //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
          SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email, null);
-        return persistence.addItem(SpecialistRepairCenter.class, add);
+        return persistence.commitItem(add);
     }
 
     /**
@@ -65,7 +64,7 @@ public class SpecRepairSystem {
 
     public boolean editRepairCentre(SpecialistRepairCenter edit)
     {
-        return persistence.updateItem(SpecialistRepairCenter.class, edit);
+        return persistence.commitItem(edit);
     }
 
 }

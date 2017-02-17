@@ -1,9 +1,6 @@
 package entities;
 
-import logic.Criterion;
 import logic.Searchable;
-
-import java.util.SortedMap;
 
 /**
  * @author Marcello De Bernardi
@@ -27,11 +24,11 @@ public class User implements Searchable {
      * @param userType user's type (administrator / normal)
      */
     @Reflective
-    public User(@Simple(name = "userID", primary = true) String userID,
-                @Simple(name = "password") String password,
-                @Simple(name = "firstName") String firstName,
-                @Simple(name = "surname") String surname,
-                @Simple(name = "userType") UserType userType) {
+    public User(@Column(name = "userID", primary = true) String userID,
+                @Column(name = "password") String password,
+                @Column(name = "firstName") String firstName,
+                @Column(name = "surname") String surname,
+                @Column(name = "userType") UserType userType) {
         this.userID = userID;
         this.password = password;
         this.firstName = firstName;
@@ -44,7 +41,7 @@ public class User implements Searchable {
      *
      * @return user identification string
      */
-    @Simple(name = "userID", primary = true)
+    @Column(name = "userID", primary = true)
     public String getUserID() {
         return userID;
     }
@@ -54,7 +51,7 @@ public class User implements Searchable {
      *
      * @return password string
      */
-    @Simple(name = "password")
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -64,7 +61,7 @@ public class User implements Searchable {
      *
      * @return first name string
      */
-    @Simple(name = "firstName")
+    @Column(name = "firstName")
     public String getFirstName() {
         return firstName;
     }
@@ -74,7 +71,7 @@ public class User implements Searchable {
      *
      * @return surname string
      */
-    @Simple(name = "surname")
+    @Column(name = "surname")
     public String getSurname() {
         return surname;
     }
@@ -84,7 +81,7 @@ public class User implements Searchable {
      *
      * @return UserType enum
      */
-    @Simple(name = "userType")
+    @Column(name = "userType")
     public UserType getUserType() {
         return userType;
     }

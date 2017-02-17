@@ -29,23 +29,40 @@ import static logic.CriterionOperator.EqualTo;
 public class DatabaseRepository implements CriterionRepository {
     private static DatabaseRepository instance;
 
-    // todo setup connection correctly
+    // database connection
     private final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
     private Connection connection;
     private PreparedStatement statement;
 
+    // string components
     private final String SELECTSTRING = "SELECT * FROM ";
     private final String INSERTSTRING = "INSERT INTO ";
     private final String UPDATESTRING = "UPDATE ";
     private final String DELETESTRING = "DELETE FROM ";
 
+    // reflection data
+    private List<Class<?>> numericDataTypes;
+    // todo get reflection data once
 
     /**
      * Constructor for DatabaseRepository. Temporary.
      */
     private DatabaseRepository() {
         try {
+            // connect to database
             connection = DriverManager.getConnection(DB_URL);
+
+            // perform reflection
+            numericDataTypes = new ArrayList<>();
+            numericDataTypes.add(Integer.class);
+            numericDataTypes.add(Double.class);
+            numericDataTypes.add(Float.class);
+            numericDataTypes.add(Short.class);
+            numericDataTypes.add(Byte.class);
+            numericDataTypes.add(Date.class);
+            numericDataTypes.add(DateTime.class);
+
+
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
@@ -85,7 +102,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    public <E extends Searchable> boolean addItem(Class<E> eClass, E item) {
+    public <E extends Searchable> boolean commitItem(E item) {
         // handle bad input
         if (item == null) throw new NullPointerException();
 
@@ -94,7 +111,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue statements for transaction
-            List<String> statements = toINSERTTransaction(eClass, item);
+            List<String> statements = toINSERTTransaction(item);
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
@@ -102,30 +119,6 @@ public class DatabaseRepository implements CriterionRepository {
             // commit transaction and wrap up
             connection.commit();
             connection.setAutoCommit(true);
-            return true;
-        } catch (SQLException e) {
-            System.err.print(e.getMessage());
-            return false;
-        }
-    }
-
-    public <E extends Searchable> boolean updateItem(Class<E> eClass, E item) {
-        // handle bad input
-        if (item == null) throw new NullPointerException();
-
-        try {
-            //set up transaction mode
-            connection.setAutoCommit(false);
-
-            // generate and queue queries for transaction
-            List<String> statements = toUPDATETransaction(eClass, item);
-            for (String s : statements) {
-                connection.prepareStatement(s).executeUpdate();
-            }
-
-            // commit transaction and wrap up
-            connection.commit();
-            connection.setAutoCommit(false);
             return true;
         } catch (SQLException e) {
             System.err.print(e.getMessage());
@@ -157,73 +150,103 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    /** Converts criterion to SQL SELECT query */
+    /**
+     * Converts criterion to SQL SELECT query
+     */
     <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
         return SELECTSTRING + criteria.getCriterionClass().getSimpleName()
                 + (criteria.toString().equals("") ? "" : " WHERE ")
                 + criteria.toString() + ";";
     }
 
-    /** Converts an entity into an insertion transaction */
-    <E extends Searchable> List<String> toINSERTTransaction(Class<E> eClass, E item) {
+    /**
+     * Converts an entity into an insertion transaction
+     */
+    <E extends Searchable> List<String> toINSERTTransaction(E item) {
+        Class<? extends Searchable> eClass = item.getClass();
         List<String> queries = new ArrayList<>();
+        List<Method> columnGetters = getColumnGetters(eClass);
+        List<Method> tableRefGetters = getTableGetters(eClass);
 
-        // query components
-        String columnString = "(";
-        String valueString = "VALUES (";
-        String delimiter = "";
+        String columns = "(";
+        String values = "VALUES (";
+        String delim = "";
 
-        // annotated getters
-        List<Method> simpleGetters = getSimpleGetters(eClass);
-        List<Method> complexGetters = getComplexGetters(eClass);
+        // todo figure out if INSERT or UPDATE
 
-
-        // add simple attributes into INSERT query
-        for (int i = 0; i < simpleGetters.size(); i++) {
+        // generate query for this item
+        for (Method column : columnGetters) {
             try {
-                if (simpleGetters.get(i).invoke(item) != null) {
-                    // columnString += delimiter + ((Simple)simpleAnnotations.get(i)).name();
-                    valueString += delimiter + simpleGetters.get(i).invoke(item);
-                    delimiter = ", ";
+                Object attribute = column.invoke(item);
+
+                // if not null ,add to insert statement
+                if (attribute != null) {
+                    columns += delim + ((Column)column.getDeclaredAnnotations()[0]).name();
+                    values += delim
+                            + (numericDataTypes.contains(attribute.getClass()) ? "" : "'")
+                            + attribute.toString()
+                            + (numericDataTypes.contains(attribute.getClass()) ? "" : "'");
+                    delim = ", ";
                 }
             }
             catch (IllegalAccessException | InvocationTargetException e) {
-                System.err.print(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
-        columnString += ") ";
-        valueString += ")";
-        queries.add(INSERTSTRING + columnString + valueString);
+        queries.add(INSERTSTRING + eClass.getSimpleName() + columns + ") " + values + ");");
 
-        // recursively get complex attributes
-        for (int i = 0; i < complexGetters.size(); i++) {}
+        // todo how to handle references to parent items
+        // recurse on children
+        for (Method tableRef : tableRefGetters) {
+            try {
+                Object attribute = tableRef.invoke(item);
+                TableReference tableRefAnn = (TableReference)tableRef.getDeclaredAnnotations()[0];
+
+                // item is list
+                if (attribute != null && attribute instanceof List<?>) {
+                    List attributeList = ArrayList.class.cast(attribute);
+                    for (int i = 0; i < attributeList.size(); i++) {
+                        for (Class<? extends Searchable> type : tableRefAnn.specTypes()) {
+                            queries.addAll(toINSERTTransaction(type.cast(attributeList.get(i))));
+                        }
+                    }
+                }
+                // item is individual
+                else if (attribute != null) {
+                    for (Class<? extends Searchable> type : tableRefAnn.specTypes()) {
+                        queries.addAll(toINSERTTransaction(type.cast(attribute)));
+                    }
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        resolveForeignKeys(queries);
 
         return queries;
     }
 
-    /** Converts an entity into an update transaction */
-    <E extends Searchable> List<String> toUPDATETransaction(Class<E> eClass, E item) {
-        // todo implement similar to INSERT
-        return null;
-    }
-
-    /** Converts a criterion into a deletion transaction */
+    /**
+     * Converts a criterion into a deletion transaction
+     */
     <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria) {
-        List<String> query = new ArrayList<>();
-        List<Method> complexGetters = getComplexGetters(criteria.getCriterionClass());
+        List<String> queries = new ArrayList<>();
+        List<Method> complexGetters = getTableGetters(criteria.getCriterionClass());
         List<E> targets = getByCriteria(criteria);
 
-        if (targets.size() == 0) return query;
+        if (targets.size() == 0) return queries;
 
         // form delete transaction for specified item
-        query.add(DELETESTRING + criteria.getCriterionClass().getSimpleName()
+        queries.add(DELETESTRING + criteria.getCriterionClass().getSimpleName()
                 + (criteria.toString().equals("") ? "" : " WHERE ")
                 + criteria.toString() + ";");
 
         for (E target : targets) {
             // issue delete transaction for complex children
             for (Method method : complexGetters) {
-                Complex annotation = (Complex)method.getDeclaredAnnotations()[0];
+                TableReference annotation = (TableReference) method.getDeclaredAnnotations()[0];
                 try {
                     Object attribute = method.invoke(target);
                     if (attribute == null) break;
@@ -234,9 +257,9 @@ public class DatabaseRepository implements CriterionRepository {
                         // for each list element, issue delete transaction
                         for (int i = 0; i < list.size(); i++) {
                             for (Class<? extends Searchable> type : annotation.specTypes()) {
-                                query.addAll(toDELETETransaction(
+                                queries.addAll(toDELETETransaction(
                                         new Criterion<>(type,
-                                                ((Simple)getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
+                                                ((Column) getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
                                                 EqualTo,
                                                 getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i)))));
                             }
@@ -245,24 +268,25 @@ public class DatabaseRepository implements CriterionRepository {
                     // is not list
                     else {
                         for (Class<? extends Searchable> type : annotation.specTypes()) {
-                            query.addAll(toDELETETransaction(
+                            queries.addAll(toDELETETransaction(
                                     new Criterion<>(type,
-                                            ((Simple)getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
+                                            ((Column) getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
                                             EqualTo,
                                             getPrimaryKeyGetter(attribute.getClass()).invoke(attribute))));
                         }
                     }
-                }
-                catch (IllegalAccessException | InvocationTargetException e) {
-                    System.err.print(e.getMessage() + "DELETE: invoke @Complex getter.");
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    System.err.print(e.getMessage() + "DELETE: invoke @TableReference getter.");
                     return null;
                 }
             }
         }
-        return query;
+        return queries;
     }
 
-    /** Converts a ResultSet into a List<E> of objects todo break down into helper method */
+    /**
+     * Converts a ResultSet into a List<E> of objects
+     */
     private <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
         List<E> returnList = new ArrayList<>();
 
@@ -281,8 +305,7 @@ public class DatabaseRepository implements CriterionRepository {
             columnNames = new ArrayList<>();
             for (int i = 1; i <= columnNumber; i++)
                 columnNames.add(results.getMetaData().getColumnName(i));
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
             return null;
         }
@@ -298,8 +321,7 @@ public class DatabaseRepository implements CriterionRepository {
             }
             constructor = eClass.getConstructor(constructorArgumentTypes);
             constructorAnnotations = constructor.getParameterAnnotations();
-        }
-        catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             System.err.print(e.getMessage() + " - Failed to obtain constructor and parameters.");
             return null;
         }
@@ -314,8 +336,8 @@ public class DatabaseRepository implements CriterionRepository {
                 for (int i = 0; i < constructorAnnotations.length; i++) {
                     Annotation annotation = constructorAnnotations[i][0];
 
-                    if (annotation.annotationType().equals(Simple.class)) {
-                        Simple metadata = (Simple)annotation;
+                    if (annotation.annotationType().equals(Column.class)) {
+                        Column metadata = (Column) annotation;
                         String columnName = metadata.name();
                         int columnIndex = columnNames.indexOf(columnName) + 1;
 
@@ -325,7 +347,7 @@ public class DatabaseRepository implements CriterionRepository {
                         sure all expected data types have a switch case below.
                         todo make more elegant by changing to something without switch
                          */
-                        switch(constructorArgumentTypes[i].getSimpleName()) {
+                        switch (constructorArgumentTypes[i].getSimpleName()) {
                             case "String":
                                 initArgs[i] = results.getString(columnIndex);
                                 break;
@@ -361,13 +383,12 @@ public class DatabaseRepository implements CriterionRepository {
                                 break;
                             default:
                                 System.err.print("\nORM toObjects(): data type of constructor argument for database column "
-                                        + "(" + columnIndex + ", " +  columnName + ") could not be identified."
+                                        + "(" + columnIndex + ", " + columnName + ") could not be identified."
                                         + "Check DatabaseRepository.toObjects for missing switch cases.");
                                 return null;
                         }
-                    }
-                    else if (annotation.annotationType().equals(Complex.class)) {
-                        Complex metadata = (Complex)annotation;
+                    } else if (annotation.annotationType().equals(TableReference.class)) {
+                        TableReference metadata = (TableReference) annotation;
 
                         // the complex attribute is a list of some form
                         if (constructorArgumentTypes[i].isAssignableFrom(List.class)) {
@@ -399,38 +420,38 @@ public class DatabaseRepository implements CriterionRepository {
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         System.out.println("Annotation type not detected");
                     }
                 }
                 returnList.add(constructor.newInstance(initArgs));
             }
             return returnList;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.print(e.getMessage() + " - Failed to map results to object.");
             return null;
-        }
-        catch(InvocationTargetException | InstantiationException | IllegalAccessException e) {
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             System.err.print(e.getMessage() + " - Failed to create object instance.");
             return null;
         }
     }
 
-    /** Allows running a raw SQL query on the database. Consider minimal use */
+    /**
+     * Allows running a raw SQL query on the database. Consider minimal use
+     */
     private ResultSet runSQL(String query) {
         try {
             return connection.prepareStatement(query).executeQuery();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;
         }
     }
 
-    /** Returns all reflective @Simple getter methods for the class */
-    private List<Method> getSimpleGetters(Class<?> eClass) {
+    /**
+     * Returns all reflective @Column getter methods for the class
+     */
+    private List<Method> getColumnGetters(Class<?> eClass) {
         List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
 
         // discard non-public, non-reflective methods and return reflective getters
@@ -438,7 +459,7 @@ public class DatabaseRepository implements CriterionRepository {
             Method method = methods.get(i);
             if (!(Modifier.isPublic(method.getModifiers())
                     && method.getDeclaredAnnotations().length != 0
-                    && method.getDeclaredAnnotations()[0].annotationType().equals(Simple.class))) {
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(Column.class))) {
                 methods.remove(method);
                 i--;
             }
@@ -446,16 +467,18 @@ public class DatabaseRepository implements CriterionRepository {
         return methods;
     }
 
-    /** Returns all reflective @Complex getter methods for the class */
-    private List<Method> getComplexGetters(Class<?> eClass) {
+    /**
+     * Returns all reflective @TableReference getter methods for the class
+     */
+    private List<Method> getTableGetters(Class<?> eClass) {
         List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
 
-        // discard non-public, non-reflective methods and return @Complex getters
+        // discard non-public, non-reflective methods and return @TableReference getters
         for (int i = 0; i < methods.size(); i++) {
             Method method = methods.get(i);
             if (!(Modifier.isPublic(method.getModifiers())
                     && method.getDeclaredAnnotations().length != 0
-                    && method.getDeclaredAnnotations()[0].annotationType().equals(Complex.class))) {
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(TableReference.class))) {
                 methods.remove(method);
                 i--;
             }
@@ -463,7 +486,9 @@ public class DatabaseRepository implements CriterionRepository {
         return methods;
     }
 
-    /** Returns getter for primary key */
+    /**
+     * Returns getter for primary key
+     */
     private Method getPrimaryKeyGetter(Class<?> eClass) {
         List<Method> methods = Arrays.asList(eClass.getDeclaredMethods());
 
@@ -471,11 +496,16 @@ public class DatabaseRepository implements CriterionRepository {
         for (Method method : methods) {
             if (Modifier.isPublic(method.getModifiers())
                     && method.getDeclaredAnnotations().length != 0
-                    && method.getDeclaredAnnotations()[0].annotationType().equals(Simple.class)
-                    && ((Simple)method.getDeclaredAnnotations()[0]).primary())
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(Column.class)
+                    && ((Column) method.getDeclaredAnnotations()[0]).primary())
                 return method;
         }
         System.err.println("getPrimaryKeyGetter: return NULL on " + eClass.getSimpleName());
         return null;
+    }
+
+    /** Resolves the foreign keys in a transaction */
+    private void resolveForeignKeys(List<String> transaction) {
+
     }
 }

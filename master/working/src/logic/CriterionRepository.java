@@ -50,22 +50,7 @@ public interface CriterionRepository {
      * @param item Criterion object to add to the database
      * @return true if add successful, false is add unsuccessful
      */
-    <E extends Searchable> boolean addItem(Class<E> eClass, E item);
-
-    /**
-     * /**
-     * <p>
-     * Takes a Searchable object and updates the information stored about it in the
-     * persistence layer. The primary ID variable must not be missing.
-     * </p>
-     * <p>
-     * Updates do not propagate, and must be performed manually if necessary.
-     * </p>
-     *
-     * @param item Criterion object to add to the database
-     * @return true if update successful, false is update rejected
-     */
-    <E extends Searchable> boolean updateItem(Class<E> eClass, E item);
+    <E extends Searchable> boolean commitItem(E item);
 
     /**
      * <p>

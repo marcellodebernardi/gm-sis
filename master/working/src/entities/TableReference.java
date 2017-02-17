@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Marcello De Bernardi
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Complex {
+public @interface TableReference {
     Class<? extends Searchable> baseType();
     Class<? extends Searchable>[] specTypes();
     String key();

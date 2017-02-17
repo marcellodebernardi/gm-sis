@@ -1,14 +1,11 @@
 package logic;
 
+import entities.Column;
 import entities.Reflective;
-import entities.Simple;
 
-import javax.lang.model.type.PrimitiveType;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -291,35 +288,34 @@ public class Criterion<E extends Searchable> {
 
     // returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {
-        // argument types of reflective constructor
+        // System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
+        //        + "attribute " + attribute + ", value " + value);
+
+        // get argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
-
-        System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
-                + "attribute " + attribute + ", value " + value);
-
         for (Constructor<?> c : eClass.getConstructors()) {
             if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                 constructorArgumentTypes = c.getParameterTypes();
-                System.out.println("@Reflective constructor identified.");
+                // System.out.println("@Reflective constructor identified.");
                 break;
             }
         }
 
         // get reflective constructor and check:
-        // 1. a parameter is annotated as Simple(name = "attribute")
+        // 1. a parameter is annotated as Column(name = "attribute")
         // 2. the same parameter is of the same class as value
         try {
             Constructor<E> constructor = eClass.getConstructor(constructorArgumentTypes);
             Annotation[][] annotations = constructor.getParameterAnnotations();
 
             for (int i = 0; i < annotations.length; i++) {
-                if (annotations[i][0].annotationType().equals(Simple.class)) {
-                    Simple metadata = (Simple)annotations[i][0];
+                if (annotations[i][0].annotationType().equals(Column.class)) {
+                    Column metadata = (Column)annotations[i][0];
                     if (metadata.name().equals(attribute)) {
-                        System.out.println(i + "th constructor parameter " + metadata.name()
-                                + " (" + constructorArgumentTypes[i].getSimpleName()
-                                + ") matches query parameter " + attribute
-                                + " (" + value.getClass().getSimpleName() + ")");
+                        // System.out.println(i + "th constructor parameter " + metadata.name()
+                        //        + " (" + constructorArgumentTypes[i].getSimpleName()
+                        //        + ") matches query parameter " + attribute
+                        //        + " (" + value.getClass().getSimpleName() + ")");
                         return constructorArgumentTypes[i].isPrimitive() ?
                                 constructorArgumentTypes[i].toString().substring(0,1)
                                         .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))

@@ -57,17 +57,19 @@ public class RepositoryTests {
 
     @Test
     public void testDELETETransaction() {
-        List<String> result = DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(Customer.class));
+        while (true) {
+            List<String> result = DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(Customer.class));
 
-        for (String s : result) {
-            System.out.println(s);
+            for (String s : result) {
+                System.out.println(s);
+            }
         }
     }
 
     @Test
     public void testINSERTTransaction() {
         User user = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(User.class)).get(0);
-        List<String> result = DatabaseRepository.getInstance().toINSERTTransaction(User.class, user);
+        List<String> result = DatabaseRepository.getInstance().toINSERTTransaction(user);
 
         for (String s : result) {
             System.out.println(s);

@@ -15,11 +15,11 @@ public class PartOccurrence implements Searchable {
     private int specRepID;
 
     @Reflective
-    public PartOccurrence(@Simple(name = "partOccurrenceID", primary = true) int partOccurrenceID,
-                          @Simple(name = "partAbstractionID") int partAbstractionID,
-                          @Simple(name = "installationID") int installationID,
-                          @Simple(name = "bookingID") int bookingID,
-                          @Simple(name = "specRepID") int specRepID){
+    public PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
+                          @Column(name = "partAbstractionID") int partAbstractionID,
+                          @Column(name = "installationID") int installationID,
+                          @Column(name = "bookingID") int bookingID,
+                          @Column(name = "specRepID") int specRepID){
         this.partOccurrenceID = partOccurrenceID;
         this.partAbstractionID = partAbstractionID;
         this.installationID = installationID;
@@ -27,7 +27,7 @@ public class PartOccurrence implements Searchable {
         this.specRepID = specRepID;
     }
 
-    @Simple(name = "partOccurrenceID", primary = true)
+    @Column(name = "partOccurrenceID", primary = true)
     public int getPartOccurrenceID() {
         return partOccurrenceID;
     }
@@ -36,7 +36,7 @@ public class PartOccurrence implements Searchable {
         this.partOccurrenceID = partOccurrenceID;
     }
 
-    @Simple(name = "partAbstractionID")
+    @Column(name = "partAbstractionID")
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
@@ -45,7 +45,7 @@ public class PartOccurrence implements Searchable {
         this.partAbstractionID = partAbstractionID;
     }
 
-    @Simple(name = "installationID")
+    @Column(name = "installationID")
     public int getInstallationID() {
         return installationID;
     }
@@ -54,7 +54,7 @@ public class PartOccurrence implements Searchable {
         this.installationID = installationID;
     }
 
-    @Simple(name = "bookingID")
+    @Column(name = "bookingID")
     public int getBookingID() {
         return bookingID;
     }
@@ -63,7 +63,7 @@ public class PartOccurrence implements Searchable {
         this.bookingID = bookingID;
     }
 
-    @Simple(name = "specRepID")
+    @Column(name = "specRepID")
     public int getSpecRepID() {
         return specRepID;
     }

@@ -29,12 +29,12 @@ public abstract class SpecRepBooking implements Searchable {
      * @param cost Double representing the total cost of the SR booking
      */
     @Reflective // todo remove reflective ability and Searchable?
-    public SpecRepBooking(@Simple(name = "spcRepID", primary = true) int spcRepID,
-                          @Simple(name = "spcID") int spcID,
-                          @Simple(name = "deliveryDate") Date deliveryDate,
-                          @Simple(name = "returnDate") Date returnDate,
-                          @Simple(name = "cost") double cost,
-                          @Simple(name = "bookingID") int bookingID ){
+    public SpecRepBooking(@Column(name = "spcRepID", primary = true) int spcRepID,
+                          @Column(name = "spcID") int spcID,
+                          @Column(name = "deliveryDate") Date deliveryDate,
+                          @Column(name = "returnDate") Date returnDate,
+                          @Column(name = "cost") double cost,
+                          @Column(name = "bookingID") int bookingID ){
         this.spcRepID = spcRepID;
         this.spcID = spcID;
         this.deliveryDate = deliveryDate;

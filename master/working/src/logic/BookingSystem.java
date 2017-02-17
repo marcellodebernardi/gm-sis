@@ -91,7 +91,7 @@ public class BookingSystem {
         // todo come up with way to ensure ID is not missing
         return isWithinOpenHours(booking)
                 && isNotOnHoliday(booking)
-                && persistence.addItem(DiagRepBooking.class, booking);
+                && persistence.commitItem(booking);
     }
 
     /**
@@ -107,7 +107,7 @@ public class BookingSystem {
         // todo same as above
         return isWithinOpenHours(booking)
                 && isNotOnHoliday(booking)
-                && persistence.updateItem(DiagRepBooking.class, booking);
+                && persistence.commitItem(booking);
     }
 
     /**

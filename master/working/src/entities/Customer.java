@@ -23,17 +23,17 @@ public class Customer implements Searchable
     private List<Vehicle> vehicles;
 
     @Reflective
-    public Customer(@Simple(name = "customerID", primary = true) int customerID,
-                    @Simple(name = "customerSurname") String customerSurname,
-                    @Simple(name = "customerFirstname") String customerFirstname,
-                    @Simple(name = "customerAddress") String customerAddress,
-                    @Simple(name = "customerPostcode") String customerPostcode,
-                    @Simple(name = "customerPhone") String customerPhone,
-                    @Simple(name = "customerEmail") String customerEmail,
-                    @Simple(name = "customerType") CustomerType customerType,
-                    @Complex(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
+    public Customer(@Column(name = "customerID", primary = true) int customerID,
+                    @Column(name = "customerSurname") String customerSurname,
+                    @Column(name = "customerFirstname") String customerFirstname,
+                    @Column(name = "customerAddress") String customerAddress,
+                    @Column(name = "customerPostcode") String customerPostcode,
+                    @Column(name = "customerPhone") String customerPhone,
+                    @Column(name = "customerEmail") String customerEmail,
+                    @Column(name = "customerType") CustomerType customerType,
+                    @TableReference(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
                                 List<DiagRepBooking> bookings,
-                    @Complex(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+                    @TableReference(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
                                 List<Vehicle> vehicles) {
         this.customerID = customerID;
         this.customerSurname = customerSurname;
@@ -48,14 +48,14 @@ public class Customer implements Searchable
     }
 
     //gets unique identifier for customer
-    @Simple(name = "customerID", primary = true)
+    @Column(name = "customerID", primary = true)
     public int getCustomerID()
     {
         return customerID;
     }
 
     //gets customer's surname
-    @Simple(name = "customerSurname")
+    @Column(name = "customerSurname")
     public String getCustomerSurname()
     {
         return customerSurname;
@@ -66,7 +66,7 @@ public class Customer implements Searchable
     }
 
     //gets customer's first name
-    @Simple(name = "customerFirstname")
+    @Column(name = "customerFirstname")
     public String getCustomerFirstname()
     {
         return customerFirstname;
@@ -77,7 +77,7 @@ public class Customer implements Searchable
     }
 
     //gets customer's address
-    @Simple(name = "customerAddress")
+    @Column(name = "customerAddress")
     public String getCustomerAddress()
     {
         return customerAddress;
@@ -88,7 +88,7 @@ public class Customer implements Searchable
     }
 
     //gets customer's postcode
-    @Simple(name = "customerPostcode")
+    @Column(name = "customerPostcode")
     public String getCustomerPostcode()
     {
         return customerPostcode;
@@ -99,7 +99,7 @@ public class Customer implements Searchable
     }
 
     //gets customer's phone number
-    @Simple(name = "customerPhone")
+    @Column(name = "customerPhone")
     public String getCustomerPhone()
     {
         return customerPhone;
@@ -110,7 +110,7 @@ public class Customer implements Searchable
     }
 
     //gets customer's email address
-    @Simple(name = "customerEmail")
+    @Column(name = "customerEmail")
     public String getCustomerEmail()
     {
         return customerEmail;
@@ -121,7 +121,7 @@ public class Customer implements Searchable
     }
 
     //gets customer type (private or business)
-    @Simple(name = "customerType")
+    @Column(name = "customerType")
     public CustomerType getCustomerType()
     {
         return customerType;
@@ -131,7 +131,7 @@ public class Customer implements Searchable
         this.customerType = customerType;
     }
 
-    @Complex(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+    @TableReference(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
@@ -140,7 +140,7 @@ public class Customer implements Searchable
         this.vehicles = vehicles;
     }
 
-    @Complex(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
+    @TableReference(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
     public List<DiagRepBooking> getBookings() {
         return bookings;
     }

@@ -19,12 +19,12 @@ public class PartAbstraction implements Searchable {
     private List<PartOccurrence> occurrenceList;
 
     @Reflective
-    public PartAbstraction(@Simple(name = "partAbstractionID", primary = true) int partAbstractionID,
-                           @Simple(name = "partName") String partName,
-                           @Simple(name = "partDescription") String partDescription,
-                           @Simple(name = "partPrice") double partPrice,
-                           @Simple(name = "partStockLevel") int partStockLevel,
-                           @Complex(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
+    public PartAbstraction(@Column(name = "partAbstractionID", primary = true) int partAbstractionID,
+                           @Column(name = "partName") String partName,
+                           @Column(name = "partDescription") String partDescription,
+                           @Column(name = "partPrice") double partPrice,
+                           @Column(name = "partStockLevel") int partStockLevel,
+                           @TableReference(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
                                    List<PartOccurrence> occurrenceList){
         this.partAbstractionID = partAbstractionID;
         this.partName = partName;
@@ -34,7 +34,7 @@ public class PartAbstraction implements Searchable {
         this.occurrenceList = occurrenceList;
     }
 
-    @Simple(name = "partAbstractionID", primary = true)
+    @Column(name = "partAbstractionID", primary = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
@@ -43,7 +43,7 @@ public class PartAbstraction implements Searchable {
         this.partAbstractionID = partAbstractionID;
     }
 
-    @Simple(name = "partName")
+    @Column(name = "partName")
     public String getPartName() {
         return partName;
     }
@@ -52,7 +52,7 @@ public class PartAbstraction implements Searchable {
         this.partName = partName;
     }
 
-    @Simple(name = "partDescription")
+    @Column(name = "partDescription")
     public String getPartDescription() {
         return partDescription;
     }
@@ -61,7 +61,7 @@ public class PartAbstraction implements Searchable {
         this.partDescription = partDescription;
     }
 
-    @Simple(name = "partPrice")
+    @Column(name = "partPrice")
     public double getPartPrice() {
         return partPrice;
     }
@@ -70,7 +70,7 @@ public class PartAbstraction implements Searchable {
         this.partPrice = partPrice;
     }
 
-    @Simple(name = "partStockLevel")
+    @Column(name = "partStockLevel")
     public int getPartStockLevel() {
         return partStockLevel;
     }
@@ -79,7 +79,7 @@ public class PartAbstraction implements Searchable {
         this.partStockLevel = partStockLevel;
     }
 
-    @Complex(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
+    @TableReference(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
     public List<PartOccurrence> getOccurrenceList() {
         return occurrenceList;
     }

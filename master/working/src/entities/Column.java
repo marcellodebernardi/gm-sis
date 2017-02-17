@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Marcello De Bernardi
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Simple {
+public @interface Column {
     String name();
     boolean primary() default false;
 }

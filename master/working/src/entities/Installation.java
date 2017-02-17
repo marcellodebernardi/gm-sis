@@ -22,12 +22,12 @@ public class Installation implements Searchable {
     private int partAbstractionID;
 
     @Reflective
-    public Installation(@Simple(name = "installationID", primary = true) int installationID,
-                         @Simple(name = "installationDate") Date installationDate,
-                         @Simple(name = "endWarrantyDate") Date endWarrantyDate,
-                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber,
-                         @Simple(name = "partAbstractionID") int partAbstractionID,
-                         @Complex(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
+    public Installation(@Column(name = "installationID", primary = true) int installationID,
+                         @Column(name = "installationDate") Date installationDate,
+                         @Column(name = "endWarrantyDate") Date endWarrantyDate,
+                         @Column(name = "vehicleRegNumber") String vehicleRegNumber,
+                         @Column(name = "partAbstractionID") int partAbstractionID,
+                         @TableReference(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence){
         this.installationID = installationID;
         this.installationDate = installationDate;
@@ -37,7 +37,7 @@ public class Installation implements Searchable {
         this.partOccurrence = partOccurrence;
     }
 
-    @Simple(name = "installationID", primary = true)
+    @Column(name = "installationID", primary = true)
     public int getInstallationID() {
         return installationID;
     }
@@ -46,7 +46,7 @@ public class Installation implements Searchable {
         this.installationID = installationID;
     }
 
-    @Simple(name = "installationDate")
+    @Column(name = "installationDate")
     public Date getInstallationDate() {
         return installationDate;
     }
@@ -55,7 +55,7 @@ public class Installation implements Searchable {
         this.installationDate = installationDate;
     }
 
-    @Simple(name = "endWarrantyDate")
+    @Column(name = "endWarrantyDate")
     public Date getEndWarrantyDate() {
         return endWarrantyDate;
     }
@@ -64,7 +64,7 @@ public class Installation implements Searchable {
         this.endWarrantyDate = endWarrantyDate;
     }
 
-    @Simple(name = "vehicleRegNumber")
+    @Column(name = "vehicleRegNumber")
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
@@ -73,7 +73,7 @@ public class Installation implements Searchable {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    @Simple(name = "partAbstractionID")
+    @Column(name = "partAbstractionID")
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
@@ -82,7 +82,7 @@ public class Installation implements Searchable {
         this.partAbstractionID = partAbstractionID;
     }
 
-    @Complex(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
+    @TableReference(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
     }

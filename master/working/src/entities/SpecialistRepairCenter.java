@@ -29,12 +29,12 @@ public class SpecialistRepairCenter implements Searchable {
      * @param email   Email address of a particular Specialist Repair Center
      */
     @Reflective
-    public SpecialistRepairCenter(@Simple(name = "spcID", primary = true) int spcID,
-                                  @Simple(name = "name") String name,
-                                  @Simple(name = "address") String address,
-                                  @Simple(name = "phone") String phone,
-                                  @Simple(name = "email") String email,
-                                  @Complex(baseType = SpecRepBooking.class, specTypes = SpecRepBooking.class, key = "spcID")
+    public SpecialistRepairCenter(@Column(name = "spcID", primary = true) int spcID,
+                                  @Column(name = "name") String name,
+                                  @Column(name = "address") String address,
+                                  @Column(name = "phone") String phone,
+                                  @Column(name = "email") String email,
+                                  @TableReference(baseType = SpecRepBooking.class, specTypes = SpecRepBooking.class, key = "spcID")
                                           List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
@@ -50,7 +50,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcID
      */
-    @Simple(name = "spcID", primary = true)
+    @Column(name = "spcID", primary = true)
     public int getSpcID() {
         return this.spcID;
     }
@@ -60,7 +60,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcName
      */
-    @Simple(name = "name")
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -70,7 +70,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcAddress
      */
-    @Simple(name = "address")
+    @Column(name = "address")
     public String getAddress() {
         return this.address;
     }
@@ -80,7 +80,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcPhone
      */
-    @Simple(name = "phone")
+    @Column(name = "phone")
     public String getPhone() {
         return this.phone;
     }
@@ -90,7 +90,7 @@ public class SpecialistRepairCenter implements Searchable {
      *
      * @return spcEmail
      */
-    @Simple(name = "email")
+    @Column(name = "email")
     public String getEmail() {
         return this.email;
     }

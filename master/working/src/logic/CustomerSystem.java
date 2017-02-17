@@ -2,9 +2,7 @@ package logic;
 
 import entities.Customer;
 import entities.CustomerType;
-import entities.Vehicle;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
+
 import java.util.*;
 import static logic.CriterionOperator.*;
 
@@ -39,13 +37,13 @@ public class CustomerSystem {
     public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
         Customer add = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
-        return persistence.addItem(Customer.class, add);
+        return persistence.commitItem(add);
     }
 
     public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
         Customer edit = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
-        return persistence.updateItem(Customer.class, edit);
+        return persistence.commitItem(edit);
     }
 
     //public boolean deleteCustomer()

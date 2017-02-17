@@ -1,7 +1,7 @@
 package entities;
 
 import java.util.Date;
-import entities.PartAbstraction;
+
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
  * project: SE31
@@ -22,13 +22,13 @@ public class PartRepair extends SpecRepBooking
      * @param partOccurrenceID represents the part being sent off to the SRC
      */
     @Reflective
-    public PartRepair(@Simple(name = "spcRepID", primary = true) int spcRepID,
-                      @Simple(name = "spcID") int spcID,
-                      @Simple(name = "deliveryDate") Date deliveryDate,
-                      @Simple(name = "returnDate") Date returnDate,
-                      @Simple(name = "cost") double cost,
-                      @Simple(name = "bookingID") int bookingID,
-                      @Simple(name = "partOccurrenceID") int partOccurrenceID) {
+    public PartRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
+                      @Column(name = "spcID") int spcID,
+                      @Column(name = "deliveryDate") Date deliveryDate,
+                      @Column(name = "returnDate") Date returnDate,
+                      @Column(name = "cost") double cost,
+                      @Column(name = "bookingID") int bookingID,
+                      @Column(name = "partOccurrenceID") int partOccurrenceID) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.partOccurrenceID = partOccurrenceID;
     }
@@ -39,7 +39,7 @@ public class PartRepair extends SpecRepBooking
         this.partOccurrenceID = partOccurrenceID;
     }
 
-    @Simple(name = "spcRepID")
+    @Column(name = "spcRepID")
     public int getSpcRepID() {
         return super.getSpcRepID();
     }
@@ -48,7 +48,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "spcID", primary = true)
+    @Column(name = "spcID", primary = true)
     public int getspcID() {
         return super.getSpcID();
     }
@@ -57,7 +57,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "deliveryDate")
+    @Column(name = "deliveryDate")
     public Date getDeliveryDate() {
         return super.getDeliveryDate();
     }
@@ -66,7 +66,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "returnDate")
+    @Column(name = "returnDate")
     public Date getReturnDate() {
         return super.getReturnDate();
     }
@@ -75,7 +75,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "cost")
+    @Column(name = "cost")
     public double getCost() {
         return super.getCost();
     }
@@ -84,7 +84,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Simple(name = "bookingID")
+    @Column(name = "bookingID")
     public int getBookingID() {
         return super.getBookingID();
     }
@@ -93,7 +93,7 @@ public class PartRepair extends SpecRepBooking
         super.setBookingID(bookingID);
     }
 
-    @Simple(name = "partOccurrenceID")
+    @Column(name = "partOccurrenceID")
     public int getPartOccurrenceID() {
         return partOccurrenceID;
     }

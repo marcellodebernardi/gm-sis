@@ -1,7 +1,6 @@
 package entities;
 
 import java.util.Date;
-import entities.Vehicle;
 
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
@@ -22,13 +21,13 @@ public class VehicleRepair extends SpecRepBooking {
      * @param vehicleRegNumber Represents the vehicle being booked in for repair
      */
     @Reflective
-    public VehicleRepair(@Simple(name = "spcRepID", primary = true) int spcRepID,
-                         @Simple(name = "spcID") int spcID,
-                         @Simple(name = "deliveryDate") Date deliveryDate,
-                         @Simple(name = "returnDate") Date returnDate,
-                         @Simple(name = "cost") double cost,
-                         @Simple(name = "bookingID") int bookingID,
-                         @Simple(name = "vehicleRegNumber") String vehicleRegNumber) {
+    public VehicleRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
+                         @Column(name = "spcID") int spcID,
+                         @Column(name = "deliveryDate") Date deliveryDate,
+                         @Column(name = "returnDate") Date returnDate,
+                         @Column(name = "cost") double cost,
+                         @Column(name = "bookingID") int bookingID,
+                         @Column(name = "vehicleRegNumber") String vehicleRegNumber) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.vehicleRegNumber = vehicleRegNumber;
     }
@@ -39,37 +38,37 @@ public class VehicleRepair extends SpecRepBooking {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    @Simple(name = "spcRepID", primary = true)
+    @Column(name = "spcRepID", primary = true)
     public int getSpcRepID() {
         return super.getSpcRepID();
     }
 
-    @Simple(name = "spcID")
+    @Column(name = "spcID")
     public int getSpcID() {
         return super.getSpcID();
     }
 
-    @Simple(name = "deliveryDate")
+    @Column(name = "deliveryDate")
     public Date getDeliveryDate() {
         return super.getDeliveryDate();
     }
 
-    @Simple(name = "returnDate")
+    @Column(name = "returnDate")
     public Date getReturnDate() {
         return super.getReturnDate();
     }
 
-    @Simple(name = "cost")
+    @Column(name = "cost")
     public double getCost() {
         return super.getCost();
     }
 
-    @Simple(name = "bookingID")
+    @Column(name = "bookingID")
     public int getBookingID() {
         return super.getBookingID();
     }
 
-    @Simple(name = "vehicleRegNumber")
+    @Column(name = "vehicleRegNumber")
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
