@@ -1,5 +1,6 @@
 package persistence;
 
+import entities.Customer;
 import entities.User;
 import logic.Criterion;
 import logic.CriterionOperator;
@@ -56,7 +57,11 @@ public class RepositoryTests {
 
     @Test
     public void testDELETETransaction() {
-        System.out.println(DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(User.class)));
+        List<String> result = DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(Customer.class));
+
+        for (String s : result) {
+            System.out.println(s);
+        }
     }
 
     @Test

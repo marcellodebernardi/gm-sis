@@ -153,31 +153,6 @@ public class Criterion<E extends Searchable> {
     }
 
     /**
-     * Allows adding a new criterion of a different type to the sequence of criteria. This entails
-     * providing the class of the sub-criterion, the name by which it is identified within the
-     * parent criterion, and the attributes within the sub-criterion that are to be searched.
-     * <p>
-     * In SQL terms, it allows subqueries.
-     *
-     * @param eClass    class of subcriterion
-     * @param identity  attribute name by which complex attribute is identified in parent class
-     * @param attribute attribute in child class that is to be examin
-     * @param operator  operator applying to the attribute
-     * @param value     value to use for the attribute
-     * @return a new Criterion with the added search criteria
-     * @throws CriterionException if poorly specified arguments
-     */
-    @Deprecated
-    public Criterion<E> and(Class<? extends Searchable> eClass, String identity, String attribute,
-                            CriterionOperator operator, Object value) throws CriterionException {
-        // check value and operator compatibility
-        if (!operatorIsCompatible(operator, value))
-            throw new CriterionException("AND (" + attribute + "): operator incompatible.");
-        // todo implement
-        return null;
-    }
-
-    /**
      * Adds a criterion to the Criterion object, connected to previous criteria by an OR
      * logical connective.
      *
@@ -256,6 +231,7 @@ public class Criterion<E extends Searchable> {
      * @return String representing search criteria
      */
     public String toString() {
+        // todo fix date handling
         if (attributes.size() == 0) return "";
 
         // first element
@@ -318,13 +294,13 @@ public class Criterion<E extends Searchable> {
         // argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
 
-        System.err.println("\nCRITERION(CHECK) Criterion class: " + eClass.getSimpleName() + ", "
-                + "attribute: " + attribute + ", value: " + value);
+        System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
+                + "attribute " + attribute + ", value " + value);
 
         for (Constructor<?> c : eClass.getConstructors()) {
             if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                 constructorArgumentTypes = c.getParameterTypes();
-                System.err.println("Reflective constructor identified.");
+                System.out.println("@Reflective constructor identified.");
                 break;
             }
         }
@@ -339,13 +315,11 @@ public class Criterion<E extends Searchable> {
             for (int i = 0; i < annotations.length; i++) {
                 if (annotations[i][0].annotationType().equals(Simple.class)) {
                     Simple metadata = (Simple)annotations[i][0];
-
-                    System.err.println("ANNOT.CHECK Simple annotation, attribute " + metadata.name()
-                            + ", constructor argument: " + constructorArgumentTypes[i].getSimpleName()
-                            + ", attribute type: " + attribute.getClass().getSimpleName()
-                            + ", value type: " + value.getClass().getSimpleName());
-
                     if (metadata.name().equals(attribute)) {
+                        System.out.println(i + "th constructor parameter " + metadata.name()
+                                + " (" + constructorArgumentTypes[i].getSimpleName()
+                                + ") matches query parameter " + attribute
+                                + " (" + value.getClass().getSimpleName() + ")");
                         return constructorArgumentTypes[i].isPrimitive() ?
                                 constructorArgumentTypes[i].toString().substring(0,1)
                                         .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))

@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import static logic.CriterionOperator.EqualTo;
@@ -157,47 +157,34 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    /* Converts criterion to SQL SELECT query */
+    /** Converts criterion to SQL SELECT query */
     <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
         return SELECTSTRING + criteria.getCriterionClass().getSimpleName()
                 + (criteria.toString().equals("") ? "" : " WHERE ")
                 + criteria.toString() + ";";
     }
 
-    /* Converts an entity into an insertion transaction */
+    /** Converts an entity into an insertion transaction */
     <E extends Searchable> List<String> toINSERTTransaction(Class<E> eClass, E item) {
         List<String> queries = new ArrayList<>();
+
+        // query components
         String columnString = "(";
         String valueString = "VALUES (";
-        String delim = "";
+        String delimiter = "";
 
-        // getters and annotations
-        List<Method> simpleGetters = new ArrayList<>();
-        List<Method> complexGetters = new ArrayList<>();
-        List<Annotation> simpleAnnotations = new ArrayList<>();
-        List<Annotation> complexAnnotations = new ArrayList<>();
+        // annotated getters
+        List<Method> simpleGetters = getSimpleGetters(eClass);
+        List<Method> complexGetters = getComplexGetters(eClass);
 
-        // gets annotated getters fixme assumes reflection annotation is first
-        for (Method m : eClass.getDeclaredMethods()) {
-            if (Modifier.isPublic(m.getModifiers()) && m.getDeclaredAnnotations().length != 0) {
-                if (m.getDeclaredAnnotations()[0].annotationType().equals(Simple.class)) {
-                    simpleGetters.add(m);
-                    simpleAnnotations.add(m.getDeclaredAnnotations()[0]);
-                }
-                else if (m.getDeclaredAnnotations()[0].annotationType().equals(Complex.class)) {
-                    complexGetters.add(m);
-                    complexAnnotations.add(m.getDeclaredAnnotations()[0]);
-                }
-            }
-        }
 
         // add simple attributes into INSERT query
         for (int i = 0; i < simpleGetters.size(); i++) {
             try {
                 if (simpleGetters.get(i).invoke(item) != null) {
-                    columnString += delim + ((Simple)simpleAnnotations.get(i)).name();
-                    valueString += delim + simpleGetters.get(i).invoke(item);
-                    delim = ", ";
+                    // columnString += delimiter + ((Simple)simpleAnnotations.get(i)).name();
+                    valueString += delimiter + simpleGetters.get(i).invoke(item);
+                    delimiter = ", ";
                 }
             }
             catch (IllegalAccessException | InvocationTargetException e) {
@@ -214,24 +201,68 @@ public class DatabaseRepository implements CriterionRepository {
         return queries;
     }
 
-    /* Converts an entity into an update transaction */
+    /** Converts an entity into an update transaction */
     <E extends Searchable> List<String> toUPDATETransaction(Class<E> eClass, E item) {
         // todo implement similar to INSERT
         return null;
     }
 
-    /* Converts a criterion into a deletion transaction */
-    // todo implement cascading
+    /** Converts a criterion into a deletion transaction */
     <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria) {
         List<String> query = new ArrayList<>();
+        List<Method> complexGetters = getComplexGetters(criteria.getCriterionClass());
+        List<E> targets = getByCriteria(criteria);
 
+        if (targets.size() == 0) return query;
+
+        // form delete transaction for specified item
         query.add(DELETESTRING + criteria.getCriterionClass().getSimpleName()
                 + (criteria.toString().equals("") ? "" : " WHERE ")
                 + criteria.toString() + ";");
+
+        for (E target : targets) {
+            // issue delete transaction for complex children
+            for (Method method : complexGetters) {
+                Complex annotation = (Complex)method.getDeclaredAnnotations()[0];
+                try {
+                    Object attribute = method.invoke(target);
+                    if (attribute == null) break;
+
+                    // is list
+                    if (attribute instanceof List<?>) {
+                        List list = ArrayList.class.cast(attribute);
+                        // for each list element, issue delete transaction
+                        for (int i = 0; i < list.size(); i++) {
+                            for (Class<? extends Searchable> type : annotation.specTypes()) {
+                                query.addAll(toDELETETransaction(
+                                        new Criterion<>(type,
+                                                ((Simple)getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
+                                                EqualTo,
+                                                getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i)))));
+                            }
+                        }
+                    }
+                    // is not list
+                    else {
+                        for (Class<? extends Searchable> type : annotation.specTypes()) {
+                            query.addAll(toDELETETransaction(
+                                    new Criterion<>(type,
+                                            ((Simple)getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
+                                            EqualTo,
+                                            getPrimaryKeyGetter(attribute.getClass()).invoke(attribute))));
+                        }
+                    }
+                }
+                catch (IllegalAccessException | InvocationTargetException e) {
+                    System.err.print(e.getMessage() + "DELETE: invoke @Complex getter.");
+                    return null;
+                }
+            }
+        }
         return query;
     }
 
-    /* Converts a ResultSet into a List<E> of objects todo break down into helper method */
+    /** Converts a ResultSet into a List<E> of objects todo break down into helper method */
     private <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
         List<E> returnList = new ArrayList<>();
 
@@ -387,12 +418,7 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-    private <E extends Searchable> boolean exists(E item) {
-        return false;
-        // return getByCriteria(new Criterion<>(item.getClass(), item.))
-    }
-
-    /* Allows running a raw SQL query on the database. Consider minimal use */
+    /** Allows running a raw SQL query on the database. Consider minimal use */
     private ResultSet runSQL(String query) {
         try {
             return connection.prepareStatement(query).executeQuery();
@@ -401,5 +427,55 @@ public class DatabaseRepository implements CriterionRepository {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    /** Returns all reflective @Simple getter methods for the class */
+    private List<Method> getSimpleGetters(Class<?> eClass) {
+        List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
+
+        // discard non-public, non-reflective methods and return reflective getters
+        for (int i = 0; i < methods.size(); i++) {
+            Method method = methods.get(i);
+            if (!(Modifier.isPublic(method.getModifiers())
+                    && method.getDeclaredAnnotations().length != 0
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(Simple.class))) {
+                methods.remove(method);
+                i--;
+            }
+        }
+        return methods;
+    }
+
+    /** Returns all reflective @Complex getter methods for the class */
+    private List<Method> getComplexGetters(Class<?> eClass) {
+        List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
+
+        // discard non-public, non-reflective methods and return @Complex getters
+        for (int i = 0; i < methods.size(); i++) {
+            Method method = methods.get(i);
+            if (!(Modifier.isPublic(method.getModifiers())
+                    && method.getDeclaredAnnotations().length != 0
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(Complex.class))) {
+                methods.remove(method);
+                i--;
+            }
+        }
+        return methods;
+    }
+
+    /** Returns getter for primary key */
+    private Method getPrimaryKeyGetter(Class<?> eClass) {
+        List<Method> methods = Arrays.asList(eClass.getDeclaredMethods());
+
+        // return getter for primary key
+        for (Method method : methods) {
+            if (Modifier.isPublic(method.getModifiers())
+                    && method.getDeclaredAnnotations().length != 0
+                    && method.getDeclaredAnnotations()[0].annotationType().equals(Simple.class)
+                    && ((Simple)method.getDeclaredAnnotations()[0]).primary())
+                return method;
+        }
+        System.err.println("getPrimaryKeyGetter: return NULL on " + eClass.getSimpleName());
+        return null;
     }
 }
