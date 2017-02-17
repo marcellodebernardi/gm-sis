@@ -13,11 +13,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
    <children>
-      <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="500.0" prefWidth="691.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Today">
                <content>
@@ -83,7 +85,7 @@
                      <children>
                         <ToolBar layoutX="1.0" prefHeight="40.0" prefWidth="600.0">
                           <items>
-                            <Button fx:id="addBookig" mnemonicParsing="false" onAction="#addBooking" text="Add booking" />
+                            <Button fx:id="addBooking" mnemonicParsing="false" onAction="#addBooking" text="Add booking" />
                               <Button mnemonicParsing="false" onAction="#editBooking" text="Edit booking" />
                               <Button mnemonicParsing="false" onAction="#deleteBooking" text="Delete Booking" />
                               <Button mnemonicParsing="false" onAction="#todayBooking" text="Todays bookings" />
@@ -124,50 +126,28 @@
               </content>
             </Tab>
             <Tab text="Specialist Repairs">
-              <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                      <children>
-                          <ToolBar layoutX="4.0" layoutY="7.0" prefHeight="40.0" prefWidth="593.0">
-                              <items>
-                                  <Button mnemonicParsing="false" text="Make a booking" />
-                                  <Button mnemonicParsing="false" text="Choose Booking to edit" />
-                                  <Button layoutX="10.0" layoutY="11.0" mnemonicParsing="false" text="Query SRCs" />
-                              </items>
-                          </ToolBar>
-                          <ComboBox editable="true" layoutX="137.0" layoutY="57.0" prefWidth="150.0" promptText="None selected" />
-                          <Label layoutX="24.0" layoutY="62.0" prefHeight="17.0" prefWidth="83.0" text="Select SRC">
-                              <font>
-                                  <Font size="14.0" />
-                              </font>
-                          </Label>
-                          <Label layoutX="24.0" layoutY="105.0" prefHeight="30.0" prefWidth="65.0" text="Name:">
-                              <font>
-                                  <Font size="17.0" />
-                              </font>
-                          </Label>
-                          <TextField editable="false" layoutX="133.0" layoutY="109.0" prefHeight="10.0" prefWidth="157.0" />
-                          <TextField editable="false" layoutX="133.0" layoutY="154.0" prefHeight="10.0" prefWidth="157.0" />
-                          <Label layoutX="24.0" layoutY="156.0" prefHeight="30.0" prefWidth="90.0" text="Address:">
-                              <font>
-                                  <Font size="17.0" />
-                              </font>
-                          </Label>
-                          <DatePicker layoutX="373.0" layoutY="57.0" prefHeight="27.0" prefWidth="175.0" promptText="Select a date" />
-                          <Label layoutX="24.0" layoutY="204.0" text="Phone:">
-                              <font>
-                                  <Font size="18.0" />
-                              </font>
-                          </Label>
-                          <TextField editable="false" layoutX="133.0" layoutY="199.0" prefHeight="10.0" prefWidth="157.0" />
-                          <Label layoutX="24.0" layoutY="241.0" text="Email:">
-                              <font>
-                                  <Font size="18.0" />
-                              </font>
-                          </Label>
-                          <TextField editable="false" layoutX="133.0" layoutY="239.0" prefHeight="10.0" prefWidth="157.0" />
-                      </children>
-                  </AnchorPane>
-              </content>
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="691.0">
+                        <children>
+                            <TextField fx:id="field_searchSRC" layoutX="5.0" layoutY="65.0" onAction="#searchSRC" prefHeight="27.0" prefWidth="542.0" promptText="Search Specialist Repair Centers..." />
+                            <Button fx:id="btn_search" layoutX="548.0" layoutY="65.0" mnemonicParsing="false" onAction="#searchSRC" prefHeight="27.0" prefWidth="148.0" text="Search" />
+                            <Button fx:id="btn_addSpecialistBooking" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onAction="#addSRCBooking" prefHeight="27.0" prefWidth="145.0" text="Create booking" />
+                            <Button fx:id="btn_deleteSpecialistBooking" layoutX="159.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteSRCBooking" prefHeight="27.0" prefWidth="145.0" text="Delete Booking" />
+                            <Button fx:id="btn_editSpecialistBooking" layoutX="314.0" layoutY="14.0" mnemonicParsing="false" onAction="#editSRCBooking" prefHeight="27.0" prefWidth="132.0" text="Modify Booking" />
+                            <TableView layoutX="5.0" layoutY="94.0" prefHeight="342.0" prefWidth="691.0">
+                                <columns>
+                                    <TableColumn prefWidth="90.0" text="SRC ID:" />
+                                    <TableColumn prefWidth="81.0" text="SRC Name:" />
+                                    <TableColumn prefWidth="123.0" text="SRC Address:" />
+                                    <TableColumn prefWidth="108.0" text="SRC Postcode:" />
+                                    <TableColumn prefWidth="138.0" text="SRC Phone:" />
+                                    <TableColumn prefWidth="151.0" text="SRC Email:" />
+                                    <TableColumn prefWidth="296.0" text="SRC Phone:" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
             </Tab>
             <Tab fx:id="userTab" text="Users">
               <content>
@@ -179,3 +159,4 @@
       <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="UserType" />
    </children>
 </AnchorPane>
+

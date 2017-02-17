@@ -27,12 +27,12 @@ public class Main extends Application {
         //testing my parts GUI for now, you can change it (SHAKIB)
 
 
-        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
+            mainPane = FXMLLoader.load(getClass().getResource("/resources/AddSRCBooking.fxml"));
         //test.fxml
         login = new Scene(mainPane);
         primaryStage.setScene(login);
         primaryStage.show();
-        //primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(true);
 
 
     }

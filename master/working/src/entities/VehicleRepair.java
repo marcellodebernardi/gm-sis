@@ -33,6 +33,12 @@ public class VehicleRepair extends SpecRepBooking {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
+    public VehicleRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID, String vehicleRegNumber)
+    {
+        super(spcID, deliveryDate, returnDate, cost, bookingID);
+        this.vehicleRegNumber = vehicleRegNumber;
+    }
+
     @Simple(name = "spcRepID", primary = true)
     public int getSpcRepID() {
         return super.getSpcRepID();

@@ -289,4 +289,36 @@ public void handleButtonAdd() throws Exception {
                 }
         }
 
+        public void searchSRC()
+        {
+
+        }
+
+        public void addSRCBooking() throws Exception
+        {
+                try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCBooking.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        todayBStage = new Stage();
+                        todayBStage.setTitle("Add Specialist Booking");
+                        todayBStage.setScene(new Scene(menu));
+                        todayBStage.show();
+                }
+                catch(Exception e)
+                {
+                        //todo relevant error message
+                }
+        }
+
+        public void deleteSRCBooking()
+        {
+
+        }
+
+        public void editSRCBooking()
+        {
+
+        }
+
+
 }

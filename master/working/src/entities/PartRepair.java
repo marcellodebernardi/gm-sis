@@ -33,6 +33,12 @@ public class PartRepair extends SpecRepBooking
         this.partOccurrenceID = partOccurrenceID;
     }
 
+    public PartRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID, int partOccurrenceID)
+    {
+        super(spcID, deliveryDate, returnDate, cost, bookingID);
+        this.partOccurrenceID = partOccurrenceID;
+    }
+
     @Simple(name = "spcRepID")
     public int getSpcRepID() {
         return super.getSpcRepID();
