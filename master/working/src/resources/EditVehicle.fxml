@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,7 +12,7 @@
    <children>
       <TextField fx:id="tVReg" layoutX="105.0" layoutY="21.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Vehicle Reg" />
       <Label layoutX="42.0" layoutY="26.0" text="reg" />
-      <Button fx:id="editV" layoutX="431.0" layoutY="21.0" mnemonicParsing="false" onAction="#VehicleEditB" text="Edit" />
+      <Button fx:id="editV" layoutX="431.0" layoutY="21.0" mnemonicParsing="false" onAction="#VehicleEditB" text="Search" />
       <TextField fx:id="eVR" layoutX="98.0" layoutY="97.0" prefHeight="27.0" prefWidth="167.0" />
       <Label layoutX="36.0" layoutY="100.0" text="reg" />
       <Label layoutX="16.0" layoutY="135.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
@@ -28,18 +31,40 @@
       <Label layoutX="274.0" layoutY="294.0" text="warrantyExpirationDate" />
       <Button fx:id="eEV" layoutX="328.0" layoutY="323.0" mnemonicParsing="false" text="Edit" />
       <TextField fx:id="eCID" layoutX="96.0" layoutY="130.0" />
-      <TextField fx:id="eVT" layoutX="96.0" layoutY="162.0" />
       <TextField fx:id="eModel" layoutX="96.0" layoutY="192.0" />
       <TextField fx:id="eM" layoutX="96.0" layoutY="223.0" />
       <TextField fx:id="eES" layoutX="96.0" layoutY="256.0" />
-      <TextField fx:id="eFT" layoutX="96.0" layoutY="289.0" />
       <TextField fx:id="eC" layoutX="96.0" layoutY="323.0" />
-      <TextField fx:id="eM" layoutX="420.0" layoutY="97.0" />
+      <TextField fx:id="eMi" layoutX="420.0" layoutY="97.0" />
       <TextField fx:id="eRDM" layoutX="420.0" layoutY="130.0" />
       <TextField fx:id="eDLS" layoutX="420.0" layoutY="162.0" />
-      <TextField fx:id="eCBW" layoutX="420.0" layoutY="192.0" />
       <TextField fx:id="eWN" layoutX="420.0" layoutY="223.0" />
       <TextField fx:id="eWCA" layoutX="420.0" layoutY="256.0" />
       <TextField fx:id="eWED" layoutX="420.0" layoutY="290.0" />
+      <ComboBox fx:id="eVT" layoutX="96.0" layoutY="160.0" prefHeight="27.0" prefWidth="167.0">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:value="Car" />
+            <String fx:value="Van" />
+            <String fx:value="Truck" />
+         </FXCollections>
+      </items>
+      </ComboBox>
+      <ComboBox fx:id="eCBW" layoutX="420.0" layoutY="192.0" prefHeight="27.0" prefWidth="167.0">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:value="True" />
+            <String fx:value="False" />
+         </FXCollections>
+      </items>
+   </ComboBox>
+      <ComboBox fx:id="eFT" layoutX="96.0" layoutY="289.0" prefHeight="27.0" prefWidth="167.0">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:value="Diesel" />
+            <String fx:value="Petrol" />
+         </FXCollections>
+      </items>
+   </ComboBox>
    </children>
 </AnchorPane>
