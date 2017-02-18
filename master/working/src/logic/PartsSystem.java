@@ -42,7 +42,7 @@ public class PartsSystem {
 
     public boolean addPart(int partAbstractionID, String partName, String partDescription, Double partPrice, int partStockLevel){
 
-        PartAbstraction addNewPart = new PartAbstraction(partAbstractionID,partName, partDescription, partPrice, partStockLevel, null);
+        PartAbstraction addNewPart = new PartAbstraction(partName, partDescription, partPrice, partStockLevel, null);
         boolean result = persistence.commitItem(addNewPart);
         return result;
 

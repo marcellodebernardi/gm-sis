@@ -69,11 +69,17 @@ public class RepositoryTests {
 
     @Test
     public void testINSERTTransaction() {
-        User user = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(User.class)).get(0);
-        List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(user);
+        Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
+        List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
 
         for (String s : result) {
             System.out.println(s);
         }
+    }
+
+    @Test
+    public void testGetID() {
+        int ID = DatabaseRepository.getInstance().getNextID("Customer", "customerID");
+        System.out.println(ID);
     }
 }
