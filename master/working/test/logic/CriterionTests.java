@@ -1,14 +1,12 @@
 package logic;
 
-import entities.DiagRepBooking;
-import entities.User;
+import domain.DiagRepBooking;
+import domain.User;
 
 import static logic.CriterionOperator.EqualTo;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
-
-import java.util.Date;
 
 /**
  * @author Marcello De Bernardi

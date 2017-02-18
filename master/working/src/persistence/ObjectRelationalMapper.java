@@ -1,6 +1,6 @@
 package persistence;
 
-import entities.*;
+import domain.*;
 import logic.Criterion;
 import logic.Searchable;
 import org.joda.time.DateTime;
@@ -29,23 +29,50 @@ class ObjectRelationalMapper {
 
     // helper classes
     private ForeignKeyResolver resolver;
+    private DatabaseRepository persistence;
 
     // reflection data
     private List<Class<? extends Searchable>> searchableClasses;
-    private HashMap<Class<? extends Searchable>, Constructor<?>> constructors;
-    private HashMap<Class<? extends Searchable>, List<Method>> getterLists;
-    private HashMap<Class<?>, Method> primaryGetters;
+    private HashMap<Class<? extends Searchable>, Constructor<?>> constructorMap;
+    private HashMap<Class<? extends Searchable>, List<Method>> getterListMap;
+    private HashMap<Class<? extends Searchable>, Method> primaryGetters;
     private List<Class<?>> numericDataTypes;
 
     // database structure
     private HashMap<Class<? extends Searchable>, Class<? extends Searchable>> dependencyMap;
 
 
-    // todo get reflection data once
-
-
     private ObjectRelationalMapper() {
         resolver = ForeignKeyResolver.getInstance();
+
+        // reflection information
+        searchableClasses = new ArrayList<>();
+        searchableClasses.add(Customer.class);
+        searchableClasses.add(DiagRepBooking.class);
+        searchableClasses.add(Installation.class);
+        searchableClasses.add(PartAbstraction.class);
+        searchableClasses.add(PartOccurrence.class);
+        searchableClasses.add(PartRepair.class);
+        searchableClasses.add(SpecialistRepairCenter.class);
+        searchableClasses.add(User.class);
+        searchableClasses.add(Vehicle.class);
+        searchableClasses.add(VehicleRepair.class);
+
+        constructorMap = new HashMap<>();
+        getterListMap = new HashMap<>();
+        primaryGetters = new HashMap<>();
+        for (Class<? extends Searchable> eClass : searchableClasses) {
+            for (Constructor<?> c : eClass.getDeclaredConstructors()) {
+                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                    constructorMap.put(eClass, c);
+                    break;
+                }
+            }
+            getterListMap.put(eClass, getColumnGetters(eClass));
+            getterListMap.put(eClass,getTableGetters(eClass));
+            primaryGetters.put(eClass, getPrimaryKeyGetter(eClass));
+            getterListMap.remove(primaryGetters.get(eClass));
+        }
     }
 
     /**
@@ -56,6 +83,11 @@ class ObjectRelationalMapper {
     static ObjectRelationalMapper getInstance() {
         if (instance == null) instance = new ObjectRelationalMapper();
         return instance;
+    }
+
+    void initialize(DatabaseRepository persistence) {
+        this.persistence = persistence;
+        resolver.initialize(persistence);
     }
 
     /**
@@ -71,65 +103,7 @@ class ObjectRelationalMapper {
      * Converts an entity into an insertion transaction
      */
     <E extends Searchable> List<String> toINSERTTransaction(E item) {
-        Class<? extends Searchable> eClass = item.getClass();
-        List<String> queries = new ArrayList<>();
-        List<Method> columnGetters = getColumnGetters(eClass);
-        List<Method> tableRefGetters = getTableGetters(eClass);
-
-        String columns = "(";
-        String values = "VALUES (";
-        String delim = "";
-
-        // todo figure out if INSERT or UPDATE
-
-        // generate query for this item
-        for (Method column : columnGetters) {
-            try {
-                Object attribute = column.invoke(item);
-
-                // todo add to String - Object hashmap instead
-                // if not null ,add to insert statement
-                if (attribute != null) {
-                    columns += delim + ((Column) column.getDeclaredAnnotations()[0]).name();
-                    values += delim
-                            + (numericDataTypes.contains(attribute.getClass()) ? "" : "'")
-                            + attribute.toString()
-                            + (numericDataTypes.contains(attribute.getClass()) ? "" : "'");
-                    delim = ", ";
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-        queries.add("INSERT INTO " + eClass.getSimpleName() + columns + ") " + values + ");");
-
-        // todo how to handle references to parent items
-        // recurse on children
-        for (Method tableRef : tableRefGetters) {
-            try {
-                Object attribute = tableRef.invoke(item);
-                TableReference tableRefAnn = (TableReference) tableRef.getDeclaredAnnotations()[0];
-
-                // item is list
-                if (attribute != null && attribute instanceof List<?>) {
-                    List attributeList = ArrayList.class.cast(attribute);
-                    for (int i = 0; i < attributeList.size(); i++) {
-                        for (Class<? extends Searchable> type : tableRefAnn.specTypes()) {
-                            queries.addAll(toINSERTTransaction(type.cast(attributeList.get(i))));
-                        }
-                    }
-                }
-                // item is individual
-                else if (attribute != null) {
-                    for (Class<? extends Searchable> type : tableRefAnn.specTypes()) {
-                        queries.addAll(toINSERTTransaction(type.cast(attribute)));
-                    }
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-        return queries;
+        return resolver.resolveForeignKeys(generateStatementGraph(item));
     }
 
     /**
@@ -396,5 +370,59 @@ class ObjectRelationalMapper {
         }
         System.err.println("getPrimaryKeyGetter: return NULL on " + eClass.getSimpleName());
         return null;
+    }
+
+
+    private <E extends Searchable> List<StatementNode> generateStatementGraph(E item) {
+        Class<? extends Searchable> eClass = item.getClass();
+        List<StatementNode> statementGraph = new ArrayList<>();
+        List<Method> columnGetters = getColumnGetters(eClass);
+        List<Method> tableRefGetters = getTableGetters(eClass);
+
+        HashMap<String, Object> columnValues = new HashMap<>();
+        String primaryKey = "";
+
+        // generate statementnode for this item
+        for (Method column : columnGetters) {
+            Column annotation = (Column) column.getDeclaredAnnotations()[0];
+            try {
+                if (!annotation.primary() && !annotation.foreign()) {
+                    Object attribute = column.invoke(item);
+                    if (attribute != null)
+                        columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
+                } else if (annotation.primary()) {
+                    primaryKey = annotation.name();
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        // add this statement node to graph
+        StatementNode sN = new StatementNode(eClass, item, primaryGetters.get(eClass), columnValues,
+                primaryKey, persistence);
+        statementGraph.add(sN);
+
+        // recurse on children
+        for (Method tableRef : tableRefGetters) {
+            TableReference tableRefAnn = (TableReference) tableRef.getDeclaredAnnotations()[0];
+            try {
+                Object attribute = tableRef.invoke(item);
+                // item is non-empty list
+                if (attribute != null && attribute instanceof List<?>) {
+                    List attributeList = ArrayList.class.cast(attribute);
+                    for (int i = 0; i < attributeList.size(); i++) {
+                        statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attributeList.get(i))));
+                    }
+                }
+                // item is individual
+                else if (attribute != null) {
+                    statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attribute)));
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return statementGraph;
     }
 }

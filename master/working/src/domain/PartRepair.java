@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import java.util.Date;
 
@@ -12,17 +12,23 @@ public class PartRepair extends SpecRepBooking
     private int partOccurrenceID;
 
     /**
-     * Constructor for creating a specialist repair booking for a part
-     *
-     * @param spcRepID
+     * Creates a new PartRepair
      * @param spcID
      * @param deliveryDate
      * @param returnDate
      * @param cost
-     * @param partOccurrenceID represents the part being sent off to the SRC
+     * @param bookingID
+     * @param partOccurrenceID
      */
+    public PartRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID,
+                      int partOccurrenceID) {
+        super(spcID, deliveryDate, returnDate, cost, bookingID);
+        this.partOccurrenceID = partOccurrenceID;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public PartRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
+    private PartRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
                       @Column(name = "spcID") int spcID,
                       @Column(name = "deliveryDate") Date deliveryDate,
                       @Column(name = "returnDate") Date returnDate,
@@ -33,11 +39,6 @@ public class PartRepair extends SpecRepBooking
         this.partOccurrenceID = partOccurrenceID;
     }
 
-    public PartRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID, int partOccurrenceID)
-    {
-        super(spcID, deliveryDate, returnDate, cost, bookingID);
-        this.partOccurrenceID = partOccurrenceID;
-    }
 
     @Column(name = "spcRepID")
     public int getSpcRepID() {

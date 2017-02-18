@@ -1,7 +1,7 @@
 package logic;
 
-import entities.Column;
-import entities.Reflective;
+import domain.Column;
+import domain.Reflective;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * <p>
  * Criterion objects are used to interact with CriterionRepositories. They encapsulate criteria
- * by which entities in the persistence layer are identified. A Criterion is created like this:
+ * by which domain in the persistence layer are identified. A Criterion is created like this:
  * </p>
  * <p>
  * <i>new Criterion(MyClass.class, "attributeName", operator, value)</i>

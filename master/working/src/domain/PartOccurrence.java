@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import logic.Searchable;
 
@@ -15,7 +15,7 @@ public class PartOccurrence implements Searchable {
     private int specRepID;
 
     @Reflective
-    public PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
+    private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
                           @Column(name = "partAbstractionID") int partAbstractionID,
                           @Column(name = "installationID") int installationID,
                           @Column(name = "bookingID") int bookingID,

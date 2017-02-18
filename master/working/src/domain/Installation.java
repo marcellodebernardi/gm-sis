@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 
 import logic.Searchable;
@@ -21,8 +21,28 @@ public class Installation implements Searchable {
     private String vehicleRegNumber;
     private int partAbstractionID;
 
+
+    /**
+     * Creates a new installation
+     * @param installationDate
+     * @param endWarrantyDate
+     * @param vehicleRegNumber
+     * @param partAbstractionID
+     * @param partOccurrence
+     */
+    public Installation(Date installationDate, Date endWarrantyDate, String vehicleRegNumber,
+                         int partAbstractionID, PartOccurrence partOccurrence){
+        this.installationID = -1;
+        this.installationDate = installationDate;
+        this.endWarrantyDate = endWarrantyDate;
+        this.vehicleRegNumber = vehicleRegNumber;
+        this.partAbstractionID = partAbstractionID;
+        this.partOccurrence = partOccurrence;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public Installation(@Column(name = "installationID", primary = true) int installationID,
+    private Installation(@Column(name = "installationID", primary = true) int installationID,
                          @Column(name = "installationDate") Date installationDate,
                          @Column(name = "endWarrantyDate") Date endWarrantyDate,
                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
@@ -36,6 +56,7 @@ public class Installation implements Searchable {
         this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;
     }
+
 
     @Column(name = "installationID", primary = true)
     public int getInstallationID() {

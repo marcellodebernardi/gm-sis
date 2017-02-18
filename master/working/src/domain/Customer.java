@@ -1,7 +1,6 @@
-package entities;
+package domain;
 import logic.Searchable;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 /**
@@ -22,8 +21,24 @@ public class Customer implements Searchable
     // hierarchical ownership links
     private List<Vehicle> vehicles;
 
+
+    public Customer(String customerSurname, String customerFirstname, String customerAddress,
+                    String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType,
+                    List<Vehicle> vehicles) {
+        customerID = -1;
+        this.customerSurname = customerSurname;
+        this.customerFirstname = customerFirstname;
+        this.customerAddress = customerAddress;
+        this.customerPostcode = customerPostcode;
+        this.customerPhone = customerPhone;
+        this.customerEmail = customerEmail;
+        this.customerType = customerType;
+        this.vehicles = vehicles;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public Customer(@Column(name = "customerID", primary = true) int customerID,
+    private Customer(@Column(name = "customerID", primary = true) int customerID,
                     @Column(name = "customerSurname") String customerSurname,
                     @Column(name = "customerFirstname") String customerFirstname,
                     @Column(name = "customerAddress") String customerAddress,
@@ -43,6 +58,7 @@ public class Customer implements Searchable
         this.customerType = customerType;
         this.vehicles = vehicles;
     }
+
 
     //gets unique identifier for customer
     @Column(name = "customerID", primary = true)

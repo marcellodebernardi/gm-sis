@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ public class VehicleRepair extends SpecRepBooking {
      * @param vehicleRegNumber Represents the vehicle being booked in for repair
      */
     @Reflective
-    public VehicleRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
+    private VehicleRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
                          @Column(name = "spcID") int spcID,
                          @Column(name = "deliveryDate") Date deliveryDate,
                          @Column(name = "returnDate") Date returnDate,

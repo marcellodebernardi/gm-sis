@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import logic.Searchable;
 
@@ -22,14 +22,25 @@ public class SpecialistRepairCenter implements Searchable {
 
 
     /**
-     * @param spcID   Unique ID for a particular Specialist Repair Center
-     * @param name    Name of a particular Specialist Repair Center
-     * @param address Address of a particular Specialist Repair Center
-     * @param phone   Phone number of a particular Specialist Repair Center
-     * @param email   Email address of a particular Specialist Repair Center
+     * Creates a new SPC
+     * @param name
+     * @param address
+     * @param phone
+     * @param email
+     * @param bookings
      */
+    public SpecialistRepairCenter(String name, String address, String phone, String email, List<SpecRepBooking> bookings) {
+        this.spcID = -1;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.bookings = bookings;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public SpecialistRepairCenter(@Column(name = "spcID", primary = true) int spcID,
+    private SpecialistRepairCenter(@Column(name = "spcID", primary = true) int spcID,
                                   @Column(name = "name") String name,
                                   @Column(name = "address") String address,
                                   @Column(name = "phone") String phone,

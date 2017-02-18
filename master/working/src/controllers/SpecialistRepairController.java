@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.*;
+import domain.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,7 +8,6 @@ import logic.Criterion;
 import logic.CriterionOperator;
 import java.util.List;
 
-import logic.Searchable;
 import persistence.DatabaseRepository;
 public class SpecialistRepairController {
 

@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableInterval;
@@ -24,36 +24,46 @@ public class DiagRepBooking extends Booking {
 
 
     /**
-     * <p>
-     * Allows manual setting of all fields except the convenience date fields,
-     * which are inferred from the diagnosis and repair intervals.
-     * </p>
+     * Creates a new diagnosis and repair booking.
      *
-     * @param bookingID         unique ID of this booking
-     * @param vehicleRegNumber  unique registration number of vehicle
-     * @param description       description of booking as entered by some user
-     * @param billAmount        the associated bill's cost
-     * @param billSettled       whether the bill has already been settled by customer
-     * @param mechanicID        id of mechanic doing booking
-     * @param diagnosisStart    start time of diagnosis
-     * @param diagnosisEnd      end time of diagnosis
-     * @param repairStart       start time of diagnosis
-     * @param repairEnd         end time of diagnosis
-     * @param specRepBooking    reference to a connected specialist repair booking, can be null
+     * @param vehicleRegNumber
+     * @param description
+     * @param billAmount
+     * @param billSettled
+     * @param mechanicID
+     * @param diagnosisStart
+     * @param diagnosisEnd
+     * @param repairStart
+     * @param repairEnd
+     * @param specRepBooking
      */
+    public DiagRepBooking(String vehicleRegNumber, String description, double billAmount,
+                          boolean billSettled, int mechanicID, DateTime diagnosisStart, DateTime diagnosisEnd,
+                          DateTime repairStart, DateTime repairEnd, SpecRepBooking specRepBooking) {
+        super(-1, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
+        this.diagnosisStart = diagnosisStart;
+        this.diagnosisEnd = diagnosisEnd;
+        this.diagnosisInterval = new MutableInterval(diagnosisStart, diagnosisEnd);
+        this.repairStart = repairStart;
+        this.repairEnd = repairEnd;
+        this.repairInterval = new MutableInterval(repairStart, repairEnd);
+        this.specRepBooking = specRepBooking;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public DiagRepBooking(@Column(name = "bookingID", primary = true) int bookingID,
-                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
-                          @Column(name = "description") String description,
-                          @Column(name = "billAmount") double billAmount,
-                          @Column(name = "billSettled") boolean billSettled,
-                          @Column(name = "mechanicID") int mechanicID,
-                          @Column(name = "diagnosisStart") DateTime diagnosisStart,
-                          @Column(name = "diagnosisEnd") DateTime diagnosisEnd,
-                          @Column(name = "repairStart") DateTime repairStart,
-                          @Column(name = "repairEnd") DateTime repairEnd,
-                          @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
-                                  SpecRepBooking specRepBooking) {
+    private DiagRepBooking(@Column(name = "bookingID", primary = true) int bookingID,
+                           @Column(name = "vehicleRegNumber") String vehicleRegNumber,
+                           @Column(name = "description") String description,
+                           @Column(name = "billAmount") double billAmount,
+                           @Column(name = "billSettled") boolean billSettled,
+                           @Column(name = "mechanicID") int mechanicID,
+                           @Column(name = "diagnosisStart") DateTime diagnosisStart,
+                           @Column(name = "diagnosisEnd") DateTime diagnosisEnd,
+                           @Column(name = "repairStart") DateTime repairStart,
+                           @Column(name = "repairEnd") DateTime repairEnd,
+                           @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+                                   SpecRepBooking specRepBooking) {
         super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;

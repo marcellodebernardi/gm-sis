@@ -1,7 +1,7 @@
 package logic;
 
 
-import entities.SpecialistRepairCenter;
+import domain.SpecialistRepairCenter;
 import persistence.DatabaseRepository;
 
 import java.util.List;
@@ -45,10 +45,10 @@ public class SpecRepairSystem {
      *
      * @return true if adding of a repair center is successful.
      */
-    public boolean addRepairCenter(int spcID, String name, String address, String phone, String email)
+    public boolean addRepairCenter(String name, String address, String phone, String email)
     {
         //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
-         SpecialistRepairCenter add  = new SpecialistRepairCenter(spcID, name, address, phone, email, null);
+         SpecialistRepairCenter add  = new SpecialistRepairCenter(name, address, phone, email, null);
         return persistence.commitItem(add);
     }
 

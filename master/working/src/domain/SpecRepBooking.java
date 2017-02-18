@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 
 import logic.Searchable;
@@ -20,16 +20,28 @@ public abstract class SpecRepBooking implements Searchable {
     private int spcID;
     private int bookingID;
 
+
     /**
-     * Constructor to create a specialist repair booking
-     * @param spcRepID ID representing a unique SRC booking
-     * @param spcID ID representing the unique ID of the SRC to which this part is being sent to
-     * @param deliveryDate Date representing the date on which the part or vehicle is being sent
-     * @param returnDate Date representing the date on which the part or vehicle is expected to return
-     * @param cost Double representing the total cost of the SR booking
+     * Creates new SpecRepBooking
+     * @param spcID
+     * @param deliveryDate
+     * @param returnDate
+     * @param cost
+     * @param bookingID
      */
-    @Reflective // todo remove reflective ability and Searchable?
-    public SpecRepBooking(@Column(name = "spcRepID", primary = true) int spcRepID,
+    public SpecRepBooking(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID)
+    {
+        this.spcRepID = -1;
+        this.spcID = spcID;
+        this.deliveryDate = deliveryDate;
+        this.returnDate = returnDate;
+        this.cost = cost;
+        this.bookingID = bookingID;
+    }
+
+    // reflection only, do not use todo does superclass need to be reflective?
+    @Reflective
+    SpecRepBooking(@Column(name = "spcRepID", primary = true) int spcRepID,
                           @Column(name = "spcID") int spcID,
                           @Column(name = "deliveryDate") Date deliveryDate,
                           @Column(name = "returnDate") Date returnDate,
@@ -43,15 +55,6 @@ public abstract class SpecRepBooking implements Searchable {
         this.bookingID = bookingID;
     }
 
-    public SpecRepBooking(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID)
-    {
-        this.spcRepID = -1;
-        this.spcID = spcID;
-        this.deliveryDate = deliveryDate;
-        this.returnDate = returnDate;
-        this.cost = cost;
-        this.bookingID = bookingID;
-    }
 
     /**
      *

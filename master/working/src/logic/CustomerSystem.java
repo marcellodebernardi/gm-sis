@@ -1,7 +1,7 @@
 package logic;
 
-import entities.Customer;
-import entities.CustomerType;
+import domain.Customer;
+import domain.CustomerType;
 
 import java.util.*;
 import static logic.CriterionOperator.*;
@@ -36,13 +36,13 @@ public class CustomerSystem {
 
     public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer add = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
+        Customer add = new Customer(customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
         return persistence.commitItem(add);
     }
 
     public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer edit = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
+        Customer edit = new Customer(customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
         return persistence.commitItem(edit);
     }
 

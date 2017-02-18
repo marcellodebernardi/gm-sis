@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.PartAbstraction;
+import domain.PartAbstraction;
 import javafx.scene.control.*;
 import persistence.DatabaseRepository;
 import logic.Criterion;
@@ -24,8 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
-import static logic.CriterionOperator.*;
 
 
 public class PartsController {

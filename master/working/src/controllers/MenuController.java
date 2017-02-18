@@ -1,24 +1,13 @@
 package controllers;
 
-        import entities.UserType;
-        import javafx.event.ActionEvent;
-        import javafx.event.EventHandler;
+        import domain.UserType;
         import javafx.fxml.FXML;
-        import javafx.geometry.Pos;
         import javafx.scene.control.*;
-        import javafx.scene.layout.AnchorPane;
-        import javafx.scene.layout.VBox;
-        import javafx.stage.Modality;
-        import javafx.stage.WindowEvent;
         import logic.AuthenticationSystem;
         import javafx.stage.Stage;
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Scene;
         import javafx.scene.Parent;
-        import logic.VehicleSys;
-        import controllers.LoginController;
-
-        import java.io.Console;
 
 /**
  * Created by DillonVaghela on 2/8/17.

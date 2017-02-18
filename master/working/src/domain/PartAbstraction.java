@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import logic.Searchable;
 
@@ -18,8 +18,28 @@ public class PartAbstraction implements Searchable {
     // hierarchical links
     private List<PartOccurrence> occurrenceList;
 
+
+    /**
+     * Creates a new PartAbstraction
+     * @param partName
+     * @param partDescription
+     * @param partPrice
+     * @param partStockLevel
+     * @param occurrenceList
+     */
+    public PartAbstraction(String partName, String partDescription, double partPrice, int partStockLevel,
+                           List<PartOccurrence> occurrenceList){
+        this.partAbstractionID = -1;
+        this.partName = partName;
+        this.partDescription = partDescription;
+        this.partPrice = partPrice;
+        this.partStockLevel = partStockLevel;
+        this.occurrenceList = occurrenceList;
+    }
+
+    // reflection only, do not use
     @Reflective
-    public PartAbstraction(@Column(name = "partAbstractionID", primary = true) int partAbstractionID,
+    private PartAbstraction(@Column(name = "partAbstractionID", primary = true) int partAbstractionID,
                            @Column(name = "partName") String partName,
                            @Column(name = "partDescription") String partDescription,
                            @Column(name = "partPrice") double partPrice,

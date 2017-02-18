@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 /**
  * @author Marcello De Bernardi
@@ -11,7 +11,7 @@ public class Mechanic {
     private double hourlyRate;
 
     @Reflective
-    public Mechanic(@Column(name = "mechanicID", primary = true) int mechanicID,
+    private Mechanic(@Column(name = "mechanicID", primary = true) int mechanicID,
                     @Column(name = "firstName") String firstName,
                     @Column(name = "surname") String surname,
                     @Column(name = "hourlyRate") double hourlyRate) {
