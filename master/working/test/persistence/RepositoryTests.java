@@ -51,14 +51,14 @@ public class RepositoryTests {
 
     @Test
     public void testSELECTQuery() {
-        System.out.println(DatabaseRepository.getInstance().toSELECTQuery(new Criterion<>(User.class, "userID",
+        System.out.println(ObjectRelationalMapper.getInstance().toSELECTQuery(new Criterion<>(User.class, "userID",
                 CriterionOperator.EqualTo, "foo").and("password", CriterionOperator.EqualTo, "bar")));
     }
 
     @Test
     public void testDELETETransaction() {
         while (true) {
-            List<String> result = DatabaseRepository.getInstance().toDELETETransaction(new Criterion<>(Customer.class));
+            List<String> result = ObjectRelationalMapper.getInstance().toDELETETransaction(new Criterion<>(Customer.class));
 
             for (String s : result) {
                 System.out.println(s);
@@ -69,7 +69,7 @@ public class RepositoryTests {
     @Test
     public void testINSERTTransaction() {
         User user = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(User.class)).get(0);
-        List<String> result = DatabaseRepository.getInstance().toINSERTTransaction(user);
+        List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(user);
 
         for (String s : result) {
             System.out.println(s);

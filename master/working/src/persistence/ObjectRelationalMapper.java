@@ -29,7 +29,6 @@ class ObjectRelationalMapper {
 
     // helper classes
     private ForeignKeyResolver resolver;
-    private DatabaseRepository persistence;
 
     // reflection data
     private List<Class<? extends Searchable>> searchableClasses;
@@ -47,7 +46,6 @@ class ObjectRelationalMapper {
 
     private ObjectRelationalMapper() {
         resolver = ForeignKeyResolver.getInstance();
-        persistence = DatabaseRepository.getInstance();
     }
 
     /**
@@ -137,7 +135,7 @@ class ObjectRelationalMapper {
     /**
      * Converts a criterion into a deletion transaction
      */
-    <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria) {
+    <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria, DatabaseRepository persistence) {
         final String DELETESTRING = "DELETE FROM ";
 
         List<String> queries = new ArrayList<>();
@@ -169,7 +167,7 @@ class ObjectRelationalMapper {
                                         new Criterion<>(type,
                                                 ((Column) getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
                                                 EqualTo,
-                                                getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i)))));
+                                                getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i))), persistence));
                             }
                         }
                     }
@@ -180,7 +178,7 @@ class ObjectRelationalMapper {
                                     new Criterion<>(type,
                                             ((Column) getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
                                             EqualTo,
-                                            getPrimaryKeyGetter(attribute.getClass()).invoke(attribute))));
+                                            getPrimaryKeyGetter(attribute.getClass()).invoke(attribute)), persistence));
                         }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
@@ -195,7 +193,7 @@ class ObjectRelationalMapper {
     /**
      * Converts a ResultSet into a List<E> of objects
      */
-    <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
+    <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results, DatabaseRepository persistence) {
         List<E> returnList = new ArrayList<>();
 
         // reflection class data

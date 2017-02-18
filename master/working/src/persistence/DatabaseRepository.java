@@ -66,7 +66,7 @@ public class DatabaseRepository implements CriterionRepository {
         // get requested objects using appropriate mapper
         try {
             statement = connection.prepareStatement(mapper.toSELECTQuery(criteria));
-            return mapper.toObjects(criteria.getCriterionClass(), statement.executeQuery());
+            return mapper.toObjects(criteria.getCriterionClass(), statement.executeQuery(), this);
         } catch (SQLException e) {
             System.err.print(e.getMessage());
             return null;
@@ -106,7 +106,7 @@ public class DatabaseRepository implements CriterionRepository {
             connection.setAutoCommit(false);
 
             // generate and queue queries for transaction
-            List<String> statements = mapper.toDELETETransaction(criteria);
+            List<String> statements = mapper.toDELETETransaction(criteria, this);
             for (String s : statements) {
                 connection.prepareStatement(s).executeUpdate();
             }
