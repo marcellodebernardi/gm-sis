@@ -19,7 +19,9 @@ import persistence.DatabaseRepository;
 import javax.xml.soap.Text;
 import java.text.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -62,8 +64,10 @@ public class VehicleController {
     public TextField eWN;
     public TextField eWCA;
     public TextField eWED;
-
-
+    public ComboBox sCBW;
+    public TextField sWN;
+    public TextField sWCA;
+    public TextField sWED;
 
 
 
@@ -268,6 +272,26 @@ public class VehicleController {
 
     }
 
+    public void searchVehicle()
+    {
+        List<Vehicle> arrayList = vSys.getVehiclesList();
+
+    }
+
+    public void hiddenWarranty()
+    {
+        if (sCBW.getSelectionModel().getSelectedItem().equals("True")) {
+            sWN.setDisable(false);
+            sWCA.setDisable(false);
+            sWED.setDisable(false);
+        }
+        else {
+            sWN.setDisable(true);
+            sWCA.setDisable(true);
+            sWED.setDisable(true);
+
+        }
+    }
 
 
 }
