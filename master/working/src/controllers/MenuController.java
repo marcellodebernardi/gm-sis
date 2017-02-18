@@ -43,6 +43,7 @@ public class MenuController {
         Stage todayBStage;
         Stage allBStage;
         Stage addSpecialistBooking;
+        Stage deleteSpecialistBooking;
 
         public void initialize() throws Exception {
                 setUserType();
@@ -298,29 +299,58 @@ public void handleButtonAdd() throws Exception {
         public void searchSRC()
         {
 
+
         }
 
         @FXML
-        public void addSRCBooking() throws Exception
-        {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCBooking.fxml"));
-                Parent menu = fxmlLoader.load();
-                addSpecialistBooking = new Stage();
-                addSpecialistBooking.setTitle("Add Specialist Booking");
-                addSpecialistBooking.setScene(new Scene(menu));
-                addSpecialistBooking.show();
-            }
-            catch (Exception e) {
-                System.out.println("ERROR IN OPENING WINDOW");
-                System.out.println(e);
-            }
+        public void addSRCBooking() throws Exception {
+                try{
+                        if (addSpecialistBooking != null)
+                        {
+                                if (addSpecialistBooking.isShowing())
+                                {
+                                        showAlert();
+                                        addSpecialistBooking.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCB.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        addSpecialistBooking = new Stage();
+                        addSpecialistBooking.setTitle("Add Booking");
+                        addSpecialistBooking.setScene(new Scene(menu));
+                        addSpecialistBooking.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
 
         }
 
         public void deleteSRCBooking()
         {
-
+                try{
+                        if (deleteSpecialistBooking != null)
+                        {
+                                if (deleteSpecialistBooking.isShowing())
+                                {
+                                        showAlert();
+                                        deleteSpecialistBooking.setAlwaysOnTop(true);
+                                        //editBStage.setFullScreen(true);
+                                        return; }
+                        }
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteSRB.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        deleteSpecialistBooking = new Stage();
+                        deleteSpecialistBooking.setTitle("Delete Booking");
+                        deleteSpecialistBooking.setScene(new Scene(menu));
+                        deleteSpecialistBooking.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
         }
 
         public void editSRCBooking()

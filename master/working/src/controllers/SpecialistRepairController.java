@@ -1,36 +1,25 @@
 package controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import entities.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import logic.Criterion;
 import logic.CriterionOperator;
 import java.util.List;
-import persistence.DatabaseRepository;
 
-public class SpecialistRepairController implements Initializable {
+import logic.Searchable;
+import persistence.DatabaseRepository;
+public class SpecialistRepairController {
 
 DatabaseRepository db = DatabaseRepository.getInstance();
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private TextField field_custy;
 
     @FXML
-    private ComboBox<String> booking_type;
-
-    @FXML
-    private ComboBox<String> select_SRC;
+    private TextField field_SRCID;
 
     @FXML
     private TextField field_itemID;
@@ -42,13 +31,13 @@ DatabaseRepository db = DatabaseRepository.getInstance();
     private TextField itemInfo;
 
     @FXML
-    private Button btn_addSRbooking;
+    private TextField srID;
 
     @FXML
-    private DatePicker bookingDate;
+    private RadioButton r_vehicleDel;
 
     @FXML
-    private Label vreg;
+    private RadioButton r_partDel;
 
     @FXML
     private Label vmod;
@@ -57,7 +46,10 @@ DatabaseRepository db = DatabaseRepository.getInstance();
     private Label vmake;
 
     @FXML
-    private Label partID;
+    private RadioButton r_vehicle;
+
+    @FXML
+    private RadioButton r_part;
 
     @FXML
     private Label partN;
@@ -65,38 +57,7 @@ DatabaseRepository db = DatabaseRepository.getInstance();
     @FXML
     private Label partDes;
 
-    @Override
-    public void initialize(URL location, ResourceBundle  resources)
-    {
-     booking_type.getItems().addAll("Vehicle", "Part");
-     vreg.setVisible(false);
-     vmod.setVisible(false);
-     vmake.setVisible(false);
-     partID.setVisible(false);
-     partN.setVisible(false);
-     partDes.setVisible(false);
-     btn_addSRbooking.setVisible(true);
-     field_itemID.setVisible(true);
-     field_custy.setVisible(true);
 
-     select_SRC.getItems().addAll("someName","someOtherName");
-
-        if(booking_type.getSelectionModel().getSelectedItem().equals("Vehicle"))
-        {
-            vreg.setVisible(true);
-            vreg.setText("Please Enter a Vehicle Registration");
-            vmake.setVisible(true);
-            vmod.setVisible(true);
-        }
-        else
-        {
-            partID.setVisible(true);
-            partID.setText("Please enter a Part ID");
-            partN.setVisible(true);
-            partDes.setVisible(true);
-
-        }
-    }
 
     /**
      * Checks what type of booking specialist repair booking is (Vehicle or part)
@@ -106,26 +67,27 @@ DatabaseRepository db = DatabaseRepository.getInstance();
     @FXML
     void addSRBooking() {
 
-        if(booking_type.getSelectionModel()!=null)
+        if(r_part != null && r_vehicle !=null)
         {
-            List<SpecialistRepairCenter> specialistRepairCenters = db.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"name",CriterionOperator.EqualTo,select_SRC.getSelectionModel().getSelectedItem()));
 
-            if(booking_type.getSelectionModel().getSelectedItem().equals("Vehicle"))
+            if(r_vehicle.isSelected())
             {
                 List<Vehicle> vehicles = db.getByCriteria(new Criterion<>(Vehicle.class,"regNumber",CriterionOperator.EqualTo,field_itemID.getText()));
                 Vehicle vehicle = vehicles.get(0);
-                SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
-                VehicleRepair vehicleRepair = new VehicleRepair(specialistRepairCenter.getSpcID(),null,null,20,-1,vehicle.getRegNumber());
+                VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(srID.getText()),null,null,20,-1,vehicle.getRegNumber());
                 db.commitItem(vehicleRepair);
             }
             else
             {
                 List<PartOccurrence> partOccurrences = db.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", CriterionOperator.EqualTo,Integer.parseInt(field_itemID.getText())));
                 PartOccurrence partOccurrence = partOccurrences.get(0);
-                SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
-                PartRepair partRepair = new PartRepair(specialistRepairCenter.getSpcID(),null,null,20,-1,partOccurrence.getPartOccurrenceID());
+                PartRepair partRepair = new PartRepair(Integer.parseInt(srID.getText()),null,null,20,-1,partOccurrence.getPartOccurrenceID());
                 db.commitItem(partRepair);
             }
+        }
+        else
+        {
+            showAlert();
         }
 
 
@@ -147,21 +109,55 @@ DatabaseRepository db = DatabaseRepository.getInstance();
     void searchItem()
     {
 
-        if(booking_type.getSelectionModel().getSelectedItem().equals("Vehicle"))
-        {
+        if(r_vehicle.isSelected())
+            {
             List<Vehicle> vehicles = db.getByCriteria(new Criterion<>(Vehicle.class, "regNumber",CriterionOperator.EqualTo,field_itemID.getText()));
             Vehicle vehicle = vehicles.get(0);
+            partDes.setVisible(false);
+            partN.setVisible(false);
+            vmod.setVisible(true);
+            vmake.setVisible(true);
             itemName.setText(vehicle.getManufacturer());
             itemInfo.setText(vehicle.getModel());
         }
-        else
+        else if(r_part.isSelected())
         {
             List<PartAbstraction> partAbstractions = db.getByCriteria(new Criterion<>(PartAbstraction.class,"partAbstractionID",CriterionOperator.EqualTo,Integer.parseInt(field_itemID.getText())));
             PartAbstraction partAbstraction = partAbstractions.get(0);
+            vmake.setVisible(false);
+            vmod.setVisible(false);
+            partN.setVisible(true);
+            partDes.setVisible(true);
             itemName.setText(partAbstraction.getPartName());
             itemInfo.setText(partAbstraction.getPartDescription());
         }
+        else
+        {
+            showAlert();
+        }
 
+    }
+
+    @FXML
+    void confirmDelete()
+    {
+       if(r_vehicleDel.isSelected())
+       {
+        db.deleteItem(new Criterion<>(VehicleRepair.class,"spcRepID", CriterionOperator.EqualTo,Integer.parseInt(field_SRCID.getText())));
+       }
+       if(r_partDel.isSelected())
+       {
+           db.deleteItem(new Criterion<>(PartRepair.class, "spcRepID",CriterionOperator.EqualTo,Integer.parseInt(field_SRCID.getText())));
+       }
+    }
+
+
+    public void showAlert()
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Nothing selected!");
+        alert.showAndWait();
     }
 
 }

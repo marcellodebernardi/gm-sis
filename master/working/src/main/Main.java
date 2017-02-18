@@ -25,12 +25,18 @@ public class Main extends Application {
    @Override
     public void start(Stage primaryStage) throws Exception {
 
-      mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
-        //test.fxml
-       login = new Scene(mainPane);
-       primaryStage.setScene(login);
-       primaryStage.show();
-       //primaryStage.setFullScreen(true);
+        try {
+            mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+            //test.fxml
+            login = new Scene(mainPane);
+            primaryStage.setScene(login);
+            primaryStage.show();
+            //primaryStage.setFullScreen(true);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
 
 
     }
