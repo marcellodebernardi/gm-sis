@@ -14,13 +14,13 @@ import java.util.List;
 class StatementNode implements Comparable<StatementNode> {
     // graph properties
     private List<StatementNode> dependents;
-    private List<StatementNode> lockedDependencies;
-    private List<StatementNode> unlockedDependencies;
-    private boolean solved;
-    // todo separate states for having primary key AND foreign keys?
+    private List<StatementNode> unresolvedDependencies;
+    private List<StatementNode> resolvedDependencies;
+    private boolean resolved;
+    private boolean complete;
 
     // reflection
-    private Class<? extends Searchable> table; // string better?
+    private Class<? extends Searchable> table;
     private Searchable object;
     private Method primaryGetter;
 
@@ -30,58 +30,125 @@ class StatementNode implements Comparable<StatementNode> {
     private StatementType statementType;
     private HashMap<String, Object> solvedValues;
 
-
+    // database instance
+    private DatabaseRepository persistence;
 
     StatementNode(Class<? extends Searchable> table, Searchable object, Method primaryGetter,
-                  HashMap<String, Object> solvedValues, String primaryKey) {
+                  HashMap<String, Object> solvedValues, String primaryKey, DatabaseRepository persistence) {
         dependents = new ArrayList<>();
-        lockedDependencies = new ArrayList<>();
-        unlockedDependencies = new ArrayList<>();
+        unresolvedDependencies = new ArrayList<>();
+        resolvedDependencies = new ArrayList<>();
+        // todo initialize dependencies
 
-        solved = false;
+        resolved = false;
+        complete = false;
         this.table = table;
         this.object = object;
         this.primaryGetter = primaryGetter;
         this.solvedValues = solvedValues;
         this.primaryKey = primaryKey;
+        this.persistence = persistence;
     }
 
+    void addDependent(StatementNode dependent) {
+        dependents.add(dependent);
+    }
+
+    void addDependency(StatementNode dependency) {
+        unresolvedDependencies.add(dependency);
+    }
+
+    /**
+     * The natural ordering of StatementNodes is in accordance to the number of unresolved
+     * dependencies they have. A StatementNode with fewer unresolved dependencies comes
+     * before a StatementNode with more unresolved dependencies.
+     *
+     * @param o the StatementNode to compare to
+     * @return 1 if this comes after 0, -1 if this comes before 0, 0 if equal
+     */
     @Override
     public int compareTo(StatementNode o) {
-        if (lockedDependencies.size() < o.getUnresolvedDependencies()) return -1;
-        else if (lockedDependencies.size() > o.getUnresolvedDependencies()) return 1;
-        else return 0;
-        // decide how to compare nodes with same number of unresolved dependencies
+        if (unresolvedDependencies.size() < o.unresolvedDependencies.size()) return -1;
+        else if (unresolvedDependencies.size() > o.unresolvedDependencies.size()) return 1;
+        else if (dependents.size() > o.dependents.size()) return -1;
+        else if (dependents.size() < o.dependents.size()) return 1;
+        else return -1;
     }
 
-    private int getUnresolvedDependencies() {
-        return lockedDependencies.size();
+    /**
+     * Returns the number of unresolved dependencies.
+     */
+    int getUnresolvedDependencies() {
+        return unresolvedDependencies.size();
     }
 
+    /**
+     * Generates the full, ready-for-execution SQL query represented by this StatementNode.
+     * Note that the StatementNode must be
+     *
+     * @return null if not complete, SQL statement string otherwise
+     */
+    public String toString() {
+        if (!complete) {
+            System.err.println("StatementNode: calling toString() on incomplete node.");
+            return null;
+        }
+
+        if (statementType == StatementType.INSERT) {
+            String keys = solvedValues.keySet().toString();
+            keys = keys.replace("[", "(");
+            keys = keys.replace("]", ")");
+
+            String values = solvedValues.values().toString();
+            values = values.replace("[", "(");
+            values = values.replace("]", ")");
+
+            return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + values + ";";
+        }
+        else {
+            String newInfo = solvedValues.toString();
+            newInfo = newInfo.replace("{", "");
+            newInfo = newInfo.replace("}", "");
+
+            return "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
+                    + primaryKey + " = " + primaryKeyValue + ";";
+        }
+    }
+
+    /**
+     * Returns the string giving the name of the primary key involved with this SQL
+     * statement.
+     *
+     * @return primary key name
+     */
     String getPrimaryKey() {
         return primaryKey;
     }
 
+    /**
+     * Returns the value corresponding to the primary key involved with this SQL
+     * statement.
+     *
+     * @return primary key value
+     */
     Object getPrimaryKeyValue() {
-        if (solved) return primaryKeyValue;
+        if (resolved) return primaryKeyValue;
         try {
             primaryKeyValue = primaryGetter.invoke(object);
             // has no primary key: INSERT
             if (primaryKeyValue == null) {
                 statementType = StatementType.INSERT;
-
-                // todo get future primary key from database
+                primaryKeyValue = persistence.getNextID(table.getSimpleName(), primaryKey);
             }
             // has primary key: UPDATE
             else statementType = StatementType.UPDATE;
 
-            // unlock, mark solved and return key
+            // unlock, mark resolved and return key
             for (StatementNode sN : dependents) {
                 sN.unlock(this);
             }
-            solved = true;
-        }
-        catch (IllegalAccessException | InvocationTargetException e) {
+            resolved = true;
+        } catch (IllegalAccessException | InvocationTargetException e) {
             System.err.print(e.getMessage() + "\nStatementNode failed to obtain primary key.");
         }
         return primaryKeyValue;
@@ -93,36 +160,37 @@ class StatementNode implements Comparable<StatementNode> {
      * or it will not run.
      */
     boolean setForeignKeys() {
-        if (lockedDependencies.size() != 0) return false;
+        if (unresolvedDependencies.size() != 0) return false;
 
-        for (StatementNode sN : unlockedDependencies) {
+        for (StatementNode sN : resolvedDependencies) {
             solvedValues.put(sN.getPrimaryKey(), sN.getPrimaryKeyValue());
         }
+        complete = true;
         return true;
     }
 
-
-
-    // generates query string
-    public String toString() {
-        if (statementType == StatementType.INSERT) {
-            // do stuff
-        }
-        else {
-            // do some other stuff
-        }
-        return null;
-    }
-
+    /**
+     * Takes a reference to another StatementNode and "unlocks" this node's dependency
+     * on the node given as argument. That is, if this node is dependent on the argument
+     * node, this node is informed of the fact that the argument node has been resolved
+     * and thus can be moved to the resolvedDependencies list in this node.
+     *
+     * @param sN a reference to the resolved node
+     * @return true if successful, false if not successful
+     */
     private boolean unlock(StatementNode sN) {
-        if (lockedDependencies.contains(sN)) {
-            lockedDependencies.remove(sN);
-            unlockedDependencies.add(sN);
+        if (unresolvedDependencies.contains(sN)) {
+            unresolvedDependencies.remove(sN);
+            resolvedDependencies.add(sN);
             return true;
         }
         return false;
     }
 
+    /**
+     * Enum used to denote whether a StatementNode represents an INSERT statement or an
+     * UPDATE statement.
+     */
     enum StatementType {
         INSERT, UPDATE;
     }

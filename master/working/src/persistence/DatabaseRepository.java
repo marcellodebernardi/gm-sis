@@ -34,6 +34,7 @@ public class DatabaseRepository implements CriterionRepository {
             // connect to database
             connection = DriverManager.getConnection(DB_URL);
             mapper = ObjectRelationalMapper.getInstance();
+            mapper.initialize(this);
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
@@ -132,6 +133,20 @@ public class DatabaseRepository implements CriterionRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;
+        }
+    }
+
+    int getNextID(String table, String primaryKey) {
+        try {
+            ResultSet result = connection
+                    .prepareStatement("SELECT MAX(" + primaryKey + ") FROM " + table + ";")
+                    .executeQuery();
+            return result.getInt(1) + 1;
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage()
+                    + "\nFailed to get MAX(" + primaryKey + ") from " + table + ".");
+            return -1;
         }
     }
 }
