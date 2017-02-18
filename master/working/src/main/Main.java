@@ -2,6 +2,7 @@ package main;
 
 import controllers.MenuController;
 import javafx.application.Application;
+import javafx.fxml.LoadException;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
@@ -33,9 +34,9 @@ public class Main extends Application {
             primaryStage.show();
             //primaryStage.setFullScreen(true);
         }
-        catch(Exception e)
+        catch(LoadException e)
         {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 

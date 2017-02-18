@@ -63,7 +63,7 @@ class ObjectRelationalMapper {
         primaryGetters = new HashMap<>();
         for (Class<? extends Searchable> eClass : searchableClasses) {
             for (Constructor<?> c : eClass.getDeclaredConstructors()) {
-                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                if (c.getDeclaredAnnotations().length != 0 && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                     constructorMap.put(eClass, c);
                     break;
                 }
