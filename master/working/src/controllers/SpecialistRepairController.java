@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logic.Criterion;
 import logic.CriterionOperator;
+import java.util.Date;
 import java.util.List;
 
 import persistence.DatabaseRepository;
@@ -15,48 +16,13 @@ DatabaseRepository db = DatabaseRepository.getInstance();
 
 
     @FXML
-    private TextField field_custy;
+    private TextField field_custy, field_SRCID,field_itemID, itemName, itemInfo, srID, srcBookingID, srcID, deliveryDate, returnDate, itemID, SRBookingID, cost;
 
     @FXML
-    private TextField field_SRCID;
+    private RadioButton r_vehicleDel,r_partDel, r_vehicle,r_part,r_vehicleEdit,r_partEdit;
 
     @FXML
-    private TextField field_itemID;
-
-    @FXML
-    private TextField itemName;
-
-    @FXML
-    private TextField itemInfo;
-
-    @FXML
-    private TextField srID;
-
-    @FXML
-    private RadioButton r_vehicleDel;
-
-    @FXML
-    private RadioButton r_partDel;
-
-    @FXML
-    private Label vmod;
-
-    @FXML
-    private Label vmake;
-
-    @FXML
-    private RadioButton r_vehicle;
-
-    @FXML
-    private RadioButton r_part;
-
-    @FXML
-    private Label partN;
-
-    @FXML
-    private Label partDes;
-
-
+    private Label veh_lbl, part_lbl, partN, vmake,vmod,partDes;
 
     /**
      * Checks what type of booking specialist repair booking is (Vehicle or part)
@@ -157,6 +123,60 @@ DatabaseRepository db = DatabaseRepository.getInstance();
         alert.setTitle("Error");
         alert.setHeaderText("Nothing selected!");
         alert.showAndWait();
+    }
+
+    public void searchSRC()
+    {
+        List<SpecialistRepairCenter> specialistRepairCenters = db.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"spcID",CriterionOperator.EqualTo,srID.getText()));
+        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        field_SRCID.setText(Integer.toString(specialistRepairCenter.getSpcID()));
+
+    }
+
+    //todo Implement way of extracting date to String
+    public void searchSRCBookings()
+    {
+        if(r_vehicleEdit.isSelected())
+        {
+            part_lbl.setVisible(false);
+            veh_lbl.setVisible(true);
+            List<VehicleRepair> vehicleRepairs = db.getByCriteria(new Criterion<>(VehicleRepair.class, "spcRepID",CriterionOperator.EqualTo,Integer.parseInt(srcBookingID.getText()) ));
+            VehicleRepair vehicleRepair = vehicleRepairs.get(0);
+            srcID.setText(Integer.toString(vehicleRepair.getSpcID()));
+            deliveryDate.setText("");
+            returnDate.setText("");
+            cost.setText(Double.toString(vehicleRepair.getCost()));
+            SRBookingID.setText(Integer.toString(vehicleRepair.getBookingID()));
+            itemID.setText(vehicleRepair.getVehicleRegNumber());
+        }
+        else if(r_partEdit.isSelected())
+        {
+            veh_lbl.setVisible(false);
+            part_lbl.setVisible(true);
+            List<PartRepair> partRepairs = db.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID",CriterionOperator.EqualTo,Integer.parseInt(srcBookingID.getText())));
+            PartRepair partRepair = partRepairs.get(0);
+            srcID.setText(Integer.toString(partRepair.getSpcID()));
+            deliveryDate.setText("");
+            returnDate.setText("");
+            cost.setText(Double.toString(partRepair.getCost()));
+            SRBookingID.setText(Integer.toString(partRepair.getBookingID()));
+            itemID.setText(Integer.toString(partRepair.getPartOccurrenceID()));
+        }
+
+    }
+
+    public void submitChanges()
+    {
+        if(r_vehicleEdit.isSelected())
+        {
+            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(srcID.getText()),null,null,Double.parseDouble(cost.getText()),Integer.parseInt(SRBookingID.getText()),itemID.getText());
+            db.commitItem(vehicleRepair);
+        }
+        else if(r_partEdit.isSelected())
+        {
+            PartRepair partRepair = new PartRepair(Integer.parseInt(srcID.getText()),null,null,Double.parseDouble(cost.getText()),Integer.parseInt(SRBookingID.getText()),Integer.parseInt(itemID.getText()));
+            db.commitItem(partRepair);
+        }
     }
 
 }

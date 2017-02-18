@@ -127,7 +127,7 @@
                      <children>
                         <Button fx:id="addSRBooking" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#addSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Add Booking" />
                         <Button fx:id="deleteSRBooking" layoutX="151.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Delete Booking" />
-                        <Button fx:id="editSRBooking" layoutX="288.0" layoutY="14.0" mnemonicParsing="false" onAction="#editSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Add Booking" />
+                        <Button fx:id="editSRBooking" layoutX="288.0" layoutY="14.0" mnemonicParsing="false" onAction="#editSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Edit Booking" />
                         <TableView layoutX="14.0" layoutY="89.0" prefHeight="266.0" prefWidth="663.0">
                           <columns>
                             <TableColumn prefWidth="99.0" text="Specialist ID:" />
