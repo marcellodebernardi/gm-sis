@@ -304,7 +304,7 @@ public void handleButtonAdd() throws Exception {
         public void addSRCBooking() throws Exception
         {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addSRCBooking"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCBooking.fxml"));
                 Parent menu = fxmlLoader.load();
                 addSpecialistBooking = new Stage();
                 addSpecialistBooking.setTitle("Add Specialist Booking");
@@ -313,6 +313,7 @@ public void handleButtonAdd() throws Exception {
             }
             catch (Exception e) {
                 System.out.println("ERROR IN OPENING WINDOW");
+                System.out.println(e);
             }
 
         }

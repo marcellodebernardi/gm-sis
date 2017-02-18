@@ -1,10 +1,13 @@
 package logic;
 
 import entities.FuelType;
+import entities.Installation;
 import entities.Vehicle;
 import entities.VehicleType;
 import persistence.DatabaseRepository;
 import java.util.*;
+
+import static java.util.Collections.emptyList;
 import static logic.CriterionOperator.*;
 
 /**
@@ -46,9 +49,10 @@ public class VehicleSys {
         return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
     }
 
-    public boolean editVehicle(Vehicle delete){
+    public boolean editVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate){
+        //edit Vehicle
 
-        return persistence.commitItem(delete);
+        return persistence.commitItem(new Vehicle(regNumber, customerID, vehicleType, model, manufacturer, engineSize, fuelType, colour, mileage, renewalDateMot, dateLastServiced, coveredByWarranty, warrantyName, warrantyCompAddress, warrantyExpirationDate, null ));
 
     }
 

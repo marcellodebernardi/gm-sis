@@ -78,9 +78,10 @@ public class VehicleController {
     {
         try
         {
-            boolean check = true;
+            boolean check = false;
             if ((!reg.getText().equals("")) && (!cID.getText().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals("")))
             {
+                check = true;
                 if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True"))
                 {
                     if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getText().equals(""))
@@ -119,6 +120,8 @@ public class VehicleController {
                     alert.setTitle("Message");
                     alert.setHeaderText("Vehicle Added: " + checker);
                     alert.showAndWait();
+                    Stage addStage =   (Stage) cByWarranty.getScene().getWindow();
+                    addStage.close();
                 }
             }
             if (!check) {
@@ -179,6 +182,69 @@ public class VehicleController {
             System.out.println(e);
         }
 
+    }
+
+    public void editVehicle()
+    {
+        try
+        {
+            boolean check = false;
+            if ((!eVR.getText().equals("")) && (!eCID.getText().equals("")) && (!eVT.getSelectionModel().getSelectedItem().toString().equals("")) && (!eModel.getText().equals("")) && (!eM.getText().equals("")) && (!eSize.getText().equals("")) && (!eFT.getSelectionModel().getSelectedItem().toString().equals("")) && (!eC.getText().equals("")) && (!eMi.getText().equals("")) && (!eRDM.getText().equals("")) && (!eDLS.getText().equals("")) && (!eCBW.getSelectionModel().getSelectedItem().toString().equals("")))
+            {
+                check = true;
+                if (eCBW.getSelectionModel().getSelectedItem().toString().equals("True"))
+                {
+                    if (eWN.getText().equals("") || eWCA.getText().equals("") || eWED.getText().equals(""))
+                    {
+                        check = false;
+                    }
+                }
+                if (check) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    Date rdm = format.parse(eRDM.getText());
+                    Date dls = format.parse(eDLS.getText());
+                    Date wed = format.parse(eWED.getText());
+                    VehicleType vT;
+                    if (eVT.getSelectionModel().getSelectedItem().toString().equals("Car")) {
+                        vT = VehicleType.Car;
+                    } else if (eVT.getSelectionModel().getSelectedItem().toString().equals("Van")) {
+                        vT = VehicleType.Van;
+                    } else {
+                        vT = VehicleType.Truck;
+                    }
+                    FuelType fT;
+                    if (eFT.getSelectionModel().getSelectedItem().toString().equals("Diesel")) {
+                        fT = FuelType.diesel;
+                    } else {
+                        fT = FuelType.petrol;
+                    }
+                    Boolean W;
+                    if (eCBW.getSelectionModel().getSelectedItem().toString().equals("True")) {
+                        W = true;
+                    } else {
+                        W = false;
+                    }
+
+                    boolean checker = vSys.editVehicle(eVR.getText(), Integer.parseInt(eCID.getText()), vT, eModel.getText(), eM.getText(), Double.parseDouble(eES.getText()), fT, eC.getText(), Integer.parseInt(eMi.getText()), rdm, dls, W, eWN.getText(), eWCA.getText(), wed);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Message");
+                    alert.setHeaderText("Vehicle Added: " + checker);
+                    alert.showAndWait();
+                    Stage addStage =   (Stage) eVR.getScene().getWindow();
+                    addStage.close();
+                }
+            }
+            if (!check) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields required are not complete!");
+                alert.showAndWait();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(  );
+        }
     }
 
     public void setVehicleDets(Vehicle vehicle)
