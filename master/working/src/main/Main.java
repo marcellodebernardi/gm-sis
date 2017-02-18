@@ -21,23 +21,35 @@ public class Main extends Application {
     {
         Application.launch(args);
     }
-    @Override
+
+   @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //testing my parts GUI for now, you can change it (SHAKIB)
-
-
-            mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+      mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
         //test.fxml
-        login = new Scene(mainPane);
-        primaryStage.setScene(login);
-        primaryStage.show();
-        primaryStage.setFullScreen(true);
+       login = new Scene(mainPane);
+       primaryStage.setScene(login);
+       primaryStage.show();
+       //primaryStage.setFullScreen(true);
 
 
     }
 
 
+    //Shakibs test method for Parts module (leave it commented out for now please)
+   /**
+    @Override
+
+   public void start(Stage primaryStage) throws Exception {
+
+        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
+        login = new Scene(mainPane);
+        primaryStage.setScene(login);
+        primaryStage.show();
+
+    }
+
+   **/
 
 
 }

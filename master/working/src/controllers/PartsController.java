@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.*;
 import javafx.scene.control.TextField;
@@ -23,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import static logic.CriterionOperator.*;
 
 
 public class PartsController {
@@ -45,29 +48,15 @@ public class PartsController {
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
     final ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
+    final ObservableList tableEntries2 = FXCollections.observableArrayList();
+    final ObservableList<PartAbstraction> tableItems = FXCollections.observableArrayList();
     private List<PartAbstraction> List;
+    private List<PartAbstraction> List2;
+    private String[] split2;
+    private ArrayList data = new ArrayList();
 
-    public void updateTable(){
 
-        Criterion c=new Criterion<>(PartAbstraction.class);
-
-        List = instance.getByCriteria(c); //the data from Parts DB stored in this list
-
-        /** test list
-         *
-         *
-         * // System.out.println(List.get(0).getPartName());
-         * // System.out.println(List.get(1).getPartName());
-         * /System.out.println(List.get(0).getPartDescription());
-         * // System.out.println(List.size());
-         **/
-
-        tableEntries.removeAll(tableEntries);
-
-        for(int i =0; i<List.size(); i++){
-
-            tableEntries.add(List.get(i));
-        }
+    public void setTable1() {
 
         partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
         partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
@@ -113,10 +102,34 @@ public class PartsController {
                 ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartStockLevel(event.getNewValue());
             }
         });
+    }
 
+    public void updateTable(){
 
+        Criterion c =new Criterion<>(PartAbstraction.class);
+
+        List = instance.getByCriteria(c); //the data from Parts DB stored in this list
+
+        /** test list
+         *
+         *
+         * // System.out.println(List.get(0).getPartName());
+         * // System.out.println(List.get(1).getPartName());
+         * /System.out.println(List.get(0).getPartDescription());
+         * // System.out.println(List.size());
+         **/
+
+        tableEntries.removeAll(tableEntries);
+
+        for(int i =0; i<List.size(); i++){
+
+            tableEntries.add(List.get(i));
+        }
+
+        setTable1();
 
         PartsTable.setItems(tableEntries);
+
     }
 
     public void addPartButtonClick() throws Exception{
@@ -178,5 +191,29 @@ public class PartsController {
         alert.showAndWait();
     }
 
+    public void searchPart() {
 
+        // TODO: fix the search textfield, not returning list properly
+
+        Criterion c2 =new Criterion<>(PartAbstraction.class);
+        List2 = instance.getByCriteria(c2);
+
+        tableEntries2.removeAll(tableEntries2);
+        tableItems.removeAll(tableItems);
+
+        for(int i=0; i<List2.size(); i++){
+
+            if(searchParts.getText().equals("") || List2.get(i).getPartName().startsWith(searchParts.getText()));
+            {
+                tableEntries2.add(List2.get(i).getPartName());
+                tableItems.add(List2.get(i));
+            }
+        }
+
+        setTable1();
+
+        PartsTable.setItems(tableEntries2);
+
+    }
 }
+

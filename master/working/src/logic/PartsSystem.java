@@ -1,7 +1,12 @@
 package logic;
 
+import entities.PartAbstraction;
+import persistence.DatabaseRepository;
+import static logic.CriterionOperator.*;
+
 import java.util.List;
 import java.util.ArrayList;
+
 /**
  * Created by Muhammad Shakib Hoque on 07/02/2017.
  *
@@ -9,7 +14,8 @@ import java.util.ArrayList;
 public class PartsSystem {
 
     private static PartsSystem instance;
-    private CriterionRepository persistence;
+    private CriterionRepository persistence = DatabaseRepository.getInstance();
+    private PartAbstraction addNewPart;
 
     private PartsSystem(CriterionRepository persistence) {
 
@@ -21,34 +27,29 @@ public class PartsSystem {
         return instance;
     }
 
-    public List<PartsSystem> getPartList() {
+    public List<PartAbstraction> getPartList() {
 
-        List<PartsSystem> PartsList = new ArrayList<PartsSystem>();
-
-        return PartsList;
-
-    }
-
-    public List<PartsSystem> searchPartList() {
-
-        /** TODO: create search method
-         *
-         */
-
-        List<PartsSystem> PartsList2 = new ArrayList<PartsSystem>();
-        return PartsList2;
+        ArrayList<PartAbstraction> arrayPartsList = new ArrayList<PartAbstraction>();
+        return arrayPartsList;
 
     }
 
-    public boolean addPart(){
-
-        return false;
+    public PartAbstraction searchPartList(String partName) {
+        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName", EqualTo, partName));
+        return result.size() == 0 ? null : result.get(0);
 
     }
 
-    public boolean deletePart(){
+    public boolean addPart(int partAbstractionID, String partName, String partDescription, Double partPrice, int partStockLevel){
 
-        return false;
+        PartAbstraction addNewPart = new PartAbstraction(partAbstractionID,partName, partDescription, partPrice, partStockLevel, null);
+        boolean result = persistence.commitItem(addNewPart);
+        return result;
+
+    }
+
+    public boolean deletePart(int partAbstractionID){
+        return persistence.deleteItem(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
     }
 
     public boolean editPart(){
