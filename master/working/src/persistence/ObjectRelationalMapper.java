@@ -103,7 +103,7 @@ class ObjectRelationalMapper {
      * Converts an entity into an insertion transaction
      */
     <E extends Searchable> List<String> toINSERTTransaction(E item) {
-        return resolver.resolveForeignKeys(generateStatementGraph(item));
+        return resolver.resolveForeignKeys(generateStatementGraph(item, null));
     }
 
     /**
@@ -373,7 +373,7 @@ class ObjectRelationalMapper {
     }
 
 
-    private <E extends Searchable> List<StatementNode> generateStatementGraph(E item) {
+    private <E extends Searchable> List<StatementNode> generateStatementGraph(E item, StatementNode parent) {
         Class<? extends Searchable> eClass = item.getClass();
         List<StatementNode> statementGraph = new ArrayList<>();
         List<Method> columnGetters = getColumnGetters(eClass);
@@ -382,7 +382,7 @@ class ObjectRelationalMapper {
         HashMap<String, Object> columnValues = new HashMap<>();
         String primaryKey = "";
 
-        // generate statementnode for this item
+        // generate StatementNode for this item
         for (Method column : columnGetters) {
             Column annotation = (Column) column.getDeclaredAnnotations()[0];
             try {
@@ -398,9 +398,10 @@ class ObjectRelationalMapper {
             }
         }
 
-        // add this statement node to graph
+        // add this StatementNode to graph
         StatementNode sN = new StatementNode(eClass, item, primaryGetters.get(eClass), columnValues,
                 primaryKey, persistence);
+        if (parent != null) sN.addDependency(parent);
         statementGraph.add(sN);
 
         // recurse on children
@@ -412,12 +413,12 @@ class ObjectRelationalMapper {
                 if (attribute != null && attribute instanceof List<?>) {
                     List attributeList = ArrayList.class.cast(attribute);
                     for (int i = 0; i < attributeList.size(); i++) {
-                        statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attributeList.get(i))));
+                        statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attributeList.get(i)), sN));
                     }
                 }
                 // item is individual
                 else if (attribute != null) {
-                    statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attribute)));
+                    statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attribute), sN));
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 System.err.println(e.getMessage());

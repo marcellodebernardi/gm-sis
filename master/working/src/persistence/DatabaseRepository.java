@@ -122,20 +122,14 @@ public class DatabaseRepository implements CriterionRepository {
         }
     }
 
-
     /**
-     * Allows running a raw SQL query on the database. Should be used minimally
-     * and carefully.
+     * Gets the next ID that will be used for a row in the table specified as
+     * the argument.
+     *
+     * @param table table to check
+     * @param primaryKey column used as primary key
+     * @return next ID value that will be used
      */
-    ResultSet runSQL(String query) {
-        try {
-            return connection.prepareStatement(query).executeQuery();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
-
     int getNextID(String table, String primaryKey) {
         try {
             ResultSet result = connection
@@ -147,6 +141,19 @@ public class DatabaseRepository implements CriterionRepository {
             System.err.println(e.getMessage()
                     + "\nFailed to get MAX(" + primaryKey + ") from " + table + ".");
             return -1;
+        }
+    }
+
+    /**
+     * Allows running a raw SQL query on the database. Should be used minimally
+     * and carefully.
+     */
+    ResultSet runSQL(String query) {
+        try {
+            return connection.prepareStatement(query).executeQuery();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
         }
     }
 }

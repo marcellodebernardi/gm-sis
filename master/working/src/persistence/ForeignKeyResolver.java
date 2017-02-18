@@ -16,9 +16,8 @@ class ForeignKeyResolver {
     // database instance
     private DatabaseRepository persistence;
 
-    private ForeignKeyResolver() {
 
-    }
+    private ForeignKeyResolver() {}
 
     static ForeignKeyResolver getInstance() {
         if (instance == null) instance = new ForeignKeyResolver();
@@ -29,6 +28,14 @@ class ForeignKeyResolver {
         this.persistence = persistence;
     }
 
+
+    /** For a correctly formed statement graph stored in a list of nodes, resolves the
+     * missing foreign key dependencies and returns a list of SQL queries ready for
+     * execution.
+     *
+     * @param statementGraph statement dependency graph to resolve
+     * @return list of resolved statements
+     */
     List<String> resolveForeignKeys(List<StatementNode> statementGraph) {
         List<String> transaction = new ArrayList<>();
 

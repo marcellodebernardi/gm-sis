@@ -38,7 +38,6 @@ class StatementNode implements Comparable<StatementNode> {
         dependents = new ArrayList<>();
         unresolvedDependencies = new ArrayList<>();
         resolvedDependencies = new ArrayList<>();
-        // todo initialize dependencies
 
         resolved = false;
         complete = false;
@@ -50,6 +49,7 @@ class StatementNode implements Comparable<StatementNode> {
         this.persistence = persistence;
     }
 
+    // todo adding dependencies
     void addDependent(StatementNode dependent) {
         dependents.add(dependent);
     }
@@ -89,6 +89,7 @@ class StatementNode implements Comparable<StatementNode> {
      * @return null if not complete, SQL statement string otherwise
      */
     public String toString() {
+        // todo format string for numeric and text values (single quotes etc)
         if (!complete) {
             System.err.println("StatementNode: calling toString() on incomplete node.");
             return null;
