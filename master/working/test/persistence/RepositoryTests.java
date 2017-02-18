@@ -57,6 +57,7 @@ public class RepositoryTests {
 
     @Test
     public void testDELETETransaction() {
+        // hello
         while (true) {
             List<String> result = ObjectRelationalMapper.getInstance().toDELETETransaction(new Criterion<>(Customer.class),
                     DatabaseRepository.getInstance());
