@@ -1,5 +1,7 @@
 package logic;
 
+import domain.Searchable;
+
 import java.util.List;
 
 /**

@@ -1,4 +1,4 @@
-package logic;
+package domain;
 
 /**
  * Entities implementing Searchable are marked as capable of being searched for directly

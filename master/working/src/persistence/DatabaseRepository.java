@@ -2,7 +2,7 @@ package persistence;
 
 import logic.Criterion;
 import logic.CriterionRepository;
-import logic.Searchable;
+import domain.Searchable;
 
 import java.sql.*;
 import java.util.List;

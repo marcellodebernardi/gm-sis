@@ -1,6 +1,6 @@
 package persistence;
 
-import logic.Searchable;
+import domain.Searchable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

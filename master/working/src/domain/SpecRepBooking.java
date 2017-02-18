@@ -1,8 +1,6 @@
 package domain;
 
 
-import logic.Searchable;
-
 import java.util.Date;
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.

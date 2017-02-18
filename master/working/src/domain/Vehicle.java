@@ -1,8 +1,6 @@
 package domain;
 import java.util.*;
 
-import logic.Searchable;
-
 /**
  * @author Dillon Vaghela on 2/9/17.
  */

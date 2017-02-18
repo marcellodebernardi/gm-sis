@@ -2,6 +2,7 @@ package logic;
 
 import domain.Column;
 import domain.Reflective;
+import domain.Searchable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

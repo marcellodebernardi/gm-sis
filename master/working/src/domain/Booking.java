@@ -1,7 +1,5 @@
 package domain;
 
-import logic.Searchable;
-
 /**
  * @author Marcello De Bernardi
  * @version 0.2

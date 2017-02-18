@@ -2,7 +2,7 @@ package persistence;
 
 import domain.*;
 import logic.Criterion;
-import logic.Searchable;
+import domain.Searchable;
 import org.joda.time.DateTime;
 
 import java.lang.annotation.Annotation;
