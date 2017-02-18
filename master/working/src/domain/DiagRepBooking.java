@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableInterval;

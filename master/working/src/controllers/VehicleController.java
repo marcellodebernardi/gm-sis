@@ -1,28 +1,16 @@
 package controllers;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import logic.AuthenticationSystem;
-import logic.CriterionRepository;
 import logic.VehicleSys;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import logic.AuthenticationSystem;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
-import entities.*;
-import persistence.DatabaseRepository;
+import domain.*;
 
-import javax.xml.soap.Text;
 import java.text.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by DillonVaghela on 2/9/17.

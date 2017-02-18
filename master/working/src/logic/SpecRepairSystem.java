@@ -1,7 +1,7 @@
 package logic;
 
 
-import entities.SpecialistRepairCenter;
+import domain.SpecialistRepairCenter;
 import persistence.DatabaseRepository;
 
 import java.util.List;

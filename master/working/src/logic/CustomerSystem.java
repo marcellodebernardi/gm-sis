@@ -1,7 +1,7 @@
 package logic;
 
-import entities.Customer;
-import entities.CustomerType;
+import domain.Customer;
+import domain.CustomerType;
 
 import java.util.*;
 import static logic.CriterionOperator.*;

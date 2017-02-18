@@ -1,13 +1,11 @@
 package logic;
 
-import entities.FuelType;
-import entities.Installation;
-import entities.Vehicle;
-import entities.VehicleType;
+import domain.FuelType;
+import domain.Vehicle;
+import domain.VehicleType;
 import persistence.DatabaseRepository;
 import java.util.*;
 
-import static java.util.Collections.emptyList;
 import static logic.CriterionOperator.*;
 
 /**

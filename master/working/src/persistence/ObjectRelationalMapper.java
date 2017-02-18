@@ -1,6 +1,6 @@
 package persistence;
 
-import entities.*;
+import domain.*;
 import logic.Criterion;
 import logic.Searchable;
 import org.joda.time.DateTime;

@@ -1,18 +1,10 @@
 package logic;
 
-import entities.User;
-import entities.UserType;
+import domain.User;
+import domain.UserType;
 import persistence.DatabaseRepository;
 import static logic.CriterionOperator.*;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import logic.AuthenticationSystem;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.Parent;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

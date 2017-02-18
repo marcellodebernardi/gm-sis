@@ -6,7 +6,7 @@ import java.util.List;
  * <p>
  * <i>PersistenceInterface</i> provides an abstraction of persistence implementations. Objects
  * implementing the interface fulfill the contract of accepting Criterion objects and returning
- * business entities. An implementation of the interface is specific both to a particular entity
+ * business domain. An implementation of the interface is specific both to a particular entity
  * model as well as to a particular persistence solution.
  * </p>
  *
@@ -59,7 +59,7 @@ public interface CriterionRepository {
      * </p>
      * <p>
      * Deletion propagates downward in the entity hierarchy. Updates do not propagate, but
-     * deletion triggers updates for entities upward of the deleted entity that are one
+     * deletion triggers updates for domain upward of the deleted entity that are one
      * link away from it. Other updates must be performed manually if necessary.
      * </p>
      * <p>

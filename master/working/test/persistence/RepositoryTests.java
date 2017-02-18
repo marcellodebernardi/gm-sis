@@ -1,7 +1,7 @@
 package persistence;
 
-import entities.Customer;
-import entities.User;
+import domain.Customer;
+import domain.User;
 import logic.Criterion;
 import logic.CriterionOperator;
 import logic.CriterionRepository;

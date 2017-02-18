@@ -1,7 +1,6 @@
-package entities;
+package domain;
 import logic.Searchable;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 /**

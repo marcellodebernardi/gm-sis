@@ -1,4 +1,4 @@
-package entities;
+package domain;
 
 /**
  * @author Marcello De Bernardi

@@ -1,6 +1,6 @@
 package logic;
 
-import entities.PartAbstraction;
+import domain.PartAbstraction;
 import persistence.DatabaseRepository;
 import static logic.CriterionOperator.*;
 

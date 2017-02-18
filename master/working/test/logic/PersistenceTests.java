@@ -1,8 +1,6 @@
 package logic;
 
-import entities.*;
-import logic.Criterion;
-import logic.CriterionRepository;
+import domain.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
