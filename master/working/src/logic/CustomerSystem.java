@@ -36,13 +36,13 @@ public class CustomerSystem {
 
     public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer add = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
+        Customer add = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
         return persistence.commitItem(add);
     }
 
     public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
-        Customer edit = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null, null);
+        Customer edit = new Customer(customerID, customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
         return persistence.commitItem(edit);
     }
 

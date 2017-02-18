@@ -1,6 +1,7 @@
 package entities;
 import logic.Searchable;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 /**
@@ -19,7 +20,6 @@ public class Customer implements Searchable
     private CustomerType customerType;
 
     // hierarchical ownership links
-    private List<DiagRepBooking> bookings;
     private List<Vehicle> vehicles;
 
     @Reflective
@@ -31,8 +31,6 @@ public class Customer implements Searchable
                     @Column(name = "customerPhone") String customerPhone,
                     @Column(name = "customerEmail") String customerEmail,
                     @Column(name = "customerType") CustomerType customerType,
-                    @TableReference(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
-                                List<DiagRepBooking> bookings,
                     @TableReference(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
                                 List<Vehicle> vehicles) {
         this.customerID = customerID;
@@ -43,7 +41,6 @@ public class Customer implements Searchable
         this.customerPhone = customerPhone;
         this.customerEmail = customerEmail;
         this.customerType = customerType;
-        this.bookings = bookings;
         this.vehicles = vehicles;
     }
 
@@ -140,12 +137,8 @@ public class Customer implements Searchable
         this.vehicles = vehicles;
     }
 
-    @TableReference(baseType = DiagRepBooking.class, specTypes = DiagRepBooking.class, key = "customerID")
     public List<DiagRepBooking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<DiagRepBooking> bookings) {
-        this.bookings = bookings;
+        // todo implement with lazy loading
+        throw null;
     }
 }

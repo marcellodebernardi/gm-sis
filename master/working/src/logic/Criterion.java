@@ -288,8 +288,8 @@ public class Criterion<E extends Searchable> {
 
     // returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {
-        // System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
-        //        + "attribute " + attribute + ", value " + value);
+        System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
+                + "attribute " + attribute + ", value " + value);
 
         // get argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
