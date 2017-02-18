@@ -116,7 +116,7 @@ DatabaseRepository db = DatabaseRepository.getInstance();
                 Vehicle vehicle = vehicles.get(0);
                 SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
                 VehicleRepair vehicleRepair = new VehicleRepair(specialistRepairCenter.getSpcID(),null,null,20,-1,vehicle.getRegNumber());
-                db.commitItem( vehicleRepair);
+                db.commitItem(vehicleRepair);
             }
             else
             {

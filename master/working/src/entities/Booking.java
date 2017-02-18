@@ -22,16 +22,14 @@ public abstract class Booking implements Searchable {
      * Full constructor which allows setting all fields manually.
      *
      * @param bookingID        unique ID of this booking
-     * @param customerID       ID of the associated customer
      * @param vehicleRegNumber unique registration number of vehicle
      * @param description      description of booking as entered by some user
      * @param bill             the associated bill
      * @param mechanicID       the ID of the associated mechanic
      */
-    public Booking(int bookingID, int customerID, String vehicleRegNumber, String description,
+    public Booking(int bookingID, String vehicleRegNumber, String description,
                    Bill bill, int mechanicID) {
         this.bookingID = bookingID;
-        this.customerID = customerID;
         this.vehicleRegNumber = vehicleRegNumber;
         this.description = description;
         this.bill = bill;

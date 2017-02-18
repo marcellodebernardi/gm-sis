@@ -14,4 +14,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Column {
     String name();
     boolean primary() default false;
+    boolean foreign() default false;
 }

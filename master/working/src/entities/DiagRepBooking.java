@@ -30,7 +30,6 @@ public class DiagRepBooking extends Booking {
      * </p>
      *
      * @param bookingID         unique ID of this booking
-     * @param customerID        ID of the associated customer
      * @param vehicleRegNumber  unique registration number of vehicle
      * @param description       description of booking as entered by some user
      * @param billAmount        the associated bill's cost
@@ -44,7 +43,6 @@ public class DiagRepBooking extends Booking {
      */
     @Reflective
     public DiagRepBooking(@Column(name = "bookingID", primary = true) int bookingID,
-                          @Column(name = "customerID") int customerID,
                           @Column(name = "vehicleRegNumber") String vehicleRegNumber,
                           @Column(name = "description") String description,
                           @Column(name = "billAmount") double billAmount,
@@ -56,7 +54,7 @@ public class DiagRepBooking extends Booking {
                           @Column(name = "repairEnd") DateTime repairEnd,
                           @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                   SpecRepBooking specRepBooking) {
-        super(bookingID, customerID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
+        super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
         this.diagnosisInterval = new MutableInterval(diagnosisStart, diagnosisEnd);
@@ -76,17 +74,6 @@ public class DiagRepBooking extends Booking {
     @Override
     public int getBookingID() {
         return super.getBookingID();
-    }
-
-    /**
-     * Get unique ID of associated customer.
-     *
-     * @return customer ID
-     */
-    @Column(name = "customerID")
-    @Override
-    public int getCustomerID() {
-        return super.getCustomerID();
     }
 
     /**
