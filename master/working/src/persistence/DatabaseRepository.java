@@ -85,6 +85,7 @@ public class DatabaseRepository implements CriterionRepository {
             // generate and queue statements for transaction
             List<String> statements = mapper.toINSERTTransaction(item);
             for (String s : statements) {
+                System.out.println("Executing " + s);
                 connection.prepareStatement(s).executeUpdate();
             }
 

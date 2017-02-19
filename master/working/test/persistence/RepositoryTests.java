@@ -1,7 +1,6 @@
 package persistence;
 
-import domain.Customer;
-import domain.User;
+import domain.*;
 import logic.Criterion;
 import logic.CriterionOperator;
 import logic.CriterionRepository;
@@ -11,6 +10,7 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -21,14 +21,23 @@ import static org.junit.Assert.*;
  * @since 0.1
  */
 public class RepositoryTests {
-
     /**
-     * Tests overall creation of DatabaseRepository. Failure may be due to a variety
-     * of reasons.
+     * Tests instantiation of all database singletons. Fails if the process takes longer
+     * than 0.4
      */
     @Test
-    public void testRepositoryCreation() {
+    public void testRepositoryCreationPerformance() {
+        long startTime = System.nanoTime();
         CriterionRepository database = DatabaseRepository.getInstance();
+        long endTime = System.nanoTime();
+
+        try {
+            assertTrue((endTime - startTime)/1000 < 400000);
+        }
+        catch (AssertionError e) {
+            e.printStackTrace();
+            System.err.println("Database instantiation took longer than 0.4 seconds.");
+        }
     }
 
     /**
@@ -50,22 +59,68 @@ public class RepositoryTests {
     }
 
     @Test
-    public void testSELECTQuery() {
-        System.out.println(ObjectRelationalMapper.getInstance().toSELECTQuery(new Criterion<>(User.class, "userID",
-                CriterionOperator.EqualTo, "foo").and("password", CriterionOperator.EqualTo, "bar")));
+    public void testDatabaseSearching() {
+        // query for users, customers, vehicles, SRCs and part abstractions
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(User.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(SpecialistRepairCenter.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartAbstraction.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartOccurrence.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Installation.class)));
+        System.out.println(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(DiagRepBooking.class)));
     }
 
     @Test
-    public void testDELETETransaction() {
-        // hello
-        while (true) {
-            List<String> result = ObjectRelationalMapper.getInstance().toDELETETransaction(new Criterion<>(Customer.class),
-                    DatabaseRepository.getInstance());
+    public void testDatabaseInsertion() {
+        DatabaseRepository.getInstance().commitItem(new User(
+                "55555",
+                "password",
+                "Dillon",
+                "Vaghela",
+                UserType.NORMAL));
 
-            for (String s : result) {
-                System.out.println(s);
-            }
-        }
+        List<User> result = DatabaseRepository
+                .getInstance()
+                .getByCriteria(new Criterion<>(
+                                User.class,
+                                "userID",
+                                CriterionOperator.EqualTo,
+                                "55555"));
+
+        DatabaseRepository.getInstance().commitItem(new Vehicle(
+                "TEST REG", 1, VehicleType.Car, "TestModel", "QMUL Car company",
+                69.5, FuelType.diesel, "red", 100, new Date(), new Date(),
+                false, null, null, null, null));
+
+        List<Vehicle> vehicle = DatabaseRepository
+                .getInstance()
+                .getByCriteria(new Criterion<>(
+                        Vehicle.class,
+                        "regNumber",
+                        CriterionOperator.EqualTo,
+                        "TEST REG"));
+
+
+        assertTrue(result.size() != 0 && vehicle.size() != 0);
+    }
+
+    @Test
+    public void testDatabaseDeletion() {
+        DatabaseRepository.getInstance().deleteItem(new Criterion<>(
+                User.class,
+                "userID",
+                CriterionOperator.EqualTo,
+                "55555"));
+        List<User> result = DatabaseRepository
+                .getInstance()
+                .getByCriteria(new Criterion<>(
+                        User.class,
+                        "userID",
+                        CriterionOperator.EqualTo,
+                        "55555"
+                ));
+        assertTrue(result.size() == 0);
     }
 
     @Test
@@ -73,6 +128,8 @@ public class RepositoryTests {
         while (true) {
             Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
             List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
+
+            System.out.println(result);
         }
     }
 

@@ -1,6 +1,8 @@
 package persistence;
 
 import domain.Searchable;
+import domain.User;
+import domain.Vehicle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -103,15 +105,22 @@ class StatementNode implements Comparable<StatementNode> {
             keys = keys.replace("[", "(");
             keys = keys.replace("]", ")");
 
-            String valueString = "";
+            String values = "";
             String delim = "";
             for (Object value : solvedValues.values()) {
-                valueString += numericTypes.contains(value.getClass()) ?
+                values += numericTypes.contains(value.getClass()) ?
                         delim + value : delim + "'" + value + "'";
                 delim = ", ";
             }
+            values = "(" + values + ")";
 
-            return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + valueString + ";";
+            // handle user and vehicle special cases
+            if (table.equals(User.class) || table.equals(Vehicle.class)) {
+                keys = keys.replace("(", "(" + primaryKey + ", ");
+                values = values.replace("(", "('" + primaryKeyValue + "', ");
+            }
+
+            return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + values + ";";
         }
         else {
             String newInfo = "";
@@ -147,12 +156,16 @@ class StatementNode implements Comparable<StatementNode> {
      */
     Object getPrimaryKeyValue() {
         if (resolved) return primaryKeyValue;
+
         try {
             primaryKeyValue = primaryGetter.invoke(object);
             // has no primary key: INSERT
             if (primaryKeyValue == null) {
                 statementType = StatementType.INSERT;
                 primaryKeyValue = persistence.getNextID(table.getSimpleName(), primaryKey);
+            }
+            else if (table.equals(User.class) || table.equals(Vehicle.class)) {
+                statementType = StatementType.INSERT;
             }
             // has primary key: UPDATE
             else statementType = StatementType.UPDATE;

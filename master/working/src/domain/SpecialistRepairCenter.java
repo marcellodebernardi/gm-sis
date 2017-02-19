@@ -43,7 +43,8 @@ public class SpecialistRepairCenter implements Searchable {
                                   @Column(name = "address") String address,
                                   @Column(name = "phone") String phone,
                                   @Column(name = "email") String email,
-                                  @TableReference(baseType = SpecRepBooking.class, specTypes = SpecRepBooking.class, key = "spcID")
+                                  @TableReference(baseType = SpecRepBooking.class,
+                                          specTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
                                           List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
