@@ -2,12 +2,11 @@ package controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.BooleanStringConverter;
-import javafx.util.converter.DateStringConverter;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.util.StringConverter;
+import javafx.util.converter.*;
 import logic.VehicleSys;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +18,8 @@ import java.text.*;
 
 import java.util.Date;
 import java.util.List;
+
+import static javafx.scene.control.cell.ComboBoxTableCell.forTableColumn;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -46,11 +47,11 @@ public class VehicleController {
     public TableView<Vehicle> searchTable;
     public TableColumn<Vehicle, String> tReg;
     public TableColumn<Vehicle, Integer> tCID;
-    public TableColumn<Vehicle, String> tVT;
+    public TableColumn<Vehicle, VehicleType> tVT;
     public TableColumn<Vehicle, String> tMod;
     public TableColumn<Vehicle, String> tManu;
     public TableColumn<Vehicle, Double> tEs;
-    public TableColumn<Vehicle, String> tFT;
+    public TableColumn<Vehicle, FuelType> tFT;
     public TableColumn<Vehicle, String> tCol;
     public TableColumn<Vehicle, Integer> tMil;
     public TableColumn<Vehicle, Date> tMOT;
@@ -259,7 +260,7 @@ public class VehicleController {
     public void searchVehicle()
     {
         List<Vehicle> arrayList = vSys.getVehiclesList();
-
+        DisplayTable(arrayList);
     }
 
     public void searchVehicleA()
@@ -271,6 +272,7 @@ public class VehicleController {
 
     public void DisplayTable(List<Vehicle> arrayList)
     {
+        try {
         searchTable.setDisable(false);
         tableEntries.removeAll(tableEntries);
         for(int i =0; i<arrayList.size(); i++){
@@ -278,52 +280,171 @@ public class VehicleController {
             tableEntries.add(arrayList.get(i));
         }
 
-        tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tReg"));
         tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
+        tReg.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setRegNumber(event.getNewValue());
+            }
+        });
 
         tCID.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tCID"));
         tCID.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter()));
+        tCID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Integer> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setCustomerID(event.getNewValue());
+            }
+        });
 
-        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tVT"));
-        tVT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("tVT"));
+        tVT.setCellFactory(TextFieldTableCell.<Vehicle, VehicleType>forTableColumn(new StringConverter<VehicleType>() {
+            @Override
+            public String toString(VehicleType object) {
+                return null;
+            }
+
+            @Override
+            public VehicleType fromString(String string) {
+                return null;
+            }
+        }));
+        tVT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, VehicleType>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, VehicleType> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleType(event.getNewValue());
+            }
+        });
 
         tMod.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tMod"));
         tMod.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tMod.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setModel(event.getNewValue());
+            }
+        });
+
 
         tManu.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tManu"));
         tManu.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tManu.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setManufacturer(event.getNewValue());
+            }
+        });
 
         tEs.setCellValueFactory(new PropertyValueFactory<Vehicle, Double>("tManu"));
         tEs.setCellFactory(TextFieldTableCell.<Vehicle, Double>forTableColumn( new DoubleStringConverter()));
+        tEs.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Double>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Double> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineSize(event.getNewValue());
+            }
+        });
 
-        tFT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tFT"));
-        tFT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tFT.setCellValueFactory(new PropertyValueFactory<Vehicle, FuelType>("tFT"));
+        tFT.setCellFactory(TextFieldTableCell.<Vehicle, FuelType>forTableColumn(new StringConverter<FuelType>() {
+            @Override
+            public String toString(FuelType object) {
+                return null;
+            }
+
+            @Override
+            public FuelType fromString(String string) {
+                return null;
+            }
+        }));
+        tFT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, FuelType>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, FuelType> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setFuelType(event.getNewValue());
+            }
+        });
+
 
         tCol.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tCol"));
         tCol.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setColour(event.getNewValue());
+            }
+        });
 
         tMil.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tMil"));
         tMil.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter() ));
+        tMil.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Integer> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setMileage(event.getNewValue());
+            }
+        });
 
         tMOT.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
         tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+        tMOT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setRenewalDateMot(event.getNewValue());
+            }
+        });
 
         tDLS.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
         tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+        tDLS.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setDateLastServiced(event.getNewValue());
+            }
+        });
 
         tW.setCellValueFactory(new PropertyValueFactory<Vehicle, Boolean>("tW"));
         tW.setCellFactory(TextFieldTableCell.<Vehicle, Boolean>forTableColumn(new BooleanStringConverter()));
+        tW.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Boolean>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Boolean> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setCoveredByWarranty(event.getNewValue());
+            }
+        });
 
         tWn.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tWn"));
         tWn.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tWn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setWarrantyName(event.getNewValue());
+            }
+        });
 
         tA.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tA"));
         tA.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+        tA.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setWarrantyCompAddress(event.getNewValue());
+            }
+        });
 
         tD.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tD"));
         tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+        tD.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setWarrantyExpirationDate(event.getNewValue());
+            }
+        });
 
         searchTable.setItems(tableEntries);
+        }
+        catch (Exception e)
+        {
+            System.out.println("not working");
+            e.printStackTrace(  );
+            System.out.println(e);
+        }
+
     }
 
     public void hiddenWarranty()
