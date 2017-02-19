@@ -15,12 +15,12 @@ import java.util.List;
 public class AuthenticationSystem {
 
     private static AuthenticationSystem instance;
-    private CriterionRepository persistence = DatabaseRepository.getInstance();
+    private CriterionRepository persistence;
     private UserType loginS;
 
 
     private AuthenticationSystem() {
-
+        persistence = DatabaseRepository.getInstance();
     }
 
     // currently only accepted userID is "00000", password "password"

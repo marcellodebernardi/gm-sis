@@ -14,8 +14,8 @@ import persistence.DatabaseRepository;
  * @since 0.1
  */
 public class Main extends Application {
-    private static Scene login;
-    private static Pane mainPane;
+    public static Scene login;
+    public static Pane mainPane;
     private static DatabaseRepository persistence; // todo inject on modules
 
     public static void main (String[] args) {
