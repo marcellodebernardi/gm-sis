@@ -98,6 +98,18 @@ public class DiagRepBooking extends Booking {
     }
 
     /**
+     * Associate the booking to a different vehicle, by giving the registration number
+     * of the new vehicle. Note that the list of bookings in the corresponding vehicles must also
+     * be updated.
+     *
+     * @param vehicleRegNumber unique registration number of new vehicle to associate
+     */
+    @Override
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        super.setVehicleRegNumber(vehicleRegNumber);
+    }
+
+    /**
      * Get description of booking as entered by some user.
      *
      * @return booking description
@@ -106,6 +118,16 @@ public class DiagRepBooking extends Booking {
     @Override
     public String getDescription() {
         return super.getDescription();
+    }
+
+    /**
+     * Sets the description of the booking.
+     *
+     * @param description new description
+     */
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
     }
 
     /**
@@ -186,12 +208,29 @@ public class DiagRepBooking extends Booking {
     }
 
     /**
+     * Associates a new bill to the booking.
+     *
+     * @param bill the new bill
+     */
+    @Override
+    public void setBill(Bill bill) {
+        super.setBill(bill);
+    }
+
+    /**
      * Returns the date on which the diagnosis check is to be carried out.
      *
      * @return date of diagnosis check
      */
     public MutableInterval getDiagnosisInterval() {
         return diagnosisInterval;
+    }
+
+    /**
+     * Sets the diagnosis date.
+     */
+    public void setDiagnosisInterval(MutableInterval diagnosisInterval) {
+        this.diagnosisInterval = diagnosisInterval;
     }
 
     /**
@@ -213,58 +252,6 @@ public class DiagRepBooking extends Booking {
         return specRepBooking;
     }
 
-
-
-    /**
-     * Set the ID of the associated customer. Note that the reference variable in the
-     * corresponding Customer object must also reflect any changes.
-     *
-     * @param customerID ID of new customer
-     */
-    @Override
-    public void setCustomerID(int customerID) {
-        super.setCustomerID(customerID);
-    }
-
-    /**
-     * Associate the booking to a different vehicle, by giving the registration number
-     * of the new vehicle. Note that the list of bookings in the corresponding vehicles must also
-     * be updated.
-     *
-     * @param vehicleRegNumber unique registration number of new vehicle to associate
-     */
-    @Override
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        super.setVehicleRegNumber(vehicleRegNumber);
-    }
-
-    /**
-     * Sets the description of the booking.
-     *
-     * @param description new description
-     */
-    @Override
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    /**
-     * Associates a new bill to the booking.
-     *
-     * @param bill the new bill
-     */
-    @Override
-    public void setBill(Bill bill) {
-        super.setBill(bill);
-    }
-
-    /**
-     * Sets the diagnosis date.
-     */
-    public void setDiagnosisInterval(MutableInterval diagnosisInterval) {
-        this.diagnosisInterval = diagnosisInterval;
-    }
-
     /**
      * Sets the start time of the repair session.
      *
@@ -274,5 +261,5 @@ public class DiagRepBooking extends Booking {
         this.repairInterval = repairInterval;
     }
 
-    // todo methods for manipulating parts connected to repair
+    // todo part occurrences using dependency entanglement
 }

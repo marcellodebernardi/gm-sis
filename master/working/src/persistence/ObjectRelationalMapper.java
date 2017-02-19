@@ -193,14 +193,14 @@ class ObjectRelationalMapper {
         // obtain reflection data
         try {
             constructorArgumentTypes = new Class<?>[0];
-            for (Constructor<?> c : eClass.getConstructors()) {
+            for (Constructor<?> c : eClass.getDeclaredConstructors()) {
                 if (c.getDeclaredAnnotations().length != 0
                         && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                     constructorArgumentTypes = c.getParameterTypes();
                     break;
                 }
             }
-            constructor = eClass.getConstructor(constructorArgumentTypes);
+            constructor = eClass.getDeclaredConstructor(constructorArgumentTypes);
             constructorAnnotations = constructor.getParameterAnnotations();
         } catch (NoSuchMethodException e) {
             System.err.print(e.getMessage() + " - Failed to obtain constructor and parameters.");
@@ -305,7 +305,9 @@ class ObjectRelationalMapper {
                         System.out.println("Annotation type not detected");
                     }
                 }
+                constructor.setAccessible(true);
                 returnList.add(constructor.newInstance(initArgs));
+                constructor.setAccessible(false);
             }
             return returnList;
         } catch (SQLException e) {

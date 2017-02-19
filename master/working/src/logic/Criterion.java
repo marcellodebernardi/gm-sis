@@ -294,8 +294,9 @@ public class Criterion<E extends Searchable> {
 
         // get argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
-        for (Constructor<?> c : eClass.getConstructors()) {
-            if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+        for (Constructor<?> c : eClass.getDeclaredConstructors()) {
+            if (c.getDeclaredAnnotations().length != 0
+                    && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                 constructorArgumentTypes = c.getParameterTypes();
                 // System.out.println("@Reflective constructor identified.");
                 break;
@@ -306,17 +307,17 @@ public class Criterion<E extends Searchable> {
         // 1. a parameter is annotated as Column(name = "attribute")
         // 2. the same parameter is of the same class as value
         try {
-            Constructor<E> constructor = eClass.getConstructor(constructorArgumentTypes);
+            Constructor<E> constructor = eClass.getDeclaredConstructor(constructorArgumentTypes);
             Annotation[][] annotations = constructor.getParameterAnnotations();
 
             for (int i = 0; i < annotations.length; i++) {
                 if (annotations[i][0].annotationType().equals(Column.class)) {
                     Column metadata = (Column)annotations[i][0];
                     if (metadata.name().equals(attribute)) {
-                        // System.out.println(i + "th constructor parameter " + metadata.name()
-                        //        + " (" + constructorArgumentTypes[i].getSimpleName()
-                        //        + ") matches query parameter " + attribute
-                        //        + " (" + value.getClass().getSimpleName() + ")");
+                        System.out.println(i + "th constructor parameter " + metadata.name()
+                                + " (" + constructorArgumentTypes[i].getSimpleName()
+                                + ") matches query parameter " + attribute
+                                + " (" + value.getClass().getSimpleName() + ")");
                         return constructorArgumentTypes[i].isPrimitive() ?
                                 constructorArgumentTypes[i].toString().substring(0,1)
                                         .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))

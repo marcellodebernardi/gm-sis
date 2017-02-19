@@ -10,7 +10,6 @@ public abstract class Booking implements Searchable {
     private String description;
 
     // inverse hierarchical database links
-    private int customerID;
     private String vehicleRegNumber;
     private Bill bill;
     private int mechanicID;
@@ -42,15 +41,6 @@ public abstract class Booking implements Searchable {
      */
     public int getBookingID() {
         return bookingID;
-    }
-
-    /**
-     * Get unique ID of associated customer.
-     *
-     * @return customer ID
-     */
-    public int getCustomerID() {
-        return customerID;
     }
 
     /**
@@ -87,16 +77,6 @@ public abstract class Booking implements Searchable {
      */
     public int getMechanicID() {
         return mechanicID;
-    }
-
-    /**
-     * Set the ID of the associated customer. Note that the reference variable in the
-     * corresponding Customer object must also reflect any changes.
-     *
-     * @param customerID ID of new customer
-     */
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
     }
 
     /**

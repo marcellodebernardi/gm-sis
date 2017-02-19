@@ -73,7 +73,7 @@ public class PersistenceTests {
         if (bookings.get(0).getSpecRepBooking() == null) System.out.println("No spc booking");
 
         for (DiagRepBooking b : bookings) {
-            System.out.println(b.getBookingID() + ", " + b.getCustomerID() + ", " + b.getVehicleRegNumber()
+            System.out.println(b.getBookingID() + ", " + ", " + b.getVehicleRegNumber()
                     + ", " + b.getRepairInterval() + ", spc " + b.getSpecRepBooking().getSpcRepID());
         }
     }
