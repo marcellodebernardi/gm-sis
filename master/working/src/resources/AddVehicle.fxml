@@ -19,22 +19,22 @@
                         <TextField fx:id="mil" layoutX="419.0" layoutY="9.0" promptText="Enter Mileage" />
                         <TextField fx:id="wCompAddress" layoutX="420.0" layoutY="148.0" promptText="Enter Address" />
                         <TextField fx:id="col" layoutX="97.0" layoutY="202.0" promptText="Enter Colour" />
-                        <Label layoutX="31.0" layoutY="14.0" text="reg" />
+                        <Label layoutX="10.0" layoutY="14.0" text="Vehicle Reg" />
                         <Label layoutX="9.0" layoutY="45.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
-                        <Label layoutX="8.0" layoutY="72.0" text="VehicleType" />
-                        <Label layoutX="23.0" layoutY="99.0" text="model" />
-                        <Label layoutX="6.0" layoutY="126.0" text="manufacturer" />
-                        <Label layoutX="18.0" layoutY="153.0" text="engineSize" />
-                        <Label layoutX="25.0" layoutY="180.0" text="fuelType" />
-                        <Label layoutX="28.0" layoutY="207.0" text="colour" />
-                        <Label layoutX="324.0" layoutY="14.0" text="mileage" />
-                        <Label layoutX="302.0" layoutY="45.0" text="renewalDateMot" />
-                        <Label layoutX="299.0" layoutY="72.0" text="dateLastServiced" />
-                        <Label layoutX="292.0" layoutY="100.0" text="coveredByWarranty" />
-                        <Label layoutX="308.0" layoutY="126.0" text="warrantyName" />
-                        <Label layoutX="278.0" layoutY="154.0" text="warrantyCompAddress" />
-                        <Label layoutX="276.0" layoutY="180.0" text="warrantyExpirationDate" />
-                        <Button fx:id="addV" layoutX="363.0" layoutY="202.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
+                        <Label layoutX="8.0" layoutY="72.0" text="Vehicle Type" />
+                        <Label layoutX="23.0" layoutY="99.0" text="Model" />
+                        <Label layoutX="6.0" layoutY="126.0" text="Manufacturer" />
+                        <Label layoutX="18.0" layoutY="153.0" text="Engine Size" />
+                        <Label layoutX="25.0" layoutY="180.0" text="Fuel Type" />
+                        <Label layoutX="28.0" layoutY="207.0" text="Colour" />
+                        <Label layoutX="324.0" layoutY="14.0" text="Mileage" />
+                        <Label layoutX="302.0" layoutY="45.0" text="MOT renewal Date" />
+                        <Label layoutX="299.0" layoutY="72.0" text="Date Last Serviced" />
+                        <Label layoutX="316.0" layoutY="100.0" text="Warranty?" />
+                        <Label layoutX="327.0" layoutY="126.0" text="Name" />
+                        <Label layoutX="292.0" layoutY="145.0" prefHeight="33.0" prefWidth="116.0" text="Company Address" />
+                        <Label layoutX="300.0" layoutY="180.0" prefHeight="17.0" prefWidth="94.0" text="Expiration Date" />
+                        <Button fx:id="addV" layoutX="363.0" layoutY="202.0" mnemonicParsing="false" onAction="#addEditVehicle" text="Add" />
                         <TextField fx:id="rDateMot" layoutX="420.0" layoutY="40.0" promptText="Enter renewal Date Mot" />
                         <TextField fx:id="dLastServiced" layoutX="419.0" layoutY="67.0" promptText="Enter Date" />
                         <TextField fx:id="wExpirationDate" layoutX="420.0" layoutY="175.0" promptText="Enter Date" />
@@ -55,7 +55,7 @@
                               </FXCollections>
                            </items>
                         </ComboBox>
-                        <ComboBox fx:id="cByWarranty" layoutX="420.0" layoutY="95.0" prefHeight="27.0" prefWidth="167.0" promptText="Pick True/False">
+                        <ComboBox fx:id="cByWarranty" layoutX="420.0" layoutY="95.0" onAction="#hiddenWarranty" prefHeight="27.0" prefWidth="167.0" promptText="Pick True/False">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
                                         <String fx:value="True" />

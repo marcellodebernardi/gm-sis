@@ -114,7 +114,7 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="600.0">
                           <items>
-                            <Button fx:id="addPartBtn" mnemonicParsing="false" text="Add part" />
+                            <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#PartMenu" text="Add part" />
                           </items>
                         </ToolBar>
                      </children>

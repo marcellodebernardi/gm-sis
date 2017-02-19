@@ -23,8 +23,8 @@ public class VehicleSys {
     }
 
     public List<Vehicle> getVehiclesList(){
-        ArrayList<Vehicle> arrayList = new ArrayList<Vehicle>();
-        return arrayList;
+        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class));
+        return results;
     }
 
     public Vehicle searchVehicle(String regNumber) {
@@ -36,10 +36,10 @@ public class VehicleSys {
 
 
 
-    public boolean addVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
+    public boolean addEditVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
-        Vehicle add = new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate, null);
-        boolean result = persistence.commitItem(add);
+        Vehicle addEdit = new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate, null);
+        boolean result = persistence.commitItem(addEdit);
         return result;
     }
 
@@ -47,12 +47,6 @@ public class VehicleSys {
         return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
     }
 
-    public boolean editVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate){
-        //edit Vehicle
-
-        return persistence.commitItem(new Vehicle(regNumber, customerID, vehicleType, model, manufacturer, engineSize, fuelType, colour, mileage, renewalDateMot, dateLastServiced, coveredByWarranty, warrantyName, warrantyCompAddress, warrantyExpirationDate, null ));
-
-    }
 
     public static VehicleSys getInstance() {
         if (instance == null) instance = new VehicleSys();

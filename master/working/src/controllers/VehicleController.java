@@ -1,5 +1,13 @@
 package controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.BooleanStringConverter;
+import javafx.util.converter.DateStringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import logic.VehicleSys;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -18,7 +26,6 @@ import java.util.List;
 public class VehicleController {
 
     private VehicleSys vSys = VehicleSys.getInstance();
-    public TextField vReg;
     public TextField reg;
     public TextField cID;
     public ComboBox vType = new ComboBox();
@@ -35,57 +42,83 @@ public class VehicleController {
     public TextField wCompAddress;
     public TextField wExpirationDate;
     public Button editV;
-    public TextField tVReg;
-    @FXML
-    public TextField eVR;
-    public TextField eCID;
-    public ComboBox eVT;
-    public TextField eModel;
-    public TextField eM;
-    public TextField eES;
-    public ComboBox eFT;
-    public TextField eC;
-    public TextField eMi;
-    public TextField eRDM;
-    public TextField eDLS;
-    public ComboBox eCBW;
-    public TextField eWN;
-    public TextField eWCA;
-    public TextField eWED;
-    public ComboBox sCBW;
-    public TextField sWN;
-    public TextField sWCA;
-    public TextField sWED;
+    public TextField eReg;
+    public TableView<Vehicle> searchTable;
+    public TableColumn<Vehicle, String> tReg;
+    public TableColumn<Vehicle, Integer> tCID;
+    public TableColumn<Vehicle, String> tVT;
+    public TableColumn<Vehicle, String> tMod;
+    public TableColumn<Vehicle, String> tManu;
+    public TableColumn<Vehicle, Double> tEs;
+    public TableColumn<Vehicle, String> tFT;
+    public TableColumn<Vehicle, String> tCol;
+    public TableColumn<Vehicle, Integer> tMil;
+    public TableColumn<Vehicle, Date> tMOT;
+    public TableColumn<Vehicle, Date> tDLS;
+    public TableColumn<Vehicle, Boolean> tW;
+    public TableColumn<Vehicle, String> tWn;
+    public TableColumn<Vehicle, String> tA;
+    public TableColumn<Vehicle, Date> tD;
+    final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
 
-
-
-    public VehicleController()
+    public void showAlert(String message)
     {
-
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Message");
+        alert.setHeaderText(message);
+        alert.showAndWait();
     }
 
-
-
-    public void addVehicle()
+    public boolean showAlertC(String message)
     {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkFields()
+    {
+        boolean check = false;
+        if ((!reg.getText().equals("")) && (!cID.getText().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
+            check = true;
+            if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
+                if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getText().equals("")) {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
+
+    public void addEditVehicle()
+    {
+        String addOrEdit;
+        if (eReg != null)
+        {
+            addOrEdit = "edit";
+            // true is edit
+        }
+        else
+        {
+            addOrEdit = "add";
+            // false is add
+        }
         try
         {
-            boolean check = false;
-            if ((!reg.getText().equals("")) && (!cID.getText().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals("")))
-            {
-                check = true;
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True"))
-                {
-                    if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getText().equals(""))
-                    {
-                        check = false;
-                    }
-                }
+            boolean check = checkFields();
                 if (check) {
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                     Date rdm = format.parse(rDateMot.getText());
                     Date dls = format.parse(dLastServiced.getText());
-                    Date wed = format.parse(wExpirationDate.getText());
+                    Date wed = new Date();
+                    if ((!wExpirationDate.getText().equals(""))){
+                    wed = format.parse(wExpirationDate.getText()); }
                     VehicleType vT;
                     if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
                         vT = VehicleType.Car;
@@ -106,25 +139,24 @@ public class VehicleController {
                     } else {
                         W = false;
                     }
-
-                    boolean checker = vSys.addVehicle(reg.getText(), Integer.parseInt(cID.getText()), vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Message");
-                    alert.setHeaderText("Vehicle Added: " + checker);
-                    alert.showAndWait();
-                    Stage addStage =   (Stage) cByWarranty.getScene().getWindow();
-                    addStage.close();
+                    boolean add = showAlertC("Are you sure you want to " + addOrEdit +" this Vehicle, have you checked the vehicle details?");
+                    if (add) {
+                        boolean checker = vSys.addEditVehicle(reg.getText(), Integer.parseInt(cID.getText()), vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                        showAlert("vehicle "+ addOrEdit+": " + Boolean.toString(checker));
+                        if (checker) {
+                            Stage addStage = (Stage) cByWarranty.getScene().getWindow();
+                            addStage.close();
+                        }
+                    }
                 }
-            }
-            if (!check) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields required are not complete!");
-                alert.showAndWait();
+
+            else  {
+                showAlert("Can't " + addOrEdit +" as all fields required are incomplete");
             }
         }
         catch (Exception e)
         {
+            System.out.println("Vehicle " + addOrEdit +" error");
             e.printStackTrace(  );
         }
     }
@@ -133,131 +165,95 @@ public class VehicleController {
     {
         try
         {
-            boolean check = vSys.deleteVehicle( vReg.getText());
+            if (reg.getText().equals(""))
+            {
+                showAlert("No Vehicle entered to delete");
+                return;
+            }
+            if ((!showAlertC("Sure you want to delete this Vehicle")))
+            {
+                return;
+            }
+            boolean check = vSys.deleteVehicle( reg.getText());
             if (check)
             {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("success");
-                alert.setHeaderText("vehicle deleted");
-                alert.showAndWait();
+                showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
             }
             else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Cant find Reg Plate");
-            alert.showAndWait(); }
+                showAlert("Cant find Reg Plate");
+            }
         }
         catch (Exception e)
         {
+            System.out.println("Vehicle delete error");
             e.printStackTrace(  );
         }
     }
 
     @FXML
-    public void VehicleEditB() throws Exception {
+    public void VehicleEditS() throws Exception {
         try{
-            Vehicle vehicle = vSys.searchVehicle(tVReg.getText());
+            Vehicle vehicle = vSys.searchVehicle(eReg.getText());
             if (vehicle == null)
             {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Registration Number invalid");
-                alert.showAndWait();
+                showAlert("Registration Number invalid");
             }
             else {
+                showAlert("Vehicle Found!");
                 setVehicleDets(vehicle);
             }
         }
         catch (Exception e)
         {
-            System.out.println("cant open a");
+            System.out.println("Vehicle editSearch error");
             System.out.println(e);
         }
 
     }
 
-    public void editVehicle()
-    {
-        try
-        {
-            boolean check = false;
-            if ((!eVR.getText().equals("")) && (!eCID.getText().equals("")) && (!eVT.getSelectionModel().getSelectedItem().toString().equals("")) && (!eModel.getText().equals("")) && (!eM.getText().equals("")) && (!eSize.getText().equals("")) && (!eFT.getSelectionModel().getSelectedItem().toString().equals("")) && (!eC.getText().equals("")) && (!eMi.getText().equals("")) && (!eRDM.getText().equals("")) && (!eDLS.getText().equals("")) && (!eCBW.getSelectionModel().getSelectedItem().toString().equals("")))
-            {
-                check = true;
-                if (eCBW.getSelectionModel().getSelectedItem().toString().equals("True"))
-                {
-                    if (eWN.getText().equals("") || eWCA.getText().equals("") || eWED.getText().equals(""))
-                    {
-                        check = false;
-                    }
-                }
-                if (check) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    Date rdm = format.parse(eRDM.getText());
-                    Date dls = format.parse(eDLS.getText());
-                    Date wed = format.parse(eWED.getText());
-                    VehicleType vT;
-                    if (eVT.getSelectionModel().getSelectedItem().toString().equals("Car")) {
-                        vT = VehicleType.Car;
-                    } else if (eVT.getSelectionModel().getSelectedItem().toString().equals("Van")) {
-                        vT = VehicleType.Van;
-                    } else {
-                        vT = VehicleType.Truck;
-                    }
-                    FuelType fT;
-                    if (eFT.getSelectionModel().getSelectedItem().toString().equals("Diesel")) {
-                        fT = FuelType.diesel;
-                    } else {
-                        fT = FuelType.petrol;
-                    }
-                    Boolean W;
-                    if (eCBW.getSelectionModel().getSelectedItem().toString().equals("True")) {
-                        W = true;
-                    } else {
-                        W = false;
-                    }
 
-                    boolean checker = vSys.editVehicle(eVR.getText(), Integer.parseInt(eCID.getText()), vT, eModel.getText(), eM.getText(), Double.parseDouble(eES.getText()), fT, eC.getText(), Integer.parseInt(eMi.getText()), rdm, dls, W, eWN.getText(), eWCA.getText(), wed);
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Message");
-                    alert.setHeaderText("Vehicle Added: " + checker);
-                    alert.showAndWait();
-                    Stage addStage =   (Stage) eVR.getScene().getWindow();
-                    addStage.close();
-                }
-            }
-            if (!check) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields required are not complete!");
-                alert.showAndWait();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(  );
-        }
-    }
 
     public void setVehicleDets(Vehicle vehicle)
     {
-
-        eVR.setText(vehicle.getRegNumber());
-        eCID.setText( Integer.toString(vehicle.getCustomerID()));
-        eVT.setValue(vehicle.getVehicleType().toString());
-        eModel.setText(vehicle.getModel());
-        eM.setText(vehicle.getManufacturer());
-        eES.setText(Double.toString(vehicle.getEngineSize()));
-        eFT.setValue(vehicle.getFuelType().toString());
-        eC.setText(vehicle.getColour());
-        eMi.setText(Integer.toString(vehicle.getMileage()));
-        eRDM.setText(vehicle.getRenewalDateMot().toString());
-        eDLS.setText(vehicle.getDateLastServiced().toString());
-        eCBW.setValue(vehicle.isCoveredByWarranty());
-        eWN.setText(vehicle.getWarrantyName());
-        eWCA.setText(vehicle.getWarrantyCompAddress());
-        eWED.setText(vehicle.getWarrantyExpirationDate().toString());
-
+        reg.setText(vehicle.getRegNumber());
+        reg.setDisable(false);
+        cID.setText( Integer.toString(vehicle.getCustomerID()));
+        cID.setDisable(false);
+        vType.setValue(vehicle.getVehicleType().toString());
+        vType.setDisable(false);
+        mod.setText(vehicle.getModel());
+        mod.setDisable(false);
+        manuf.setText(vehicle.getManufacturer());
+        manuf.setDisable(false);
+        eSize.setText(Double.toString(vehicle.getEngineSize()));
+        eSize.setDisable(false);
+        String VT= vehicle.getFuelType().toString();
+        fType.setValue(VT.substring(0, 1).toUpperCase() + VT.substring(1,VT.length()));
+        fType.setDisable(false);
+        col.setText(vehicle.getColour());
+        col.setDisable(false);
+        mil.setText(Integer.toString(vehicle.getMileage()));
+        mil.setDisable(false);
+        rDateMot.setText(vehicle.getRenewalDateMot().toString());
+        rDateMot.setDisable(false);
+        dLastServiced.setText(vehicle.getDateLastServiced().toString());
+        dLastServiced.setDisable(false);
+        cByWarranty.setDisable(false);
+        if (vehicle.isCoveredByWarranty())
+        {
+            cByWarranty.setValue("True");
+        }
+        else {
+            cByWarranty.setValue("False");
+        }
+        cByWarranty.setDisable(false);
+        wName.setText(vehicle.getWarrantyName());
+        wName.setDisable(false);
+        wCompAddress.setText(vehicle.getWarrantyCompAddress());
+        wCompAddress.setDisable(false);
+        wExpirationDate.setText(vehicle.getWarrantyExpirationDate().toString());
+        wExpirationDate.setDisable(false);
+        hiddenWarranty();
     }
 
     public void searchVehicle()
@@ -266,20 +262,87 @@ public class VehicleController {
 
     }
 
+    public void searchVehicleA()
+    {
+        List<Vehicle> arrayList = vSys.getVehiclesList();
+        DisplayTable(arrayList);
+
+    }
+
+    public void DisplayTable(List<Vehicle> arrayList)
+    {
+        searchTable.setDisable(false);
+        tableEntries.removeAll(tableEntries);
+        for(int i =0; i<arrayList.size(); i++){
+
+            tableEntries.add(arrayList.get(i));
+        }
+
+        tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tReg"));
+        tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
+
+        tCID.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tCID"));
+        tCID.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter()));
+
+        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tVT"));
+        tVT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tMod.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tMod"));
+        tMod.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tManu.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tManu"));
+        tManu.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tEs.setCellValueFactory(new PropertyValueFactory<Vehicle, Double>("tManu"));
+        tEs.setCellFactory(TextFieldTableCell.<Vehicle, Double>forTableColumn( new DoubleStringConverter()));
+
+        tFT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tFT"));
+        tFT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tCol.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tCol"));
+        tCol.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tMil.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tMil"));
+        tMil.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter() ));
+
+        tMOT.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
+        tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+
+        tDLS.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
+        tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+
+        tW.setCellValueFactory(new PropertyValueFactory<Vehicle, Boolean>("tW"));
+        tW.setCellFactory(TextFieldTableCell.<Vehicle, Boolean>forTableColumn(new BooleanStringConverter()));
+
+        tWn.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tWn"));
+        tWn.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tA.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tA"));
+        tA.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
+
+        tD.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tD"));
+        tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
+
+        searchTable.setItems(tableEntries);
+    }
+
     public void hiddenWarranty()
     {
-        if (sCBW.getSelectionModel().getSelectedItem().equals("True")) {
-            sWN.setDisable(false);
-            sWCA.setDisable(false);
-            sWED.setDisable(false);
+        if (cByWarranty.getSelectionModel().getSelectedItem().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals("true") ) {
+            wName.setDisable(false);
+            wCompAddress.setDisable(false);
+            wExpirationDate.setDisable(false);
         }
         else {
-            sWN.setDisable(true);
-            sWCA.setDisable(true);
-            sWED.setDisable(true);
-
+            wName.setDisable(true);
+            wCompAddress.setDisable(true);
+            wExpirationDate.setDisable(true);
+            wName.clear();
+            wCompAddress.clear();
+            wExpirationDate.clear();
         }
     }
+
 
 
 }

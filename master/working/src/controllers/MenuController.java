@@ -1,6 +1,8 @@
 package controllers;
 
+        import com.sun.javafx.stage.StageHelper;
         import domain.UserType;
+        import javafx.collections.ObservableList;
         import javafx.fxml.FXML;
         import javafx.scene.control.*;
         import logic.AuthenticationSystem;
@@ -8,6 +10,9 @@ package controllers;
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Scene;
         import javafx.scene.Parent;
+
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by DillonVaghela on 2/8/17.
@@ -22,10 +27,10 @@ public class MenuController {
         public Button addSRBooking;
         public Button editSRBooking;
         public Button deleteSRBooking;
-        Stage addStage;
-        Stage deleteStage;
-        Stage editSearchStage;
-        Stage searchStage;
+        Stage addStage = new Stage();
+        Stage deleteStage = new Stage();
+        Stage editSearchStage = new Stage();
+        Stage searchStage = new Stage();
         Stage addBStage;
         Stage deletebStage;
         Stage editBStage;
@@ -38,17 +43,35 @@ public class MenuController {
                 setUserType();
         }
 
+        public boolean StageChecker()
+        {
+                if (searchStage.isShowing() || addStage.isShowing() || deleteStage.isShowing() || editSearchStage.isShowing())
+                        {
+                                ArrayList<Stage> list =  new ArrayList<Stage>();
+                                list.add(searchStage);
+                                list.add(addStage);
+                                list.add(deleteStage);
+                                list.add(editSearchStage);
+                                for (Stage s : list)
+                                {
+                                        if (s.isShowing() )
+                                        {
+                                                s.setAlwaysOnTop(false);
+                                                showAlert();
+                                                s.setAlwaysOnTop(true);
+                                                return true;
+                                        }
+                                }
+                        }
+                return false;
+        }
+
         @FXML
         public void handleButtonSearch() throws Exception {
                 try{
-                        if (searchStage != null)
+                        if (StageChecker())
                         {
-                                if (searchStage.isShowing())
-                                {
-                                        showAlert();
-                                        searchStage.setAlwaysOnTop(true);
-                                        //searchStage.setFullScreen(true);
-                                        return; }
+                                return;
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
@@ -70,14 +93,9 @@ public class MenuController {
         @FXML
 public void handleButtonAdd() throws Exception {
                 try{
-                        if (addStage != null)
+                        if (StageChecker())
                         {
-                                if (addStage.isShowing())
-                                {
-                                        showAlert();
-                                        addStage.setAlwaysOnTop(true);
-                                        return;
-                                }
+                                return;
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
@@ -96,20 +114,16 @@ public void handleButtonAdd() throws Exception {
         {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setHeaderText("This window is already open, press ok and your window will show on top");
+                alert.setHeaderText("This window is already open or another vehicle window is open");
                 alert.showAndWait();
         }
 
         @FXML
         public void handleButtonDelete() throws Exception {
                 try{
-                        if (deleteStage != null)
+                        if (StageChecker())
                         {
-                                if (deleteStage.isShowing())
-                                {
-                                        showAlert();
-                                        deleteStage.setAlwaysOnTop(true);
-                                        return; }
+                                return;
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
@@ -127,13 +141,9 @@ public void handleButtonAdd() throws Exception {
 
         public void handleButtonEditSearch() throws Exception {
                 try{
-                        if (editSearchStage != null)
+                        if (StageChecker())
                         {
-                                if (editSearchStage.isShowing())
-                                {
-                                        showAlert();
-                                        editSearchStage.setAlwaysOnTop(true);
-                                        return; }
+                                return;
                         }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
@@ -347,5 +357,20 @@ public void handleButtonAdd() throws Exception {
 
         }
 
+        public void PartMenu()
+        {
+                try{
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/PartModule.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        Stage s = new Stage();
+                        s.setTitle("Add Booking");
+                        s.setScene(new Scene(menu));
+                        s.show();
+                }
+                catch (Exception e)
+                {
+                        System.out.println("cant open");
+                }
+        }
 
 }

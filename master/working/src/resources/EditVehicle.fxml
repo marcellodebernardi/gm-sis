@@ -10,61 +10,61 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
    <children>
-      <TextField fx:id="tVReg" layoutX="105.0" layoutY="21.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Vehicle Reg" />
+      <TextField fx:id="eReg" layoutX="105.0" layoutY="21.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Vehicle Reg" />
       <Label layoutX="42.0" layoutY="26.0" text="reg" />
-      <Button fx:id="editV" layoutX="431.0" layoutY="21.0" mnemonicParsing="false" onAction="#VehicleEditB" text="Search" />
-      <TextField fx:id="eVR" layoutX="98.0" layoutY="97.0" prefHeight="27.0" prefWidth="167.0" />
-      <Label layoutX="36.0" layoutY="100.0" text="reg" />
+      <Button fx:id="editV" layoutX="431.0" layoutY="21.0" mnemonicParsing="false" onAction="#VehicleEditS" text="Search" />
+      <Label layoutX="11.0" layoutY="101.0" text="Vehicle Reg" />
       <Label layoutX="16.0" layoutY="135.0" prefHeight="17.0" prefWidth="77.0" text="CustomerID" />
-      <Label layoutX="16.0" layoutY="167.0" text="VehicleType" />
-      <Label layoutX="38.0" layoutY="197.0" text="model" />
-      <Label layoutX="13.0" layoutY="228.0" text="manufacturer" />
-      <Label layoutX="13.0" layoutY="261.0" text="engineSize" />
-      <Label layoutX="27.0" layoutY="295.0" text="fuelType" />
-      <Label layoutX="35.0" layoutY="328.0" text="colour" />
-      <Label layoutX="325.0" layoutY="101.0" text="mileage" />
-      <Label layoutX="299.0" layoutY="135.0" text="renewalDateMot" />
-      <Label layoutX="296.0" layoutY="167.0" text="dateLastServiced" />
-      <Label layoutX="288.0" layoutY="197.0" text="coveredByWarranty" />
-      <Label layoutX="304.0" layoutY="228.0" text="warrantyName" />
-      <Label layoutX="278.0" layoutY="261.0" text="warrantyCompAddress" />
-      <Label layoutX="274.0" layoutY="294.0" text="warrantyExpirationDate" />
-      <Button fx:id="eEV" layoutX="328.0" layoutY="323.0" mnemonicParsing="false" onAction="#editVehicle" text="Edit" />
-      <TextField fx:id="eCID" layoutX="96.0" layoutY="130.0" />
-      <TextField fx:id="eModel" layoutX="96.0" layoutY="192.0" />
-      <TextField fx:id="eM" layoutX="96.0" layoutY="223.0" />
-      <TextField fx:id="eES" layoutX="96.0" layoutY="256.0" />
-      <TextField fx:id="eC" layoutX="96.0" layoutY="323.0" />
-      <TextField fx:id="eMi" layoutX="420.0" layoutY="97.0" />
-      <TextField fx:id="eRDM" layoutX="420.0" layoutY="130.0" />
-      <TextField fx:id="eDLS" layoutX="420.0" layoutY="162.0" />
-      <TextField fx:id="eWN" layoutX="420.0" layoutY="223.0" />
-      <TextField fx:id="eWCA" layoutX="420.0" layoutY="256.0" />
-      <TextField fx:id="eWED" layoutX="420.0" layoutY="290.0" />
-      <ComboBox fx:id="eVT" layoutX="96.0" layoutY="160.0" prefHeight="27.0" prefWidth="167.0">
-      <items>
-         <FXCollections fx:factory="observableArrayList">
-            <String fx:value="Car" />
-            <String fx:value="Van" />
-            <String fx:value="Truck" />
-         </FXCollections>
-      </items>
+      <Label layoutX="13.0" layoutY="167.0" text="Vehicle Type" />
+      <Label layoutX="38.0" layoutY="197.0" text="Model" />
+      <Label layoutX="13.0" layoutY="228.0" text="Manufacturer" />
+      <Label layoutX="13.0" layoutY="261.0" text="Engine Size" />
+      <Label layoutX="27.0" layoutY="295.0" text="Fuel Type" />
+      <Label layoutX="35.0" layoutY="328.0" text="Colour" />
+      <Label layoutX="325.0" layoutY="101.0" text="Mileage" />
+      <Label layoutX="286.0" layoutY="135.0" text="MOT renewal Date" />
+      <Label layoutX="285.0" layoutY="167.0" text="Date Last Serviced" />
+      <Label layoutX="312.0" layoutY="197.0" text="Warranty?" />
+      <Label layoutX="328.0" layoutY="228.0" text="Name" />
+      <Label layoutX="293.0" layoutY="261.0" text="Company Address" />
+      <Label layoutX="299.0" layoutY="294.0" text="Expiration Date" />
+      <Button fx:id="eEV" layoutX="328.0" layoutY="323.0" mnemonicParsing="false" onAction="#addEditVehicle" text="Edit" />
+      <TextField fx:id="reg" disable="true" layoutX="96.0" layoutY="97.0" promptText="Enter Vehicle Reg" />
+      <TextField fx:id="cID" disable="true" layoutX="96.0" layoutY="129.0" promptText="Enter Customer ID" />
+      <TextField fx:id="mod" disable="true" layoutX="96.0" layoutY="192.0" prefHeight="28.0" prefWidth="167.0" promptText="Enter model" />
+      <TextField fx:id="manuf" disable="true" layoutX="96.0" layoutY="223.0" promptText="Enter Manufacturer" />
+      <TextField fx:id="eSize" disable="true" layoutX="96.0" layoutY="256.0" promptText="Enter Engine Size" />
+      <TextField fx:id="col" disable="true" layoutX="96.0" layoutY="323.0" promptText="Enter Colour" />
+      <ComboBox fx:id="vType" disable="true" layoutX="96.0" layoutY="162.0" prefHeight="27.0" prefWidth="167.0" promptText="pick Vehicle">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Car" />
+               <String fx:value="Van" />
+               <String fx:value="Truck" />
+            </FXCollections>
+         </items>
       </ComboBox>
-      <ComboBox fx:id="eCBW" layoutX="420.0" layoutY="192.0" prefHeight="27.0" prefWidth="167.0">
-      <items>
-         <FXCollections fx:factory="observableArrayList">
-            <String fx:value="True" />
-            <String fx:value="False" />
-         </FXCollections>
-      </items>
-   </ComboBox>
-      <ComboBox fx:id="eFT" layoutX="96.0" layoutY="289.0" prefHeight="27.0" prefWidth="167.0">
-      <items>
-         <FXCollections fx:factory="observableArrayList">
-            <String fx:value="Diesel" />
-            <String fx:value="Petrol" />
-         </FXCollections>
-      </items>
-   </ComboBox>
+      <ComboBox fx:id="fType" disable="true" layoutX="96.0" layoutY="290.0" prefHeight="27.0" prefWidth="167.0" promptText="pick Fuel">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Diesel" />
+               <String fx:value="Petrol" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <TextField fx:id="wName" disable="true" layoutX="419.0" layoutY="223.0" promptText="Enter Name" />
+      <TextField fx:id="mil" disable="true" layoutX="419.0" layoutY="97.0" promptText="Enter Mileage" />
+      <TextField fx:id="wCompAddress" disable="true" layoutX="419.0" layoutY="256.0" promptText="Enter Address" />
+      <TextField fx:id="rDateMot" disable="true" layoutX="419.0" layoutY="130.0" promptText="Enter renewal Date Mot" />
+      <TextField fx:id="dLastServiced" disable="true" layoutX="419.0" layoutY="162.0" promptText="Enter Date" />
+      <TextField fx:id="wExpirationDate" disable="true" layoutX="419.0" layoutY="289.0" promptText="Enter Date" />
+      <ComboBox fx:id="cByWarranty" disable="true" layoutX="419.0" layoutY="193.0" onAction="#hiddenWarranty" prefHeight="27.0" prefWidth="167.0" promptText="Pick True/False">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="True" />
+               <String fx:value="False" />
+            </FXCollections>
+         </items>
+      </ComboBox>
    </children>
 </AnchorPane>
