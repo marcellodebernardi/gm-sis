@@ -23,6 +23,8 @@ class StatementNode implements Comparable<StatementNode> {
     private Class<? extends Searchable> table;
     private Searchable object;
     private Method primaryGetter;
+    private List<Class<?>> numericTypes;
+    private List<Class<?>> dateTypes;
 
     // payload
     private String primaryKey;
@@ -34,7 +36,8 @@ class StatementNode implements Comparable<StatementNode> {
     private DatabaseRepository persistence;
 
     StatementNode(Class<? extends Searchable> table, Searchable object, Method primaryGetter,
-                  HashMap<String, Object> solvedValues, String primaryKey, DatabaseRepository persistence) {
+                  HashMap<String, Object> solvedValues, String primaryKey, DatabaseRepository persistence,
+                  List<Class<?>> numericTypes, List<Class<?>> dateTypes) {
         dependents = new ArrayList<>();
         unresolvedDependencies = new ArrayList<>();
         resolvedDependencies = new ArrayList<>();
@@ -47,9 +50,10 @@ class StatementNode implements Comparable<StatementNode> {
         this.solvedValues = solvedValues;
         this.primaryKey = primaryKey;
         this.persistence = persistence;
+        this.numericTypes = numericTypes;
+        this.dateTypes = dateTypes;
     }
 
-    // todo adding dependencies
     void addDependent(StatementNode dependent) {
         dependents.add(dependent);
     }
@@ -89,7 +93,6 @@ class StatementNode implements Comparable<StatementNode> {
      * @return null if not complete, SQL statement string otherwise
      */
     public String toString() {
-        // todo format string for numeric and text values (single quotes etc)
         if (!complete) {
             System.err.println("StatementNode: calling toString() on incomplete node.");
             return null;
@@ -100,16 +103,26 @@ class StatementNode implements Comparable<StatementNode> {
             keys = keys.replace("[", "(");
             keys = keys.replace("]", ")");
 
-            String values = solvedValues.values().toString();
-            values = values.replace("[", "(");
-            values = values.replace("]", ")");
+            String valueString = "";
+            String delim = "";
+            for (Object value : solvedValues.values()) {
+                valueString += numericTypes.contains(value.getClass()) ?
+                        delim + value : delim + "'" + value + "'";
+                delim = ", ";
+            }
 
-            return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + values + ";";
+            return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + valueString + ";";
         }
         else {
-            String newInfo = solvedValues.toString();
-            newInfo = newInfo.replace("{", "");
-            newInfo = newInfo.replace("}", "");
+            String newInfo = "";
+            String delim = "";
+
+            for (String key : solvedValues.keySet()) {
+                Object value = solvedValues.get(key);
+                newInfo += numericTypes.contains(value.getClass()) ?
+                        delim + key + " = " + value : delim + key + " = '" + value + "'";
+                delim = ", ";
+            }
 
             return "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
                     + primaryKey + " = " + primaryKeyValue + ";";
@@ -163,6 +176,8 @@ class StatementNode implements Comparable<StatementNode> {
     boolean setForeignKeys() {
         if (unresolvedDependencies.size() != 0) return false;
 
+        // this procedure works on the assumption that the foreign key in this object has the
+        // same name as the primary key in the dependency. todo vulnerable to changes, fix
         for (StatementNode sN : resolvedDependencies) {
             solvedValues.put(sN.getPrimaryKey(), sN.getPrimaryKeyValue());
         }

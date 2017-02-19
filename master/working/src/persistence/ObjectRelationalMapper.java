@@ -31,12 +31,13 @@ class ObjectRelationalMapper {
     private ForeignKeyResolver resolver;
     private DatabaseRepository persistence;
 
-    // reflection data
+    // reflection data todo refactor and move persistence information upward in hierarchy to minimize repetition
     private List<Class<? extends Searchable>> searchableClasses;
     private HashMap<Class<? extends Searchable>, Constructor<?>> constructorMap;
     private HashMap<Class<? extends Searchable>, List<Method>> getterListMap;
     private HashMap<Class<? extends Searchable>, Method> primaryGetters;
-    private List<Class<?>> numericDataTypes;
+    private List<Class<?>> numericTypes;
+    private List<Class<?>> dateTypes;
 
     // database structure
     private HashMap<Class<? extends Searchable>, Class<? extends Searchable>> dependencyMap;
@@ -73,6 +74,26 @@ class ObjectRelationalMapper {
             primaryGetters.put(eClass, getPrimaryKeyGetter(eClass));
             getterListMap.remove(primaryGetters.get(eClass));
         }
+
+        numericTypes = new ArrayList<>();
+        numericTypes.add(Integer.class);
+        numericTypes.add(int.class);
+        numericTypes.add(Double.class);
+        numericTypes.add(double.class);
+        numericTypes.add(Float.class);
+        numericTypes.add(float.class);
+        numericTypes.add(Short.class);
+        numericTypes.add(short.class);
+        numericTypes.add(Long.class);
+        numericTypes.add(long.class);
+        numericTypes.add(Byte.class);
+        numericTypes.add(byte.class);
+
+        dateTypes = new ArrayList<>();
+        dateTypes.add(Date.class);
+        dateTypes.add(DateTime.class);
+
+        numericTypes.addAll(dateTypes);
     }
 
     /**
@@ -385,14 +406,13 @@ class ObjectRelationalMapper {
         HashMap<String, Object> columnValues = new HashMap<>();
         String primaryKey = "";
 
-        // todo foreign keys usually won't be null but rather -1
         // generate StatementNode for this item (and non-foreign key values)
         for (Method column : columnGetters) {
             Column annotation = (Column) column.getDeclaredAnnotations()[0];
             try {
                 if (!annotation.primary() && !annotation.foreign()) {
                     Object attribute = column.invoke(item);
-                    if (attribute != null)
+                    if (!(attribute == null || (numericTypes.contains(attribute.getClass()) && attribute.equals(-1))))
                         columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
                 } else if (annotation.primary()) {
                     primaryKey = annotation.name();
@@ -404,10 +424,15 @@ class ObjectRelationalMapper {
 
         // add this StatementNode to graph
         StatementNode sN = new StatementNode(eClass, item, primaryGetters.get(eClass), columnValues,
-                primaryKey, persistence);
+                primaryKey, persistence, numericTypes, dateTypes);
         if (parent != null) {
             sN.addDependency(parent);
             parent.addDependent(sN);
+        }
+        if (item instanceof DependencyConnectable) {
+            for (DependencyConnection connection : ((DependencyConnectable) item).getDependencies()) {
+                connection.transmit(sN);
+            }
         }
         statementGraph.add(sN);
 

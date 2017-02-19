@@ -70,11 +70,9 @@ public class RepositoryTests {
 
     @Test
     public void testINSERTTransaction() {
-        Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
-        List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
-
-        for (String s : result) {
-            System.out.println(s);
+        while (true) {
+            Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
+            List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
         }
     }
 

@@ -1,8 +1,13 @@
 package domain;
 
+import logic.Criterion;
+import logic.CriterionOperator;
 import org.joda.time.DateTime;
 import org.joda.time.MutableInterval;
+import persistence.DatabaseRepository;
+import persistence.DependencyConnection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +15,7 @@ import java.util.List;
  * @version 0.1
  * @since 0.1
  */
-public class DiagRepBooking extends Booking {
+public class DiagRepBooking extends Booking implements DependencyConnectable {
     private DateTime diagnosisStart;
     private DateTime diagnosisEnd;
     private DateTime repairStart;
@@ -21,6 +26,9 @@ public class DiagRepBooking extends Booking {
     // direction inversion in database
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
+
+    // dependency connections
+    List<DependencyConnection> dependencyConnections;
 
 
     /**
@@ -39,7 +47,8 @@ public class DiagRepBooking extends Booking {
      */
     public DiagRepBooking(String vehicleRegNumber, String description, double billAmount,
                           boolean billSettled, int mechanicID, DateTime diagnosisStart, DateTime diagnosisEnd,
-                          DateTime repairStart, DateTime repairEnd, SpecRepBooking specRepBooking) {
+                          DateTime repairStart, DateTime repairEnd, SpecRepBooking specRepBooking,
+                          List<PartOccurrence> repairParts) {
         super(-1, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
@@ -48,6 +57,9 @@ public class DiagRepBooking extends Booking {
         this.repairEnd = repairEnd;
         this.repairInterval = new MutableInterval(repairStart, repairEnd);
         this.specRepBooking = specRepBooking;
+        for (PartOccurrence part : repairParts) {
+            addRequiredPart(part);
+        }
     }
 
     // reflection only, do not use
@@ -200,24 +212,6 @@ public class DiagRepBooking extends Booking {
     }
 
     /**
-     * Returns the bill associated with this booking.
-     * @return
-     */
-    public Bill getBill() {
-        return getBill();
-    }
-
-    /**
-     * Associates a new bill to the booking.
-     *
-     * @param bill the new bill
-     */
-    @Override
-    public void setBill(Bill bill) {
-        super.setBill(bill);
-    }
-
-    /**
      * Returns the date on which the diagnosis check is to be carried out.
      *
      * @return date of diagnosis check
@@ -261,5 +255,22 @@ public class DiagRepBooking extends Booking {
         this.repairInterval = repairInterval;
     }
 
-    // todo part occurrences using dependency entanglement
+    public List<PartOccurrence> getRequiredPartsList() {
+        if (requiredPartsList == null)
+            requiredPartsList = DatabaseRepository
+                    .getInstance()
+                    .getByCriteria(new Criterion<>(
+                            PartOccurrence.class, "bookingID", CriterionOperator.EqualTo, getBookingID()));
+        return requiredPartsList;
+    }
+
+    public void addRequiredPart(PartOccurrence part) {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
+        DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
+        part.setBooking(transmitter.pair());
+    }
+
+    public List<DependencyConnection> getDependencies() {
+        return dependencyConnections;
+    }
 }

@@ -18,6 +18,8 @@ public abstract class SpecRepBooking implements Searchable {
     private int spcID;
     private int bookingID;
 
+    // dependency connection
+
 
     /**
      * Creates new SpecRepBooking

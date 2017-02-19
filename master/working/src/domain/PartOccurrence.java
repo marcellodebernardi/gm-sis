@@ -1,9 +1,14 @@
 package domain;
 
+import persistence.DependencyConnection;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  */
-public class PartOccurrence implements Searchable {
+public class PartOccurrence implements Searchable, DependencyConnectable {
     private int partOccurrenceID;
 
     // inverse hierarchical database links todo finish up
@@ -11,6 +16,9 @@ public class PartOccurrence implements Searchable {
     private int installationID;
     private int bookingID;
     private int specRepID;
+
+    // dependency connections
+    List<DependencyConnection> dependencyConnections;
 
     @Reflective
     private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
@@ -22,6 +30,14 @@ public class PartOccurrence implements Searchable {
         this.partAbstractionID = partAbstractionID;
         this.installationID = installationID;
         this.bookingID = bookingID;
+        this.specRepID = specRepID;
+    }
+
+    public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
+        partOccurrenceID = -1;
+        this.partAbstractionID = partAbstractionID;
+        this.installationID = installationID;
+        this.bookingID = -1;
         this.specRepID = specRepID;
     }
 
@@ -57,8 +73,9 @@ public class PartOccurrence implements Searchable {
         return bookingID;
     }
 
-    public void setBookingID(int bookingID) {
-        this.bookingID = bookingID;
+    public void setBooking(DependencyConnection pair) {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
+        dependencyConnections.add(pair);
     }
 
     @Column(name = "specRepID")
@@ -68,5 +85,9 @@ public class PartOccurrence implements Searchable {
 
     public void setSpecRepID(int specRepID) {
         this.specRepID = specRepID;
+    }
+
+    public List<DependencyConnection> getDependencies() {
+        return dependencyConnections;
     }
 }
