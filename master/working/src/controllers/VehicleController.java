@@ -319,7 +319,8 @@ public class VehicleController {
             tableEntries.add(arrayList.get(i));
         }
 
-        tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
+        tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+        tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tReg.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
@@ -327,7 +328,7 @@ public class VehicleController {
             }
         });
 
-        tCID.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tCID"));
+        tCID.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("customerID"));
         tCID.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter()));
         tCID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Integer>>() {
             @Override
@@ -336,7 +337,7 @@ public class VehicleController {
             }
         });
 
-        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("tVT"));
+        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("vehicleType"));
         tVT.setCellFactory(TextFieldTableCell.<Vehicle, VehicleType>forTableColumn(new StringConverter<VehicleType>() {
             @Override
             public String toString(VehicleType object) {
@@ -355,7 +356,7 @@ public class VehicleController {
             }
         });
 
-        tMod.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tMod"));
+        tMod.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("model"));
         tMod.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tMod.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
@@ -365,7 +366,7 @@ public class VehicleController {
         });
 
 
-        tManu.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tManu"));
+        tManu.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("manufacturer"));
         tManu.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tManu.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
@@ -374,7 +375,7 @@ public class VehicleController {
             }
         });
 
-        tEs.setCellValueFactory(new PropertyValueFactory<Vehicle, Double>("tManu"));
+        tEs.setCellValueFactory(new PropertyValueFactory<Vehicle, Double>("engineSize"));
         tEs.setCellFactory(TextFieldTableCell.<Vehicle, Double>forTableColumn( new DoubleStringConverter()));
         tEs.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Double>>() {
             @Override
@@ -383,7 +384,7 @@ public class VehicleController {
             }
         });
 
-        tFT.setCellValueFactory(new PropertyValueFactory<Vehicle, FuelType>("tFT"));
+        tFT.setCellValueFactory(new PropertyValueFactory<Vehicle, FuelType>("fuelType"));
         tFT.setCellFactory(TextFieldTableCell.<Vehicle, FuelType>forTableColumn(new StringConverter<FuelType>() {
             @Override
             public String toString(FuelType object) {
@@ -403,7 +404,7 @@ public class VehicleController {
         });
 
 
-        tCol.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tCol"));
+        tCol.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("colour"));
         tCol.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
@@ -412,7 +413,7 @@ public class VehicleController {
             }
         });
 
-        tMil.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("tMil"));
+        tMil.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("mileage"));
         tMil.setCellFactory(TextFieldTableCell.<Vehicle, Integer>forTableColumn(new IntegerStringConverter() ));
         tMil.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Integer>>() {
             @Override
@@ -421,7 +422,7 @@ public class VehicleController {
             }
         });
 
-        tMOT.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
+        tMOT.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("renewalDateMot"));
         tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
         tMOT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
             @Override
@@ -430,7 +431,7 @@ public class VehicleController {
             }
         });
 
-        tDLS.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tMOT"));
+        tDLS.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("dateLastServiced"));
         tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
         tDLS.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
             @Override
@@ -439,7 +440,7 @@ public class VehicleController {
             }
         });
 
-        tW.setCellValueFactory(new PropertyValueFactory<Vehicle, Boolean>("tW"));
+        tW.setCellValueFactory(new PropertyValueFactory<Vehicle, Boolean>("coveredByWarranty"));
         tW.setCellFactory(TextFieldTableCell.<Vehicle, Boolean>forTableColumn(new BooleanStringConverter()));
         tW.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Boolean>>() {
             @Override
@@ -448,7 +449,7 @@ public class VehicleController {
             }
         });
 
-        tWn.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tWn"));
+        tWn.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("warrantyName"));
         tWn.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tWn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
@@ -457,7 +458,7 @@ public class VehicleController {
             }
         });
 
-        tA.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("tA"));
+        tA.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("warrantyCompAddress"));
         tA.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn( ));
         tA.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
@@ -466,7 +467,7 @@ public class VehicleController {
             }
         });
 
-        tD.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("tD"));
+        tD.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("warrantyExpirationDate"));
         tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter() ));
         tD.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
             @Override
