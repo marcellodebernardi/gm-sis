@@ -206,7 +206,7 @@ public class VehicleController {
         }
         catch (Exception e)
         {
-            System.out.println("Vehicle editSearch error");
+            showAlert("Registration Number invalid");
             System.out.println(e);
         }
 
