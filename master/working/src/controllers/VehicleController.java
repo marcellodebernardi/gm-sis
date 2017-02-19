@@ -194,7 +194,7 @@ public class VehicleController {
     @FXML
     public void VehicleEditS() throws Exception {
         try{
-            Vehicle vehicle = vSys.searchVehicle(eReg.getText());
+            Vehicle vehicle = vSys.searchAVehicle(eReg.getText());
             if (vehicle == null)
             {
                 showAlert("Registration Number invalid");
@@ -259,8 +259,47 @@ public class VehicleController {
 
     public void searchVehicle()
     {
-        List<Vehicle> arrayList = vSys.getVehiclesList();
-        DisplayTable(arrayList);
+        try {
+
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date rdm = format.parse(rDateMot.getText());
+            Date dls = format.parse(dLastServiced.getText());
+            Date wed = new Date();
+            if ((!wExpirationDate.getText().equals(""))){
+                wed = format.parse(wExpirationDate.getText()); }
+            VehicleType vT;
+            if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
+                vT = VehicleType.Car;
+            } else if (vType.getSelectionModel().getSelectedItem().toString().equals("Van")) {
+                vT = VehicleType.Van;
+            } else {
+                vT = VehicleType.Truck;
+            }
+            FuelType fT;
+            if (fType.getSelectionModel().getSelectedItem().toString().equals("Diesel")) {
+                fT = FuelType.diesel;
+            } else {
+                fT = FuelType.petrol;
+            }
+            Boolean W;
+            if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
+                W = true;
+            } else {
+                W = false;
+            }
+            boolean add = showAlertC("Are you sure you want to search for this Vehicle, have you checked the vehicle details?");
+            if (add) {
+                List<Vehicle> arrayList = vSys.searchVehicle(reg.getText(), Integer.parseInt(cID.getText()), vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                DisplayTable(arrayList);
+            }
+
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Search Vehicle Error");
+            e.printStackTrace(  );
+        }
     }
 
     public void searchVehicleA()

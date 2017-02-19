@@ -27,14 +27,23 @@ public class VehicleSys {
         return results;
     }
 
-    public Vehicle searchVehicle(String regNumber) {
+    public List<Vehicle> searchVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", EqualTo, regNumber));
-        return results.size() == 0 ? null : results.get(0);
+                "regNumber", EqualTo, regNumber).and("customerID", EqualTo, customerID).and("vehicleType", EqualTo, vehicleType)
+                .and("model",EqualTo,model).and("manufacturer",EqualTo, manufacturer).and("engineSize", EqualTo, engineSize).and("fuelType",
+                        EqualTo, fuelType).and("colour",EqualTo,colour).and("mileage",EqualTo,mileage).and("renewalDateMot",EqualTo,renewalDateMot)
+                .and("dateLastServiced",EqualTo,dateLastServiced).and("coveredByWarranty",EqualTo, coveredByWarranty).and("warrantyName",EqualTo,
+                        warrantyName).and("warrantyCompAddress",EqualTo, warrantyCompAddress).and("warrantyExpirationDate",EqualTo,warrantyExpirationDate));
+        return results;
 
     }
 
-
+    public Vehicle searchAVehicle(String regNumber)
+    {
+        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
+                "regNumber", EqualTo, regNumber));
+        return results !=null ? results.get(0) : null;
+    }
 
     public boolean addEditVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
