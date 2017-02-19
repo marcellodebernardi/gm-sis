@@ -154,6 +154,7 @@ public class Customer implements Searchable
 
     public List<DiagRepBooking> getBookings() {
         // todo implement with lazy loading
+
         throw null;
     }
 }

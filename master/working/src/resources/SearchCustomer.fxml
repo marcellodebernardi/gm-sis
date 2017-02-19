@@ -13,6 +13,6 @@
          </font>
       </Label>
       <Label layoutX="48.0" layoutY="62.0" text="Enter customer's first name, surname or vehicle ID" />
-      <TextField fx:id="searchCustomerTextField" layoutX="93.0" layoutY="98.0" prefHeight="25.0" prefWidth="180.0" />
+      <TextField fx:id="searchCustomerInput" layoutX="93.0" layoutY="98.0" prefHeight="25.0" prefWidth="180.0" />
    </children>
 </AnchorPane>

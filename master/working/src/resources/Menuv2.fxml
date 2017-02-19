@@ -68,9 +68,9 @@
                <content>
                   <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
-                      <Button mnemonicParsing="false" text="Add Customer" />
-                        <Button mnemonicParsing="false" text="Edit Customer" />
-                        <Button mnemonicParsing="false" text="Search Customer" />
+                      <Button fx:id="addCustomer" mnemonicParsing="false" onAction="#addCustomerListener" text="Add Customer" />
+                        <Button fx:id="editCustomer" mnemonicParsing="false" onAction="#editCustomerListener" text="Edit Customer" />
+                        <Button fx:id="searchCustomer" mnemonicParsing="false" onAction="#searchCustomerListener" text="Search Customer" />
                     </items>
                   </ToolBar>
                </content>
