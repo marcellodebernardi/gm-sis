@@ -1,12 +1,12 @@
 package main;
 
-import controllers.MenuController;
 import javafx.application.Application;
 import javafx.fxml.LoadException;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
+import persistence.DatabaseRepository;
 
 /**
  * @author Marcello De Bernardi, Dillon Vaghela
@@ -14,18 +14,23 @@ import javafx.scene.Scene;
  * @since 0.1
  */
 public class Main extends Application {
+    private static Scene login;
+    private static Pane mainPane;
+    private static DatabaseRepository persistence; // todo inject on modules
 
-    public static Scene login;
-    public static Pane mainPane;
-
-    public static void main (String[] args)
-    {
+    public static void main (String[] args) {
         Application.launch(args);
     }
 
-   @Override
-    public void start(Stage primaryStage) throws Exception {
+    // standard JavaFX initialization method that runs in separate thread
+    // best place to perform startup initializations
+    @Override
+    public void init() {
+        persistence = DatabaseRepository.getInstance();
+    }
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
             //test.fxml
@@ -34,12 +39,15 @@ public class Main extends Application {
             primaryStage.show();
             //primaryStage.setFullScreen(true);
         }
-        catch(LoadException e)
-        {
+        catch(LoadException e) {
             e.printStackTrace();
         }
+    }
 
-
+    // standard JavaFX method for closing resources etc
+    @Override
+    public void stop() {
+        persistence.close();
     }
     
 

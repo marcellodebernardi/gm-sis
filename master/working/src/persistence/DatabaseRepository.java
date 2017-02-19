@@ -50,6 +50,15 @@ public class DatabaseRepository implements CriterionRepository {
         return instance;
     }
 
+    public void close() {
+        try {
+            connection.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void finalize() {
         try {
@@ -62,7 +71,7 @@ public class DatabaseRepository implements CriterionRepository {
 
     public <E extends Searchable> List<E> getByCriteria(Criterion<E> criteria) {
         // handle bad input
-        if (criteria == null) throw new NullPointerException("No criteria given.");
+        if (criteria == null) throw new NullPointerException("No criteria provided.");
 
         // get requested objects using appropriate mapper
         try {
@@ -76,7 +85,7 @@ public class DatabaseRepository implements CriterionRepository {
 
     public <E extends Searchable> boolean commitItem(E item) {
         // handle bad input
-        if (item == null) throw new NullPointerException();
+        if (item == null) throw new NullPointerException("No item provided.");
 
         try {
             // set up transaction mode
