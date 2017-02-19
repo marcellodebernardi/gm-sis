@@ -54,9 +54,30 @@ public class PartsController {
     private ArrayList data = new ArrayList();
 
 
-    public void setTable1() {
 
-        partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
+
+    public void updateTable(){
+
+        Criterion c = new Criterion<>(PartAbstraction.class);
+
+        List = instance.getByCriteria(c); //the data from Parts DB stored in this list
+
+        /** test list
+         *
+         *
+         * // System.out.println(List.get(0).getPartName());
+         * // System.out.println(List.get(1).getPartName());
+         * /System.out.println(List.get(0).getPartDescription());
+         * // System.out.println(List.size());
+         **/
+
+        tableEntries.removeAll(tableEntries);
+
+        for(int i =0; i<List.size(); i++){
+
+            tableEntries.add(List.get(i));
+        }
+
         partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
         partAbstractionID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Integer>>() {
             @Override
@@ -100,31 +121,6 @@ public class PartsController {
                 ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartStockLevel(event.getNewValue());
             }
         });
-    }
-
-    public void updateTable(){
-
-        Criterion c =new Criterion<>(PartAbstraction.class);
-
-        List = instance.getByCriteria(c); //the data from Parts DB stored in this list
-
-        /** test list
-         *
-         *
-         * // System.out.println(List.get(0).getPartName());
-         * // System.out.println(List.get(1).getPartName());
-         * /System.out.println(List.get(0).getPartDescription());
-         * // System.out.println(List.size());
-         **/
-
-        tableEntries.removeAll(tableEntries);
-
-        for(int i =0; i<List.size(); i++){
-
-            tableEntries.add(List.get(i));
-        }
-
-        setTable1();
 
         PartsTable.setItems(tableEntries);
 
@@ -208,7 +204,6 @@ public class PartsController {
             }
         }
 
-        setTable1();
 
         PartsTable.setItems(tableEntries2);
 

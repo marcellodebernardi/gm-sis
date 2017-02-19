@@ -27,7 +27,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         try {
-            mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
+            mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
             //test.fxml
             login = new Scene(mainPane);
             primaryStage.setScene(login);
@@ -41,22 +41,6 @@ public class Main extends Application {
 
 
     }
-
-
-    //Shakibs test method for Parts module (leave it commented out for now please)
-   /**
-    @Override
-
-   public void start(Stage primaryStage) throws Exception {
-
-        mainPane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
-        login = new Scene(mainPane);
-        primaryStage.setScene(login);
-        primaryStage.show();
-
-    }
-
-   **/
-
+    
 
 }
