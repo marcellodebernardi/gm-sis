@@ -194,7 +194,8 @@ class ObjectRelationalMapper {
         try {
             constructorArgumentTypes = new Class<?>[0];
             for (Constructor<?> c : eClass.getConstructors()) {
-                if (c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                if (c.getDeclaredAnnotations().length != 0
+                        && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                     constructorArgumentTypes = c.getParameterTypes();
                     break;
                 }
@@ -382,7 +383,8 @@ class ObjectRelationalMapper {
         HashMap<String, Object> columnValues = new HashMap<>();
         String primaryKey = "";
 
-        // generate StatementNode for this item
+        // todo foreign keys usually won't be null but rather -1
+        // generate StatementNode for this item (and non-foreign key values)
         for (Method column : columnGetters) {
             Column annotation = (Column) column.getDeclaredAnnotations()[0];
             try {
@@ -401,7 +403,10 @@ class ObjectRelationalMapper {
         // add this StatementNode to graph
         StatementNode sN = new StatementNode(eClass, item, primaryGetters.get(eClass), columnValues,
                 primaryKey, persistence);
-        if (parent != null) sN.addDependency(parent);
+        if (parent != null) {
+            sN.addDependency(parent);
+            parent.addDependent(sN);
+        }
         statementGraph.add(sN);
 
         // recurse on children
