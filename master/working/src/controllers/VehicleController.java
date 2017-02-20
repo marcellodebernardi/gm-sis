@@ -235,9 +235,10 @@ public class VehicleController {
         col.setDisable(false);
         mil.setText(Integer.toString(vehicle.getMileage()));
         mil.setDisable(false);
-        rDateMot.setText(vehicle.getRenewalDateMot().toString());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        rDateMot.setText(format.format(vehicle.getRenewalDateMot()));
         rDateMot.setDisable(false);
-        dLastServiced.setText(vehicle.getDateLastServiced().toString());
+        dLastServiced.setText(format.format(vehicle.getDateLastServiced()));
         dLastServiced.setDisable(false);
         cByWarranty.setDisable(false);
         if (vehicle.isCoveredByWarranty())
@@ -252,7 +253,7 @@ public class VehicleController {
         wName.setDisable(false);
         wCompAddress.setText(vehicle.getWarrantyCompAddress());
         wCompAddress.setDisable(false);
-        wExpirationDate.setText(vehicle.getWarrantyExpirationDate().toString());
+        wExpirationDate.setText(format.format(vehicle.getWarrantyExpirationDate()));
         wExpirationDate.setDisable(false);
         hiddenWarranty();
     }
