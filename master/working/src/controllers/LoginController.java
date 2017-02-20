@@ -1,68 +1,58 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import logic.AuthenticationSystem;
-import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.Parent;
-import main.Main;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+import logic.AuthenticationSystem;
 
 /**
- * @author Dillon Vaghela, Muhammad Shakib Hoque
+ * @author Dillon Vaghela, Muhammad Shakib Hoque, Marcello De Bernardi
  * @version 0.1
  * @since 0.1
  */
 
 public class LoginController {
-
-    public Button loginBtn;
-    public Button exitBtn;
+    public Button loginButton;
+    public Button exitButton;
     public TextArea username;
     public PasswordField password;
-    public Stage stage;
-    private AuthenticationSystem auth = AuthenticationSystem.getInstance();
-
+    private AuthenticationSystem authentication = AuthenticationSystem.getInstance();
 
 
     @FXML
-    public void handleButtonClick() throws Exception {
+    public void loginHandler() throws Exception {
+        if (authentication.login(username.getText(), password.getText())) {
+            Parent menu = new FXMLLoader(getClass().getResource("/ApplicationPane.fxml")).load();
 
-        try{
-        auth.login(username.getText(), password.getText());
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Menuv2.fxml"));
-        Parent menu = fxmlLoader.load();
-        stage = new Stage();
-        stage.setTitle("Main Menu");
-        stage.setScene(new Scene(menu));
-        stage.show();
-        // code to get stage
-        Stage primaryStage =   (Stage) loginBtn.getScene().getWindow();
-        primaryStage.close();
+            Stage stage = new Stage();
+            stage.setTitle("GM-SIS");
+            stage.setScene(new Scene(menu));
+            stage.show();
 
+            ((Stage) loginButton.getScene().getWindow()).close();
 
-        }
-        catch (Exception e)
-        {
+        } else {
             showAlert();
             password.clear();
         }
-
     }
-    public void showAlert()
-    {
+
+    @FXML
+    public void exitHandler() {
+        System.exit(0);
+    }
+
+    private void showAlert() {
+        // todo change popup to something more elegant
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("The username and/or password is incorrect");
         alert.showAndWait();
     }
-
-
-
-    @FXML
-    public void handleButtonClick2() {
-        System.exit(0);
-    }
-
-    }
+}

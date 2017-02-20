@@ -2,6 +2,7 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.LoadException;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
@@ -14,8 +15,10 @@ import persistence.DatabaseRepository;
  * @since 0.1
  */
 public class Main extends Application {
-    public static Scene login;
-    public static Pane mainPane;
+    private static Scene mainScene;
+    private static Scene loginScene;
+    private static Pane mainPane;
+    private static AnchorPane loginPane;
     private static DatabaseRepository persistence; // todo inject on modules
 
     public static void main (String[] args) {
@@ -32,12 +35,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            mainPane = FXMLLoader.load(getClass().getResource("/resources/test.fxml"));
-            //test.fxml
-            login = new Scene(mainPane);
-            primaryStage.setScene(login);
+            loginPane = FXMLLoader.load(getClass().getResource("/loginPane.fxml"));
+            loginScene = new Scene(loginPane);
+            primaryStage.setScene(loginScene);
             primaryStage.show();
-            //primaryStage.setFullScreen(true);
+            // primaryStage.setFullScreen(true);
         }
         catch(LoadException e) {
             e.printStackTrace();

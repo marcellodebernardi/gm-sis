@@ -11,15 +11,12 @@ import javafx.stage.Stage;
  * @since 0.1
  */
 public class BookingsController {
-
-    public void addBooking()
-    {
+    public void addBooking() {
 
     }
 
-    public void editSBooking()
-    {
-        try{
+    public void editSBooking() {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditBooking.fxml"));
             Parent menu = fxmlLoader.load();
             Stage stage = new Stage();
@@ -27,22 +24,17 @@ public class BookingsController {
             stage.setScene(new Scene(menu));
             stage.show();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("cant open a");
             System.out.println(e);
         }
     }
 
-    public void deleteBooking()
-    {
+    public void deleteBooking() {
 
     }
 
-    public void editBooking()
-    {
+    public void editBooking() {
 
     }
-
 }
