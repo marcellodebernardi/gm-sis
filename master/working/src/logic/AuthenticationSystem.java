@@ -68,6 +68,11 @@ public class AuthenticationSystem {
         return results !=null ? results.get(0) : null;
     }
 
+    public List<User> getUsersList(){
+        List<User> results = persistence.getByCriteria(new Criterion<>(User.class));
+        return results;
+    }
+
     /**
      * Returns the singleton instance of the authentication system.
      *

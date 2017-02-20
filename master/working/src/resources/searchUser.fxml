@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserController">
     <children>
         <Label layoutX="34.0" layoutY="30.0" text="UserID" />
         <Label layoutX="25.0" layoutY="62.0" text="password" />
@@ -20,14 +20,14 @@
         <TextField layoutX="153.0" layoutY="115.0" promptText="enter Surname" />
         <TextField layoutX="153.0" layoutY="144.0" promptText="enter User Type" />
         <Button layoutX="453.0" layoutY="44.0" mnemonicParsing="false" text="Search" />
-      <Button layoutX="453.0" layoutY="124.0" mnemonicParsing="false" text="View All" />
-      <TableView layoutX="14.0" layoutY="186.0" prefHeight="200.0" prefWidth="573.0">
+      <Button layoutX="453.0" layoutY="124.0" mnemonicParsing="false" text="View All" onAction="#AllUsers" />
+      <TableView layoutX="14.0" layoutY="186.0" prefHeight="200.0" prefWidth="573.0" fx:id="tUsers">
         <columns>
-          <TableColumn prefWidth="114.6" text="UserID" />
-          <TableColumn prefWidth="114.6" text="Password" />
-            <TableColumn minWidth="1.0" prefWidth="114.6" text="firstName" />
-            <TableColumn prefWidth="114.6" text="surname" />
-            <TableColumn prefWidth="114.6" text="userType" />
+          <TableColumn prefWidth="114.6" text="UserID" fx:id="userID" />
+          <TableColumn prefWidth="114.6" text="Password" fx:id="password" />
+            <TableColumn minWidth="1.0" prefWidth="114.6" text="firstName"  fx:id="firstname"/>
+            <TableColumn prefWidth="114.6" text="surname" fx:id="surname"/>
+            <TableColumn prefWidth="114.6" text="userType" fx:id="userType" />
         </columns>
       </TableView>
     </children>

@@ -27,7 +27,7 @@
             </FXCollections>
         </items>
     </ComboBox>
-        <Button layoutX="434.0" layoutY="287.0" mnemonicParsing="false" text="Edit" />
+        <Button layoutX="434.0" layoutY="287.0" mnemonicParsing="false" text="Edit" onAction="#addEditUser" />
       <Label layoutX="84.0" layoutY="113.0" text="UserID" />
       <TextField layoutX="178.0" layoutY="108.0" promptText="Enter User ID" fx:id="SUID"/>
       <Button layoutX="434.0" layoutY="108.0" mnemonicParsing="false" text="Search" fx:id="USBTN" onAction="#sUser" />

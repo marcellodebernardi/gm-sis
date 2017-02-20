@@ -310,10 +310,6 @@ public class VehicleController {
 
     }
 
-    public StringConverter<VehicleType> VehicleConveter(StringConverter<VehicleType> A)
-    {
-        return A;
-    }
 
     public void DisplayTable(List<Vehicle> arrayList)
     {
