@@ -47,7 +47,7 @@ public class VehicleController {
     public TableView<Vehicle> searchTable;
     public TableColumn<Vehicle, String> tReg;
     public TableColumn<Vehicle, Integer> tCID;
-    public TableColumn<Vehicle, VehicleType> tVT;
+    public TableColumn<Vehicle, String> tVT;
     public TableColumn<Vehicle, String> tMod;
     public TableColumn<Vehicle, String> tManu;
     public TableColumn<Vehicle, Double> tEs;
@@ -310,6 +310,11 @@ public class VehicleController {
 
     }
 
+    public StringConverter<VehicleType> VehicleConveter(StringConverter<VehicleType> A)
+    {
+        return A;
+    }
+
     public void DisplayTable(List<Vehicle> arrayList)
     {
         try {
@@ -338,22 +343,22 @@ public class VehicleController {
             }
         });
 
-        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("vehicleType"));
-        tVT.setCellFactory(TextFieldTableCell.<Vehicle, VehicleType>forTableColumn(new StringConverter<VehicleType>() {
-            @Override
-            public String toString(VehicleType object) {
-                return null;
-            }
 
+        tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleType"));
+        tVT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
+        tVT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
             @Override
-            public VehicleType fromString(String string) {
-                return null;
-            }
-        }));
-        tVT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, VehicleType>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Vehicle, VehicleType> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleType(event.getNewValue());
+            public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                VehicleType vehicle;
+                if (event.getNewValue().equals("Car"))
+                {
+                    vehicle = VehicleType.Car;
+                }
+                else
+                {
+                    vehicle = VehicleType.Truck;
+                }
+                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleType(vehicle);
             }
         });
 

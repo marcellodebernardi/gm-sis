@@ -143,7 +143,17 @@
             </Tab>
             <Tab fx:id="userTab" text="Users">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ToolBar layoutX="7.0" prefHeight="40.0" prefWidth="481.0">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#addUser" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#editUser" text="Edit" />
+                              <Button mnemonicParsing="false" onAction="#deleteUser" text="Delete" />
+                              <Button mnemonicParsing="false" onAction="#searchUser" text="Search" />
+                          </items>
+                        </ToolBar>
+                     </children></AnchorPane>
               </content>
             </Tab>
         </tabs>

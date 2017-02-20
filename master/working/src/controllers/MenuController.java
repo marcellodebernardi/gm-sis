@@ -1,7 +1,9 @@
 package controllers;
 
         import domain.UserType;
+        import com.sun.javafx.stage.StageHelper;
         import javafx.fxml.FXML;
+        import javafx.collections.ObservableList;
         import javafx.scene.control.*;
         import logic.AuthenticationSystem;
         import javafx.stage.Stage;
@@ -10,6 +12,8 @@ package controllers;
         import javafx.scene.Parent;
 
         import java.io.IOException;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by DillonVaghela on 2/8/17.
@@ -27,10 +31,10 @@ public class MenuController {
         public Button addCustomer;
         public Button editCustomer;
         public Button searchCustomer;
-        Stage addStage;
-        Stage deleteStage;
-        Stage editSearchStage;
-        Stage searchStage;
+        Stage addStage = new Stage();
+        Stage deleteStage = new Stage();
+        Stage editSearchStage = new Stage();
+        Stage searchStage = new Stage();
         Stage addBStage;
         Stage deletebStage;
         Stage editBStage;
@@ -44,23 +48,45 @@ public class MenuController {
         Stage viewCustomerStage;
         Stage searchCustomerStage;
         Stage PartModule;
+        Stage addUser = new Stage();
+        Stage deleteUser = new Stage();
+        Stage editUser = new Stage();
+        Stage searchUser = new Stage();
 
         public void initialize() throws Exception {
                 setUserType();
         }
 
+    public boolean StageChecker()
+    {
+        if (searchStage.isShowing() || addStage.isShowing() || deleteStage.isShowing() || editSearchStage.isShowing())
+        {
+            ArrayList<Stage> list =  new ArrayList<Stage>();
+            list.add(searchStage);
+            list.add(addStage);
+            list.add(deleteStage);
+            list.add(editSearchStage);
+            for (Stage s : list)
+            {
+                if (s.isShowing() )
+                {
+                    s.setAlwaysOnTop(false);
+                    showAlert();
+                    s.setAlwaysOnTop(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
         @FXML
         public void handleButtonSearch() throws Exception {
                 try{
-                        if (searchStage != null)
-                        {
-                                if (searchStage.isShowing())
-                                {
-                                        showAlert();
-                                        searchStage.setAlwaysOnTop(true);
-                                        //searchStage.setFullScreen(true);
-                                        return; }
-                        }
+                    if (StageChecker())
+                    {
+                        return;
+                    }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         searchStage = new Stage();
@@ -81,15 +107,10 @@ public class MenuController {
         @FXML
 public void handleButtonAdd() throws Exception {
                 try{
-                        if (addStage != null)
-                        {
-                                if (addStage.isShowing())
-                                {
-                                        showAlert();
-                                        addStage.setAlwaysOnTop(true);
-                                        return;
-                                }
-                        }
+                    if (StageChecker())
+                    {
+                        return;
+                    }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         addStage = new Stage();
@@ -107,21 +128,17 @@ public void handleButtonAdd() throws Exception {
         {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setHeaderText("This window is already open, press ok and your window will show on top");
+            alert.setHeaderText("This window is already open or another vehicle window is open");
                 alert.showAndWait();
         }
 
         @FXML
         public void handleButtonDelete() throws Exception {
                 try{
-                        if (deleteStage != null)
-                        {
-                                if (deleteStage.isShowing())
-                                {
-                                        showAlert();
-                                        deleteStage.setAlwaysOnTop(true);
-                                        return; }
-                        }
+                    if (StageChecker())
+                    {
+                        return;
+                    }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         deleteStage = new Stage();
@@ -138,14 +155,10 @@ public void handleButtonAdd() throws Exception {
 
         public void handleButtonEditSearch() throws Exception {
                 try{
-                        if (editSearchStage != null)
-                        {
-                                if (editSearchStage.isShowing())
-                                {
-                                        showAlert();
-                                        editSearchStage.setAlwaysOnTop(true);
-                                        return; }
-                        }
+                    if (StageChecker())
+                    {
+                        return;
+                    }
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
                         Parent menu = fxmlLoader.load();
                         editSearchStage = new Stage();
@@ -459,5 +472,83 @@ public void handleButtonAdd() throws Exception {
 
     }
 
+    public void addUser() throws Exception
+    {
+        if (StageCheckerU())
+        {
+            return;
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/addUser.fxml"));
+        Parent menu = fxmlLoader.load();
+        addUser = new Stage();
+        addUser.setTitle("Search Customer");
+        addUser.setScene(new Scene(menu));
+        addUser.show();
+    }
 
+    public void deleteUser() throws Exception
+    {
+        if (StageCheckerU())
+        {
+            return;
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/deleteUser.fxml"));
+        Parent menu = fxmlLoader.load();
+        deleteUser = new Stage();
+        deleteUser.setTitle("Search Customer");
+        deleteUser.setScene(new Scene(menu));
+        deleteUser.show();
+    }
+
+    public void editUser() throws Exception
+    {
+        if (StageCheckerU())
+        {
+            return;
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/editUser.fxml"));
+        Parent menu = fxmlLoader.load();
+        editUser = new Stage();
+        editUser.setTitle("Search Customer");
+        editUser.setScene(new Scene(menu));
+        editUser.show();
+    }
+
+    public void searchUser() throws Exception
+    {
+        if (StageCheckerU())
+        {
+            return;
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/searchUser.fxml"));
+        Parent menu = fxmlLoader.load();
+        searchUser = new Stage();
+        searchUser.setTitle("Search Customer");
+        searchUser.setScene(new Scene(menu));
+        searchUser.show();
+    }
+
+
+    public boolean StageCheckerU()
+    {
+        if (addUser.isShowing() || deleteUser.isShowing() || editUser.isShowing() || searchUser.isShowing())
+        {
+            ArrayList<Stage> list =  new ArrayList<Stage>();
+            list.add(addUser);
+            list.add(deleteUser);
+            list.add(editUser);
+            list.add(searchUser);
+            for (Stage s : list)
+            {
+                if (s.isShowing() )
+                {
+                    s.setAlwaysOnTop(false);
+                    showAlert();
+                    s.setAlwaysOnTop(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
