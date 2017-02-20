@@ -466,7 +466,7 @@ public void handleButtonAdd() throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/PartModule.fxml"));
         Parent menu = fxmlLoader.load();
         PartModule = new Stage();
-        PartModule.setTitle("Main Menu");
+        PartModule.setTitle("Parts Module");
         PartModule.setScene(new Scene(menu));
         PartModule.show();
 

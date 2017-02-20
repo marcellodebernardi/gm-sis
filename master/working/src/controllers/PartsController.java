@@ -1,10 +1,8 @@
 package controllers;
 
 import domain.PartAbstraction;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import logic.CriterionOperator;
-import logic.PartsSystem;
 import persistence.DatabaseRepository;
 import logic.Criterion;
 import javafx.event.EventHandler;
@@ -19,24 +17,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
-
-import java.sql.Connection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.*;
+import java.util.ResourceBundle;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
+//import java.sql.Connection;
+//import org.controlsfx.control.textfield.TextFields;
+//import javax.swing.*;
 
-import javax.swing.*;
 
+public class PartsController implements Initializable {
 
-public class PartsController {
-
-    @FXML
-    private Button addPartBtn;
     @FXML
     private TableView<PartAbstraction> PartsTable;
     @FXML
@@ -50,22 +47,19 @@ public class PartsController {
     @FXML
     private TableColumn<PartAbstraction, Integer> partStockLevel;
     @FXML
-    private Button editPartBtn;
-    @FXML
-    private Button deletePartBtn;
-    @FXML
-    private Button withdrawBtn;
-    @FXML
-    private Button updateBtn;
-    @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<?> PartCB1;
+    private ComboBox<String> CB1, CB2, CB3,CB4;
     @FXML
-    private Button searchBtn;
+    private TextField price1, price2, price3, price4;
+    @FXML
+    private TextField qty1, qty2, qty3, qty4, totalBill;
+    @FXML
+    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
+    private ArrayList data=new ArrayList();
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
     final ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
@@ -73,30 +67,61 @@ public class PartsController {
     private List<PartAbstraction> List;
     private List<PartAbstraction> List2;
 
+    ObservableList<String> CB=FXCollections.observableArrayList();
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * The initialize method ensures that the combo-boxes which i have created refers to an observableArrayList (CB).
+     * Need to click "Display All Parts" button so that the updateTable() method puts data into that list object.
+     *
+     */
+    public void initialize(URL location, ResourceBundle resources){
 
+        try {
+            CB1.setItems(CB);
+        }catch(NullPointerException e){e.printStackTrace();}
+
+        try {
+            CB2.setItems(CB);
+        }catch(NullPointerException e){e.printStackTrace();}
+
+        try {
+            CB3.setItems(CB);
+        }catch(NullPointerException e){e.printStackTrace();}
+
+        try {
+            CB4.setItems(CB);
+        }catch(NullPointerException e){e.printStackTrace();}
+
+    }
+
+    /**
+     * This method is the action for my "Display All Parts" button on the interface
+     * This method is responsible for fetching data and displaying it all in the TableView
+     * The TableView has also been created to be made editable when double clicking on the cell
+     *
+     */
     public void updateTable() {
 
         Criterion c = new Criterion<>(PartAbstraction.class);
 
         List = instance.getByCriteria(c); //the data from Parts DB stored in this list
 
-        /** test list
-         *
-         *
-         * // System.out.println(List.get(0).getPartName());
-         * // System.out.println(List.get(1).getPartName());
-         * /System.out.println(List.get(0).getPartDescription());
-         * // System.out.println(List.size());
-         **/
+        //Test
+        // System.out.println(List.get(0).getPartName());
+        // System.out.println(List.get(1).getPartName());
+        //System.out.println(List.get(0).getPartDescription());
+        // System.out.println(List.size());
 
-        tableEntries.removeAll(tableEntries);
+        tableEntries.removeAll(tableEntries); //table clears for when database gets updated
 
         for (int i = 0; i < List.size(); i++) {
 
             tableEntries.add(List.get(i));
+            data.add(List.get(i).getPartName());
+            CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
         }
 
         partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
@@ -146,6 +171,8 @@ public class PartsController {
 
         PartsTable.setItems(tableEntries);
 
+       // TextFields.bindAutoCompletion(searchParts,data);
+
     }
 
     public void addPartButtonClick() throws Exception {
@@ -169,6 +196,7 @@ public class PartsController {
             System.out.println("Cannot Open");
 
         }
+        CB1.setItems(CB);
     }
 
     public void withdrawButtonClick() throws Exception {
@@ -198,17 +226,80 @@ public class PartsController {
         alert.showAndWait();
     }
 
+    /**
+     * In order to search the table, user must click on "display all parts" button first and then enter
+     * part name to search, then click on the search button, the data should display in tableview...
+     */
     public void searchPart() {
 
+        tableEntries.removeAll(tableEntries);
+
+        for(int i=0; i<List.size(); i++){
+
+            if(List.get(i).getPartName().toLowerCase().contains(searchParts.getText())){
+                tableEntries.add(List.get(i));
+            }
+        }
+
+        PartsTable.setItems(tableEntries);
+
+    }
+
+    /**
+     * The CbSelect methods are used to get the price for the ID which is selected in the combo-box and sets the textbox
+     * to display the price...
+     */
+
+    public void CbSelect(){
+
+        int IdIndex=CB1.getSelectionModel().getSelectedIndex();
+        System.out.println(IdIndex);
+        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        price1.setText(price);
+
+    }
+    public void CbSelect2(){
+
+        int IdIndex=CB2.getSelectionModel().getSelectedIndex();
+        System.out.println(IdIndex);
+        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        price2.setText(price);
+
+    }
+
+    public void CbSelect3(){
+
+        int IdIndex=CB3.getSelectionModel().getSelectedIndex();
+        System.out.println(IdIndex);
+        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        price3.setText(price);
+
+    }
+
+    public void CbSelect4(){
+
+        int IdIndex=CB4.getSelectionModel().getSelectedIndex();
+        System.out.println(IdIndex);
+        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        price4.setText(price);
+
+    }
+
+    public void calculateBill(){
+
+        TextField[] prices={price1,price2,price3,price4};
+        TextField[] quantity={qty1,qty2,qty3,qty4};
+        Double total=0.00;
+        for(int i=0;i<4;i++){
+            if(!prices[i].getText().equals("")&&!quantity[i].getText().equals("")){
+                total+=(Double.parseDouble(prices[i].getText())*Integer.parseInt(quantity[i].getText()));
+            }
+        }
+        String.format("%1$,.2f", total);
+       totalBill.setText("£ " + total.toString()+"");
+
 
 
     }
-    public void clickCB1(){
-
-
-
-    }
-
-
 }
 
