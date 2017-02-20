@@ -12,10 +12,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PartsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PartsController">
    <children>
-      <TabPane prefHeight="554.0" prefWidth="994.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="701.0" prefWidth="994.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Parts">
             <content>
@@ -23,9 +24,21 @@
                      <children>
                         <ToolBar prefHeight="39.0" prefWidth="994.0">
                           <items>
-                            <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#addPartButtonClick" text="Add Stock" />
+                              <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="133.0" text="Display All Parts">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Button>
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
-                              <Button fx:id="withdrawBtn" mnemonicParsing="false" onAction="#withdrawButtonClick" text="Withdraw Stock" />
+                            <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#addPartButtonClick" prefHeight="27.0" prefWidth="133.0" text="Add Stock">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Button>
+                              <Separator orientation="VERTICAL" prefHeight="1.0" />
+                              <Button fx:id="withdrawBtn" mnemonicParsing="false" onAction="#withdrawButtonClick" prefHeight="27.0" prefWidth="133.0" text="Withdraw Stock">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Button>
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
                           </items>
                         </ToolBar>
@@ -38,49 +51,86 @@
                               <TableColumn fx:id="partStockLevel" minWidth="7.0" prefWidth="85.85107421875" text="Stock Level" />
                           </columns>
                         </TableView>
-                        <Label layoutX="14.0" layoutY="56.0" text="Currently available:" />
-                        <TableView layoutX="14.0" layoutY="340.0" prefHeight="162.0" prefWidth="851.0">
+                        <Label layoutX="13.0" layoutY="56.0" text="Currently available:">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <TableView layoutX="14.0" layoutY="365.0" prefHeight="142.0" prefWidth="972.0">
                            <columns>
-                              <TableColumn prefWidth="79.30229377746582" text="Booking ID" />
-                              <TableColumn prefWidth="79.32534790039062" text="Vehicle ID" />
-                              <TableColumn minWidth="0.0" prefWidth="80.67462158203125" text="Reg No" />
-                              <TableColumn prefWidth="94.046142578125" text="Name" />
-                              <TableColumn prefWidth="97.2322998046875" text="Surname" />
-                              <TableColumn minWidth="0.0" prefWidth="87.76779174804688" text="Part Name" />
-                              <TableColumn prefWidth="93.18609619140625" text="Description" />
-                              <TableColumn prefWidth="115.81390380859375" text="Installation Date" />
-                              <TableColumn prefWidth="121.0" text="Warranty Expiry" />
+                              <TableColumn prefWidth="99.1675386428833" text="Booking ID" />
+                              <TableColumn prefWidth="101.83243560791016" text="Vehicle ID" />
+                              <TableColumn minWidth="0.0" prefWidth="142.66488647460938" text="Reg No" />
+                              <TableColumn prefWidth="147.55136108398438" text="Firstname" />
+                              <TableColumn prefWidth="140.09060668945312" text="Surname" />
+                              <TableColumn minWidth="0.0" prefWidth="101.32440185546875" text="Part Name" />
+                              <TableColumn prefWidth="113.6590576171875" text="Installation Date" />
+                              <TableColumn prefWidth="127.3409423828125" text="Warranty Expiry" />
                            </columns>
                         </TableView>
-                        <Separator layoutX="3.0" layoutY="283.0" prefHeight="12.0" prefWidth="994.0" />
-                        <Button layoutX="870.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Add to list" />
-                        <Button layoutX="871.0" layoutY="380.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Edit list" />
-                        <Button layoutX="871.0" layoutY="417.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="Delete from list" />
-                        <Label layoutX="20.0" layoutY="310.0" text="Part Installation History:" />
+                        <Separator layoutX="3.0" layoutY="281.0" prefHeight="12.0" prefWidth="994.0" />
+                        <Button layoutX="862.0" layoutY="544.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="120.0" text="Add" />
+                        <Label layoutX="20.0" layoutY="298.0" text="Part Installation History:">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
                         <Separator layoutX="705.0" layoutY="43.0" orientation="VERTICAL" prefHeight="243.0" prefWidth="6.0" />
-                        <ChoiceBox layoutX="197.0" layoutY="303.0" prefHeight="27.0" prefWidth="200.0" />
-                        <TextField layoutX="403.0" layoutY="302.0" prefHeight="27.0" prefWidth="463.0" promptText="Search by regisration number or customer name" />
-                        <Label layoutX="798.0" layoutY="47.0" text="Parts Bill Calculator" />
-                        <Label layoutX="743.0" layoutY="76.0" text="Part ID" />
-                        <Label layoutX="847.0" layoutY="76.0" text="Price" />
-                        <Label layoutX="923.0" layoutY="76.0" text="Quantity" />
-                        <TextField fx:id="price1" layoutX="817.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField fx:id="price2" layoutX="818.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField fx:id="price3" layoutX="818.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField fx:id="price4" layoutX="818.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
-                        <TextField fx:id="qty1" layoutX="917.0" layoutY="98.0" prefHeight="27.0" prefWidth="65.0" />
-                        <TextField fx:id="qty2" layoutX="918.0" layoutY="134.0" prefHeight="27.0" prefWidth="65.0" />
-                        <TextField fx:id="qty3" layoutX="918.0" layoutY="169.0" prefHeight="27.0" prefWidth="65.0" />
-                        <TextField fx:id="qty4" layoutX="918.0" layoutY="203.0" prefHeight="27.0" prefWidth="65.0" />
-                        <Button fx:id="calculateBtn" layoutX="717.0" layoutY="237.0" mnemonicParsing="false" onAction="#calculateBill" prefHeight="43.0" prefWidth="95.0" text="Calculate" />
-                        <TextField fx:id="totalBill" layoutX="819.0" layoutY="247.0" prefHeight="27.0" prefWidth="163.0" text="Total Bill" />
-                        <TextField fx:id="searchParts" layoutX="145.0" layoutY="51.0" prefHeight="27.0" prefWidth="300.0" promptText="Enter part name and click search..." />
+                        <ChoiceBox layoutX="17.0" layoutY="328.0" prefHeight="27.0" prefWidth="200.0" />
+                        <TextField layoutX="222.0" layoutY="328.0" prefHeight="27.0" prefWidth="762.0" promptText="Search by regisration number or customer name" />
+                        <Label layoutX="798.0" layoutY="47.0" text="Parts Bill Calculator">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <Label layoutX="743.0" layoutY="76.0" text="Part ID">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <Label layoutX="853.0" layoutY="76.0" text="Price">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <Label layoutX="926.0" layoutY="76.0" text="Quantity">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <TextField fx:id="price1" alignment="CENTER" layoutX="825.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField fx:id="price2" alignment="CENTER" layoutX="825.0" layoutY="134.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField fx:id="price3" alignment="CENTER" layoutX="825.0" layoutY="169.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField fx:id="price4" alignment="CENTER" layoutX="825.0" layoutY="203.0" prefHeight="27.0" prefWidth="92.0" />
+                        <TextField fx:id="qty1" layoutX="942.0" layoutY="98.0" prefHeight="27.0" prefWidth="28.0" promptText="Q" />
+                        <TextField fx:id="qty2" layoutX="942.0" layoutY="134.0" prefHeight="27.0" prefWidth="28.0" promptText="Q" />
+                        <TextField fx:id="qty3" layoutX="942.0" layoutY="169.0" prefHeight="27.0" prefWidth="28.0" promptText="Q" />
+                        <TextField fx:id="qty4" layoutX="943.0" layoutY="203.0" prefHeight="27.0" prefWidth="28.0" promptText="Q" />
+                        <Button fx:id="calculateBtn" layoutX="717.0" layoutY="247.0" mnemonicParsing="false" onAction="#calculateBill" prefHeight="25.0" prefWidth="95.0" text="Calculate" />
+                        <TextField fx:id="totalBill" alignment="CENTER" layoutX="824.0" layoutY="247.0" prefHeight="27.0" prefWidth="158.0" text="Total Parts Bill" />
+                        <TextField fx:id="searchParts" layoutX="155.0" layoutY="51.0" prefHeight="27.0" prefWidth="413.0" promptText="Enter part name and click search..." />
                         <ComboBox fx:id="CB1" layoutX="717.0" layoutY="98.0" onAction="#CbSelect" prefHeight="27.0" prefWidth="92.0" />
-                        <Button fx:id="searchBtn" layoutX="452.0" layoutY="52.0" mnemonicParsing="false" onAction="#searchPart" prefHeight="27.0" prefWidth="122.0" text="Search" />
-                        <Button fx:id="updateBtn" layoutX="581.0" layoutY="52.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="122.0" text="Display All Parts" />
+                        <Button fx:id="searchBtn" layoutX="576.0" layoutY="51.0" mnemonicParsing="false" onAction="#searchPart" prefHeight="27.0" prefWidth="122.0" text="Search" />
                         <ComboBox fx:id="CB2" layoutX="717.0" layoutY="134.0" onAction="#CbSelect2" prefHeight="27.0" prefWidth="92.0" />
                         <ComboBox fx:id="CB3" layoutX="717.0" layoutY="170.0" onAction="#CbSelect3" prefHeight="27.0" prefWidth="92.0" />
                         <ComboBox fx:id="CB4" layoutX="717.0" layoutY="204.0" onAction="#CbSelect4" prefHeight="27.0" prefWidth="93.0" />
+                        <Label layoutX="17.0" layoutY="550.0" text="Booking ID" />
+                        <TextField layoutX="100.0" layoutY="545.0" />
+                        <TextField layoutX="100.0" layoutY="581.0" />
+                        <TextField layoutX="100.0" layoutY="620.0" />
+                        <TextField layoutX="370.0" layoutY="546.0" />
+                        <TextField layoutX="370.0" layoutY="581.0" />
+                        <TextField layoutX="370.0" layoutY="619.0" />
+                        <TextField layoutX="661.0" layoutY="546.0" promptText="DD/MM/YYYY" />
+                        <TextField layoutX="661.0" layoutY="582.0" promptText="DD/MM/YYYY" />
+                        <Label layoutX="17.0" layoutY="587.0" text="Vehicle ID" />
+                        <Label layoutX="18.0" layoutY="624.0" text="Registration" />
+                        <Label layoutX="294.0" layoutY="549.0" text="Firstname" />
+                        <Label layoutX="294.0" layoutY="586.0" text="Surname" />
+                        <Label layoutX="294.0" layoutY="625.0" text="Part Name" />
+                        <Label layoutX="555.0" layoutY="550.0" text="Installation Date" />
+                        <Label layoutX="555.0" layoutY="592.0" text="Warranty Expiry" />
+                        <Separator layoutX="-3.0" layoutY="504.0" prefHeight="22.0" prefWidth="999.0" />
+                        <Label layoutX="17.0" layoutY="519.0" text="Add to list:">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="846.0" layoutY="291.0" mnemonicParsing="false" text="Delete from history" />
                      </children>
                   </AnchorPane>
             </content>

@@ -60,13 +60,10 @@ public class PartsController implements Initializable {
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
     private ArrayList data=new ArrayList();
+    private List<PartAbstraction> List;
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
-    final ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
-    final ObservableList<PartAbstraction> tableItems = FXCollections.observableArrayList();
-    private List<PartAbstraction> List;
-    private List<PartAbstraction> List2;
-
+    ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
     ObservableList<String> CB=FXCollections.observableArrayList();
 
 
@@ -81,17 +78,8 @@ public class PartsController implements Initializable {
 
         try {
             CB1.setItems(CB);
-        }catch(NullPointerException e){e.printStackTrace();}
-
-        try {
             CB2.setItems(CB);
-        }catch(NullPointerException e){e.printStackTrace();}
-
-        try {
             CB3.setItems(CB);
-        }catch(NullPointerException e){e.printStackTrace();}
-
-        try {
             CB4.setItems(CB);
         }catch(NullPointerException e){e.printStackTrace();}
 
@@ -99,9 +87,9 @@ public class PartsController implements Initializable {
 
     /**
      * This method is the action for my "Display All Parts" button on the interface
-     * This method is responsible for fetching data and displaying it all in the TableView
-     * The TableView has also been created to be made editable when double clicking on the cell
-     *
+     * This method is responsible for fetching data and displaying it all in the TableView by creating a list and storing into the object
+     * Also the combo-box gets the PartAbstractionID and is stored into the object
+     * Once the list has been created the setPartsTable() method is called and the PartsTable is set with the tableEntries data
      */
     public void updateTable() {
 
@@ -123,6 +111,20 @@ public class PartsController implements Initializable {
             data.add(List.get(i).getPartName());
             CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
         }
+
+        setPartsTable();;
+
+        PartsTable.setItems(tableEntries);
+
+       // TextFields.bindAutoCompletion(searchParts,data);
+
+    }
+
+    /**
+     * The setPartsTable() method has been created to set the data in the TableView
+     * Each field has been made to be editable when double clicked, the data can be edited using the interface
+     */
+    public void setPartsTable(){
 
         partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
         partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
@@ -169,11 +171,14 @@ public class PartsController implements Initializable {
             }
         });
 
-        PartsTable.setItems(tableEntries);
-
-       // TextFields.bindAutoCompletion(searchParts,data);
-
     }
+
+    /**
+     * The addPartButtonClick() and withdrawButtonClick method opens up an pop up window which allows users to enter new stock/withdraw stock into/from the system
+     * If the user clicks on the button whilst the relevant window is already open then an alert is shown to user
+     * The showAlert() method displays a pop up window telling the user the window is already open
+     * @throws Exception
+     */
 
     public void addPartButtonClick() throws Exception {
         try {
@@ -196,7 +201,7 @@ public class PartsController implements Initializable {
             System.out.println("Cannot Open");
 
         }
-        CB1.setItems(CB);
+        //CB1.setItems(CB);
     }
 
     public void withdrawButtonClick() throws Exception {
@@ -228,7 +233,7 @@ public class PartsController implements Initializable {
 
     /**
      * In order to search the table, user must click on "display all parts" button first and then enter
-     * part name to search, then click on the search button, the data should display in tableview...
+     * part name to search, then click on the search button, the data should display in TableView...
      */
     public void searchPart() {
 
@@ -242,7 +247,6 @@ public class PartsController implements Initializable {
         }
 
         PartsTable.setItems(tableEntries);
-
     }
 
     /**
@@ -266,7 +270,6 @@ public class PartsController implements Initializable {
         price2.setText(price);
 
     }
-
     public void CbSelect3(){
 
         int IdIndex=CB3.getSelectionModel().getSelectedIndex();
@@ -275,7 +278,6 @@ public class PartsController implements Initializable {
         price3.setText(price);
 
     }
-
     public void CbSelect4(){
 
         int IdIndex=CB4.getSelectionModel().getSelectedIndex();
@@ -285,21 +287,24 @@ public class PartsController implements Initializable {
 
     }
 
+    /**
+     * This method allows user to calculate individual parts bill where the user must click "Display All Parts" button
+     * Once that button is clicked, the user selects the part id from relevent combo-box and the price is displayed
+     * The user needs to input the quantity and click the button which stores the values into an array
+     */
     public void calculateBill(){
 
         TextField[] prices={price1,price2,price3,price4};
         TextField[] quantity={qty1,qty2,qty3,qty4};
         Double total=0.00;
+
         for(int i=0;i<4;i++){
             if(!prices[i].getText().equals("")&&!quantity[i].getText().equals("")){
                 total+=(Double.parseDouble(prices[i].getText())*Integer.parseInt(quantity[i].getText()));
             }
         }
-        String.format("%1$,.2f", total);
-       totalBill.setText("£ " + total.toString()+"");
-
-
-
+        //String.format("%1$,.2f", total);
+        totalBill.setText("£ " + total.toString()+"");
     }
 }
 
