@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
@@ -16,15 +17,6 @@
    <children>
       <TabPane prefHeight="554.0" prefWidth="994.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Other Modules">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ToolBar prefHeight="40.0" prefWidth="995.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
           <Tab text="Parts">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="433.0" prefWidth="742.0">
@@ -46,7 +38,7 @@
                               <TableColumn fx:id="partStockLevel" minWidth="7.0" prefWidth="85.85107421875" text="Stock Level" />
                           </columns>
                         </TableView>
-                        <Label layoutX="179.0" layoutY="54.0" text="Currently available in garage:" />
+                        <Label layoutX="118.0" layoutY="56.0" text="Currently available in garage:" />
                         <TableView layoutX="14.0" layoutY="340.0" prefHeight="162.0" prefWidth="851.0">
                            <columns>
                               <TableColumn prefWidth="79.30229377746582" text="Booking ID" />
@@ -70,10 +62,6 @@
                         <TextField layoutX="403.0" layoutY="302.0" prefHeight="27.0" prefWidth="463.0" promptText="Search by regisration number or customer name" />
                         <Label layoutX="798.0" layoutY="47.0" text="Parts Bill Calculator" />
                         <Label layoutX="743.0" layoutY="76.0" text="Part ID" />
-                        <ChoiceBox layoutX="720.0" layoutY="98.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="720.0" layoutY="134.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="721.0" layoutY="168.0" prefHeight="27.0" prefWidth="90.0" />
-                        <ChoiceBox layoutX="721.0" layoutY="203.0" prefHeight="27.0" prefWidth="90.0" />
                         <Label layoutX="847.0" layoutY="76.0" text="Price" />
                         <Label layoutX="923.0" layoutY="76.0" text="Quantity" />
                         <TextField layoutX="817.0" layoutY="98.0" prefHeight="27.0" prefWidth="92.0" />
@@ -86,8 +74,10 @@
                         <TextField layoutX="918.0" layoutY="203.0" prefHeight="27.0" prefWidth="65.0" />
                         <Button layoutX="721.0" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Calculate" />
                         <TextField layoutX="820.0" layoutY="247.0" prefHeight="27.0" prefWidth="162.0" text="Total Bill" />
-                        <Button fx:id="updateBtn" layoutX="11.0" layoutY="50.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="150.0" text="Display Parts" />
-                        <TextField fx:id="searchParts" layoutX="368.0" layoutY="51.0" onAction="#searchPart" prefHeight="27.0" prefWidth="330.0" />
+                        <Button fx:id="updateBtn" layoutX="11.0" layoutY="50.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="27.0" prefWidth="99.0" text="Display Parts" />
+                        <TextField fx:id="searchParts" layoutX="305.0" layoutY="51.0" prefHeight="27.0" prefWidth="266.0" />
+                        <ComboBox fx:id="CB1" layoutX="715.0" layoutY="98.0" onAction="#clickCB1" prefHeight="27.0" prefWidth="94.0" />
+                        <Button fx:id="searchBtn" layoutX="576.0" layoutY="51.0" mnemonicParsing="false" onAction="#searchPart" prefHeight="27.0" prefWidth="124.0" text="Search" />
                      </children>
                   </AnchorPane>
             </content>

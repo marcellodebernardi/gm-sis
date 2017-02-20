@@ -9,6 +9,8 @@ package controllers;
         import javafx.scene.Scene;
         import javafx.scene.Parent;
 
+        import java.io.IOException;
+
 /**
  * Created by DillonVaghela on 2/8/17.
  */
@@ -41,6 +43,7 @@ public class MenuController {
         Stage deleteCustomerStage;
         Stage viewCustomerStage;
         Stage searchCustomerStage;
+        Stage PartModule;
 
         public void initialize() throws Exception {
                 setUserType();
@@ -445,8 +448,14 @@ public void handleButtonAdd() throws Exception {
         }
     }
 
-    public void PartMenu()
-    {
+    public void PartMenu() throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/PartModule.fxml"));
+        Parent menu = fxmlLoader.load();
+        PartModule = new Stage();
+        PartModule.setTitle("Main Menu");
+        PartModule.setScene(new Scene(menu));
+        PartModule.show();
 
     }
 

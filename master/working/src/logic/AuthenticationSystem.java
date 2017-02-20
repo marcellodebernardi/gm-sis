@@ -23,7 +23,9 @@ public class AuthenticationSystem {
         persistence = DatabaseRepository.getInstance();
     }
 
-    // currently only accepted userID is "00000", password "password"
+    // currently only accepted userID is "admin", password "password"
+
+
     public boolean login(String username, String password) {
         User user;
         List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, username)

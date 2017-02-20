@@ -2,6 +2,9 @@ package controllers;
 
 import domain.PartAbstraction;
 import javafx.scene.control.*;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import logic.CriterionOperator;
+import logic.PartsSystem;
 import persistence.DatabaseRepository;
 import logic.Criterion;
 import javafx.event.EventHandler;
@@ -17,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.*;
@@ -24,39 +28,56 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ComboBox;
+
+import javax.swing.*;
 
 
 public class PartsController {
 
-    @FXML private Button addPartBtn;
-    @FXML private TableView<PartAbstraction> PartsTable;
-    @FXML private TableColumn<PartAbstraction, Integer> partAbstractionID;
-    @FXML private TableColumn<PartAbstraction, String> partName;
-    @FXML private TableColumn<PartAbstraction, String> partDescription;
-    @FXML private TableColumn<PartAbstraction, Double> partPrice;
-    @FXML private TableColumn<PartAbstraction, Integer> partStockLevel;
-    @FXML private Button editPartBtn;
-    @FXML private Button deletePartBtn;
-    @FXML private Button withdrawBtn;
-    @FXML private Button updateBtn;
-    @FXML private TextField searchParts;
+    @FXML
+    private Button addPartBtn;
+    @FXML
+    private TableView<PartAbstraction> PartsTable;
+    @FXML
+    private TableColumn<PartAbstraction, Integer> partAbstractionID;
+    @FXML
+    private TableColumn<PartAbstraction, String> partName;
+    @FXML
+    private TableColumn<PartAbstraction, String> partDescription;
+    @FXML
+    private TableColumn<PartAbstraction, Double> partPrice;
+    @FXML
+    private TableColumn<PartAbstraction, Integer> partStockLevel;
+    @FXML
+    private Button editPartBtn;
+    @FXML
+    private Button deletePartBtn;
+    @FXML
+    private Button withdrawBtn;
+    @FXML
+    private Button updateBtn;
+    @FXML
+    private TextField searchParts;
+    @FXML
+    private ComboBox<?> PartCB1;
+    @FXML
+    private Button searchBtn;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
     final ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
-    final ObservableList tableEntries2 = FXCollections.observableArrayList();
     final ObservableList<PartAbstraction> tableItems = FXCollections.observableArrayList();
     private List<PartAbstraction> List;
     private List<PartAbstraction> List2;
-    private String[] split2;
-    private ArrayList data = new ArrayList();
 
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public void updateTable(){
+    public void updateTable() {
 
         Criterion c = new Criterion<>(PartAbstraction.class);
 
@@ -73,16 +94,17 @@ public class PartsController {
 
         tableEntries.removeAll(tableEntries);
 
-        for(int i =0; i<List.size(); i++){
+        for (int i = 0; i < List.size(); i++) {
 
             tableEntries.add(List.get(i));
         }
 
+        partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
         partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
         partAbstractionID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Integer>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<PartAbstraction, Integer> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartAbstractionID(event.getNewValue());
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartAbstractionID(event.getNewValue());
             }
         });
 
@@ -91,7 +113,7 @@ public class PartsController {
         partName.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<PartAbstraction, String> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartName(event.getNewValue());
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartName(event.getNewValue());
             }
         });
 
@@ -100,7 +122,7 @@ public class PartsController {
         partDescription.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<PartAbstraction, String> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartDescription(event.getNewValue());
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartDescription(event.getNewValue());
             }
         });
 
@@ -109,7 +131,7 @@ public class PartsController {
         partPrice.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Double>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<PartAbstraction, Double> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartPrice(event.getNewValue());
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartPrice(event.getNewValue());
             }
         });
 
@@ -118,7 +140,7 @@ public class PartsController {
         partStockLevel.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Integer>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<PartAbstraction, Integer> event) {
-                ( event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartStockLevel(event.getNewValue());
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartStockLevel(event.getNewValue());
             }
         });
 
@@ -126,12 +148,10 @@ public class PartsController {
 
     }
 
-    public void addPartButtonClick() throws Exception{
-        try{
-            if (AddPartStage != null)
-            {
-                if (AddPartStage.isShowing())
-                {
+    public void addPartButtonClick() throws Exception {
+        try {
+            if (AddPartStage != null) {
+                if (AddPartStage.isShowing()) {
                     showAlert();
                     AddPartStage.setAlwaysOnTop(true);
                     return;
@@ -145,20 +165,16 @@ public class PartsController {
             AddPartStage.setScene(new Scene(menu));
             AddPartStage.show();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Cannot Open");
 
         }
     }
 
-    public void withdrawButtonClick() throws Exception{
-        try{
-            if (WithdrawPartStage != null)
-            {
-                if (WithdrawPartStage.isShowing())
-                {
+    public void withdrawButtonClick() throws Exception {
+        try {
+            if (WithdrawPartStage != null) {
+                if (WithdrawPartStage.isShowing()) {
                     showAlert();
                     WithdrawPartStage.setAlwaysOnTop(true);
                     return;
@@ -170,15 +186,12 @@ public class PartsController {
             WithdrawPartStage.setTitle("Withdraw Part");
             WithdrawPartStage.setScene(new Scene(menu));
             WithdrawPartStage.show();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Cannot Open");
         }
     }
 
-    public void showAlert()
-    {
+    public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Alert");
         alert.setHeaderText("This window is already open, press ok to continue");
@@ -187,26 +200,15 @@ public class PartsController {
 
     public void searchPart() {
 
-        // TODO: fix the search textfield, not returning list properly
 
-        Criterion c2 =new Criterion<>(PartAbstraction.class);
-        List2 = instance.getByCriteria(c2);
-
-        tableEntries2.removeAll(tableEntries2);
-        tableItems.removeAll(tableItems);
-
-        for(int i=0; i<List2.size(); i++){
-
-            if(searchParts.getText().equals("") || List2.get(i).getPartName().startsWith(searchParts.getText()));
-            {
-                tableEntries2.add(List2.get(i).getPartName());
-                tableItems.add(List2.get(i));
-            }
-        }
-
-
-        PartsTable.setItems(tableEntries2);
 
     }
+    public void clickCB1(){
+
+
+
+    }
+
+
 }
 
