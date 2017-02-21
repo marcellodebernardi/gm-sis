@@ -103,7 +103,8 @@ class StatementNode implements Comparable<StatementNode> {
         if (statementType == StatementType.INSERT) {
             String keys = solvedValues.keySet().toString();
             keys = keys.replace("[", "(");
-            keys = keys.replace("]", ")");
+            keys = keys.replace("]", "");
+            keys += ", " + primaryKey + ")";
 
             String values = "";
             String delim = "";
@@ -112,7 +113,7 @@ class StatementNode implements Comparable<StatementNode> {
                         delim + value : delim + "'" + value + "'";
                 delim = ", ";
             }
-            values = "(" + values + ")";
+            values = "(" + values + ", " + primaryKeyValue + ")";
 
             // handle user and vehicle special cases
             if (table.equals(User.class) || table.equals(Vehicle.class)) {
@@ -160,7 +161,9 @@ class StatementNode implements Comparable<StatementNode> {
         try {
             primaryKeyValue = primaryGetter.invoke(object);
             // has no primary key: INSERT
-            if (primaryKeyValue == null) {
+            if (primaryKeyValue == null ||
+                    (numericTypes.contains(primaryKeyValue.getClass())
+                            && primaryKeyValue.equals(-1))) {
                 statementType = StatementType.INSERT;
                 primaryKeyValue = persistence.getNextID(table.getSimpleName(), primaryKey);
             }

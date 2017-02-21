@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
-   <children>
-      <TabPane prefHeight="500.0" prefWidth="691.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.MenuController">
+      <TabPane tabClosingPolicy="UNAVAILABLE">
           <Tab text="Today">
                <content>
                   <GridPane>
@@ -75,9 +75,9 @@
                   </ToolBar>
                </content>
             </Tab>
-            <Tab text="Bookings">
+          <Tab text="Bookings">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane>
                      <children>
                         <ToolBar layoutX="1.0" prefHeight="40.0" prefWidth="600.0">
                           <items>
@@ -92,7 +92,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Vehicle">
+          <Tab text="Vehicle">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -108,7 +108,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Parts">
+          <Tab text="Parts">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -121,9 +121,9 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Specialist Repairs">
+          <Tab text="Specialist Repairs">
                 <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="358.0" prefWidth="589.0">
+                    <AnchorPane>
                      <children>
                         <Button fx:id="addSRBooking" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#addSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Add Booking" />
                         <Button fx:id="deleteSRBooking" layoutX="151.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Delete Booking" />
@@ -141,7 +141,7 @@
                     </AnchorPane>
                 </content>
             </Tab>
-            <Tab fx:id="userTab" text="Users">
+          <Tab fx:id="userTab" text="Users">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -156,8 +156,7 @@
                      </children></AnchorPane>
               </content>
             </Tab>
-        </tabs>
       </TabPane>
       <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="UserType" />
-   </children>
+    <!-- todo get rid of fixed position -->
 </AnchorPane>

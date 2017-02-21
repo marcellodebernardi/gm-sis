@@ -101,8 +101,20 @@ public class RepositoryTests {
                         CriterionOperator.EqualTo,
                         "TEST REG"));
 
+        DatabaseRepository.getInstance().commitItem(new PartAbstraction("" +
+                "Spork plug",
+                "Spork plugs are amazing",
+                10,
+                10,
+                null
+                ));
 
-        assertTrue(result.size() != 0 && vehicle.size() != 0);
+        List<PartAbstraction> parts = DatabaseRepository
+                .getInstance()
+                .getByCriteria(new Criterion<>(
+                        PartAbstraction.class));
+
+        assertTrue(result.size() != 0 && vehicle.size() != 0 && parts.size() != 0);
     }
 
     @Test

@@ -25,6 +25,11 @@ public class LoginController {
     private AuthenticationSystem authentication = AuthenticationSystem.getInstance();
 
 
+    public void initialize() {
+        // todo
+    }
+
+
     @FXML
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
