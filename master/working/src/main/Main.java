@@ -18,7 +18,7 @@ import persistence.DatabaseRepository;
 public class Main extends Application {
     private Stage primaryStage;
     private Scene mainScene;
-    private BorderPane mainPane; // todo inject on controllers
+    private BorderPane rootNode; // todo inject on controllers
     private DatabaseRepository persistence; // todo inject on modules
 
     public static void main (String[] args) {
