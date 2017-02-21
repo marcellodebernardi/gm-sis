@@ -1,5 +1,6 @@
 package controllers;
 
+import domain.Installation;
 import domain.PartAbstraction;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -19,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.lang.*;
 import java.util.ResourceBundle;
@@ -46,6 +48,22 @@ public class PartsController implements Initializable {
     private TableColumn<PartAbstraction, Double> partPrice;
     @FXML
     private TableColumn<PartAbstraction, Integer> partStockLevel;
+
+    @FXML
+    private TableView<Installation> PartsBookings;
+    @FXML
+    private TableColumn<Installation, Integer> installationID;
+    @FXML
+    private TableColumn<Installation, Date> installationDate;
+    @FXML
+    private TableColumn<Installation, Date> warrantyEnd;
+    @FXML
+    private TableColumn<Installation, Integer> partAbsID;
+    @FXML
+    private TableColumn<Installation, Integer> partOccID;
+    @FXML
+    private TableColumn<Installation, String> regNumber;
+
     @FXML
     private TextField searchParts;
     @FXML
@@ -55,15 +73,18 @@ public class PartsController implements Initializable {
     @FXML
     private TextField qty1, qty2, qty3, qty4, totalBill;
     @FXML
-    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn;
+    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
     private ArrayList data=new ArrayList();
     private List<PartAbstraction> List;
+    private List<Installation> List2;
 
     DatabaseRepository instance = DatabaseRepository.getInstance();
     ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
+    ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
+
     ObservableList<String> CB=FXCollections.observableArrayList();
 
 
@@ -305,6 +326,46 @@ public class PartsController implements Initializable {
         }
         //String.format("%1$,.2f", total);
         totalBill.setText("£ " + total.toString()+"");
+    }
+
+
+    /**
+     * TODO: fix the Installation data
+     * TODO: add editable cells in the tableview
+     *
+     */
+    public void viewAllBookingsClick(){
+
+        Criterion c2 = new Criterion<>(Installation.class);
+        List2 = instance.getByCriteria(c2);
+
+        tableEntries2.removeAll(tableEntries2);
+
+        for(int i =0; i< List2.size(); i++){
+
+            tableEntries2.add(List2.get(i));
+
+        }
+
+        //System.out.println(List2.size());
+
+        installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
+
+        installationDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
+
+        warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
+
+        partAbsID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partAbstractionID"));
+
+        partOccID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partOccurrence"));
+
+        regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
+
+
+        PartsBookings.setItems(tableEntries2);
+
+
+
     }
 }
 
