@@ -14,7 +14,7 @@
       <Label layoutX="23.0" layoutY="127.0" text="Description" />
       <Label layoutX="26.0" layoutY="209.0" text="Price" />
       <Label layoutX="24.0" layoutY="248.0" text="Stock Level" />
-      <TextField fx:id="partIDField" layoutX="122.0" layoutY="50.0" prefHeight="27.0" prefWidth="265.0" />
+      <TextField fx:id="partIDField" disable="true" editable="false" layoutX="122.0" layoutY="50.0" prefHeight="27.0" prefWidth="265.0" promptText="Automatically Assigned" />
       <TextField fx:id="partNameField" layoutX="122.0" layoutY="90.0" prefHeight="27.0" prefWidth="265.0" />
       <TextArea fx:id="partDescriptionField" layoutX="122.0" layoutY="132.0" prefHeight="61.0" prefWidth="265.0" />
       <TextField fx:id="partPriceField" layoutX="122.0" layoutY="209.0" prefHeight="27.0" prefWidth="265.0" />

@@ -3,8 +3,12 @@ package controllers;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
 import persistence.DatabaseRepository;
 import logic.Criterion;
@@ -32,6 +36,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
+
+import javax.print.attribute.IntegerSyntax;
 //import java.sql.Connection;
 //import org.controlsfx.control.textfield.TextFields;
 //import javax.swing.*;
@@ -408,18 +414,29 @@ public class PartsController implements Initializable {
     }
 
 
-    public void addToDB(){
+    public void addToDB() throws Exception{
 
-        List<PartOccurrence> m = new ArrayList<>();
+        //List<PartOccurrence> m = new ArrayList<>();
 
+        try {
 
-        PartAbstraction newPart= new PartAbstraction("TestPart", "testDesc", 1.1, 1,null);
-        boolean s= instance.commitItem(newPart);
+            PartAbstraction newPart = new PartAbstraction(partNameField.getText(),
+            partDescriptionField.getText(),
+            Double.parseDouble(partPriceField.getText()),
+            Integer.parseInt(partStockLevelField.getText()),
+            null);
 
-        System.out.println(s);
+            boolean s = instance.commitItem(newPart);
 
+            AddPartStage.hide();
 
+        }
 
+        catch(Exception e){
+
+            System.out.println("Error");
+
+        }
     }
 
 
