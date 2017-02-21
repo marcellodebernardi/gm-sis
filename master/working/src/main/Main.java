@@ -18,10 +18,10 @@ import persistence.DatabaseRepository;
 public class Main extends Application {
     private static Main application;
 
+    // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
     private Scene mainScene;
-    private BorderPane rootNode; // todo inject on controllers
-    private DatabaseRepository persistence; // todo inject on modules
+    private BorderPane applicationPane;
 
     public static void main (String[] args) {
         Application.launch(args);
@@ -31,8 +31,8 @@ public class Main extends Application {
     // best place to perform startup initializations
     @Override
     public void init() {
-        application = new Main();
-        persistence = DatabaseRepository.getInstance();
+        application = this;
+        DatabaseRepository.getInstance();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Main extends Application {
     // standard JavaFX method for closing resources etc
     @Override
     public void stop() {
-        persistence.close();
+        DatabaseRepository.getInstance().close();
     }
 
     /**
@@ -64,7 +64,17 @@ public class Main extends Application {
         return application;
     }
 
-    // todo method for redrawing the content of a tab, do this by giving new pane as argument
+    /**
+     * Takes the main scene from the login controller. The main scene cannot be loaded in Main,
+     * because it has behavior that assumes that a login attempt has been made.
+     */
+    public void setMainScene(Scene scene) {
+        mainScene = scene;
+        primaryStage.setScene(mainScene);
+        primaryStage.setMaximized(true);
+    }
+
     public void replaceTabContent(Pane pane) {
+        // todo redraw specific tab in ApplicationPane
     }
 }

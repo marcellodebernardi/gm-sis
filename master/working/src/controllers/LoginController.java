@@ -8,7 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 import logic.AuthenticationSystem;
 import main.Main;
 
@@ -25,26 +24,13 @@ public class LoginController {
     public PasswordField password;
     private AuthenticationSystem authentication = AuthenticationSystem.getInstance();
 
-
-    public void initialize() {
-        // todo
-    }
-
-
     @FXML
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
             Parent menu = new FXMLLoader(getClass().getResource("/ApplicationPane.fxml")).load();
-
-            Stage stage = new Stage();
-            stage.setTitle("GM-SIS");
-            stage.setScene(new Scene(menu));
-            stage.setMaximized(true);
-            stage.show();
-
-            ((Stage) loginButton.getScene().getWindow()).close();
-
-        } else {
+            Main.getInstance().setMainScene(new Scene(menu));
+        }
+        else {
             showAlert();
             password.clear();
         }
