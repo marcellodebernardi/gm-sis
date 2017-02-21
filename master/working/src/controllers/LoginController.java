@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import logic.AuthenticationSystem;
 import main.Main;
 
@@ -20,14 +17,14 @@ import main.Main;
 public class LoginController {
     public Button loginButton;
     public Button exitButton;
-    public TextArea username;
+    public TextField username;
     public PasswordField password;
     private AuthenticationSystem authentication = AuthenticationSystem.getInstance();
 
     @FXML
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
-            Parent menu = new FXMLLoader(getClass().getResource("/ApplicationPane.fxml")).load();
+            Parent menu = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
             Main.getInstance().setMainScene(new Scene(menu));
         }
         else {

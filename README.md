@@ -11,6 +11,8 @@ Repository for GM-SIS system, by Team 31.
         components out of an FXML file.
     4. Consistent naming and logic!
 2. Add additional *lazy-loading* getters on domain classes
+3. Eventually move fxml files into resources/fxml and css into
+resources/stylesheets
 
 
 ### Ebube

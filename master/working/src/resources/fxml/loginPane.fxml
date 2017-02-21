@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane id="BorderPane"
+            xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.LoginController">
+    <top>
+        <HBox>
+            <Text id="titleText">Garage Management System</Text>
+        </HBox>
+    </top>
+    <center>
+        <GridPane id="GridPane">
+            <Label id="usernameLabel" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            </Label>
+            <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <Label id="passwordLabel" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            </Label>
+            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        </GridPane>
+    </center>
+    <bottom>
+        <HBox id="bottomBox">
+            <Button fx:id="loginButton" mnemonicParsing="false"
+                    onAction="#loginHandler" text="Login"/>
+            <Button fx:id="exitButton" mnemonicParsing="false"
+                    onAction="#exitHandler" text="Exit"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -2,8 +2,8 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.LoadException;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ public class Main extends Application {
     // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
     private Scene mainScene;
-    private BorderPane applicationPane;
+    private FlowPane applicationPane;
 
     public static void main (String[] args) {
         Application.launch(args);
@@ -40,8 +40,9 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
 
         try {
-            AnchorPane loginPane = FXMLLoader.load(getClass().getResource("/loginPane.fxml"));
+            BorderPane loginPane = FXMLLoader.load(getClass().getResource("/fxml/loginPane.fxml"));
             this.primaryStage.setScene(new Scene(loginPane));
+            primaryStage.getScene().getStylesheets().add("/resources/stylesheets/login.css");
             this.primaryStage.show();
         }
         catch(LoadException e) {
@@ -71,7 +72,9 @@ public class Main extends Application {
     public void setMainScene(Scene scene) {
         mainScene = scene;
         primaryStage.setScene(mainScene);
+        primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");
         primaryStage.setMaximized(true);
+        applicationPane = (FlowPane) mainScene.getRoot();
     }
 
     public void replaceTabContent(Pane pane) {
