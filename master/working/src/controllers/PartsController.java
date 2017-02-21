@@ -2,8 +2,10 @@ package controllers;
 
 import domain.Installation;
 import domain.PartAbstraction;
+import domain.PartOccurrence;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.converter.DateStringConverter;
 import persistence.DatabaseRepository;
 import logic.Criterion;
 import javafx.event.EventHandler;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.lang.*;
 import java.util.ResourceBundle;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -48,7 +51,6 @@ public class PartsController implements Initializable {
     private TableColumn<PartAbstraction, Double> partPrice;
     @FXML
     private TableColumn<PartAbstraction, Integer> partStockLevel;
-
     @FXML
     private TableView<Installation> PartsBookings;
     @FXML
@@ -73,6 +75,10 @@ public class PartsController implements Initializable {
     @FXML
     private TextField qty1, qty2, qty3, qty4, totalBill;
     @FXML
+    private TextField partIDFeild, partNameField, partPriceField, partStockLevelField;
+    @FXML
+    private TextArea partDescriptionField;
+    @FXML
     private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn;
 
     private Stage AddPartStage;
@@ -88,7 +94,7 @@ public class PartsController implements Initializable {
     ObservableList<String> CB=FXCollections.observableArrayList();
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*****************************************************************************************************************/
 
     /**
      * The initialize method ensures that the combo-boxes which i have created refers to an observableArrayList (CB).
@@ -222,7 +228,6 @@ public class PartsController implements Initializable {
             System.out.println("Cannot Open");
 
         }
-        //CB1.setItems(CB);
     }
 
     public void withdrawButtonClick() throws Exception {
@@ -330,8 +335,7 @@ public class PartsController implements Initializable {
 
 
     /**
-     * TODO: fix the Installation data
-     * TODO: add editable cells in the tableview
+     * TODO: fix the Installation data and set Occurence as editable
      *
      */
     public void viewAllBookingsClick(){
@@ -350,22 +354,74 @@ public class PartsController implements Initializable {
         //System.out.println(List2.size());
 
         installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
+        installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
+        installationID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Installation, Integer> event) {
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setInstallationID(event.getNewValue());
+            }
+        });
 
         installationDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
+        installationDate.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
+        installationDate.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Date>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Installation, Date> event) {
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setInstallationDate(event.getNewValue());
+            }
+        });
 
         warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
+        warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
+        warrantyEnd.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Date>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Installation, Date> event) {
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setEndWarrantyDate(event.getNewValue());
+            }
+        });
 
         partAbsID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partAbstractionID"));
+        partAbsID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
+        partAbsID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Installation, Integer> event) {
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartAbstractionID(event.getNewValue());
+            }
+        });
 
         partOccID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partOccurrence"));
+        /**
+         * TODO: make editable, not working atm
+         */
 
         regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
-
+        regNumber.setCellFactory(TextFieldTableCell.<Installation>forTableColumn());
+        regNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Installation, String> event) {
+                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleRegNumber(event.getNewValue());
+            }
+        });
 
         PartsBookings.setItems(tableEntries2);
+
+    }
+
+
+    public void addToDB(){
+
+        List<PartOccurrence> m = new ArrayList<>();
+
+
+        PartAbstraction newPart= new PartAbstraction("TestPart", "testDesc", 1.1, 1,null);
+        boolean s= instance.commitItem(newPart);
+
+        System.out.println(s);
 
 
 
     }
+
+
 }
 
