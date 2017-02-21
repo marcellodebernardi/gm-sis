@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import logic.AuthenticationSystem;
+import main.Main;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque, Marcello De Bernardi

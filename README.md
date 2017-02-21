@@ -33,3 +33,42 @@ Repository for GM-SIS system, by Team 31.
 
 ### Murad
 1. Standardize look and feel of UI with others
+
+
+## GUI architecture:
+The Main class has private instance variables for the main Stage, which
+is never deleted. It also has a private instance variable for the main
+Scene, which is also never deleted. 
+
+The main scene contains the "skeleton" FXML file, called ApplicationPane.fxml,
+which defines the TabPane we're using for the tab behavior. MenuController is
+the controller with event listeners for the tab buttons, and **only** the tab
+buttons. These controllers are responsible for loading the default view of each
+module page into the main area of the window. This includes the ribbon.
+
+The main view of each module is defined in its own FXML file, with event listeners
+in the module's controller. The module controllers are tasked **only** with
+updating the area of the screen pertaining to the module.
+
+Each controller can access methods in Main by calling Main.getInstance(), a
+method added specifically for this purpose. Like this, controllers have access
+to centralized logic for manipulating the screen. This includes methods like:
+
+1. replaceTabContent(Pane pane)
+
+This method replaces the PANE currently held inside the current tab. This is
+the preferred way to update the screen. So, if your controller wants to change
+the look of a screen, it will do it more or less like this:
+
+````java
+class Controller {
+    public void someMethod() {
+        // some logic
+        Pane newPane = new BorderPane(FXMLLoader.load( ... ));
+        // some more logic
+        Main.getInstance().replaceTabContent(newPane);
+    }
+}
+````
+
+Obviously this ignores a lot of the actual details, but you get the point

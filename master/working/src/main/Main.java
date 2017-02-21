@@ -16,6 +16,8 @@ import persistence.DatabaseRepository;
  * @since 0.1
  */
 public class Main extends Application {
+    private static Main application;
+
     private Stage primaryStage;
     private Scene mainScene;
     private BorderPane rootNode; // todo inject on controllers
@@ -29,6 +31,7 @@ public class Main extends Application {
     // best place to perform startup initializations
     @Override
     public void init() {
+        application = new Main();
         persistence = DatabaseRepository.getInstance();
     }
 
@@ -53,17 +56,15 @@ public class Main extends Application {
     }
 
     /**
-     * Every controller should call this method to change scenes.
-     * @param newScene
+     * Returns the instance of Main. Allows controllers to interact with top-level GUI logic.
+     *
+     * @return the JavaFX application
      */
-    public void replaceScene(Scene newScene) {
-        primaryStage.setScene(newScene);
-        primaryStage.show();
+    public static Main getInstance() {
+        return application;
     }
 
-
     // todo method for redrawing the content of a tab, do this by giving new pane as argument
-    public void replaceTabContent() {
-
+    public void replaceTabContent(Pane pane) {
     }
 }
