@@ -33,6 +33,7 @@ public class LoginController {
             Stage stage = new Stage();
             stage.setTitle("GM-SIS");
             stage.setScene(new Scene(menu));
+            stage.setMaximized(true);
             stage.show();
 
             ((Stage) loginButton.getScene().getWindow()).close();
