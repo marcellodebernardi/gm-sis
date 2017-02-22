@@ -215,7 +215,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/deleteBooking.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/deleteBooking.fxml"));
             Parent menu = fxmlLoader.load();
             deletebStage = new Stage();
             deletebStage.setTitle("Delete Booking");
@@ -236,7 +236,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/todayBooking.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/todayBooking.fxml"));
             Parent menu = fxmlLoader.load();
             todayBStage = new Stage();
             todayBStage.setTitle("Today's Bookings");
@@ -257,7 +257,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/allBooking.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/allBooking.fxml"));
             Parent menu = fxmlLoader.load();
             allBStage = new Stage();
             allBStage.setTitle("All Bookings");

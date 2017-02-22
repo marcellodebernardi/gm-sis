@@ -17,7 +17,7 @@ public class BookingsController {
 
     public void editSBooking() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditBooking.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/EditBooking.fxml"));
             Parent menu = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Edit Booking");
