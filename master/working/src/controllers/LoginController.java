@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import logic.AuthenticationSystem;
 import main.Main;
 
@@ -25,7 +27,7 @@ public class LoginController {
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
             Parent menu = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
-            Main.getInstance().setMainScene(new Scene(menu));
+            Main.getInstance().setRootPane((AnchorPane)menu);
         }
         else {
             showAlert();

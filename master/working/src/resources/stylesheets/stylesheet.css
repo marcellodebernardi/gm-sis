@@ -1,1 +1,10 @@
 /* MAIN STYLESHEET */
+
+.root {
+    -fx-alignment: center;
+}
+
+TabPane {
+    -fx-background-color: white;
+    -fx-alignment: center;
+}

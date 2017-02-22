@@ -1,35 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<FlowPane xmlns="http://javafx.com/javafx/8.0.111"
-          xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="controllers.MenuController">
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.MenuController">
     <TabPane tabClosingPolicy="UNAVAILABLE">
         <Tab text="Today">
-            <GridPane>
-                <TitledPane animated="false" text="Todays Bookings">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-                <TitledPane animated="false" text="Parts Tracker" GridPane.columnIndex="1">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-                <TitledPane animated="false" text="untitled" GridPane.rowIndex="1">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-                <TitledPane animated="false" text="untitled" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-                <TitledPane animated="false" text="untitled" GridPane.rowIndex="2">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-                <TitledPane animated="false" text="untitled" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                </TitledPane>
-            </GridPane>
         </Tab>
         <Tab text="Customer">
-            <ToolBar prefHeight="40.0">
+            <ToolBar>
                 <Button fx:id="addCustomer" mnemonicParsing="false" onAction="#addCustomerListener"
                         text="Add Customer"/>
                 <Button fx:id="editCustomer" mnemonicParsing="false" onAction="#editCustomerListener"
@@ -39,7 +19,7 @@
             </ToolBar>
         </Tab>
         <Tab text="Bookings">
-            <ToolBar layoutX="1.0" prefHeight="40.0">
+            <ToolBar>
                 <Button fx:id="addBooking" mnemonicParsing="false" onAction="#addBooking"
                         text="Add booking"/>
                 <Button mnemonicParsing="false" onAction="#editBooking" text="Edit booking"/>
@@ -49,7 +29,7 @@
             </ToolBar>
         </Tab>
         <Tab text="Vehicle">
-            <ToolBar prefHeight="40.0" prefWidth="600.0">
+            <ToolBar>
                 <Button fx:id="addVButton" mnemonicParsing="false" onAction="#handleButtonAdd"
                         text="Add Vehicle"/>
                 <Button fx:id="editVButton" mnemonicParsing="false" onAction="#handleButtonEditSearch"
@@ -61,41 +41,39 @@
             </ToolBar>
         </Tab>
         <Tab text="Parts">
-            <ToolBar prefHeight="40.0" prefWidth="600.0">
+            <ToolBar>
                 <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#PartMenu"
                         text="Add part"/>
             </ToolBar>
         </Tab>
         <Tab text="Specialist Repairs">
             <AnchorPane>
-                <Button fx:id="addSRBooking" layoutX="14.0" layoutY="14.0" mnemonicParsing="false"
-                        onAction="#addSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Add Booking"/>
-                <Button fx:id="deleteSRBooking" layoutX="151.0" layoutY="14.0" mnemonicParsing="false"
-                        onAction="#deleteSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Delete Booking"/>
-                <Button fx:id="editSRBooking" layoutX="288.0" layoutY="14.0" mnemonicParsing="false"
-                        onAction="#editSRCBooking" prefHeight="36.0" prefWidth="115.0" text="Edit Booking"/>
-                <TableView layoutX="14.0" layoutY="89.0" prefHeight="266.0" prefWidth="663.0">
+                <Button fx:id="addSRBooking" mnemonicParsing="false"
+                        onAction="#addSRCBooking" text="Add Booking"/>
+                <Button fx:id="deleteSRBooking" mnemonicParsing="false"
+                        onAction="#deleteSRCBooking" text="Delete Booking"/>
+                <Button fx:id="editSRBooking" mnemonicParsing="false"
+                        onAction="#editSRCBooking" text="Edit Booking"/>
+                <TableView>
                     <columns>
-                        <TableColumn prefWidth="99.0" text="Specialist ID:"/>
-                        <TableColumn prefWidth="181.0" text="Specialist Name:"/>
-                        <TableColumn prefWidth="137.0" text="Specialist Address:"/>
-                        <TableColumn prefWidth="119.0" text="Specialist Phone:"/>
-                        <TableColumn prefWidth="126.0" text="Specialist Email:"/>
+                        <TableColumn text="Specialist ID:"/>
+                        <TableColumn text="Specialist Name:"/>
+                        <TableColumn text="Specialist Address:"/>
+                        <TableColumn text="Specialist Phone:"/>
+                        <TableColumn text="Specialist Email:"/>
                     </columns>
                 </TableView>
             </AnchorPane>
         </Tab>
         <Tab fx:id="userTab" text="Users">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <ToolBar layoutX="7.0" prefHeight="40.0" prefWidth="481.0">
-                    <Button mnemonicParsing="false" onAction="#addUser" text="Add"/>
-                    <Button mnemonicParsing="false" onAction="#editUser" text="Edit"/>
-                    <Button mnemonicParsing="false" onAction="#deleteUser" text="Delete"/>
-                    <Button mnemonicParsing="false" onAction="#searchUser" text="Search"/>
-                </ToolBar>
-            </AnchorPane>
+            <ToolBar>
+                <Button mnemonicParsing="false" onAction="#addUser" text="Add"/>
+                <Button mnemonicParsing="false" onAction="#editUser" text="Edit"/>
+                <Button mnemonicParsing="false" onAction="#deleteUser" text="Delete"/>
+                <Button mnemonicParsing="false" onAction="#searchUser" text="Search"/>
+            </ToolBar>
         </Tab>
     </TabPane>
-    <Label fx:id="UserT" layoutX="520.0" layoutY="10.0" text="UserType"/>
+    <Label fx:id="UserT" text="UserType"/>
     <!-- todo get rid of fixed position -->
-</FlowPane>
+</AnchorPane>

@@ -2,9 +2,10 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.LoadException;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,17 +19,26 @@ import persistence.DatabaseRepository;
 public class Main extends Application {
     private static Main application;
 
+    // screen dimensions
+    private double screenX = Screen.getPrimary().getVisualBounds().getWidth();
+    private double screenY = Screen.getPrimary().getVisualBounds().getHeight();
+
     // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
     private Scene mainScene;
-    private FlowPane applicationPane;
+    private AnchorPane applicationPane;
+    private TabPane tabPane;
 
+
+    /**
+     * Application entry point.
+     *
+     * @param args CLI-arguments
+     */
     public static void main (String[] args) {
         Application.launch(args);
     }
 
-    // standard JavaFX initialization method that runs in separate thread
-    // best place to perform startup initializations
     @Override
     public void init() {
         application = this;
@@ -50,7 +60,9 @@ public class Main extends Application {
         }
     }
 
-    // standard JavaFX method for closing resources etc
+    /**
+     * Lifecycle method for closing resources etc.
+     */
     @Override
     public void stop() {
         DatabaseRepository.getInstance().close();
@@ -69,12 +81,26 @@ public class Main extends Application {
      * Takes the main scene from the login controller. The main scene cannot be loaded in Main,
      * because it has behavior that assumes that a login attempt has been made.
      */
-    public void setMainScene(Scene scene) {
-        mainScene = scene;
+    public void setRootPane(AnchorPane rootPane) {
+        applicationPane = rootPane;
+        tabPane = (TabPane)rootPane.getChildren().get(0);
+
+        // pane properties that are hard to implement in CSS
+        applicationPane.setPrefHeight(screenY);
+        applicationPane.setPrefWidth(screenX);
+        tabPane.setPrefHeight(screenY);
+        tabPane.setPrefWidth(screenX);
+
+        // todo make responsive
+        // http://stackoverflow.com/questions/38216268/how-to-listen-resize-event-of-stage-in-javafx
+        tabPane.setTabMinWidth(screenX/8);
+        tabPane.setTabMinHeight(screenY/20);
+
+        // set scene and stage
+        mainScene = new Scene(applicationPane);
         primaryStage.setScene(mainScene);
-        primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");
         primaryStage.setMaximized(true);
-        applicationPane = (FlowPane) mainScene.getRoot();
+        primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");
     }
 
     public void replaceTabContent(Pane pane) {
