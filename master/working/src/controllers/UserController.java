@@ -194,12 +194,16 @@ public class UserController {
             userType.setCellFactory(TextFieldTableCell.<User, UserType>forTableColumn(new StringConverter<UserType>() {
                 @Override
                 public String toString(UserType object) {
-                    return null;
+                    return object.toString();
                 }
 
                 @Override
                 public UserType fromString(String string) {
-                    return null;
+                    if (string.equals("Admin"))
+                    {
+                        return UserType.ADMINISTRATOR;
+                    }
+                    return UserType.NORMAL;
                 }
             }));
             userType.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, UserType>>() {

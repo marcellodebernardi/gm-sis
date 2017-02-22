@@ -48,7 +48,7 @@ public class VehicleController {
     public TableView<Vehicle> searchTable;
     public TableColumn<Vehicle, String> tReg;
     public TableColumn<Vehicle, Integer> tCID;
-    public TableColumn<Vehicle, String> tVT;
+    public TableColumn<Vehicle, VehicleType> tVT;
     public TableColumn<Vehicle, String> tMod;
     public TableColumn<Vehicle, String> tManu;
     public TableColumn<Vehicle, Double> tEs;
@@ -310,11 +310,32 @@ public class VehicleController {
             });
 
 
-            tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleType"));
-            tVT.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
-            tVT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
+            tVT.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("vehicleType"));
+            tVT.setCellFactory(TextFieldTableCell.<Vehicle, VehicleType>forTableColumn(new StringConverter<VehicleType>() {
                 @Override
-                public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
+                public String toString(VehicleType object) {
+                    return object.toString();
+                }
+
+                @Override
+                public VehicleType fromString(String string) {
+                     if (string.equals("Car"))
+                     {
+                         return VehicleType.Car;
+                     }
+                     else if (string.equals("Truck"))
+                    {
+                        return VehicleType.Truck;
+                    }
+                    else
+                    {
+                        return VehicleType.Van;
+                    }
+                }
+            }));
+            tVT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, VehicleType>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<Vehicle, VehicleType> event) {
                     VehicleType vehicle;
                     if (event.getNewValue().equals("Car")) {
                         vehicle = VehicleType.Car;
@@ -357,12 +378,16 @@ public class VehicleController {
             tFT.setCellFactory(TextFieldTableCell.<Vehicle, FuelType>forTableColumn(new StringConverter<FuelType>() {
                 @Override
                 public String toString(FuelType object) {
-                    return null;
+                    return object.toString();
                 }
 
                 @Override
                 public FuelType fromString(String string) {
-                    return null;
+                    if (string.equals("Diesel"))
+                    {
+                        return FuelType.diesel;
+                    }
+                    return FuelType.petrol;
                 }
             }));
             tFT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, FuelType>>() {
