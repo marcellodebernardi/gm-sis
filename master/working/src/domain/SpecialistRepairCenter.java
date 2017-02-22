@@ -104,4 +104,14 @@ public class SpecialistRepairCenter implements Searchable {
     public String getEmail() {
         return this.email;
     }
+
+    public void setBookings(List SpecRepBookings)
+    {
+        this.bookings = SpecRepBookings;
+    }
+
+    public void addToBooking(SpecRepBooking specRepBooking)
+    {
+        this.bookings.add(specRepBooking);
+    }
 }

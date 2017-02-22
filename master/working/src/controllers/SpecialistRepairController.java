@@ -19,7 +19,7 @@ public class SpecialistRepairController {
 
 
     @FXML
-    private TextField field_custy, field_SRCID, field_itemID, itemName, itemInfo, srID, srcBookingID, srcID, deliveryDate, returnDate, itemID, SRBookingID, cost;
+    private TextField field_custy, field_SRCID, field_itemID, itemName, itemInfo, srID, srcBookingID, srcID, deliveryDate, returnDate, itemID, SRBookingID, cost,btn_addSRbooking;
 
     @FXML
     private RadioButton r_vehicleDel, r_partDel, r_vehicle, r_part, r_vehicleEdit, r_partEdit;

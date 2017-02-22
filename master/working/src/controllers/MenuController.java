@@ -40,7 +40,7 @@ public class MenuController {
     Stage editBStage;
     Stage todayBStage;
     Stage allBStage;
-    Stage addSpecialistBooking;
+    Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
     Stage addCustomerStage;
     Stage editCustomerStage;
@@ -273,8 +273,8 @@ public class MenuController {
 
     }
 
-    @FXML
-    public void addSRCBooking() throws Exception {
+
+    public void addSRCBooking() {
         try {
             if (addSpecialistBooking != null) {
                 if (addSpecialistBooking.isShowing()) {
