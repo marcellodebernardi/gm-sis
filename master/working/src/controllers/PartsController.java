@@ -38,6 +38,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
 
 import javax.print.attribute.IntegerSyntax;
+
+import static logic.CriterionOperator.EqualTo;
 //import java.sql.Connection;
 //import org.controlsfx.control.textfield.TextFields;
 //import javax.swing.*;
@@ -75,7 +77,7 @@ public class PartsController implements Initializable {
     @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<String> CB1, CB2, CB3,CB4;
+    private ComboBox<String> CB1, CB2, CB3,CB4, CBremove;
     @FXML
     private TextField price1, price2, price3, price4;
     @FXML
@@ -114,6 +116,7 @@ public class PartsController implements Initializable {
             CB2.setItems(CB);
             CB3.setItems(CB);
             CB4.setItems(CB);
+            CBremove.setItems(CB);
         }catch(NullPointerException e){e.printStackTrace();}
 
     }
@@ -236,25 +239,6 @@ public class PartsController implements Initializable {
         }
     }
 
-    public void withdrawButtonClick() throws Exception {
-        try {
-            if (WithdrawPartStage != null) {
-                if (WithdrawPartStage.isShowing()) {
-                    showAlert();
-                    WithdrawPartStage.setAlwaysOnTop(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/RemovePart.fxml"));
-            Parent menu = fxmlLoader.load();
-            WithdrawPartStage = new Stage();
-            WithdrawPartStage.setTitle("Withdraw Part");
-            WithdrawPartStage.setScene(new Scene(menu));
-            WithdrawPartStage.show();
-        } catch (Exception e) {
-            System.out.println("Cannot Open");
-        }
-    }
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -316,6 +300,15 @@ public class PartsController implements Initializable {
         System.out.println(IdIndex);
         String price= Double.toString(List.get(IdIndex).getPartPrice());
         price4.setText(price);
+
+    }
+
+    public void CBremove1(){
+
+        int IdIndex=CBremove.getSelectionModel().getSelectedIndex();
+        System.out.println(IdIndex);
+        
+
 
     }
 
@@ -416,27 +409,18 @@ public class PartsController implements Initializable {
 
     public void addToDB() throws Exception{
 
-        //List<PartOccurrence> m = new ArrayList<>();
 
-        try {
+        PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
+                Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()), null);
 
-            PartAbstraction newPart = new PartAbstraction(partNameField.getText(),
-            partDescriptionField.getText(),
-            Double.parseDouble(partPriceField.getText()),
-            Integer.parseInt(partStockLevelField.getText()),
-            null);
+        boolean s = instance.commitItem(newPart);
 
-            boolean s = instance.commitItem(newPart);
+    }
 
-            AddPartStage.hide();
+    public void removePart(){
 
-        }
 
-        catch(Exception e){
 
-            System.out.println("Error");
-
-        }
     }
 
 

@@ -35,11 +35,6 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font></Button>
                               <Separator orientation="VERTICAL" prefHeight="1.0" />
-                              <Button fx:id="withdrawBtn" mnemonicParsing="false" onAction="#withdrawButtonClick" prefHeight="27.0" prefWidth="133.0" text="Withdraw Stock">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font></Button>
-                              <Separator orientation="VERTICAL" prefHeight="1.0" />
                           </items>
                         </ToolBar>
                         <TableView fx:id="PartsTable" editable="true" layoutX="9.0" layoutY="91.0" prefHeight="188.0" prefWidth="691.0">

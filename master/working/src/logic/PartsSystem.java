@@ -40,7 +40,7 @@ public class PartsSystem {
 
     }
 
-    public boolean addPart(int partAbstractionID, String partName, String partDescription, Double partPrice, int partStockLevel){
+    public boolean addPart(String partName, String partDescription, Double partPrice, int partStockLevel){
 
         PartAbstraction addNewPart = new PartAbstraction(partName, partDescription, partPrice, partStockLevel, null);
         boolean result = persistence.commitItem(addNewPart);
@@ -49,6 +49,7 @@ public class PartsSystem {
     }
 
     public boolean deletePart(int partAbstractionID){
+
         return persistence.deleteItem(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
     }
 
