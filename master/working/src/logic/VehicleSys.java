@@ -27,13 +27,9 @@ public class VehicleSys {
         return results;
     }
 
-    public List<Vehicle> searchVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate) {
+    public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", EqualTo, regNumber).and("customerID", EqualTo, customerID).and("vehicleType", EqualTo, vehicleType)
-                .and("model",EqualTo,model).and("manufacturer",EqualTo, manufacturer).and("engineSize", EqualTo, engineSize).and("fuelType",
-                        EqualTo, fuelType).and("colour",EqualTo,colour).and("mileage",EqualTo,mileage).and("renewalDateMot",EqualTo,renewalDateMot)
-                .and("dateLastServiced",EqualTo,dateLastServiced).and("coveredByWarranty",EqualTo, coveredByWarranty).and("warrantyName",EqualTo,
-                        warrantyName).and("warrantyCompAddress",EqualTo, warrantyCompAddress).and("warrantyExpirationDate",EqualTo,warrantyExpirationDate));
+                "regNumber", EqualTo, regNumber).or("manufacturer",EqualTo, manufacturer));
         return results;
 
     }

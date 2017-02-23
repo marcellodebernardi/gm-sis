@@ -199,7 +199,7 @@ public class UserController {
 
                 @Override
                 public UserType fromString(String string) {
-                    if (string.equals("Admin"))
+                    if (string.equals("ADMINISTRATOR"))
                     {
                         return UserType.ADMINISTRATOR;
                     }
