@@ -1,28 +1,24 @@
 package controllers;
 
-import domain.UserType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import logic.AuthenticationSystem;
 import main.Main;
 
-import javax.swing.border.Border;
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * @author Dillon Vaghela
- *
- * todo clean up and add comments
+ *         <p>
+ *         todo clean up and add comments
  */
 public class MenuController {
 
@@ -40,21 +36,11 @@ public class MenuController {
     public Button searchCustomer;
 
     // todo what is all this?
-    Stage addStage = new Stage();
-    Stage deleteStage = new Stage();
-    Stage editSearchStage = new Stage();
-    Stage searchStage = new Stage();
     Stage addBStage;
-    Stage deletebStage;
-    Stage editBStage;
-    Stage todayBStage;
-    Stage allBStage;
     Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
     Stage addCustomerStage;
     Stage editCustomerStage;
-    Stage deleteCustomerStage;
-    Stage viewCustomerStage;
     Stage searchCustomerStage;
     Stage PartModule;
     Stage addUser = new Stage();
@@ -83,8 +69,7 @@ public class MenuController {
             bookingsBasePane = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
             bookingsBasePane.setVisible(true);
             Main.getInstance().replaceTabContent(bookingsBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -98,8 +83,7 @@ public class MenuController {
             VehicleBasePane.setLeft(addEdit);
             VehicleBasePane.setCenter(view);
             Main.getInstance().replaceTabContent(VehicleBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -110,8 +94,7 @@ public class MenuController {
             partsBasePane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
             partsBasePane.setVisible(true);
             Main.getInstance().replaceTabContent(partsBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -125,20 +108,9 @@ public class MenuController {
     }
 
 
-
-
     @FXML
 
 
-
-
-
-    public void showAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("This window is already open or another vehicle window is open");
-        alert.showAndWait();
-    }
 
 
 
@@ -155,14 +127,6 @@ public class MenuController {
 
     public void addBooking() {
         try {
-            if (addBStage != null) {
-                if (addBStage.isShowing()) {
-                    showAlert();
-                    addBStage.setAlwaysOnTop(true);
-                    //addBStage.setFullScreen(true);
-                    return;
-                }
-            }
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/addBooking.fxml"));
             Parent menu = fxmlLoader.load();
             addBStage = new Stage();
@@ -183,14 +147,6 @@ public class MenuController {
 
     public void addSRCBooking() {
         try {
-            if (addSpecialistBooking != null) {
-                if (addSpecialistBooking.isShowing()) {
-                    showAlert();
-                    addSpecialistBooking.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCB.fxml"));
             Parent menu = fxmlLoader.load();
             addSpecialistBooking = new Stage();
@@ -205,14 +161,6 @@ public class MenuController {
 
     public void deleteSRCBooking() {
         try {
-            if (deleteSpecialistBooking != null) {
-                if (deleteSpecialistBooking.isShowing()) {
-                    showAlert();
-                    deleteSpecialistBooking.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteSRB.fxml"));
             Parent menu = fxmlLoader.load();
             deleteSpecialistBooking = new Stage();
@@ -231,20 +179,12 @@ public class MenuController {
     //action listener for opening 'Add Customer' window
     public void addCustomerListener() {
         try {
-            if (addCustomerStage != null) {
-                if (addCustomerStage.isShowing()) {
-                    showAlert();
-                    addCustomerStage.setAlwaysOnTop(true);
-                    return;
-                }
-            } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddCustomer.fxml"));
-                Parent menu = fxmlLoader.load();
-                addCustomerStage = new Stage();
-                addCustomerStage.setTitle("Add Customer");
-                addCustomerStage.setScene(new Scene(menu));
-                addCustomerStage.show();
-            }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddCustomer.fxml"));
+            Parent menu = fxmlLoader.load();
+            addCustomerStage = new Stage();
+            addCustomerStage.setTitle("Add Customer");
+            addCustomerStage.setScene(new Scene(menu));
+            addCustomerStage.show();
         } catch (Exception e) {
             System.out.println("cant open");
         }
@@ -253,20 +193,13 @@ public class MenuController {
     //action listener for opening 'Edit Customer' window
     public void editCustomerListener() {
         try {
-            if (editCustomerStage != null) {
-                if (editCustomerStage.isShowing()) {
-                    showAlert();
-                    editCustomerStage.setAlwaysOnTop(true);
-                    return;
-                }
-            } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditCustomer.fxml"));
-                Parent menu = fxmlLoader.load();
-                editCustomerStage = new Stage();
-                editCustomerStage.setTitle("Edit Customer");
-                editCustomerStage.setScene(new Scene(menu));
-                editCustomerStage.show();
-            }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditCustomer.fxml"));
+            Parent menu = fxmlLoader.load();
+            editCustomerStage = new Stage();
+            editCustomerStage.setTitle("Edit Customer");
+            editCustomerStage.setScene(new Scene(menu));
+            editCustomerStage.show();
+
         } catch (Exception e) {
             System.out.println("cant open");
         }
@@ -275,20 +208,12 @@ public class MenuController {
     //action listener for opening 'Search Customer' window
     public void searchCustomerListener() {
         try {
-            if (searchCustomerStage != null) {
-                if (searchCustomerStage.isShowing()) {
-                    showAlert();
-                    searchCustomerStage.setAlwaysOnTop(true);
-                    return;
-                }
-            } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchCustomer.fxml"));
-                Parent menu = fxmlLoader.load();
-                searchCustomerStage = new Stage();
-                searchCustomerStage.setTitle("Search Customer");
-                searchCustomerStage.setScene(new Scene(menu));
-                searchCustomerStage.show();
-            }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchCustomer.fxml"));
+            Parent menu = fxmlLoader.load();
+            searchCustomerStage = new Stage();
+            searchCustomerStage.setTitle("Search Customer");
+            searchCustomerStage.setScene(new Scene(menu));
+            searchCustomerStage.show();
         } catch (Exception e) {
             System.out.println("cant open");
         }
@@ -361,14 +286,6 @@ public class MenuController {
             list.add(deleteUser);
             list.add(editUser);
             list.add(searchUser);
-            for (Stage s : list) {
-                if (s.isShowing()) {
-                    s.setAlwaysOnTop(false);
-                    showAlert();
-                    s.setAlwaysOnTop(true);
-                    return true;
-                }
-            }
         }
         return false;
     }
