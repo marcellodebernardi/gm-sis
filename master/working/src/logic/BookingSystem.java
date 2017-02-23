@@ -3,7 +3,9 @@ package logic;
 import domain.DiagRepBooking;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import persistence.DatabaseRepository;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import static logic.CriterionOperator.EqualTo;
@@ -21,30 +23,30 @@ public class BookingSystem {
     private ArrayList<LocalDate> HOLIDAYS;
 
 
-    private BookingSystem(CriterionRepository persistence) {
-        this.persistence = persistence;
+    private BookingSystem() {
+        this.persistence = DatabaseRepository.getInstance();
 
         // todo make more flexible
         HOLIDAYS = new ArrayList<>();
-        HOLIDAYS.add(new LocalDate(1, 1, 2017));
-        HOLIDAYS.add(new LocalDate(17, 3, 2017));
-        HOLIDAYS.add(new LocalDate(14, 4, 2017));
-        HOLIDAYS.add(new LocalDate(17, 4, 2017));
-        HOLIDAYS.add(new LocalDate(1, 5, 2017));
-        HOLIDAYS.add(new LocalDate(29, 5, 2017));
-        HOLIDAYS.add(new LocalDate(7, 8, 2017));
-        HOLIDAYS.add(new LocalDate(28, 8, 2017));
-        HOLIDAYS.add(new LocalDate(30, 11, 2017));
-        HOLIDAYS.add(new LocalDate(25, 12, 2017));
-        HOLIDAYS.add(new LocalDate(26, 12, 2017));
-        HOLIDAYS.add(new LocalDate(1, 1, 2018));
-        HOLIDAYS.add(new LocalDate(30, 3, 2018));
-        HOLIDAYS.add(new LocalDate(2, 4, 2018));
-        HOLIDAYS.add(new LocalDate(7, 5, 2018));
-        HOLIDAYS.add(new LocalDate(28, 5, 2018));
-        HOLIDAYS.add(new LocalDate(27, 8, 2018));
-        HOLIDAYS.add(new LocalDate(25, 12, 2018));
-        HOLIDAYS.add(new LocalDate(26, 12, 2018));
+        HOLIDAYS.add(new LocalDate(2017, 1, 1));
+        HOLIDAYS.add(new LocalDate(2017, 3, 17));
+        HOLIDAYS.add(new LocalDate(2017, 4, 17));
+
+        HOLIDAYS.add(new LocalDate(2017, 5, 1));
+        HOLIDAYS.add(new LocalDate(2017, 5, 29));
+        HOLIDAYS.add(new LocalDate(2017, 8, 7));
+        HOLIDAYS.add(new LocalDate(2017, 8, 28));
+        HOLIDAYS.add(new LocalDate(2017, 11, 30));
+        HOLIDAYS.add(new LocalDate(2017, 12, 25));
+        HOLIDAYS.add(new LocalDate(2017, 12, 26));
+        HOLIDAYS.add(new LocalDate(2018, 1, 1));
+        HOLIDAYS.add(new LocalDate(2018, 3, 30));
+        HOLIDAYS.add(new LocalDate(2018, 4, 2));
+        HOLIDAYS.add(new LocalDate(2018, 5, 7));
+        HOLIDAYS.add(new LocalDate(2018, 5, 28));
+        HOLIDAYS.add(new LocalDate(2018, 8, 27));
+        HOLIDAYS.add(new LocalDate(2018, 12, 25));
+        HOLIDAYS.add(new LocalDate(2018, 12, 26));
     }
 
 
@@ -53,8 +55,8 @@ public class BookingSystem {
      *
      * @return singleton instance of BookingSystem
      */
-    public static BookingSystem getInstance(CriterionRepository persistence) {
-        if (instance == null) instance = new BookingSystem(persistence);
+    public static BookingSystem getInstance() {
+        if (instance == null) instance = new BookingSystem();
         return instance;
     }
 

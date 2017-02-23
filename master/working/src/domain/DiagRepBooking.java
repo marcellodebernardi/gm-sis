@@ -2,6 +2,7 @@ package domain;
 
 import logic.Criterion;
 import logic.CriterionOperator;
+import logic.VehicleSys;
 import org.joda.time.DateTime;
 import org.joda.time.MutableInterval;
 import persistence.DatabaseRepository;
@@ -268,6 +269,31 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
         part.setBooking(transmitter.pair());
+    }
+
+    public Customer getCustomer() {
+        List<Vehicle> vehicles = DatabaseRepository
+                .getInstance()
+                .getByCriteria(
+                        new Criterion<>(
+                                Vehicle.class,
+                                "regNumber",
+                                CriterionOperator.EqualTo,
+                                getVehicleRegNumber()));
+
+        if (vehicles.size() != 0) {
+            List<Customer> customers = DatabaseRepository
+                    .getInstance()
+                    .getByCriteria(
+                            new Criterion<>(
+                                    Customer.class,
+                                    "customerID",
+                                    CriterionOperator.EqualTo,
+                                    vehicles.get(0).getCustomerID())
+                    );
+            if (customers.size() != 0) return customers.get(0);
+        }
+        return null;
     }
 
     public List<DependencyConnection> getDependencies() {

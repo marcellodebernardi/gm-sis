@@ -1,5 +1,6 @@
 package controllers;
 
+import domain.DiagRepBooking;
 import domain.UserType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -41,7 +43,6 @@ public class MenuController {
     public Button UsersButton;
 
     // todo what is all this?
-
     Stage addBStage;
     Stage deletebStage;
     Stage editBStage;
@@ -72,15 +73,8 @@ public class MenuController {
     }
 
     public void openBookingsTab() {
-        BorderPane bookingsBasePane;
-        try {
-            bookingsBasePane = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
-            bookingsBasePane.setVisible(true);
-            Main.getInstance().replaceTabContent(bookingsBasePane);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        BookingsController bookingController = new BookingsController();
+        bookingController.openListView();
     }
 
     public void openVehiclesTab() {
@@ -130,8 +124,6 @@ public class MenuController {
     }
 
 
-
-
     @FXML
 
 
@@ -154,6 +146,7 @@ public class MenuController {
             UsersButton.setDisable(true);
         }
     }
+    */
 
     public void addBooking() {
         try {

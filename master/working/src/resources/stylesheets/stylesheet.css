@@ -4,7 +4,30 @@
     -fx-alignment: center;
 }
 
-TabPane {
+#tabTilePane {
     -fx-background-color: white;
-    -fx-alignment: center;
+    -fx-fit-to-width: true;
+    -fx-alignment: top-center;
+}
+
+#tabTilePane Button {
+    -fx-pref-height: 3.5em;
+    -fx-border-style: none;
+}
+
+
+
+/* BOOKINGS SECTION */
+#calendarToggle {
+    -fx-spacing: 1em;
+    -fx-padding: 0.7em;
+    -fx-alignment: top-right;
+}
+#calendarToggle Button {
+    -fx-end-margin: 1em;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 9em;
+}
+#bookingsTable columns TableColumn {
+    -fx-pref-width: 45em;
 }

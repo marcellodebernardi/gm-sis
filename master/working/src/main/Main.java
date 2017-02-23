@@ -2,6 +2,8 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.LoadException;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
@@ -21,9 +23,10 @@ import java.io.IOException;
 public class Main extends Application {
     private static Main application;
 
-    // screen dimensions
+    // screen dimensions and other dimensions
     private double screenX = Screen.getPrimary().getVisualBounds().getWidth();
     private double screenY = Screen.getPrimary().getVisualBounds().getHeight();
+    private double tabWidth = screenX/7.05;
 
     // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
@@ -93,6 +96,10 @@ public class Main extends Application {
         tabPane.setPrefHeight(screenY);
         tabPane.setPrefWidth(screenX);
 
+        for (Node b : tabPane.getChildren()) {
+            ((Button)b).setPrefWidth(tabWidth);
+        }
+
         // todo make responsive
         // http://stackoverflow.com/questions/38216268/how-to-listen-resize-event-of-stage-in-javafx
 
@@ -112,9 +119,12 @@ public class Main extends Application {
         try {
             BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
             newApplicationPane.setCenter(pane);
-            newApplicationPane.autosize();
-            primaryStage.getScene().setRoot(newApplicationPane);
 
+            for (Node b : ((HBox)newApplicationPane.getTop()).getChildren()) {
+                ((Button)b).setPrefWidth(tabWidth);
+            }
+
+            primaryStage.getScene().setRoot(newApplicationPane);
         }
         catch (IOException e) {
             e.printStackTrace();
