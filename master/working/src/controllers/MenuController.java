@@ -38,6 +38,7 @@ public class MenuController {
     public Button addCustomer;
     public Button editCustomer;
     public Button searchCustomer;
+    public Button UsersButton;
 
     // todo what is all this?
 
@@ -60,11 +61,11 @@ public class MenuController {
     Stage searchUser = new Stage();
 
 
-    /*
+
     public void initialize() throws Exception {
         setUserType();
     }
-    */
+    
 
     public void openTodayTab() {
         // todo Main.getInstance().replaceTabContent(FXMLLoader.load(getClass().getResource("")));
