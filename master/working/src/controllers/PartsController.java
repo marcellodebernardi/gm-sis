@@ -25,6 +25,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,7 +79,7 @@ public class PartsController implements Initializable {
     @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<String> CB1, CB2, CB3,CB4, CBremove;
+    private ComboBox<String> CB1, CB2, CB3,CB4;
     @FXML
     private TextField price1, price2, price3, price4;
     @FXML
@@ -87,7 +89,7 @@ public class PartsController implements Initializable {
     @FXML
     private TextArea partDescriptionField;
     @FXML
-    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn;
+    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
@@ -116,7 +118,8 @@ public class PartsController implements Initializable {
             CB2.setItems(CB);
             CB3.setItems(CB);
             CB4.setItems(CB);
-            CBremove.setItems(CB);
+
+
         }catch(NullPointerException e){e.printStackTrace();}
 
     }
@@ -303,14 +306,6 @@ public class PartsController implements Initializable {
 
     }
 
-    public void CBremove1(){
-
-        int IdIndex=CBremove.getSelectionModel().getSelectedIndex();
-        System.out.println(IdIndex);
-        
-
-
-    }
 
     /**
      * This method allows user to calculate individual parts bill where the user must click "Display All Parts" button
@@ -417,8 +412,32 @@ public class PartsController implements Initializable {
 
     }
 
-    public void removePart(){
+    public void saveChanges(){
 
+        PartAbstraction singlePart;
+
+        for(int i=0; i<tableEntries.size(); i++){
+
+
+            PartsTable.getSelectionModel().select(i); //selects whole row
+            singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
+            boolean c = instance.commitItem(singlePart);
+
+/**
+            PartsTable.getSelectionModel().select(i); //selects whole row
+            singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
+            try {
+
+                Statement stm = instance.connection.createStatement();
+                String Query="UPDATE PartAbstraction SET partStockLevel ='"+singlePart.getPartStockLevel()+"' WHERE partAbstractionID='"+singlePart.getPartAbstractionID()+"'";
+                stm.executeUpdate(Query);
+
+            }catch(SQLException e ){e.printStackTrace();}
+ **/
+
+        }
+
+       // PartsTable.getSelectionModel().clearSelection();
 
 
     }
