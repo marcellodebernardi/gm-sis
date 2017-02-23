@@ -55,17 +55,13 @@ public class MenuController {
     Stage viewCustomerStage;
     Stage searchCustomerStage;
     Stage PartModule;
-    Stage addUser = new Stage();
-    Stage deleteUser = new Stage();
-    Stage editUser = new Stage();
-    Stage searchUser = new Stage();
 
 
 
     public void initialize() throws Exception {
         setUserType();
     }
-    
+
 
     public void openTodayTab() {
         // todo Main.getInstance().replaceTabContent(FXMLLoader.load(getClass().getResource("")));
@@ -119,7 +115,18 @@ public class MenuController {
     }
 
     public void openUsersTab() {
-        // todo
+        BorderPane VehicleBasePane = new BorderPane();
+        try {
+            FlowPane addEdit = FXMLLoader.load(getClass().getResource("/resources/user/addUser.fxml"));
+            FlowPane view = FXMLLoader.load(getClass().getResource("/resources/user/searchUser.fxml"));
+            VehicleBasePane.setVisible(true);
+            VehicleBasePane.setLeft(addEdit);
+            VehicleBasePane.setCenter(view);
+            Main.getInstance().replaceTabContent(VehicleBasePane);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
