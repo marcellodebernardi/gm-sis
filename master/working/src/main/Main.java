@@ -112,7 +112,9 @@ public class Main extends Application {
         try {
             BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
             newApplicationPane.setCenter(pane);
+            newApplicationPane.autosize();
             primaryStage.getScene().setRoot(newApplicationPane);
+
         }
         catch (IOException e) {
             e.printStackTrace();

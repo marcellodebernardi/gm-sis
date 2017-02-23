@@ -6,7 +6,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,22 +13,33 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<?import javafx.scene.control.TextField?>
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
    <children>
       <SplitPane dividerPositions="0.12895927601809956, 0.744343891402715" orientation="VERTICAL" prefHeight="444.0" prefWidth="707.0">
         <items>
             <BorderPane>
                <center>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                  <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="91.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="362.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="151.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="89.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
-                        <TextField fx:id="reg" layoutX="76.0" layoutY="8.0" promptText="Enter Vehicle Reg" />
-                        <TextField fx:id="manuf" layoutX="353.0" layoutY="9.0" promptText="Enter Manufacturer" />
-                        <Label layoutY="14.0" text="Vehicle Reg" />
-                        <Label layoutX="255.0" layoutY="14.0" text="Manufacturer" />
-                        <Button fx:id="search" layoutX="615.0" layoutY="9.0" mnemonicParsing="false" onAction="#searchVehicleA" text="View All" />
-                        <Button fx:id="Search" layoutX="539.0" layoutY="8.0" mnemonicParsing="false" onAction="#searchVehicle" text="Search" />
+                        <Label prefHeight="17.0" prefWidth="155.0" text="Vehicle Reg" />
+                        <Label prefHeight="17.0" prefWidth="150.0" text="Manufacturer" GridPane.rowIndex="1" />
+                        <TextField promptText="enter reg" GridPane.columnIndex="1" />
+                        <TextField promptText="enter manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="61.0" text="Search" GridPane.columnIndex="3" />
+                        <Button mnemonicParsing="false" text="View All" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                      </children>
-                  </AnchorPane>
+                  </GridPane>
                </center>
             </BorderPane>
             <TableView fx:id="searchTable" disable="true" prefHeight="208.0" prefWidth="705.0">
