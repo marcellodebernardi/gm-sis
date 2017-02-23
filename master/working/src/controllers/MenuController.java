@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import logic.AuthenticationSystem;
 import main.Main;
@@ -89,7 +90,18 @@ public class MenuController {
     }
 
     public void openVehiclesTab() {
-        // todo
+        BorderPane VehicleBasePane = new BorderPane();
+        try {
+            FlowPane addEdit = FXMLLoader.load(getClass().getResource("/resources/vehicle/AddVehicle.fxml"));
+            FlowPane view = FXMLLoader.load(getClass().getResource("/resources/vehicle/SearchVehicle.fxml"));
+            VehicleBasePane.setVisible(true);
+            VehicleBasePane.setLeft(addEdit);
+            VehicleBasePane.setCenter(view);
+            Main.getInstance().replaceTabContent(VehicleBasePane);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void openPartsTab() {
@@ -113,60 +125,13 @@ public class MenuController {
     }
 
 
-    public boolean StageChecker() {
-        if (searchStage.isShowing() || addStage.isShowing() || deleteStage.isShowing() || editSearchStage.isShowing()) {
-            ArrayList<Stage> list = new ArrayList<Stage>();
-            list.add(searchStage);
-            list.add(addStage);
-            list.add(deleteStage);
-            list.add(editSearchStage);
-            for (Stage s : list) {
-                if (s.isShowing()) {
-                    s.setAlwaysOnTop(false);
-                    showAlert();
-                    s.setAlwaysOnTop(true);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @FXML
-    public void handleButtonSearch() throws Exception {
-        try {
-            if (StageChecker()) {
-                return;
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchVehicle.fxml"));
-            Parent menu = fxmlLoader.load();
-            searchStage = new Stage();
-            searchStage.setTitle("Search Vehicle");
-            searchStage.setScene(new Scene(menu));
-            searchStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-
-    }
 
 
     @FXML
-    public void handleButtonAdd() throws Exception {
-        try {
-            if (StageChecker()) {
-                return;
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddVehicle.fxml"));
-            Parent menu = fxmlLoader.load();
-            addStage = new Stage();
-            addStage.setTitle("Add Vehicle");
-            addStage.setScene(new Scene(menu));
-            addStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-    }
+
+
+
+
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -175,40 +140,7 @@ public class MenuController {
         alert.showAndWait();
     }
 
-    @FXML
-    public void handleButtonDelete() throws Exception {
-        try {
-            if (StageChecker()) {
-                return;
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteVehicle.fxml"));
-            Parent menu = fxmlLoader.load();
-            deleteStage = new Stage();
-            deleteStage.setTitle("Delete Vehicle");
-            deleteStage.setScene(new Scene(menu));
-            deleteStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
 
-    }
-
-    public void handleButtonEditSearch() throws Exception {
-        try {
-            if (StageChecker()) {
-                return;
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditVehicle.fxml"));
-            Parent menu = fxmlLoader.load();
-            editSearchStage = new Stage();
-            editSearchStage.setTitle("Edit Search Vehicle");
-            editSearchStage.setScene(new Scene(menu));
-            editSearchStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-
-    }
 
     /*
     public void setUserType() {

@@ -8,7 +8,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
    <children>
       <TextField fx:id="eReg" layoutX="105.0" layoutY="21.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Vehicle Reg" />
       <Label layoutX="42.0" layoutY="26.0" text="reg" />
@@ -67,4 +69,4 @@
          </items>
       </ComboBox>
    </children>
-</AnchorPane>
+</FlowPane>
