@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
+    <top>
+        <HBox>
+            <Button onAction="#openNewBookingView" text="New Booking"></Button>
+            <Button onAction="#openListView" text="List View"></Button>
+            <Button onAction="#openWeekView" text="Week View"></Button>
+            <Button onAction="#openMonthView" text="Month View"></Button>
+        </HBox>
+    </top>
+</BorderPane>

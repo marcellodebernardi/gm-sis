@@ -63,6 +63,12 @@ public class VehicleController {
     public TableColumn<Vehicle, Date> tD;
     final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
 
+
+
+
+
+
+
     public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Message");

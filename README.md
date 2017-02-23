@@ -7,9 +7,11 @@ Repository for GM-SIS system, by Team 31.
     1. Only one stage, never deleted
     2. Either only one scene that gets updated, or swapping the scene in the stage
     3. You can load whatever JavaFX you want from FXML, just depends on the root tag
-        4. That means that you can exchange components in JavaFX nodes by loading the
+        1. That means that you can exchange components in JavaFX nodes by loading the
         components out of an FXML file.
     4. Consistent naming and logic!
+    5. Should primarily use only BorderPane, HBox, VBox, StackPane, Gridpane and Flowpane,
+    because they are the only ones that resize automatically.
 2. Add additional *lazy-loading* getters on domain classes
 3. Eventually move fxml files into resources/fxml and css into
 resources/stylesheets

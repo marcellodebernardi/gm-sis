@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import persistence.DatabaseRepository;
 
+import java.io.IOException;
+
 /**
  * @author Marcello De Bernardi, Dillon Vaghela
  * @version 0.1
@@ -26,8 +28,8 @@ public class Main extends Application {
     // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
     private Scene mainScene;
-    private AnchorPane applicationPane;
-    private TabPane tabPane;
+    private BorderPane applicationPane;
+    private HBox tabPane;
 
 
     /**
@@ -81,9 +83,9 @@ public class Main extends Application {
      * Takes the main scene from the login controller. The main scene cannot be loaded in Main,
      * because it has behavior that assumes that a login attempt has been made.
      */
-    public void setRootPane(AnchorPane rootPane) {
+    public void setRootPane(BorderPane rootPane) {
         applicationPane = rootPane;
-        tabPane = (TabPane)rootPane.getChildren().get(0);
+        tabPane = (HBox)rootPane.getChildren().get(0);
 
         // pane properties that are hard to implement in CSS
         applicationPane.setPrefHeight(screenY);
@@ -93,8 +95,6 @@ public class Main extends Application {
 
         // todo make responsive
         // http://stackoverflow.com/questions/38216268/how-to-listen-resize-event-of-stage-in-javafx
-        tabPane.setTabMinWidth(screenX/8);
-        tabPane.setTabMinHeight(screenY/20);
 
         // set scene and stage
         mainScene = new Scene(applicationPane);
@@ -103,7 +103,19 @@ public class Main extends Application {
         primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");
     }
 
-    public void replaceTabContent(Pane pane) {
-        // todo redraw specific tab in ApplicationPane
+    /**
+     * Changes the tab displayed.
+     *
+     * @param pane the tab to show.
+     */
+    public void replaceTabContent(BorderPane pane) {
+        try {
+            BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
+            newApplicationPane.setCenter(pane);
+            primaryStage.getScene().setRoot(newApplicationPane);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

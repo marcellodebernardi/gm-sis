@@ -1,9 +1,11 @@
 package controllers;
 
+
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
+
+import java.io.IOException;
 
 /**
  * @author Marcello De Bernardi
@@ -11,30 +13,37 @@ import javafx.stage.Stage;
  * @since 0.1
  */
 public class BookingsController {
-    public void addBooking() {
+    private BorderPane bookingsBasePane;
 
-    }
-
-    public void editSBooking() {
+    public void initialize() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/EditBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Edit Booking");
-            stage.setScene(new Scene(menu));
-            stage.show();
-
-        } catch (Exception e) {
-            System.out.println("cant open a");
-            System.out.println(e);
+            bookingsBasePane = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public void deleteBooking() {
+
+    /**
+     * Open screen for new booking
+     */
+    @FXML
+    public void openNewBookingView() {
 
     }
 
-    public void editBooking() {
+    @FXML
+    public void openMonthView() {
 
+    }
+
+    @FXML
+    public void openWeekView() {
+
+    }
+
+    @FXML
+    public void openListView() {
     }
 }

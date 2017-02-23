@@ -9,17 +9,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import logic.AuthenticationSystem;
+import main.Main;
 
+import javax.swing.border.Border;
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by DillonVaghela on 2/8/17.
+ * @author Dillon Vaghela
+ *
+ * todo clean up and add comments
  */
 public class MenuController {
 
+    // todo move these into module controllers
     public Label UserT;
     public Button addVButton;
     public Button deleteVButton;
@@ -31,6 +37,8 @@ public class MenuController {
     public Button addCustomer;
     public Button editCustomer;
     public Button searchCustomer;
+
+    // todo what is all this?
     Stage addStage = new Stage();
     Stage deleteStage = new Stage();
     Stage editSearchStage = new Stage();
@@ -53,9 +61,57 @@ public class MenuController {
     Stage editUser = new Stage();
     Stage searchUser = new Stage();
 
+
+    /*
     public void initialize() throws Exception {
         setUserType();
     }
+    */
+
+    public void openTodayTab() {
+        // todo Main.getInstance().replaceTabContent(FXMLLoader.load(getClass().getResource("")));
+    }
+
+    public void openCustomersTab() {
+
+    }
+
+    public void openBookingsTab() {
+        BorderPane bookingsBasePane;
+        try {
+            bookingsBasePane = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
+            bookingsBasePane.setVisible(true);
+            Main.getInstance().replaceTabContent(bookingsBasePane);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openVehiclesTab() {
+        // todo
+    }
+
+    public void openPartsTab() {
+        BorderPane partsBasePane;
+        try {
+            partsBasePane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
+            partsBasePane.setVisible(true);
+            Main.getInstance().replaceTabContent(partsBasePane);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openSRCTab() {
+        // todo
+    }
+
+    public void openUsersTab() {
+        // todo
+    }
+
 
     public boolean StageChecker() {
         if (searchStage.isShowing() || addStage.isShowing() || deleteStage.isShowing() || editSearchStage.isShowing()) {
@@ -154,6 +210,7 @@ public class MenuController {
 
     }
 
+    /*
     public void setUserType() {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
             UserT.setText("admin");
@@ -162,6 +219,7 @@ public class MenuController {
             userTab.setDisable(true);
         }
     }
+    */
 
     public void addBooking() {
         try {
@@ -184,89 +242,6 @@ public class MenuController {
         }
     }
 
-    public void editBooking() {
-        try {
-            if (editBStage != null) {
-                if (editBStage.isShowing()) {
-                    showAlert();
-                    editBStage.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/editSBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            editBStage = new Stage();
-            editBStage.setTitle("Edit Booking");
-            editBStage.setScene(new Scene(menu));
-            editBStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-    }
-
-    public void deleteBooking() {
-        try {
-            if (deletebStage != null) {
-                if (deletebStage.isShowing()) {
-                    showAlert();
-                    deletebStage.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/deleteBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            deletebStage = new Stage();
-            deletebStage.setTitle("Delete Booking");
-            deletebStage.setScene(new Scene(menu));
-            deletebStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-    }
-
-    public void todayBooking() {
-        try {
-            if (todayBStage != null) {
-                if (todayBStage.isShowing()) {
-                    showAlert();
-                    todayBStage.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/todayBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            todayBStage = new Stage();
-            todayBStage.setTitle("Today's Bookings");
-            todayBStage.setScene(new Scene(menu));
-            todayBStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-    }
-
-    public void allBooking() {
-        try {
-            if (allBStage != null) {
-                if (allBStage.isShowing()) {
-                    showAlert();
-                    allBStage.setAlwaysOnTop(true);
-                    //editBStage.setFullScreen(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/booking/allBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            allBStage = new Stage();
-            allBStage.setTitle("All Bookings");
-            allBStage.setScene(new Scene(menu));
-            allBStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
-    }
 
     public void searchSRC() {
 

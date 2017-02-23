@@ -1,0 +1,41 @@
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
+    <left>
+
+    </left>
+    <center>
+        <GridPane>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+                <Button text="Test"></Button>
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="1">
+
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="2">
+
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="3">
+
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="4">
+
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="5">
+
+            </HBox>
+            <HBox GridPane.rowIndex="0" GridPane.columnIndex="6">
+
+            </HBox>
+        </GridPane>
+    </center>
+</BorderPane>

@@ -1,72 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.111"
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
-    <TabPane tabClosingPolicy="UNAVAILABLE">
-        <Tab text="Today">
-        </Tab>
-        <Tab text="Customer">
-            <ToolBar>
-                <Button fx:id="addCustomer" mnemonicParsing="false" onAction="#addCustomerListener"
-                        text="Add Customer"/>
-                <Button fx:id="editCustomer" mnemonicParsing="false" onAction="#editCustomerListener"
-                        text="Edit Customer"/>
-                <Button fx:id="searchCustomer" mnemonicParsing="false" onAction="#searchCustomerListener"
-                        text="Search Customer"/>
-            </ToolBar>
-        </Tab>
-        <Tab text="Bookings">
-            <ToolBar>
-                <Button fx:id="addBooking" mnemonicParsing="false" onAction="#addBooking" text="Add booking"/>
-                <Button mnemonicParsing="false" onAction="#editBooking" text="Edit booking"/>
-                <Button mnemonicParsing="false" onAction="#deleteBooking" text="Delete Booking"/>
-                <Button mnemonicParsing="false" onAction="#todayBooking" text="Todays bookings"/>
-                <Button mnemonicParsing="false" onAction="#allBooking" text="All Bookings"/>
-            </ToolBar>
-        </Tab>
-        <Tab text="Vehicle">
-            <ToolBar>
-                <Button fx:id="addVButton" mnemonicParsing="false" onAction="#handleButtonAdd" text="Add Vehicle"/>
-                <Button fx:id="editVButton" mnemonicParsing="false" onAction="#handleButtonEditSearch"
-                        text="Edit Vehicle"/>
-                <Button fx:id="searchVButton" mnemonicParsing="false" onAction="#handleButtonSearch"
-                        text="Search Vehicles"/>
-                <Button fx:id="deleteVButton" mnemonicParsing="false" onAction="#handleButtonDelete"
-                        text="Delete Vehicle"/>
-            </ToolBar>
-        </Tab>
-        <Tab text="Parts">
-            <ToolBar>
-                <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#PartMenu" text="Add part"/>
-            </ToolBar>
-        </Tab>
-        <Tab text="Specialist Repairs">
-            <ToolBar>
-                <items>
-                    <TableView>
-                        <columns>
-                            <TableColumn text="Specialist ID:"/>
-                            <TableColumn text="Specialist Name:"/>
-                            <TableColumn text="Specialist Address:"/>
-                            <TableColumn text="Specialist Phone:"/>
-                            <TableColumn text="Specialist Email:"/>
-                        </columns>
-                    </TableView>
-                    <Label text="Vehicle Reg:"/>
-                </items>
-            </ToolBar>
-        </Tab>
-        <Tab fx:id="userTab" text="Users">
-            <ToolBar>
-                <Button mnemonicParsing="false" onAction="#addUser" text="Add"/>
-                <Button mnemonicParsing="false" onAction="#editUser" text="Edit"/>
-                <Button mnemonicParsing="false" onAction="#deleteUser" text="Delete"/>
-                <Button mnemonicParsing="false" onAction="#searchUser" text="Search"/>
-            </ToolBar>
-        </Tab>
-    </TabPane>
-    <Label fx:id="UserT" text="UserType"/>
-    <!-- todo get rid of fixed position -->
-</AnchorPane>
+    <top>
+        <HBox>
+            <Button text="Today" onAction="#openTodayTab"></Button>
+            <Button text="Customers" onAction="#openCustomersTab"></Button>
+            <Button text="Bookings" onAction="#openBookingsTab"></Button>
+            <Button text="Vehicles" onAction="#openVehiclesTab"></Button>
+            <Button text="Parts" onAction="#openPartsTab"></Button>
+            <Button text="Specialist Repairs" onAction="#openSRCTab"></Button>
+            <Button text="Users" onAction="#openUsersTab"></Button>
+        </HBox>
+    </top>
+    <center>
+    </center>
+</BorderPane>
