@@ -2,7 +2,7 @@ package logic;
 
 import domain.Customer;
 import domain.CustomerType;
-
+import persistence.DatabaseRepository;
 import java.util.*;
 import static logic.CriterionOperator.*;
 
