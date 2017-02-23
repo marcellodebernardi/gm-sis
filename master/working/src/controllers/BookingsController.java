@@ -13,16 +13,7 @@ import java.io.IOException;
  * @since 0.1
  */
 public class BookingsController {
-    private BorderPane bookingsBasePane;
-
-    public void initialize() {
-        try {
-            bookingsBasePane = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private BorderPane basePaneInstance;
 
 
     /**
@@ -30,20 +21,32 @@ public class BookingsController {
      */
     @FXML
     public void openNewBookingView() {
-
+        loadBasePaneInstance();
     }
 
     @FXML
     public void openMonthView() {
-
+        loadBasePaneInstance();
     }
 
     @FXML
     public void openWeekView() {
-
+        loadBasePaneInstance();
     }
 
     @FXML
     public void openListView() {
+        loadBasePaneInstance();
+    }
+
+    private void loadBasePaneInstance() {
+        if (basePaneInstance == null) {
+            try {
+                basePaneInstance = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
