@@ -1,62 +1,35 @@
 package controllers;
 
-import domain.DiagRepBooking;
 import domain.UserType;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import logic.AuthenticationSystem;
 import main.Main;
 
-import javax.swing.border.Border;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * @author Dillon Vaghela
- *
- * todo clean up and add comments
+ *         <p>
+ *         todo clean up and add comments
  */
 public class MenuController {
 
     // todo move these into module controllers
-    public Label UserT;
-    public Button addVButton;
-    public Button deleteVButton;
-    public Button editVButton;
-    public Tab userTab;
-    public Button addSRBooking;
-    public Button editSRBooking;
-    public Button deleteSRBooking;
-    public Button addCustomer;
-    public Button editCustomer;
-    public Button searchCustomer;
     public Button UsersButton;
-
-    // todo what is all this?
     Stage addBStage;
-    Stage deletebStage;
-    Stage editBStage;
-    Stage todayBStage;
-    Stage allBStage;
     Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
     Stage addCustomerStage;
     Stage editCustomerStage;
-    Stage deleteCustomerStage;
-    Stage viewCustomerStage;
     Stage searchCustomerStage;
     Stage PartModule;
-
 
 
     public void initialize() throws Exception {
@@ -86,8 +59,7 @@ public class MenuController {
             VehicleBasePane.setLeft(addEdit);
             VehicleBasePane.setCenter(view);
             Main.getInstance().replaceTabContent(VehicleBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -98,8 +70,7 @@ public class MenuController {
             partsBasePane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
             partsBasePane.setVisible(true);
             Main.getInstance().replaceTabContent(partsBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -117,17 +88,10 @@ public class MenuController {
             VehicleBasePane.setLeft(addEdit);
             VehicleBasePane.setCenter(view);
             Main.getInstance().replaceTabContent(VehicleBasePane);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-    @FXML
-
-
-
 
 
     public void showAlert() {
@@ -138,7 +102,6 @@ public class MenuController {
     }
 
 
-
     public void setUserType() {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
             UsersButton.setDisable(false);
@@ -146,7 +109,6 @@ public class MenuController {
             UsersButton.setDisable(true);
         }
     }
-    */
 
     public void addBooking() {
         try {
