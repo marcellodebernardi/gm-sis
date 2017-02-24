@@ -48,6 +48,7 @@ public class MenuController {
     public void openBookingsTab() {
         BookingsController bookingController = new BookingsController();
         bookingController.openListView();
+        bookingController.openNewBookingView();
     }
 
     public void openVehiclesTab() {

@@ -48,6 +48,15 @@ public class BookingsController {
     @FXML
     public void openNewBookingView() {
         loadBasePaneInstance();
+        try {
+            FlowPane addView = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
+            basePaneInstance.setLeft(addView);
+            basePaneInstance.setVisible(true);
+            Main.getInstance().replaceTabContent(basePaneInstance);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -56,6 +65,7 @@ public class BookingsController {
         try {
             BorderPane monthView = FXMLLoader.load(getClass().getResource("/resources/booking/monthView.fxml"));
             basePaneInstance.setCenter(monthView);
+            basePaneInstance.getCenter().setId("monthWeekList");
             basePaneInstance.setVisible(true);
             Main.getInstance().replaceTabContent(basePaneInstance);
         } catch (IOException e) {
@@ -69,6 +79,7 @@ public class BookingsController {
         try {
             BorderPane weekView = FXMLLoader.load(getClass().getResource("/resources/booking/weekView.fxml"));
             basePaneInstance.setCenter(weekView);
+            basePaneInstance.getCenter().setId("monthWeekList");
             basePaneInstance.setVisible(true);
             Main.getInstance().replaceTabContent(basePaneInstance);
         } catch (IOException e) {
@@ -86,12 +97,15 @@ public class BookingsController {
             listView.setCenter(table);
 
             basePaneInstance.setCenter(listView);
+            basePaneInstance.getCenter().setId("monthWeekList");
             basePaneInstance.setVisible(true);
             Main.getInstance().replaceTabContent(basePaneInstance);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
     private void loadBasePaneInstance() {
         if (basePaneInstance == null) {

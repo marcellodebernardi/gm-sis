@@ -31,3 +31,6 @@
 #bookingsTable columns TableColumn {
     -fx-pref-width: 45em;
 }
+#monthWeekList {
+    -fx-padding: 0.5em;
+}
