@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
@@ -79,7 +80,7 @@ public class PartsController implements Initializable {
     @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<String> CB1, CB2, CB3,CB4;
+    private ComboBox<String> CB1, CB2, CB3,CB4, addPartID;
     @FXML
     private TextField price1, price2, price3, price4;
     @FXML
@@ -89,7 +90,8 @@ public class PartsController implements Initializable {
     @FXML
     private TextArea partDescriptionField;
     @FXML
-    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn;
+    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn;
+
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
@@ -108,7 +110,7 @@ public class PartsController implements Initializable {
 
     /**
      * The initialize method ensures that the combo-boxes which i have created refers to an observableArrayList (CB).
-     * Need to click "Display All Parts" button so that the updateTable() method puts data into that list object.
+     * Need to click "View All Parts" button so that the updateTable() method puts data into that list object.
      *
      */
     public void initialize(URL location, ResourceBundle resources){
@@ -118,14 +120,14 @@ public class PartsController implements Initializable {
             CB2.setItems(CB);
             CB3.setItems(CB);
             CB4.setItems(CB);
-
+            addPartID.setItems(CB);
 
         }catch(NullPointerException e){e.printStackTrace();}
 
     }
 
     /**
-     * This method is the action for my "Display All Parts" button on the interface
+     * This method is the action for my "View All Parts" button on the interface
      * This method is responsible for fetching data and displaying it all in the TableView by creating a list and storing into the object
      * Also the combo-box gets the PartAbstractionID and is stored into the object
      * Once the list has been created the setPartsTable() method is called and the PartsTable is set with the tableEntries data
@@ -136,26 +138,22 @@ public class PartsController implements Initializable {
 
         List = instance.getByCriteria(c); //the data from Parts DB stored in this list
 
-        //Test
-        // System.out.println(List.get(0).getPartName());
-        // System.out.println(List.get(1).getPartName());
-        //System.out.println(List.get(0).getPartDescription());
-        // System.out.println(List.size());
-
         tableEntries.removeAll(tableEntries); //table clears for when database gets updated
+        CB.removeAll(CB); //the dropdown boxes update, doesn't show duplicate
 
         for (int i = 0; i < List.size(); i++) {
 
             tableEntries.add(List.get(i));
             data.add(List.get(i).getPartName());
             CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
+
+
         }
 
         setPartsTable();;
 
         PartsTable.setItems(tableEntries);
 
-       // TextFields.bindAutoCompletion(searchParts,data);
 
     }
 
@@ -213,45 +211,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * The addPartButtonClick() and withdrawButtonClick method opens up an pop up window which allows users to enter new stock/withdraw stock into/from the system
-     * If the user clicks on the button whilst the relevant window is already open then an alert is shown to user
-     * The showAlert() method displays a pop up window telling the user the window is already open
-     * @throws Exception
-     */
-
-    public void addPartButtonClick() throws Exception {
-        try {
-            if (AddPartStage != null) {
-                if (AddPartStage.isShowing()) {
-                    showAlert();
-                    AddPartStage.setAlwaysOnTop(true);
-                    return;
-
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddPart.fxml"));
-            Parent menu = fxmlLoader.load();
-            AddPartStage = new Stage();
-            AddPartStage.setTitle("Add Part");
-            AddPartStage.setScene(new Scene(menu));
-            AddPartStage.show();
-
-        } catch (Exception e) {
-            System.out.println("Cannot Open");
-
-        }
-    }
-
-
-    public void showAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Alert");
-        alert.setHeaderText("This window is already open, press ok to continue");
-        alert.showAndWait();
-    }
-
-    /**
-     * In order to search the table, user must click on "display all parts" button first and then enter
+     * In order to search the table, user must click on "view all parts" button first and then enter
      * part name to search, then click on the search button, the data should display in TableView...
      */
     public void searchPart() {
@@ -306,9 +266,8 @@ public class PartsController implements Initializable {
 
     }
 
-
     /**
-     * This method allows user to calculate individual parts bill where the user must click "Display All Parts" button
+     * This method allows user to calculate individual parts bill where the user must click "View All Parts" button
      * Once that button is clicked, the user selects the part id from relevent combo-box and the price is displayed
      * The user needs to input the quantity and click the button which stores the values into an array
      */
@@ -402,13 +361,32 @@ public class PartsController implements Initializable {
     }
 
 
+    /**
+     * The addToDb() method is responsible for adding new part items to the database, a new object is created which uses
+     * the constructor from PartAbstraction and is then saved to the database using commitItem().
+     **/
     public void addToDB() throws Exception{
 
 
         PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
-                Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()), null);
+                Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
+                null);
 
         boolean s = instance.commitItem(newPart);
+
+        partNameField.clear();
+        partDescriptionField.clear();
+        partPriceField.clear();
+        partStockLevelField.clear();
+
+    }
+
+    public void clearAddForm(){
+
+        partNameField.clear();
+        partDescriptionField.clear();
+        partPriceField.clear();
+        partStockLevelField.clear();
 
     }
 
@@ -421,9 +399,12 @@ public class PartsController implements Initializable {
 
             PartsTable.getSelectionModel().select(i); //selects whole row
             singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
-            boolean c = instance.commitItem(singlePart);
+            boolean c = instance.commitItem(singlePart); //saves the single changes (edit) to the database
 
-/**
+
+
+            /*
+
             PartsTable.getSelectionModel().select(i); //selects whole row
             singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
             try {
@@ -433,7 +414,7 @@ public class PartsController implements Initializable {
                 stm.executeUpdate(Query);
 
             }catch(SQLException e ){e.printStackTrace();}
- **/
+            **/
 
         }
 
