@@ -75,25 +75,23 @@
                   <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <AnchorPane prefHeight="166.0" prefWidth="705.0">
-                     <children>
-                        <CheckBox fx:id="cREg" layoutY="9.0" mnemonicParsing="false" text="Vehicle Reg" />
-                     </children>
-                  </AnchorPane>
-                  <CheckBox fx:id="cCID" mnemonicParsing="false" prefHeight="18.0" prefWidth="133.0" text="Customer ID" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="cVT" mnemonicParsing="false" text="Vehicle Type" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="cMod" mnemonicParsing="false" text="Model" GridPane.columnIndex="1" />
-                  <CheckBox fx:id="cManu" mnemonicParsing="false" text="Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="cES" mnemonicParsing="false" text="Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="cFT" mnemonicParsing="false" text="Fuel Type" GridPane.columnIndex="2" />
-                  <CheckBox fx:id="cC" mnemonicParsing="false" text="Colour" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <CheckBox mnemonicParsing="false" text="Mileage" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="cMOT" mnemonicParsing="false" text="MOT Date" GridPane.columnIndex="3" />
-                  <CheckBox fx:id="cDLS" mnemonicParsing="false" text="Date Last Service" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="cW" mnemonicParsing="false" text="Warranty?" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="cWN" mnemonicParsing="false" text="Warranty Name" GridPane.columnIndex="4" />
-                  <CheckBox fx:id="cA" mnemonicParsing="false" text="Address" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="cD" mnemonicParsing="false" text="Date" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+
+                        <CheckBox fx:id="cReg" layoutY="9.0" mnemonicParsing="false" selected="true" text="Vehicle Reg" />
+
+                  <CheckBox fx:id="cCID" mnemonicParsing="false" prefHeight="18.0" prefWidth="133.0" selected="true" text="Customer ID" GridPane.rowIndex="1" onAction="#changeColumns" />
+                  <CheckBox fx:id="cVT" mnemonicParsing="false" selected="true" text="Vehicle Type" GridPane.rowIndex="2" onAction="#changeColumns" />
+                  <CheckBox fx:id="cMod" mnemonicParsing="false" selected="true" text="Model" GridPane.columnIndex="1" onAction="#changeColumns" />
+                  <CheckBox fx:id="cManu" mnemonicParsing="false" selected="true" text="Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#changeColumns" />
+                  <CheckBox fx:id="cES" mnemonicParsing="false" text="Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#changeColumns" />
+                  <CheckBox fx:id="cFT" mnemonicParsing="false" text="Fuel Type" GridPane.columnIndex="2" onAction="#changeColumns" />
+                  <CheckBox fx:id="cC" mnemonicParsing="false" text="Colour" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#changeColumns" />
+                  <CheckBox  fx:id="cMil" mnemonicParsing="false" text="Mileage" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#changeColumns" />
+                  <CheckBox fx:id="cMOT" mnemonicParsing="false" selected="true" text="MOT Date" GridPane.columnIndex="3" onAction="#changeColumns" />
+                  <CheckBox fx:id="cDLS" mnemonicParsing="false" selected="true" text="Date Last Service" GridPane.columnIndex="3" GridPane.rowIndex="1" onAction="#changeColumns" />
+                  <CheckBox fx:id="cW" mnemonicParsing="false" selected="true" text="Warranty?" GridPane.columnIndex="3" GridPane.rowIndex="2" onAction="#changeColumns" />
+                  <CheckBox fx:id="cWN" mnemonicParsing="false" selected="true" text="Warranty Name" GridPane.columnIndex="4" onAction="#changeColumns" />
+                  <CheckBox fx:id="cA" mnemonicParsing="false" selected="true" text="Address" GridPane.columnIndex="4" GridPane.rowIndex="1" onAction="#changeColumns" />
+                  <CheckBox fx:id="cD" mnemonicParsing="false" selected="true" text="Date" GridPane.columnIndex="4" GridPane.rowIndex="2" onAction="#changeColumns" />
                </children>
             </GridPane>
         </items>

@@ -27,57 +27,28 @@ import java.util.List;
  */
 public class VehicleController {
 
+
+    @FXML
     private VehicleSys vSys = VehicleSys.getInstance();
-    public TextField reg;
-    public TextField cID;
-    public ComboBox vType = new ComboBox();
-    public TextField mod;
-    public TextField manuf;
-    public TextField eSize;
-    public ComboBox fType;
-    public TextField col;
-    public TextField mil;
-    public TextField rDateMot;
-    public TextField dLastServiced;
-    public ComboBox cByWarranty;
-    public TextField wName;
-    public TextField wCompAddress;
-    public TextField wExpirationDate;
-    public Button editV;
-    public TextField eReg;
-    public TableView<Vehicle> searchTable;
-    public TableColumn<Vehicle, String> tReg;
-    public TableColumn<Vehicle, Integer> tCID;
+    @FXML
+    private TextField reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, eReg, regS, manufS;
+    @FXML
+    private ComboBox vType, fType, cByWarranty;
+    @FXML
+    private TableView<Vehicle> searchTable;
+    @FXML
+    private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA;
+    public TableColumn<Vehicle, Integer> tCID, tMil;
     public TableColumn<Vehicle, VehicleType> tVT;
-    public TableColumn<Vehicle, String> tMod;
-    public TableColumn<Vehicle, String> tManu;
     public TableColumn<Vehicle, Double> tEs;
     public TableColumn<Vehicle, FuelType> tFT;
-    public TableColumn<Vehicle, String> tCol;
-    public TableColumn<Vehicle, Integer> tMil;
-    public TableColumn<Vehicle, Date> tMOT;
-    public TableColumn<Vehicle, Date> tDLS;
+    public TableColumn<Vehicle, Date> tMOT, tDLS, tD;
     public TableColumn<Vehicle, Boolean> tW;
-    public TableColumn<Vehicle, String> tWn;
-    public TableColumn<Vehicle, String> tA;
-    public TableColumn<Vehicle, Date> tD;
     final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
-    public TextField regS;
-    public TextField manufS;
-    private CheckBox cReg;
-    private CheckBox cCID;
-    private CheckBox cVT;
-    private CheckBox cMOd;
-    private CheckBox cManu;
-    private CheckBox cES;
-    private CheckBox cFT;
-    private CheckBox cC;
-    private CheckBox cMil;
-    private CheckBox cMOT;
-    private CheckBox cDLS;
-    private CheckBox cW;
-    private CheckBox cA;
-    private CheckBox cD;
+    @FXML
+    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD;
+
+
 
     public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -478,6 +449,131 @@ public class VehicleController {
             wExpirationDate.clear();
         }
     }
+
+    public void changeColumns()
+    {
+        if (cReg.isSelected())
+        {
+            tReg.setVisible(true);
+        }
+        else
+        {
+            tReg.setVisible(false);
+        }
+        if (cCID.isSelected())
+        {
+            tCID.setVisible(true);
+        }
+        else
+        {
+            tCID.setVisible(false);
+        }
+        if (cVT.isSelected())
+        {
+            tVT.setVisible(true);
+        }
+        else
+        {
+            tVT.setVisible(false);
+        }
+        if (cMod.isSelected())
+        {
+            tMod.setVisible(true);
+        }
+        else
+        {
+            tMod.setVisible(false);
+        }
+        if (cManu.isSelected())
+        {
+            tManu.setVisible(true);
+        }
+        else
+        {
+            tManu.setVisible(false);
+        }
+        if (cES.isSelected())
+        {
+            tEs.setVisible(true);
+        }
+        else
+        {
+            tEs.setVisible(false);
+        }
+        if (cFT.isSelected())
+        {
+            tFT.setVisible(true);
+        }
+        else
+        {
+            tFT.setVisible(false);
+        }
+        if (cC.isSelected())
+        {
+            tCol.setVisible(true);
+        }
+        else
+        {
+            tCol.setVisible(false);
+        }
+        if (cMil.isSelected())
+        {
+            tMil.setVisible(true);
+        }
+        else
+        {
+            tMil.setVisible(false);
+        }
+        if (cMOT.isSelected())
+        {
+            tMOT.setVisible(true);
+        }
+        else
+        {
+            tMOT.setVisible(false);
+        }
+        if (cDLS.isSelected())
+        {
+            tDLS.setVisible(true);
+        }
+        else
+        {
+            tDLS.setVisible(false);
+        }
+        if (cW.isSelected())
+        {
+            tW.setVisible(true);
+        }
+        else
+        {
+            tW.setVisible(false);
+        }
+        if (cWN.isSelected())
+        {
+            tWn.setVisible(true);
+        }
+        else
+        {
+            tWn.setVisible(false);
+        }
+        if (cA.isSelected())
+        {
+            tA.setVisible(true);
+        }
+        else
+        {
+            tA.setVisible(false);
+        }
+        if (cD.isSelected())
+        {
+            tD.setVisible(true);
+        }
+        else
+        {
+            tD.setVisible(false);
+        }
+    }
+
 
 
 }
