@@ -77,7 +77,22 @@ public class MenuController {
     }
 
     public void openSRCTab() {
-        // todo
+        BorderPane specialistBasePane = new BorderPane();
+        try
+        {
+            FlowPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/centerSRC.fxml"));
+            FlowPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/leftSRC.fxml"));
+            specialistBasePane.setVisible(true);
+            specialistBasePane.setLeft(leftPane);
+            specialistBasePane.setCenter(centerPane);
+            Main.getInstance().replaceTabContent(specialistBasePane);
+
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void openUsersTab() {
@@ -149,7 +164,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddSRCB.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/AddSRCB.fxml"));
             Parent menu = fxmlLoader.load();
             addSpecialistBooking = new Stage();
             addSpecialistBooking.setTitle("Add Booking");
@@ -171,7 +186,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/DeleteSRB.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/DeleteSRB.fxml"));
             Parent menu = fxmlLoader.load();
             deleteSpecialistBooking = new Stage();
             deleteSpecialistBooking.setTitle("Delete Booking");

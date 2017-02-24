@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SpecialistRepairController">
+   <children>
+      <GridPane prefHeight="858.0" prefWidth="752.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="659.0" minWidth="10.0" prefWidth="542.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0" prefWidth="202.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="338.0" minHeight="10.0" prefHeight="241.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="436.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="289.0" minHeight="9.0" prefHeight="287.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="253.0" prefWidth="546.0">
+               <children>
+                  <TextField editable="false" layoutX="7.0" layoutY="30.0" prefHeight="40.0" prefWidth="174.0" promptText="Customer ID:" />
+                  <TextField editable="false" layoutX="187.0" layoutY="30.0" prefHeight="40.0" prefWidth="174.0" promptText="Customer Name:" />
+                  <TextField editable="false" layoutX="366.0" layoutY="30.0" prefHeight="40.0" prefWidth="174.0" promptText="Customer Surname:" />
+                  <TextField editable="false" layoutX="7.0" layoutY="86.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Registration:" />
+                  <TextField editable="false" layoutX="187.0" layoutY="86.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Make:" />
+                  <TextField editable="false" layoutX="366.0" layoutY="86.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Model:" />
+                  <TextField editable="false" layoutX="7.0" layoutY="148.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Type:" />
+                  <TextField editable="false" layoutX="187.0" layoutY="148.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Milage:" />
+                  <TextField editable="false" layoutX="366.0" layoutY="148.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Fueltype:" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="277.0" prefWidth="546.0" GridPane.rowIndex="1">
+               <children>
+                  <TextField layoutX="14.0" layoutY="74.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a Specialist Repair Center ID">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </TextField>
+                  <TextField editable="false" layoutX="208.0" layoutY="74.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Name:" />
+                  <RadioButton layoutX="21.0" layoutY="228.0" mnemonicParsing="false" selected="true" text="Vehicle Repair">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="bookingType" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton layoutX="208.0" layoutY="228.0" mnemonicParsing="false" text="Part Repair" toggleGroup="$bookingType" />
+                  <TextField editable="false" layoutX="14.0" layoutY="137.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter the item ID:" />
+                  <DatePicker layoutX="208.0" layoutY="137.0" prefHeight="40.0" prefWidth="174.0" promptText="Select a return date" />
+                  <Label layoutX="14.0" layoutY="25.0" prefHeight="0.0" prefWidth="367.0" text="Add new Specialist Repair Booking" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Button layoutX="32.0" layoutY="40.0" mnemonicParsing="false" onAction="#displayFields" prefHeight="27.0" prefWidth="143.0" text="Add SRC" />
+                  <Button layoutX="32.0" layoutY="87.0" mnemonicParsing="false" onAction="#showID" prefHeight="27.0" prefWidth="143.0" text="Delete SRC" />
+                  <Button layoutX="32.0" layoutY="139.0" mnemonicParsing="false" onAction="#displayFields" prefHeight="27.0" prefWidth="143.0" text="Edit SRC" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Button layoutX="32.0" layoutY="78.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="143.0" text="Search SRCs" />
+                  <Button layoutX="32.0" layoutY="153.0" mnemonicParsing="false" onAction="#allowBooking" prefHeight="28.0" prefWidth="143.0" text="Add Booking" />
+                  <Button layoutX="32.0" layoutY="199.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="143.0" text="Delete Booking" />
+                  <Button layoutX="32.0" layoutY="241.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="143.0" text="Edit Booking" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Button layoutX="32.0" layoutY="53.0" mnemonicParsing="false" onAction="#addSRC" prefHeight="28.0" prefWidth="143.0" text="Submit SRC" />
+                  <Button layoutX="32.0" layoutY="117.0" mnemonicParsing="false" onAction="#deleteSRC" prefHeight="28.0" prefWidth="143.0" text="Delete SRC" />
+                  <Button layoutX="32.0" layoutY="182.0" mnemonicParsing="false" onAction="#updateSRC" prefHeight="28.0" prefWidth="143.0" text="Update SRC" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <TextField fx:id="new_spcName" layoutX="8.0" layoutY="55.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Name:" visible="false" />
+                  <TextField fx:id="new_spcAdd" layoutX="227.0" layoutY="55.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Address:" visible="false" />
+                  <TextField fx:id="new_spcPho" layoutX="8.0" layoutY="115.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Phone:" visible="false" />
+                  <TextField fx:id="new_spcEmail" layoutX="227.0" layoutY="115.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Phone:" visible="false" />
+                  <TextField fx:id="spcIDtoDelete" layoutX="7.0" layoutY="55.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter SPC ID:" visible="false" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+   </children>
+</FlowPane>

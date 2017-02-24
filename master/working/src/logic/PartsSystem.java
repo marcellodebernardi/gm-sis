@@ -1,6 +1,7 @@
 package logic;
 
 import domain.PartAbstraction;
+import domain.PartOccurrence;
 import persistence.DatabaseRepository;
 import static logic.CriterionOperator.*;
 
@@ -22,7 +23,7 @@ public class PartsSystem {
         this.persistence = persistence;
     }
 
-    public PartsSystem getInstance(CriterionRepository persistence) {
+    public static PartsSystem getInstance(CriterionRepository persistence) {
         if (instance == null) instance = new PartsSystem(persistence);
         return instance;
     }

@@ -1,9 +1,13 @@
 package logic;
 
 
+import domain.PartRepair;
+import domain.Searchable;
 import domain.SpecialistRepairCenter;
+import domain.VehicleRepair;
 import persistence.DatabaseRepository;
 
+import java.util.Date;
 import java.util.List;
 
 import static logic.CriterionOperator.*;
@@ -57,14 +61,35 @@ public class SpecRepairSystem {
      *
      * @return true if deleting of SRC is successful.
      */
-    public boolean deleteRepairCenter(SpecialistRepairCenter delete)
+    public boolean deleteRepairCenter(int delete)
     {
-     return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete.getSpcID()));
+     return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete));
     }
 
-    public boolean editRepairCentre(SpecialistRepairCenter edit)
+    public boolean updateRepairCentre(SpecialistRepairCenter edit)
     {
         return persistence.commitItem(edit);
     }
 
+    public List<VehicleRepair> getVehicleBookings(String regNumber)
+    {
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleReg", EqualTo, regNumber));
+    }
+
+    public List<SpecialistRepairCenter>getAllBookings(String spcID)
+    {
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, spcID));
+    }
+
+    public List<VehicleRepair> getOutstandingV()
+    {
+        ///todo implement way to get all vehicle repairs with return dates past todays date
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, new Date()));
+    }
+
+    public List<PartRepair> getOutstandingP()
+    {
+        ///todo implement way to get all part repairs with return dates past todays date
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, new Date()));
+    }
 }
