@@ -62,12 +62,22 @@ public class VehicleController {
     public TableColumn<Vehicle, String> tA;
     public TableColumn<Vehicle, Date> tD;
     final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
-
-
-
-
-
-
+    public TextField regS;
+    public TextField manufS;
+    private CheckBox cReg;
+    private CheckBox cCID;
+    private CheckBox cVT;
+    private CheckBox cMOd;
+    private CheckBox cManu;
+    private CheckBox cES;
+    private CheckBox cFT;
+    private CheckBox cC;
+    private CheckBox cMil;
+    private CheckBox cMOT;
+    private CheckBox cDLS;
+    private CheckBox cW;
+    private CheckBox cA;
+    private CheckBox cD;
 
     public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -242,7 +252,7 @@ public class VehicleController {
         try {
             boolean add = showAlertC("Are you sure you want to search for this Vehicle, have you checked the vehicle details?");
             if (add) {
-                List<Vehicle> arrayList = vSys.searchVehicle(reg.getText(), manuf.getText());
+                List<Vehicle> arrayList = vSys.searchVehicle(regS.getText(), manufS.getText());
                 DisplayTable(arrayList);
             }
 
