@@ -256,6 +256,7 @@ public class Criterion<E extends Searchable> {
             for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
                 returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i);
 
+                // todo fix
                 switch (operators.get(0)) {
                     case EqualTo:
                         returnString += " = '" + values.get(i) + "'";
@@ -267,7 +268,7 @@ public class Criterion<E extends Searchable> {
                         returnString += " > '" + values.get(i) + "'";
                         break;
                     case Regex:
-                        returnString += " LIKE '" + values.get(i) + "'";
+                        returnString += " LIKE '" + "%" + values.get(i) + "%" + "'";
                         break;
                     default:
                         break;
