@@ -15,7 +15,6 @@ public class VehicleSys {
 
     private static VehicleSys instance;
     private CriterionRepository persistence = DatabaseRepository.getInstance();
-    private Vehicle vehicle;
 
     private VehicleSys() {
 

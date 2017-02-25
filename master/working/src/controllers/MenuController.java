@@ -54,11 +54,8 @@ public class MenuController {
     public void openVehiclesTab() {
         BorderPane VehicleBasePane = new BorderPane();
         try {
-            FlowPane addEdit = FXMLLoader.load(getClass().getResource("/resources/vehicle/AddVehicle.fxml"));
-            FlowPane view = FXMLLoader.load(getClass().getResource("/resources/vehicle/SearchVehicle.fxml"));
+            VehicleBasePane = FXMLLoader.load(getClass().getResource("/resources/vehicle/vehiclesBasePane.fxml"));
             VehicleBasePane.setVisible(true);
-            VehicleBasePane.setLeft(addEdit);
-            VehicleBasePane.setCenter(view);
             Main.getInstance().replaceTabContent(VehicleBasePane);
         } catch (IOException e) {
             e.printStackTrace();

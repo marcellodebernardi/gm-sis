@@ -1,21 +1,267 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
-    <top>
-        <HBox>
-            <Button fx:id="addVButton" mnemonicParsing="false" onAction="#handleButtonAdd" text="Add Vehicle"/>
-            <Button fx:id="editVButton" mnemonicParsing="false" onAction="#handleButtonEditSearch"
-                    text="Edit Vehicle"/>
-            <Button fx:id="searchVButton" mnemonicParsing="false" onAction="#handleButtonSearch"
-                    text="Search Vehicles"/>
-            <Button fx:id="deleteVButton" mnemonicParsing="false" onAction="#handleButtonDelete"
-                    text="Delete Vehicle"/>
-        </HBox>
-    </top>
+<BorderPane prefHeight="677.0" prefWidth="1108.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+    <left>
+        <FlowPane prefHeight="515.0" prefWidth="286.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+                <SplitPane dividerPositions="0.08771929824561403, 0.9395711500974658" orientation="VERTICAL" prefHeight="515.0" prefWidth="285.0">
+                    <items>
+                        <BorderPane>
+                            <center>
+                                <BorderPane>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add  Vehicle" />
+                                    </children>
+                                    <left>
+                                        <Label fx:id="AddEditL" text="Add Vehicle" BorderPane.alignment="CENTER" />
+                                    </left>
+                                    <right>
+                                        <ComboBox fx:id="VehicleS" onAction="#selectVehicle" prefWidth="150.0" promptText="Pick A Vehicle" BorderPane.alignment="CENTER">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="Honda Civic 1.6 Litre Petrol" />
+                                                    <String fx:value="Ford Focus 1.2 Litre Diesel" />
+                                                    <String fx:value="BMW 5 Series 2.2 Litre Petrol" />
+                                                    <String fx:value="BMW 3 Series 2.9 Litre Diesel" />
+                                                    <String fx:value="Mercedes A Class 3.0 Litre Petrol" />
+                                                    <String fx:value="Ford Transit 2.2 Litre Petrol" />
+                                                    <String fx:value="Nissan Roadster 1.2 Litre Diesel" />
+                                                    <String fx:value="Audi Y-8 Van 3.6 Litre Petrol" />
+                                                    <String fx:value="Ferrari Enzo 4.4 Litre Petrol" />
+                                                    <String fx:value="Ford Truckster 2.8 Litre Diesel" />
+                                                    <String fx:value="Renault Hybrid Van 2.3 Litre Petrol" />
+                                                    <String fx:value="MG Sport 2.0 Litre Diesel" />
+                                                    <String fx:value="Acura Model S 2.2 Litre Petrol" />
+                                                    <String fx:value="Bentley Arnage 4.0 Litre Petrol" />
+                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                    </right>
+                                </BorderPane>
+                            </center>
+                        </BorderPane>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" />
+                                <ColumnConstraints hgrow="SOMETIMES" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Vehicle Reg" />
+                                <Label text="CustomerID" GridPane.rowIndex="1" />
+                                <Label text="Vehicle Type" GridPane.rowIndex="2" />
+                                <Label text="Model" GridPane.rowIndex="4" />
+                                <Label text="Manufacturer" GridPane.rowIndex="3" />
+                                <Label text="Engine Size" GridPane.rowIndex="5" />
+                                <TextField fx:id="reg" promptText="Enter Vehicle Reg" GridPane.columnIndex="1" />
+                                <TextField fx:id="cID" promptText="Enter Customer ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <ComboBox fx:id="vType" promptText="pick Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Car" />
+                                            <String fx:value="Van" />
+                                            <String fx:value="Truck" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <TextField fx:id="mod" promptText="Enter model" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField fx:id="manuf" promptText="Enter Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField fx:id="eSize" promptText="Enter Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                <Label text="Fuel Type" GridPane.rowIndex="6" />
+                                <ComboBox fx:id="fType" promptText="pick Fuel" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Diesel" />
+                                            <String fx:value="Petrol" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <Label text="Colour" GridPane.rowIndex="7" />
+                                <Label text="Mileage" GridPane.rowIndex="8" />
+                                <Label text="MOT renewal Date" GridPane.rowIndex="9" />
+                                <TextField fx:id="col" promptText="Enter Colour" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                <Label text="Date Last Serviced" GridPane.rowIndex="10" />
+                                <Label text="Warranty?" GridPane.rowIndex="11" />
+                                <Label prefHeight="33.0" prefWidth="116.0" text="Company Address" GridPane.rowIndex="13" />
+                                <Label prefHeight="17.0" prefWidth="94.0" text="Expiration Date" GridPane.rowIndex="14" />
+                                <TextField fx:id="wCompAddress" promptText="Enter Address" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                                <TextField fx:id="wExpirationDate" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                                <TextField fx:id="mil" promptText="Enter Mileage" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                <Label text="Name" GridPane.rowIndex="12" />
+                                <TextField fx:id="wName" promptText="Enter Name" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                                <ComboBox fx:id="cByWarranty" onAction="#hiddenWarranty" promptText="Pick True/False" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="True" />
+                                            <String fx:value="False" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <TextField fx:id="rDateMot" promptText="Enter renewal Date Mot" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                <TextField fx:id="dLastServiced" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                            </children>
+                        </GridPane>
+                        <GridPane alignment="TOP_CENTER">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="82.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="135.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="82.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Button fx:id="addV" mnemonicParsing="false" onAction="#addEditVehicle" text="Add" />
+                                <Button fx:id="deleteV" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="27.0" prefWidth="66.0" text="Delete" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                <Button fx:id="ClearV" mnemonicParsing="false" onAction="#ClearFields" prefHeight="27.0" prefWidth="66.0" text="Clear" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                            </children>
+                        </GridPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </FlowPane>
+    </left>
+    <center>
+        <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+                <SplitPane dividerPositions="0.10542168674698796, 0.40512048192771083" orientation="VERTICAL" prefHeight="666.0" prefWidth="813.0">
+                    <items>
+                        <BorderPane>
+                            <center>
+                                <GridPane BorderPane.alignment="CENTER">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="91.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="362.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="151.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="89.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label prefHeight="17.0" prefWidth="155.0" text="Vehicle Reg" />
+                                        <Label prefHeight="17.0" prefWidth="150.0" text="Manufacturer" GridPane.rowIndex="1" />
+                                        <TextField fx:id="regS" promptText="enter reg" GridPane.columnIndex="1" />
+                                        <TextField fx:id="manufS" promptText="enter manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Button mnemonicParsing="false" onAction="#searchVehicle" prefHeight="27.0" prefWidth="61.0" text="Search" GridPane.columnIndex="2" />
+                                        <Button mnemonicParsing="false" onAction="#searchVehicleA" text="View All" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Button fx:id="DeleteVT" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                            </center>
+                        </BorderPane>
+                        <TableView fx:id="searchTable" disable="true" prefHeight="325.0" prefWidth="811.0">
+                            <columns>
+                                <TableColumn fx:id="tReg" prefWidth="52.0" text="Reg" />
+                                <TableColumn fx:id="tCID" prefWidth="52.0" text="CID" visible="false" />
+                                <TableColumn fx:id="tVT" prefWidth="52.0" text="VT" />
+                                <TableColumn fx:id="tMod" prefWidth="52.0" text="Mod" />
+                                <TableColumn fx:id="tManu" prefWidth="52.0" text="Manu" />
+                                <TableColumn fx:id="tEs" prefWidth="52.0" text="ES" visible="false" />
+                                <TableColumn fx:id="tFT" prefWidth="52.0" text="FT" visible="false" />
+                                <TableColumn fx:id="tCol" prefWidth="52.0" text="Col" visible="false" />
+                                <TableColumn fx:id="tMil" prefWidth="52.0" text="Mil" visible="false" />
+                                <TableColumn fx:id="tMOT" prefWidth="52.0" text="MOT" visible="false" />
+                                <TableColumn fx:id="tDLS" prefWidth="52.0" text="DLS" />
+                                <TableColumn fx:id="tW" prefWidth="52.0" text="W?" />
+                                <TableColumn fx:id="tWn" minWidth="0.0" prefWidth="52.0" text="Nam" visible="false" />
+                                <TableColumn fx:id="tA" prefWidth="52.0" text="Add" visible="false" />
+                                <TableColumn fx:id="tD" prefWidth="61.0" text="Date" visible="false" />
+                        <TableColumn fx:id="tFN" prefWidth="75.0" text="FName" />
+                        <TableColumn fx:id="tLN" prefWidth="75.0" text="LName" />
+                        <TableColumn fx:id="tCA" prefWidth="75.0" text="cAdd" visible="false" />
+                        <TableColumn fx:id="tCP" prefWidth="75.0" text="cPost" visible="false" />
+                        <TableColumn fx:id="tCPN" prefWidth="75.0" text="Phone" visible="false" />
+                        <TableColumn fx:id="tCE" prefWidth="75.0" text="Email" visible="false" />
+                        <TableColumn fx:id="tCT" prefWidth="142.0" text="Type" />
+                        <TableColumn fx:id="tDS" prefWidth="110.0" text="Diag Start" />
+                        <TableColumn fx:id="tRS" prefWidth="97.0" text="Rep Start" />
+                            </columns>
+                        </TableView>
+                        <GridPane prefHeight="154.0" prefWidth="705.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="651.0" minWidth="10.0" prefWidth="140.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="642.0" minWidth="10.0" prefWidth="140.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="642.0" minWidth="10.0" prefWidth="140.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="642.0" minWidth="10.0" prefWidth="140.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="642.0" minWidth="10.0" prefWidth="140.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+
+                                <CheckBox fx:id="cReg" layoutY="9.0" mnemonicParsing="false" selected="true" text="Vehicle Reg" />
+
+                                <CheckBox fx:id="cCID" mnemonicParsing="false" onAction="#changeColumns" prefHeight="18.0" prefWidth="133.0" text="Customer ID" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cVT" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Vehicle Type" GridPane.rowIndex="2" />
+                                <CheckBox fx:id="cMod" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Model" GridPane.rowIndex="3" />
+                                <CheckBox fx:id="cManu" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Manufacturer" GridPane.rowIndex="4" />
+                                <CheckBox fx:id="cES" mnemonicParsing="false" onAction="#changeColumns" text="Engine Size" GridPane.columnIndex="1" />
+                                <CheckBox fx:id="cFT" mnemonicParsing="false" onAction="#changeColumns" text="Fuel Type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cC" mnemonicParsing="false" onAction="#changeColumns" text="Colour" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <CheckBox fx:id="cMil" mnemonicParsing="false" onAction="#changeColumns" text="Mileage" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <CheckBox fx:id="cMOT" mnemonicParsing="false" onAction="#changeColumns" text="MOT Date" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <CheckBox fx:id="cDLS" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Date Last Service" GridPane.columnIndex="2" />
+                                <CheckBox fx:id="cW" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Warranty?" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cWN" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Name" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <CheckBox fx:id="cA" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Address" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                <CheckBox fx:id="cD" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Date" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="cFN" mnemonicParsing="false" selected="true" text="First Name" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <CheckBox fx:id="cLN" mnemonicParsing="false" selected="true" text="Last Name" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="cCA" mnemonicParsing="false" text="Customer Address" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <CheckBox fx:id="cCPC" mnemonicParsing="false" text="Customer Postcode" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="cCP" mnemonicParsing="false" text="Customer Phone" GridPane.columnIndex="4" />
+                        <CheckBox fx:id="cCE" mnemonicParsing="false" text="Customer Email" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <CheckBox fx:id="cCT" mnemonicParsing="false" selected="true" text="Customer Type" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="cDS" mnemonicParsing="false" selected="true" text="Diagnosis Start" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <CheckBox fx:id="cRS" mnemonicParsing="false" selected="true" text="Repair Start" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                        <Button mnemonicParsing="false" onAction="#ResetColumns" prefHeight="27.0" prefWidth="112.0" text="Reset" GridPane.columnIndex="3" />
+                            </children>
+                        </GridPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </FlowPane>
+    </center>
 </BorderPane>

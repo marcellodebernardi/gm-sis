@@ -1,5 +1,6 @@
 package controllers;
 
+import domain.CustomerType;
 import domain.FuelType;
 import domain.Vehicle;
 import domain.VehicleType;
@@ -17,6 +18,7 @@ import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.VehicleSys;
+import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,23 +33,36 @@ public class VehicleController {
     @FXML
     private VehicleSys vSys = VehicleSys.getInstance();
     @FXML
-    private TextField reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, eReg, regS, manufS;
+    private TextField reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
     @FXML
-    private ComboBox vType, fType, cByWarranty;
+    private ComboBox vType, fType, cByWarranty, VehicleS;
     @FXML
     private TableView<Vehicle> searchTable;
     @FXML
-    private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA;
-    public TableColumn<Vehicle, Integer> tCID, tMil;
-    public TableColumn<Vehicle, VehicleType> tVT;
-    public TableColumn<Vehicle, Double> tEs;
-    public TableColumn<Vehicle, FuelType> tFT;
-    public TableColumn<Vehicle, Date> tMOT, tDLS, tD;
-    public TableColumn<Vehicle, Boolean> tW;
+    private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA, tFN, tLN, tCA, tCP, tCPN, tCE;
+    @FXML
+    private TableColumn<Vehicle, CustomerType> tCT;
+    @FXML
+    private TableColumn<Vehicle, DateTime> tDS, tRS;
+    @FXML
+    private TableColumn<Vehicle, Integer> tCID, tMil;
+    @FXML
+    private TableColumn<Vehicle, VehicleType> tVT;
+    @FXML
+    private TableColumn<Vehicle, Double> tEs;
+    @FXML
+    private TableColumn<Vehicle, FuelType> tFT;
+    @FXML
+    private TableColumn<Vehicle, Date> tMOT, tDLS, tD;
+    @FXML
+    private TableColumn<Vehicle, Boolean> tW;
     final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
     @FXML
-    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD;
-
+    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, cFN, cLN, cCA, cCPC, cCP, cCE, cCT, cDS, cRS;
+    @FXML
+    private Label AddEditL;
+    @FXML
+    private Button deleteV, ClearV, addV;
 
 
     public void showAlert(String message) {
@@ -83,14 +98,15 @@ public class VehicleController {
     }
 
     public void addEditVehicle() {
-        String addOrEdit;
-        if (eReg != null) {
+        String addOrEdit = "";
+        if (AddEditL.getText().equals("Edit Vehicle")) {
             addOrEdit = "edit";
             // true is edit
         } else {
             addOrEdit = "add";
             // false is add
         }
+        showAlert(reg.getText());
         try {
             boolean check = checkFields();
             if (check) {
@@ -145,7 +161,7 @@ public class VehicleController {
                 showAlert("No Vehicle entered to delete");
                 return;
             }
-            if ((!showAlertC("Sure you want to delete this Vehicle"))) {
+            if ((!showAlertC("Sure you want to delete this Vehicle?"))) {
                 return;
             }
             boolean check = vSys.deleteVehicle(reg.getText());
@@ -161,71 +177,84 @@ public class VehicleController {
     }
 
     @FXML
-    public void VehicleEditS() throws Exception {
+    public void VehicleEditS()  {
         try {
-            Vehicle vehicle = vSys.searchAVehicle(eReg.getText());
-            if (vehicle == null) {
-                showAlert("Registration Number invalid");
-            } else {
-                showAlert("Vehicle Found!");
-                setVehicleDets(vehicle);
+            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            if (vehicle == null)
+            {
+                throw new  Exception();
             }
+                setVehicleDets(vehicle);
         } catch (Exception e) {
-            showAlert("Registration Number invalid");
+            showAlert("No Vehicle Selected");
             System.out.println(e);
+            e.printStackTrace();
         }
 
     }
 
+    public void DeleteSelectedVehicle()
+    {
+        try {
+            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            if (vehicle == null)
+            {
+                throw new  Exception();
+            }
+            System.out.println(vehicle.getRegNumber());
+            if ((!showAlertC("Sure you want to delete this Vehicle?"))) {
+                return;
+            }
+            boolean check = vSys.deleteVehicle(vehicle.getRegNumber());
+            if (check) {
+                showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
+            } else {
+                showAlert("Not deleted");
+            }
+        } catch (Exception e) {
+            showAlert("no Vehicle Selected");
+            //e.printStackTrace();
+        }
+    }
+
 
     public void setVehicleDets(Vehicle vehicle) {
+        regS.setText(vehicle.getRegNumber());
+        AddEditL.setText("Edit Vehicle");
         reg.setText(vehicle.getRegNumber());
-        reg.setDisable(false);
+        addV.setText("Edit");
+        VehicleS.setDisable(true);
+        deleteV.setDisable(false);
+        reg.setText(vehicle.getRegNumber());
         cID.setText(Integer.toString(vehicle.getCustomerID()));
-        cID.setDisable(false);
         vType.setValue(vehicle.getVehicleType().toString());
-        vType.setDisable(false);
         mod.setText(vehicle.getModel());
-        mod.setDisable(false);
         manuf.setText(vehicle.getManufacturer());
-        manuf.setDisable(false);
         eSize.setText(Double.toString(vehicle.getEngineSize()));
-        eSize.setDisable(false);
         String VT = vehicle.getFuelType().toString();
         fType.setValue(VT.substring(0, 1).toUpperCase() + VT.substring(1, VT.length()));
-        fType.setDisable(false);
-        col.setText(vehicle.getColour());
-        col.setDisable(false);
         mil.setText(Integer.toString(vehicle.getMileage()));
-        mil.setDisable(false);
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         rDateMot.setText(format.format(vehicle.getRenewalDateMot()));
-        rDateMot.setDisable(false);
         dLastServiced.setText(format.format(vehicle.getDateLastServiced()));
-        dLastServiced.setDisable(false);
-        cByWarranty.setDisable(false);
         if (vehicle.isCoveredByWarranty()) {
             cByWarranty.setValue("True");
         } else {
             cByWarranty.setValue("False");
         }
-        cByWarranty.setDisable(false);
         wName.setText(vehicle.getWarrantyName());
-        wName.setDisable(false);
         wCompAddress.setText(vehicle.getWarrantyCompAddress());
-        wCompAddress.setDisable(false);
         wExpirationDate.setText(format.format(vehicle.getWarrantyExpirationDate()));
-        wExpirationDate.setDisable(false);
         hiddenWarranty();
+
     }
 
     public void searchVehicle() {
         try {
-            boolean add = showAlertC("Are you sure you want to search for this Vehicle, have you checked the vehicle details?");
-            if (add) {
+
                 List<Vehicle> arrayList = vSys.searchVehicle(regS.getText(), manufS.getText());
                 DisplayTable(arrayList);
-            }
+
 
 
         } catch (Exception e) {
@@ -435,8 +464,11 @@ public class VehicleController {
 
     }
 
-    public void hiddenWarranty() {
-        if (cByWarranty.getSelectionModel().getSelectedItem().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals("true")) {
+    public void hiddenWarranty()  {
+        try {
+
+
+        if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null)) {
             wName.setDisable(false);
             wCompAddress.setDisable(false);
             wExpirationDate.setDisable(false);
@@ -447,6 +479,12 @@ public class VehicleController {
             wName.clear();
             wCompAddress.clear();
             wExpirationDate.clear();
+        }}
+        catch (Exception e)
+        {
+            wName.setDisable(false);
+            wCompAddress.setDisable(false);
+            wExpirationDate.setDisable(false);
         }
     }
 
@@ -572,8 +610,177 @@ public class VehicleController {
         {
             tD.setVisible(false);
         }
+        if (cFN.isSelected())
+        {
+            tFN.setVisible(true);
+        }
+        else
+        {
+            tFN.setVisible(false);
+        }
+        if (cLN.isSelected())
+        {
+            tLN.setVisible(true);
+        }
+        else
+        {
+            tLN.setVisible(false);
+        }
+        if (cCA.isSelected())
+        {
+            tCA.setVisible(true);
+        }
+        else
+        {
+            tCA.setVisible(false);
+        }
+         if (cCPC.isSelected())
+         {
+             tCP.setVisible(true);
+         }
+         else
+         {
+             tCP.setVisible(false);
+         }
+         if (cCP.isSelected())
+         {
+             tCPN.setVisible(true);
+         }
+         else
+         {
+             tCPN.setVisible(false);
+         }
+         if (cCE.isSelected())
+         {
+             tCE.setVisible(true);
+         }
+         else
+         {
+             tCE.setVisible(false);
+         }
+         if (cCT.isSelected())
+         {
+             tCT.setVisible(true);
+         }
+         else
+         {
+             tCT.setVisible(false);
+         }
+         if (cDS.isSelected())
+         {
+             tDS.setVisible(true);
+         }
+         else
+         {
+             tDS.setVisible(false);
+         }
+         if (cRS.isSelected())
+         {
+             tRS.setVisible(true);
+         }
+         else
+         {
+             tRS.setVisible(false);
+         }
+
     }
 
+    public void selectVehicle()
+    {
+        if (VehicleS.getSelectionModel().isSelected(0))
+        {
+            setVehicle("Civic", "Honda", "1.6", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(1))
+        {
+            setVehicle("Focus", "Ford", "1.2", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(2))
+        {
+            setVehicle("5 Series", "BMw", "2.2", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(3))
+        {
+            setVehicle("3 Series", "BMw", "2.9", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(4))
+        {
+            setVehicle("A Class", "Mercedes", "3.0", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(5))
+        {
+            setVehicle("Transit", "Ford", "2.2", "Van", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(6))
+        {
+            setVehicle("Roadster", "Nissan", "1.2", "Truck", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(7))
+        {
+            setVehicle("Y-8 Van", "Audi", "3.6", "Van", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(8))
+        {
+            setVehicle("Enzo", "Ferrari", "4.4", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(9))
+        {
+            setVehicle("Truckster", "Ford", "2.8", "Truck", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(10))
+        {
+            setVehicle("Hybrid Van", "Renault", "2.3", "Can", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(11))
+        {
+            setVehicle("Sport", "MG", "2.0", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(12))
+        {
+            setVehicle("Model S", "Acura", "2.2", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(13))
+        {
+            setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
+        }
+        else
+        {
+            setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
+        }
+    }
 
+    public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType)
+    {
+        mod.setText(model);
+        manuf.setText(manufacturer);
+        eSize.setText(engineSize);
+        vType.setValue(vehicleType);
+        fType.setValue(fuelType);
+    }
+
+    public void ClearFields()
+    {
+        reg.clear();
+        cID.clear();
+        mod.clear();
+        manuf.clear();
+        eSize.clear();
+        col.clear();
+        mil.clear();
+        rDateMot.clear();
+        dLastServiced.clear();
+        wName.clear();
+        wCompAddress.clear();
+        wExpirationDate.clear();
+        vType.setValue(null);
+        fType.setValue(null);
+        cByWarranty.setValue(null);
+        hiddenWarranty();
+    }
+
+    public void ResetColumns()
+    {
+
+    }
 
 }
