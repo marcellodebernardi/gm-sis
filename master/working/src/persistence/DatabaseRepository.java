@@ -75,7 +75,9 @@ public class DatabaseRepository implements CriterionRepository {
 
         // get requested objects using appropriate mapper
         try {
-            statement = connection.prepareStatement(mapper.toSELECTQuery(criteria));
+            String st = mapper.toSELECTQuery(criteria);
+            System.out.println(st);
+            statement = connection.prepareStatement(st);
             return mapper.toObjects(criteria.getCriterionClass(), statement.executeQuery(), this);
         } catch (SQLException e) {
             System.err.print(e.getMessage());

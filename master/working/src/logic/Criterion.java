@@ -245,7 +245,7 @@ public class Criterion<E extends Searchable> {
                 returnString += " > '" + values.get(0) + "'";
                 break;
             case Regex:
-                returnString += " LIKE '" + values.get(0) + "'";
+                returnString += " LIKE '%" + values.get(0) + "%'";
                 break;
             default:
                 break;

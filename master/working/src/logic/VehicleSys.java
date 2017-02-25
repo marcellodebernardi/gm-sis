@@ -29,7 +29,7 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", Regex, regNumber).or("manufacturer",Regex, manufacturer));
+                "regNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
         return results;
 
     }
