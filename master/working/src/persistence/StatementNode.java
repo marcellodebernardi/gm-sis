@@ -3,12 +3,15 @@ package persistence;
 import domain.Searchable;
 import domain.User;
 import domain.Vehicle;
+import logic.Criterion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static logic.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi
@@ -113,13 +116,8 @@ class StatementNode implements Comparable<StatementNode> {
                         delim + value : delim + "'" + value + "'";
                 delim = ", ";
             }
-            values = "(" + values + ", " + primaryKeyValue + ")";
-
-            // handle user and vehicle special cases
-            if (table.equals(User.class) || table.equals(Vehicle.class)) {
-                keys = keys.replace("(", "(" + primaryKey + ", ");
-                values = values.replace("(", "('" + primaryKeyValue + "', ");
-            }
+            values = (table.equals(User.class) || table.equals(Vehicle.class)) ?
+                    "(" + values + ", '" + primaryKeyValue + "')" : "(" + values + ", " + primaryKeyValue + ")";
 
             return "INSERT INTO " + table.getSimpleName() + keys + " VALUES " + values + ";";
         }
@@ -167,8 +165,26 @@ class StatementNode implements Comparable<StatementNode> {
                 statementType = StatementType.INSERT;
                 primaryKeyValue = persistence.getNextID(table.getSimpleName(), primaryKey);
             }
-            else if (table.equals(User.class) || table.equals(Vehicle.class)) {
-                statementType = StatementType.INSERT;
+            // has primary key but is User
+            else if (table.equals(User.class)) {
+                List<User> results = persistence
+                        .getByCriteria(
+                                new Criterion<>(
+                                        User.class,
+                                        "userID",
+                                        EqualTo,
+                                        primaryKeyValue));
+                statementType = results.size() == 0 ? StatementType.INSERT : StatementType.UPDATE;
+            }
+            else if (table.equals(Vehicle.class)) {
+                List<Vehicle> results = persistence
+                        .getByCriteria(
+                                new Criterion<>(
+                                        Vehicle.class,
+                                        "regNumber",
+                                        EqualTo,
+                                        primaryKeyValue));
+                statementType = results.size() == 0 ? StatementType.INSERT : StatementType.UPDATE;
             }
             // has primary key: UPDATE
             else statementType = StatementType.UPDATE;
