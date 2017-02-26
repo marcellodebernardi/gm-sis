@@ -79,7 +79,7 @@ public class VehicleController {
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
-    private Label AddEditL,SelectedVehicle, RCL, vehicleS;
+    private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL;
     @FXML
     private Button deleteV, ClearV, addV, PartsUsed, newVB;
     @FXML
@@ -943,6 +943,7 @@ public class VehicleController {
     public void ShowCustomerDetails()
     {
         try {
+            setNextBookingDate();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
             vehicleS.setText(vehicle.getRegNumber());
             CustomerTable.setDisable(false);
@@ -1027,5 +1028,40 @@ public class VehicleController {
         addV.setText("add");
         ClearV.setDisable(false);
         ClearFields();
+    }
+
+    public void setNextBookingDate()
+    {
+        Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+        List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+        DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
+        DateTime nextRepBooking = arrayList.get(0).getRepairStart();
+        DateTime DTD = new DateTime();
+        DateTime DTR = new DateTime();
+        for (int i =1;i<arrayList.size();i++)
+        {
+            DiagRepBooking DRB = arrayList.get(i);
+            DTD = DRB.getDiagnosisStart();
+            DTR = DRB.getRepairStart();
+             if (DTD.isAfterNow())
+             {
+                 if ((DTD.compareTo(nextDiagBooking)) < 0)
+                 {
+                     nextDiagBooking = DTD;
+                 }
+             }
+            if (DTR.isAfterNow())
+            {
+                if ((DTR.compareTo(nextRepBooking)) < 0)
+                {
+                    nextRepBooking = DTR;
+                }
+            }
+        }
+        DSLL.setVisible(true);
+        DSL.setText(nextDiagBooking.toString( "dd/MM/yyyy HH:mm"));
+        RSLL.setVisible(true);
+        RSL.setVisible(true);
+        RSL.setText(nextRepBooking.toString( "dd/MM/yyyy HH:mm"));
     }
 }
