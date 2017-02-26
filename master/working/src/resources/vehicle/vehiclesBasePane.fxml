@@ -179,10 +179,11 @@
                                         <TextField fx:id="manufS" promptText="enter manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Button mnemonicParsing="false" onAction="#searchVehicle" prefHeight="27.0" prefWidth="61.0" text="Search" GridPane.columnIndex="2" />
                                         <Button mnemonicParsing="false" onAction="#searchVehicleA" text="View All" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <Button fx:id="DeleteVT" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
-                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                              <Button mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Button mnemonicParsing="false" onAction="#ShowCustomerDetails" prefHeight="27.0" prefWidth="90.0" text="Customer" GridPane.columnIndex="3" />
+                                        <Button fx:id="DeleteVT" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                              <Button fx:id="bookingsB" disable="true" mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Button fx:id="addCustomerB" disable="true" mnemonicParsing="false" onAction="#ShowCustomerDetails" prefHeight="27.0" prefWidth="90.0" text="Customer" GridPane.columnIndex="3" />
+                              <Button fx:id="ViewPartsB" disable="true" mnemonicParsing="false" onAction="#VehicleParts" text="Parts" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                                     </children>
                                 </GridPane>
                             </center>
@@ -240,7 +241,7 @@
                         <Button mnemonicParsing="false" onAction="#ResetColumns" prefHeight="17.0" prefWidth="100.0" text="Reset" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                             </children>
                         </GridPane>
-                  <SplitPane prefHeight="200.0" prefWidth="200.0">
+                  <SplitPane dividerPositions="0.8101109741060419" prefHeight="200.0" prefWidth="200.0">
                      <items>
                         <SplitPane dividerPositions="0.08074534161490683, 0.40062111801242234, 0.8354037267080745" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                            <items>
@@ -294,21 +295,39 @@
                               </GridPane>
                               <GridPane>
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.07916259765625" minWidth="10.0" prefWidth="314.4615478515625" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="264.8868408203125" minWidth="10.0" prefWidth="168.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="168.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.07916259765625" minWidth="10.0" prefWidth="128.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="413.0" minWidth="10.0" prefWidth="264.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.0" minWidth="10.0" prefWidth="261.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label text="The next Booking Date for the selected Vehicle is: " />
+                                    <Label text="Next Booking Date" />
                                     <Label fx:id="DSLL" text="Diagnosis Repair:" visible="false" GridPane.columnIndex="1" />
                                     <Label fx:id="RSLL" text="Repair Start: " visible="false" GridPane.columnIndex="2" />
                                     <Label fx:id="DSL" text="Select Vehicle and click Customer" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                                     <Label fx:id="RSL" text="Label" visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
                                  </children>
                               </GridPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.16459627329192547" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                           <items>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="54.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="96.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Vehicle:" />
+                                    <Label fx:id="VehiclePartSelected" text="press Part" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                 </children>
+                              </GridPane>
+                              <ListView fx:id="PartsVehicle" prefHeight="184.0" prefWidth="150.0" />
                            </items>
                         </SplitPane>
                      </items>
@@ -319,9 +338,9 @@
         </FlowPane>
     </center>
    <right>
-      <FlowPane prefHeight="677.0" prefWidth="288.0" BorderPane.alignment="CENTER">
+      <FlowPane prefHeight="779.0" prefWidth="344.0" BorderPane.alignment="CENTER">
          <children>
-            <SplitPane dividerPositions="0.1913946587537092, 0.5637982195845698, 0.6394658753709199" orientation="VERTICAL" prefHeight="676.0" prefWidth="289.0">
+            <SplitPane dividerPositions="0.1913946587537092, 0.5637982195845698, 0.6394658753709199" orientation="VERTICAL" prefHeight="780.0" prefWidth="346.0">
                <items>
                   <GridPane>
                     <columnConstraints>
@@ -341,8 +360,9 @@
                   </GridPane>
                   <TableView fx:id="BookingsTable" prefHeight="242.0" prefWidth="287.0">
                     <columns>
-                      <TableColumn fx:id="tDS" prefWidth="141.0" text="Diag Start" />
-                      <TableColumn fx:id="rRS" prefWidth="145.0" text="Rep Start" />
+                      <TableColumn fx:id="tDS" prefWidth="114.0" text="Diag Start" />
+                      <TableColumn fx:id="rRS" prefWidth="114.0" text="Rep Start" />
+                        <TableColumn fx:id="tTC" prefWidth="116.0" text="Total Cost" />
                     </columns>
                   </TableView>
                   <GridPane>
@@ -358,7 +378,7 @@
                         <Label fx:id="RCL" text="no Repair chosen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                      </children>
                   </GridPane>
-                  <ListView fx:id="ListParts" prefHeight="213.0" prefWidth="287.0" />
+                  <ListView fx:id="ListParts" prefHeight="243.0" prefWidth="283.0" />
                </items>
             </SplitPane>
          </children>

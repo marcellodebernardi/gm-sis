@@ -83,7 +83,8 @@ public class BookingSystem {
 
     public List<DiagRepBooking> getVBooking(String regNumber)
     {
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber",EqualTo, regNumber));
+        List<DiagRepBooking> Results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber",EqualTo, regNumber));
+        return Results !=null ? Results : null;
     }
 
     /**

@@ -58,6 +58,8 @@ public class VehicleController {
     @FXML
     private TableColumn<DiagRepBooking, DateTime>  rRS, tDS;
     @FXML
+    private TableColumn<DiagRepBooking, Double> tTC;
+    @FXML
     private TableColumn<Vehicle, VehicleType> tVT;
     @FXML
     private TableColumn<Vehicle, Double> tEs;
@@ -79,11 +81,11 @@ public class VehicleController {
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
-    private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL;
+    private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected;
     @FXML
-    private Button deleteV, ClearV, addV, PartsUsed, newVB;
+    private Button deleteV, ClearV, addV, PartsUsed, newVB, addCustomerB, bookingsB, DeleteVT, EditVehicle, ViewPartsB;
     @FXML
-    private ListView ListParts;
+    private ListView ListParts, PartsVehicle;
 
 
     public void showAlert(String message) {
@@ -304,7 +306,12 @@ public class VehicleController {
 
     public void DisplayTable(List<Vehicle> arrayList) {
         try {
+            addCustomerB.setDisable(false);
+            bookingsB.setDisable(false);
+            DeleteVT.setDisable(false);
+            EditVehicle.setDisable(false);
             searchTable.setDisable(false);
+            ViewPartsB.setDisable(false);
             tableEntries.removeAll(tableEntries);
             for (int i = 0; i < arrayList.size(); i++) {
 
@@ -877,6 +884,12 @@ public class VehicleController {
             BookingsTable.setDisable(false);
             tableEntriesB.removeAll(tableEntriesB);
             List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            if (arrayList.size()==0)
+            {
+                showAlert("No Bookings");
+                PartsUsed.setDisable(true);
+                return;
+            }
             for (int i = 0; i < arrayList.size(); i++) {
 
                 tableEntriesB.add(arrayList.get(i));
@@ -909,6 +922,9 @@ public class VehicleController {
                     return DateTime.parse(string);
                 }
             }));
+
+            tTC.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, Double>("billAmount"));
+            tTC.setCellFactory(TextFieldTableCell.<DiagRepBooking, Double>forTableColumn(new DoubleStringConverter()));
 
             BookingsTable.setItems(tableEntriesB);
         } catch (Exception e) {
@@ -996,6 +1012,8 @@ public class VehicleController {
         catch (Exception e)
         {
             showAlert("no Vehicle Selected");
+            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -1032,36 +1050,70 @@ public class VehicleController {
 
     public void setNextBookingDate()
     {
-        Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-        List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
-        DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
-        DateTime nextRepBooking = arrayList.get(0).getRepairStart();
-        DateTime DTD = new DateTime();
-        DateTime DTR = new DateTime();
-        for (int i =1;i<arrayList.size();i++)
-        {
-            DiagRepBooking DRB = arrayList.get(i);
-            DTD = DRB.getDiagnosisStart();
-            DTR = DRB.getRepairStart();
-             if (DTD.isAfterNow())
-             {
-                 if ((DTD.compareTo(nextDiagBooking)) < 0)
-                 {
-                     nextDiagBooking = DTD;
-                 }
-             }
-            if (DTR.isAfterNow())
-            {
-                if ((DTR.compareTo(nextRepBooking)) < 0)
-                {
-                    nextRepBooking = DTR;
+        try {
+
+            Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+            List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
+            DateTime nextRepBooking = arrayList.get(0).getRepairStart();
+            DateTime DTD = new DateTime();
+            DateTime DTR = new DateTime();
+            for (int i = 1; i < arrayList.size(); i++) {
+                DiagRepBooking DRB = arrayList.get(i);
+                DTD = DRB.getDiagnosisStart();
+                DTR = DRB.getRepairStart();
+                if (DTD.isAfterNow()) {
+                    if ((DTD.compareTo(nextDiagBooking)) < 0) {
+                        nextDiagBooking = DTD;
+                    }
+                }
+                if (DTR.isAfterNow()) {
+                    if ((DTR.compareTo(nextRepBooking)) < 0) {
+                        nextRepBooking = DTR;
+                    }
                 }
             }
+            if (nextDiagBooking.isAfterNow()) {
+                DSLL.setVisible(true);
+                DSL.setText(nextDiagBooking.toString("dd/MM/yyyy HH:mm"));
+            } else {
+                DSLL.setVisible(true);
+                DSL.setText("N/A");
+            }
+            if (nextRepBooking.isAfterNow()) {
+                RSLL.setVisible(true);
+                RSL.setVisible(true);
+                RSL.setText(nextRepBooking.toString("dd/MM/yyyy HH:mm"));
+            } else {
+                RSLL.setVisible(true);
+                RSL.setVisible(true);
+                RSL.setText("N/A");
+            }
         }
-        DSLL.setVisible(true);
-        DSL.setText(nextDiagBooking.toString( "dd/MM/yyyy HH:mm"));
-        RSLL.setVisible(true);
-        RSL.setVisible(true);
-        RSL.setText(nextRepBooking.toString( "dd/MM/yyyy HH:mm"));
+        catch (Exception e)
+        {
+            showAlert("No Bookings");
+        }
+    }
+
+    public void VehicleParts()
+    {
+        try {
+            Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+            VehiclePartSelected.setText(vehicle.getRegNumber());
+            List<Installation> Installations = vehicle.getInstallationList();
+            ObservableList<String> items = FXCollections.observableArrayList();
+            for (int i = 0; i < Installations.size(); i++)
+            {
+                Installation A = Installations.get(i);
+                PartAbstraction PA = pSys.getPartbyID(A.getPartAbstractionID());
+                items.add(PA.getPartName());
+            }
+            PartsVehicle.setItems(items);
+        }
+        catch (Exception e)
+        {
+            showAlert("No part Selected");
+        }
     }
 }
