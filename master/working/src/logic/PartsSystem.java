@@ -60,6 +60,12 @@ public class PartsSystem {
 
     }
 
+    public PartAbstraction getPartbyID(int partAbstractionID) {
+        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+        return result.size() == 0 ? null : result.get(0);
+
+    }
+
 
 }
 

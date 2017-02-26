@@ -15,23 +15,23 @@ public class CustomerSystem {
     private CriterionRepository persistence;
 
 
-    private CustomerSystem(CriterionRepository p)
+    private CustomerSystem()
     {
-        persistence = p;
+        this.persistence = DatabaseRepository.getInstance();
     }
 
-    public static CustomerSystem getInstance(CriterionRepository persistence)
+    public static CustomerSystem getInstance()
     {
         if(instance == null)
         {
-            instance = new CustomerSystem(persistence);
+            instance = new CustomerSystem();
         }
         return instance;
     }
 
     public List<Customer> getAllCustomers()
     {
-        return persistence.getByCriteria(new Criterion<>(Customer.class,null,null,null));
+        return persistence.getByCriteria(new Criterion<>(Customer.class));
     }
 
     public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)

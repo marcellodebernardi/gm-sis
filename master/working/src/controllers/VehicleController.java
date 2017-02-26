@@ -1,14 +1,14 @@
 package controllers;
 
-import domain.CustomerType;
-import domain.FuelType;
-import domain.Vehicle;
-import domain.VehicleType;
+import domain.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.ListView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
@@ -17,9 +17,12 @@ import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import logic.VehicleSys;
+import logic.*;
 import org.joda.time.DateTime;
+import persistence.DatabaseRepository;
 
+import javax.swing.text.html.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,19 +36,25 @@ public class VehicleController {
     @FXML
     private VehicleSys vSys = VehicleSys.getInstance();
     @FXML
+    private CustomerSystem cSys = CustomerSystem.getInstance();
+    @FXML
+    private BookingSystem bSys = BookingSystem.getInstance();
+    @FXML
+    private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
+    @FXML
     private TextField reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
     @FXML
     private ComboBox vType, fType, cByWarranty, VehicleS;
     @FXML
     private TableView<Vehicle> searchTable;
     @FXML
-    private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA, tFN, tLN, tCA, tCP, tCPN, tCE;
+    private TableView<DiagRepBooking> BookingsTable;
     @FXML
-    private TableColumn<Vehicle, CustomerType> tCT;
+    private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA;
     @FXML
-    private TableColumn<Vehicle, DateTime> tDS, tRS;
+    private TableColumn<Vehicle, Integer>  tMil;
     @FXML
-    private TableColumn<Vehicle, Integer> tCID, tMil;
+    private TableColumn<DiagRepBooking, DateTime>  rRS, tDS;
     @FXML
     private TableColumn<Vehicle, VehicleType> tVT;
     @FXML
@@ -53,16 +62,21 @@ public class VehicleController {
     @FXML
     private TableColumn<Vehicle, FuelType> tFT;
     @FXML
+    private TableColumn<Vehicle, Integer> tCID;
+    @FXML
     private TableColumn<Vehicle, Date> tMOT, tDLS, tD;
     @FXML
     private TableColumn<Vehicle, Boolean> tW;
-    final ObservableList<Vehicle> tableEntries = FXCollections.observableArrayList();
+    final ObservableList tableEntries = FXCollections.observableArrayList();
+    final ObservableList tableEntriesB = FXCollections.observableArrayList();
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, cFN, cLN, cCA, cCPC, cCP, cCE, cCT, cDS, cRS;
     @FXML
-    private Label AddEditL;
+    private Label AddEditL,SelectedVehicle, RCL;
     @FXML
-    private Button deleteV, ClearV, addV;
+    private Button deleteV, ClearV, addV, PartsUsed;
+    @FXML
+    private ListView ListParts;
 
 
     public void showAlert(String message) {
@@ -142,8 +156,7 @@ public class VehicleController {
                     boolean checker = vSys.addEditVehicle(reg.getText(), Integer.parseInt(cID.getText()), vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
                     showAlert("vehicle " + addOrEdit + ": " + Boolean.toString(checker));
                     if (checker) {
-                        Stage addStage = (Stage) cByWarranty.getScene().getWindow();
-                        addStage.close();
+                        searchVehicleA();
                     }
                 }
             } else {
@@ -167,6 +180,7 @@ public class VehicleController {
             boolean check = vSys.deleteVehicle(reg.getText());
             if (check) {
                 showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
+                searchVehicleA();
             } else {
                 showAlert("Cant find Reg Plate");
             }
@@ -176,10 +190,12 @@ public class VehicleController {
         }
     }
 
+
     @FXML
     public void VehicleEditS()  {
         try {
-            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+
+            Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             if (vehicle == null)
             {
                 throw new  Exception();
@@ -193,10 +209,12 @@ public class VehicleController {
 
     }
 
+
+
     public void DeleteSelectedVehicle()
     {
         try {
-            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             if (vehicle == null)
             {
                 throw new  Exception();
@@ -208,6 +226,7 @@ public class VehicleController {
             boolean check = vSys.deleteVehicle(vehicle.getRegNumber());
             if (check) {
                 showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
+                searchVehicleA();
             } else {
                 showAlert("Not deleted");
             }
@@ -219,7 +238,6 @@ public class VehicleController {
 
 
     public void setVehicleDets(Vehicle vehicle) {
-        regS.setText(vehicle.getRegNumber());
         AddEditL.setText("Edit Vehicle");
         reg.setText(vehicle.getRegNumber());
         addV.setText("Edit");
@@ -278,6 +296,7 @@ public class VehicleController {
 
                 tableEntries.add(arrayList.get(i));
             }
+
 
             tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
             tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
@@ -455,6 +474,11 @@ public class VehicleController {
                 }
             });
 
+
+
+
+
+
             searchTable.setItems(tableEntries);
         } catch (Exception e) {
             System.out.println("not working");
@@ -610,78 +634,7 @@ public class VehicleController {
         {
             tD.setVisible(false);
         }
-        if (cFN.isSelected())
-        {
-            tFN.setVisible(true);
-        }
-        else
-        {
-            tFN.setVisible(false);
-        }
-        if (cLN.isSelected())
-        {
-            tLN.setVisible(true);
-        }
-        else
-        {
-            tLN.setVisible(false);
-        }
-        if (cCA.isSelected())
-        {
-            tCA.setVisible(true);
-        }
-        else
-        {
-            tCA.setVisible(false);
-        }
-         if (cCPC.isSelected())
-         {
-             tCP.setVisible(true);
-         }
-         else
-         {
-             tCP.setVisible(false);
-         }
-         if (cCP.isSelected())
-         {
-             tCPN.setVisible(true);
-         }
-         else
-         {
-             tCPN.setVisible(false);
-         }
-         if (cCE.isSelected())
-         {
-             tCE.setVisible(true);
-         }
-         else
-         {
-             tCE.setVisible(false);
-         }
-         if (cCT.isSelected())
-         {
-             tCT.setVisible(true);
-         }
-         else
-         {
-             tCT.setVisible(false);
-         }
-         if (cDS.isSelected())
-         {
-             tDS.setVisible(true);
-         }
-         else
-         {
-             tDS.setVisible(false);
-         }
-         if (cRS.isSelected())
-         {
-             tRS.setVisible(true);
-         }
-         else
-         {
-             tRS.setVisible(false);
-         }
+
 
     }
 
@@ -781,6 +734,78 @@ public class VehicleController {
     public void ResetColumns()
     {
 
+    }
+
+    public void ViewBookingDates()
+    {
+        Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+        SelectedVehicle.setText(vehicle.getRegNumber());
+        PartsUsed.setDisable(false);
+        try {
+            BookingsTable.setDisable(false);
+            tableEntriesB.removeAll(tableEntriesB);
+            List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                tableEntriesB.add(arrayList.get(i));
+            }
+
+
+            tDS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("diagnosisStart"));
+            tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
+                @Override
+                public String toString(DateTime object) {
+
+                    return object.toString( "dd/MM/yyyy HH:mm");
+                }
+
+                @Override
+                public DateTime fromString(String string) {
+                    return DateTime.parse(string);
+                }
+            }));
+
+            rRS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("repairStart"));
+            rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
+                @Override
+                public String toString(DateTime object) {
+                    return object.toString( "dd/MM/yyyy HH:mm");
+                }
+
+                @Override
+                public DateTime fromString(String string) {
+                    return DateTime.parse(string);
+                }
+            }));
+
+            BookingsTable.setItems(tableEntriesB);
+        } catch (Exception e) {
+            System.out.println("not working");
+            e.printStackTrace();
+            System.out.println(e);
+        }
+
+    }
+
+    public void ShowParts()
+    {
+        try {
+            DiagRepBooking DRB = BookingsTable.getSelectionModel().getSelectedItem();
+            RCL.setText(DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
+            List<PartOccurrence> parts = DRB.getRequiredPartsList();
+            ObservableList<String> items = FXCollections.observableArrayList();
+            for (int i = 0; i < parts.size(); i++)
+            {
+                PartOccurrence PO = parts.get(i);
+                PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
+                items.add(PA.getPartName());
+            }
+            ListParts.setItems(items);
+        }
+        catch (Exception e)
+        {
+            showAlert("No part Selected");
+        }
     }
 
 }

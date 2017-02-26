@@ -81,6 +81,11 @@ public class BookingSystem {
         }
     }
 
+    public List<DiagRepBooking> getVBooking(String regNumber)
+    {
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber",EqualTo, regNumber));
+    }
+
     /**
      * <p>
      * Adds a new booking to the persistence layer. Assumes an existing customer and
