@@ -11,14 +11,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="677.0" prefWidth="1108.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<BorderPane prefHeight="779.0" prefWidth="1388.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
     <left>
         <FlowPane prefHeight="515.0" prefWidth="286.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>
@@ -27,9 +27,6 @@
                         <BorderPane>
                             <center>
                                 <BorderPane>
-                                    <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add  Vehicle" />
-                                    </children>
                                     <left>
                                         <Label fx:id="AddEditL" text="Add Vehicle" BorderPane.alignment="CENTER" />
                                     </left>
@@ -139,6 +136,7 @@
                         <GridPane alignment="TOP_CENTER">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="82.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="135.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="82.0" />
                             </columnConstraints>
@@ -147,8 +145,9 @@
                             </rowConstraints>
                             <children>
                                 <Button fx:id="addV" mnemonicParsing="false" onAction="#addEditVehicle" text="Add" />
-                                <Button fx:id="deleteV" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="27.0" prefWidth="66.0" text="Delete" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                                <Button fx:id="ClearV" mnemonicParsing="false" onAction="#ClearFields" prefHeight="27.0" prefWidth="66.0" text="Clear" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                                <Button fx:id="deleteV" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="27.0" prefWidth="66.0" text="Delete" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                <Button fx:id="ClearV" mnemonicParsing="false" onAction="#ClearFields" prefHeight="27.0" prefWidth="66.0" text="Clear" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                        <Button fx:id="newVB" disable="true" mnemonicParsing="false" onAction="#newVehicle" prefHeight="27.0" prefWidth="65.0" text="New" GridPane.columnIndex="1" />
                             </children>
                         </GridPane>
                     </items>
@@ -159,7 +158,7 @@
     <center>
         <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>
-                <SplitPane dividerPositions="0.10542168674698796, 0.40512048192771083" orientation="VERTICAL" prefHeight="666.0" prefWidth="813.0">
+                <SplitPane dividerPositions="0.10574412532637076, 0.4321148825065274, 0.5744125326370757" orientation="VERTICAL" prefHeight="768.0" prefWidth="813.0">
                     <items>
                         <BorderPane>
                             <center>
@@ -167,8 +166,8 @@
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="91.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="362.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="151.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="89.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="142.92987060546875" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.07012939453125" minWidth="10.0" prefWidth="155.07012939453125" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -184,31 +183,28 @@
                                         <Button fx:id="DeleteVT" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
                                         <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                               <Button mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#ShowCustomerDetails" prefHeight="27.0" prefWidth="90.0" text="Customer" GridPane.columnIndex="3" />
                                     </children>
                                 </GridPane>
                             </center>
                         </BorderPane>
                         <TableView fx:id="searchTable" disable="true" prefHeight="325.0" prefWidth="811.0">
                             <columns>
-                                <TableColumn fx:id="tReg" prefWidth="52.0" text="Reg" />
-                                <TableColumn fx:id="tCID" prefWidth="52.0" text="CID" visible="false" />
-                                <TableColumn fx:id="tVT" prefWidth="52.0" text="VT" />
-                                <TableColumn fx:id="tMod" prefWidth="52.0" text="Mod" />
-                                <TableColumn fx:id="tManu" prefWidth="52.0" text="Manu" />
+                                <TableColumn fx:id="tReg" prefWidth="65.0" text="Reg" />
+                                <TableColumn fx:id="tCID" prefWidth="33.0" text="CID" />
+                                <TableColumn fx:id="tVT" prefWidth="54.0" text="VT" />
+                                <TableColumn fx:id="tMod" prefWidth="48.0" text="Mod" />
+                                <TableColumn fx:id="tManu" prefWidth="60.0" text="Manu" />
                                 <TableColumn fx:id="tEs" prefWidth="52.0" text="ES" visible="false" />
                                 <TableColumn fx:id="tFT" prefWidth="52.0" text="FT" visible="false" />
                                 <TableColumn fx:id="tCol" prefWidth="52.0" text="Col" visible="false" />
                                 <TableColumn fx:id="tMil" prefWidth="52.0" text="Mil" visible="false" />
-                                <TableColumn fx:id="tMOT" prefWidth="52.0" text="MOT" visible="false" />
-                                <TableColumn fx:id="tDLS" prefWidth="52.0" text="DLS" />
-                                <TableColumn fx:id="tW" prefWidth="52.0" text="W?" />
-                                <TableColumn fx:id="tWn" minWidth="0.0" prefWidth="52.0" text="Nam" visible="false" />
-                                <TableColumn fx:id="tA" prefWidth="52.0" text="Add" visible="false" />
-                                <TableColumn fx:id="tD" prefWidth="61.0" text="Date" visible="false" />
-                        <TableColumn fx:id="tCA" prefWidth="75.0" text="cAdd" visible="false" />
-                        <TableColumn fx:id="tCP" prefWidth="75.0" text="cPost" visible="false" />
-                        <TableColumn fx:id="tCPN" prefWidth="75.0" text="Phone" visible="false" />
-                        <TableColumn fx:id="tCE" prefWidth="75.0" text="Email" visible="false" />
+                                <TableColumn fx:id="tMOT" prefWidth="98.0" text="MOT" />
+                                <TableColumn fx:id="tDLS" prefWidth="50.0" text="DLS" />
+                                <TableColumn fx:id="tW" prefWidth="56.0" text="W?" />
+                                <TableColumn fx:id="tWn" minWidth="0.0" prefWidth="95.0" text="Nam" />
+                                <TableColumn fx:id="tA" prefWidth="85.0" text="Add" />
+                                <TableColumn fx:id="tD" prefWidth="167.0" text="Date" />
                             </columns>
                         </TableView>
                         <GridPane prefHeight="154.0" prefWidth="705.0">
@@ -226,9 +222,9 @@
                             </rowConstraints>
                             <children>
 
-                                <CheckBox fx:id="cReg" layoutY="9.0" mnemonicParsing="false" selected="true" text="Vehicle Reg" />
+                                <CheckBox fx:id="cReg" layoutY="9.0" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Vehicle Reg" />
 
-                                <CheckBox fx:id="cCID" mnemonicParsing="false" onAction="#changeColumns" prefHeight="18.0" prefWidth="133.0" text="Customer ID" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cCID" mnemonicParsing="false" onAction="#changeColumns" prefHeight="18.0" prefWidth="133.0" selected="true" text="Customer ID" GridPane.rowIndex="1" />
                                 <CheckBox fx:id="cVT" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Vehicle Type" GridPane.rowIndex="2" />
                                 <CheckBox fx:id="cMod" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Model" GridPane.rowIndex="3" />
                                 <CheckBox fx:id="cManu" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Manufacturer" GridPane.columnIndex="1" />
@@ -236,15 +232,77 @@
                                 <CheckBox fx:id="cFT" mnemonicParsing="false" onAction="#changeColumns" text="Fuel Type" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <CheckBox fx:id="cC" mnemonicParsing="false" onAction="#changeColumns" text="Colour" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                 <CheckBox fx:id="cMil" mnemonicParsing="false" onAction="#changeColumns" text="Mileage" GridPane.columnIndex="2" />
-                                <CheckBox fx:id="cMOT" mnemonicParsing="false" onAction="#changeColumns" text="MOT Date" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cMOT" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="MOT Date" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                 <CheckBox fx:id="cDLS" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Date Last Service" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                 <CheckBox fx:id="cW" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Warranty?" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                <CheckBox fx:id="cWN" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Name" GridPane.columnIndex="3" />
-                                <CheckBox fx:id="cA" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Address" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                <CheckBox fx:id="cD" mnemonicParsing="false" onAction="#changeColumns" text="Warranty Date" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Button mnemonicParsing="false" onAction="#ResetColumns" prefHeight="27.0" prefWidth="112.0" text="Reset" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                <CheckBox fx:id="cWN" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Warranty Name" GridPane.columnIndex="3" />
+                                <CheckBox fx:id="cA" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Warranty Address" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                <CheckBox fx:id="cD" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Warranty Date" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Button mnemonicParsing="false" onAction="#ResetColumns" prefHeight="17.0" prefWidth="100.0" text="Reset" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                             </children>
                         </GridPane>
+                  <SplitPane dividerPositions="0.8064118372379778" prefHeight="200.0" prefWidth="200.0">
+                     <items>
+                        <SplitPane dividerPositions="0.10559006211180125, 0.4440993788819876" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                           <items>
+                              <GridPane prefHeight="70.0" prefWidth="402.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="The vehicle Selected is:" />
+                                    <Label fx:id="vehicleS" text="No Vehicle Selected" GridPane.columnIndex="1" />
+                                 </children>
+                              </GridPane>
+                              <TableView fx:id="CustomerTable" prefHeight="112.0" prefWidth="650.0">
+                                <columns>
+                                  <TableColumn fx:id="ctID" prefWidth="40.48651123046875" text="ID" visible="false" />
+                                  <TableColumn fx:id="ctFN" prefWidth="109.51348876953125" text="FName" />
+                                    <TableColumn fx:id="ctSN" prefWidth="81.39141845703125" text="SName" />
+                                    <TableColumn fx:id="ctA" prefWidth="77.60861206054688" text="Address" />
+                                    <TableColumn fx:id="ctP" prefWidth="82.05206298828125" text="Postcode" />
+                                    <TableColumn fx:id="ctPN" prefWidth="79.66058349609375" text="Phone" />
+                                    <TableColumn fx:id="ctE" prefWidth="73.8258056640625" text="Email" />
+                                    <TableColumn fx:id="ctT" prefWidth="107.10406494140625" text="Type" />
+                                </columns>
+                              </TableView>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <CheckBox fx:id="ccID" mnemonicParsing="false" onAction="#changeColumns" text="Customer ID" />
+                                    <CheckBox fx:id="cFN" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="First Name" GridPane.rowIndex="1" />
+                                    <CheckBox fx:id="cLN" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Surname" GridPane.rowIndex="2" />
+                                    <CheckBox fx:id="cCA" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Address" GridPane.columnIndex="1" />
+                                    <CheckBox fx:id="cCPC" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="PostCode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <CheckBox fx:id="cCP" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Phone" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <CheckBox fx:id="cCE" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Email" GridPane.columnIndex="2" />
+                                    <CheckBox fx:id="cCT" mnemonicParsing="false" onAction="#changeColumns" selected="true" text="Customer Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <Button mnemonicParsing="false" onAction="#ResetCustomerColumns" prefHeight="27.0" prefWidth="102.0" text="Reset" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                 </children>
+                              </GridPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                          </items>
+                        </SplitPane>
+                     </items>
+                  </SplitPane>
                     </items>
                 </SplitPane>
             </children>

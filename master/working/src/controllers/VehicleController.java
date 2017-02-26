@@ -50,9 +50,11 @@ public class VehicleController {
     @FXML
     private TableView<DiagRepBooking> BookingsTable;
     @FXML
+    private TableView<Customer> CustomerTable;
+    @FXML
     private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA;
     @FXML
-    private TableColumn<Vehicle, Integer>  tMil;
+    private TableColumn<Vehicle, Integer>  tMil, tCID;
     @FXML
     private TableColumn<DiagRepBooking, DateTime>  rRS, tDS;
     @FXML
@@ -62,19 +64,24 @@ public class VehicleController {
     @FXML
     private TableColumn<Vehicle, FuelType> tFT;
     @FXML
-    private TableColumn<Vehicle, Integer> tCID;
-    @FXML
     private TableColumn<Vehicle, Date> tMOT, tDLS, tD;
     @FXML
     private TableColumn<Vehicle, Boolean> tW;
+    @FXML
+    private TableColumn<Customer, Integer> ctID;
+    @FXML
+    private TableColumn<Customer, String> ctFN, ctSN, ctA, ctP, ctPN, ctE;
+    @FXML
+    private TableColumn<Customer, CustomerType> ctT;
     final ObservableList tableEntries = FXCollections.observableArrayList();
     final ObservableList tableEntriesB = FXCollections.observableArrayList();
+    final ObservableList tableEntriesC = FXCollections.observableArrayList();
     @FXML
-    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, cFN, cLN, cCA, cCPC, cCP, cCE, cCT, cDS, cRS;
+    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
-    private Label AddEditL,SelectedVehicle, RCL;
+    private Label AddEditL,SelectedVehicle, RCL, vehicleS;
     @FXML
-    private Button deleteV, ClearV, addV, PartsUsed;
+    private Button deleteV, ClearV, addV, PartsUsed, newVB;
     @FXML
     private ListView ListParts;
 
@@ -120,7 +127,6 @@ public class VehicleController {
             addOrEdit = "add";
             // false is add
         }
-        showAlert(reg.getText());
         try {
             boolean check = checkFields();
             if (check) {
@@ -157,6 +163,11 @@ public class VehicleController {
                     showAlert("vehicle " + addOrEdit + ": " + Boolean.toString(checker));
                     if (checker) {
                         searchVehicleA();
+                        ClearFields();
+                        if (addOrEdit.equals("edit"))
+                        {
+                            newVehicle();
+                        }
                     }
                 }
             } else {
@@ -243,6 +254,8 @@ public class VehicleController {
         addV.setText("Edit");
         VehicleS.setDisable(true);
         deleteV.setDisable(false);
+        newVB.setDisable(false);
+        ClearV.setDisable(true);
         reg.setText(vehicle.getRegNumber());
         cID.setText(Integer.toString(vehicle.getCustomerID()));
         vType.setValue(vehicle.getVehicleType().toString());
@@ -251,6 +264,7 @@ public class VehicleController {
         eSize.setText(Double.toString(vehicle.getEngineSize()));
         String VT = vehicle.getFuelType().toString();
         fType.setValue(VT.substring(0, 1).toUpperCase() + VT.substring(1, VT.length()));
+        col.setText(vehicle.getColour());
         mil.setText(Integer.toString(vehicle.getMileage()));
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         rDateMot.setText(format.format(vehicle.getRenewalDateMot()));
@@ -421,7 +435,18 @@ public class VehicleController {
             });
 
             tMOT.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("renewalDateMot"));
-            tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter()));
+            tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
+                @Override
+                public String toString(Date object) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    return format.format(object);
+                }
+
+                @Override
+                public Date fromString(String string) {
+                    return new Date(string);
+                }
+            }));
             tMOT.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
@@ -430,7 +455,18 @@ public class VehicleController {
             });
 
             tDLS.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("dateLastServiced"));
-            tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter()));
+            tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
+                @Override
+                public String toString(Date object) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    return format.format(object);
+                }
+
+                @Override
+                public Date fromString(String string) {
+                    return new Date(string);
+                }
+            }));
             tDLS.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
@@ -466,18 +502,24 @@ public class VehicleController {
             });
 
             tD.setCellValueFactory(new PropertyValueFactory<Vehicle, Date>("warrantyExpirationDate"));
-            tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new DateStringConverter()));
+            tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
+                @Override
+                public String toString(Date object) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    return format.format(object);
+                }
+
+                @Override
+                public Date fromString(String string) {
+                    return new Date(string);
+                }
+            }));
             tD.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, Date>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<Vehicle, Date> event) {
                     (event.getTableView().getItems().get(event.getTablePosition().getRow())).setWarrantyExpirationDate(event.getNewValue());
                 }
             });
-
-
-
-
-
 
             searchTable.setItems(tableEntries);
         } catch (Exception e) {
@@ -634,7 +676,66 @@ public class VehicleController {
         {
             tD.setVisible(false);
         }
-
+         if (ccID.isSelected())
+         {
+             ctID.setVisible(true);
+         }
+         else
+         {
+             ctID.setVisible(false);
+         }
+        if (cFN.isSelected())
+        {
+            ctFN.setVisible(true);
+        }
+        else
+        {
+            ctFN.setVisible(false);
+        }
+        if (cLN.isSelected())
+        {
+            ctSN.setVisible(true);
+        }
+        else
+        {
+            ctSN.setVisible(false);
+        }
+        if (cCA.isSelected())
+        {
+            ctA.setVisible(true);
+        }
+        else
+        {
+            ctA.setVisible(false);
+        }
+        if (cCPC.isSelected())
+        {
+            ctP.setVisible(true);
+        }
+        if (cCP.isSelected())
+        {
+            ctPN.setVisible(true);
+        }
+        else
+        {
+            ctPN.setVisible(false);
+        }
+        if (cCE.isSelected())
+        {
+            ctE.setVisible(true);
+        }
+        else
+        {
+            ctE.setVisible(false);
+        }
+        if (cCT.isSelected())
+        {
+            ctT.setVisible(true);
+        }
+        else
+        {
+            ctT.setVisible(false);
+        }
 
     }
 
@@ -733,6 +834,37 @@ public class VehicleController {
 
     public void ResetColumns()
     {
+        cReg.setSelected(true);
+        cVT.setSelected(true);
+        cCID.setSelected(true);
+        cVT.setSelected(true);
+        cMod.setSelected(true);
+        cManu.setSelected(true);
+        cES.setSelected(false);
+        cFT.setSelected(false);
+        cC.setSelected(false);
+        cMil.setSelected(false);
+        cMOT.setSelected(true);
+        cDLS.setSelected(true);
+        cW.setSelected(true);
+        cWN.setSelected(true);
+        cA.setSelected(true);
+        cD.setSelected(true);
+        tReg.setVisible(true);
+        tMod.setVisible(true);
+        tManu.setVisible(true);
+        tCol.setVisible(false);
+        tWn.setVisible(true);
+        tA.setVisible(true);
+        tMil.setVisible(false);
+        tVT.setVisible(true);
+        tEs.setVisible(false);
+        tFT.setVisible(false);
+        tCID.setVisible(true);
+        tMOT.setVisible(true);
+        tDLS.setVisible(true);
+        tD.setVisible(true);
+        tW.setVisible(true);
 
     }
 
@@ -808,4 +940,92 @@ public class VehicleController {
         }
     }
 
+    public void ShowCustomerDetails()
+    {
+        try {
+            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            vehicleS.setText(vehicle.getRegNumber());
+            CustomerTable.setDisable(false);
+            tableEntriesC.removeAll(tableEntriesC);
+            List<Customer> arrayList = cSys.getACustomers(vehicle.getCustomerID());
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                tableEntriesC.add(arrayList.get(i));
+            }
+
+
+            ctID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerID"));
+            ctID.setCellFactory(TextFieldTableCell.<Customer, Integer>forTableColumn(new IntegerStringConverter()));
+
+            ctFN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerFirstname"));
+            ctFN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctSN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerSurname"));
+            ctSN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctA.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerAddress"));
+            ctA.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctP.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerPostcode"));
+            ctP.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctPN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerPhone"));
+            ctPN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctE.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerEmail"));
+            ctE.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
+
+            ctT.setCellValueFactory(new PropertyValueFactory<Customer, CustomerType>("customerType"));
+            ctT.setCellFactory(TextFieldTableCell.<Customer, CustomerType>forTableColumn(new StringConverter<CustomerType>() {
+                @Override
+                public String toString(CustomerType object) {
+                    return object.toString();
+                }
+
+                @Override
+                public CustomerType fromString(String string) {
+                    return null;
+                }
+            }));
+
+            CustomerTable.setItems(tableEntriesC);
+
+
+        }
+        catch (Exception e)
+        {
+            showAlert("no Vehicle Selected");
+        }
+    }
+
+    public void ResetCustomerColumns()
+    {
+        ccID.setSelected(false);
+        cFN.setSelected(true);
+        cLN.setSelected(true);
+        cCA.setSelected(true);
+        cCPC.setSelected(true);
+        cCP.setSelected(true);
+        cCE.setSelected(true);
+        cCT.setSelected(true);
+        ctID.setVisible(false);
+        ctFN.setVisible(true);
+        ctSN.setVisible(true);
+        ctA.setVisible(true);
+        ctP.setVisible(true);
+        ctPN.setVisible(true);
+        ctE.setVisible(true);
+        ctT.setVisible(true);
+    }
+
+    public void newVehicle()
+    {
+        deleteV.setDisable(true);
+        AddEditL.setText("Add Vehicle");
+        VehicleS.setDisable(false);
+        newVB.setDisable(true);
+        addV.setText("add");
+        ClearV.setDisable(false);
+        ClearFields();
+    }
 }

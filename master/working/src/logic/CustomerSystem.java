@@ -72,4 +72,9 @@ public class CustomerSystem {
         }
     }
 
+    public List<Customer> getACustomers(int customerID)
+    {
+        return persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
+    }
+
 }
