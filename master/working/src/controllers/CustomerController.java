@@ -28,21 +28,21 @@ public class CustomerController {
     //for 'CustomerView.fxml' instance variables
     //left pane (add and edit customer view)
     @FXML
-    private TextField addEditCustomerID = new TextField();
+    private TextField customerID = new TextField();
     @FXML
-    private TextField addEditCustomerFirstname = new TextField();
+    private TextField customerFirstname = new TextField();
     @FXML
-    private TextField addEditCustomerSurname = new TextField();
+    private TextField customerSurname = new TextField();
     @FXML
-    private TextField addEditCustomerAddress = new TextField();
+    private TextField customerAddress = new TextField();
     @FXML
-    private TextField addEditCustomerPostcode = new TextField();
+    private TextField customerPostcode = new TextField();
     @FXML
-    private TextField addEditCustomerPhone = new TextField();
+    private TextField customerPhone = new TextField();
     @FXML
-    private TextField addEditCustomerEmail = new TextField();
+    private TextField customerEmail = new TextField();
     @FXML
-    private ComboBox addEditCustomerType = new ComboBox();
+    private ComboBox customerType = new ComboBox();
     @FXML
     private Button saveCustomerAndAddVehicleButton = new Button();
     @FXML
@@ -93,13 +93,13 @@ public class CustomerController {
     {
         try
         {
-            String cID = addEditCustomerFirstname.getText();
-            String cFirstname = addEditCustomerFirstname.getText();
-            String cSurname = addEditCustomerSurname.getText();
-            String cAddress = addEditCustomerAddress.getText();
-            String cPostcode = addEditCustomerPostcode.getText();
-            String cPhone = addEditCustomerPhone.getText();
-            String cEmail = addEditCustomerEmail.getText();
+            String cID = customerFirstname.getText();
+            String cFirstname = customerFirstname.getText();
+            String cSurname = customerSurname.getText();
+            String cAddress = customerAddress.getText();
+            String cPostcode = customerPostcode.getText();
+            String cPhone = customerPhone.getText();
+            String cEmail = customerEmail.getText();
 
             CustomerType cType = null;
 
@@ -109,12 +109,12 @@ public class CustomerController {
             //checking validity of all Customer fields
             if((!cID.equals(""))&&(!cFirstname.equals(""))&&(!cSurname.equals(""))&&(!cAddress.equals(""))&&(!cPostcode.equals(""))&&(cPostcode.length()<=8)&&(!cPhone.equals(""))&&(cPhone.length()>10)&&(cPhone.length()<14)&&(!cEmail.equals(""))&&(cEmail.contains("@")))
             {
-                if(addEditCustomerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
+                if(customerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
                 {
                     cType = CustomerType.Private;
                     checkFields = true;
                 }
-                else if(addEditCustomerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
+                else if(customerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
                 {
                     cType = CustomerType.Business;
                     checkFields = true;
