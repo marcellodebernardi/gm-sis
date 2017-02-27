@@ -1,17 +1,18 @@
 package controllers;
 
 import javafx.scene.control.*;
-
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.collections.*;
 import javafx.fxml.FXML;
+import java.util.*;
+import logic.*;
 import logic.Criterion;
 import logic.CriterionOperator;
 import logic.CustomerSystem;
+import domain.*;
 import persistence.DatabaseRepository;
-import java.util.*;
-import domain.Customer;
-import domain.CustomerType;
-import logic.CustomerSystem;
+
 
 
 /**
@@ -24,72 +25,67 @@ public class CustomerController {
     //@FXML
     //private CustomerSystem cSystem = CustomerSystem.getInstance();
 
-    //for 'AddCustomer.fxml' instance variables
+    //for 'CustomerView.fxml' instance variables
+    //left pane (add and edit customer view)
     @FXML
-    private TextField addCustomerID = new TextField();
+    private TextField addEditCustomerID = new TextField();
     @FXML
-    private TextField addCustomerFirstname = new TextField();
+    private TextField addEditCustomerFirstname = new TextField();
     @FXML
-    private TextField addCustomerSurname = new TextField();
+    private TextField addEditCustomerSurname = new TextField();
     @FXML
-    private TextField addCustomerAddress = new TextField();
+    private TextField addEditCustomerAddress = new TextField();
     @FXML
-    private TextField addCustomerPostcode = new TextField();
+    private TextField addEditCustomerPostcode = new TextField();
     @FXML
-    private TextField addCustomerPhone = new TextField();
+    private TextField addEditCustomerPhone = new TextField();
     @FXML
-    private TextField addCustomerEmail = new TextField();
+    private TextField addEditCustomerEmail = new TextField();
     @FXML
-    private ComboBox addCustomerType = new ComboBox();
+    private ComboBox addEditCustomerType = new ComboBox();
     @FXML
-    private Button addSaveCustomerButton = new Button();
+    private Button saveCustomerAndAddVehicleButton = new Button();
     @FXML
-    private Button addResetCustomerButton = new Button();
+    private Button saveCustomerButton = new Button();
     @FXML
-    private Button addBackCustomerButton = new Button();
+    private Button deleteCustomerButton = new Button();
+    @FXML
+    private Button clearCustomerButton = new Button();
 
-    //for 'EditCustomer.fxml' instance variables
-    private TextField editCustomerID = new TextField();
-    private TextField editCustomerFirstname = new TextField();
-    private TextField editCustomerSurname = new TextField();
-    private TextField editCustomerAddress = new TextField();
-    private TextField editCustomerPostcode = new TextField();
-    private TextField editCustomerPhone = new TextField();
-    private TextField editCustomerEmail = new TextField();
-    private ComboBox editCustomerType = new ComboBox();
-    private Button editSaveCustomerButton = new Button();
-    private Button editBackCustomerButton = new Button();
+
+    //right pane (search customer)
+    @FXML
+    private TextField customerSearch = new TextField();
+    @FXML
+    private Button customerSearchButton = new Button();
+
+
+    //right pane (customer table view)
+    @FXML
+    private TableView<Customer> customerTable;
+    @FXML
+    private TableColumn<Customer, Integer> customerTableColumnID;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnFirstname;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnSurname;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnAddress;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnPostcode;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnPhone;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnEmail;
+    @FXML
+    private TableColumn<Customer, String> customerTableColumnType;
+
 
     //for 'DeleteCustomerConfirmation.fxml' instance variables
+    @FXML
     private Button deleteCustomerConfirmationYes = new Button();
+    @FXML
     private Button deleteCustomerConfirmationNo = new Button();
-
-    //for 'SearchCustomer.fxml' instance variables
-    private Button searchCustomerInput = new Button();
-
-    //for 'ViewCustomer.fxml' instance variables
-    private TextField viewCustomerID = new TextField();
-    private TextField viewCustomerFirstname = new TextField();
-    private TextField viewCustomerSurname = new TextField();
-    private TextField viewCustomerAddress = new TextField();
-    private TextField viewCustomerPostcode = new TextField();
-    private TextField viewCustomerPhone = new TextField();
-    private TextField viewCustomerEmail = new TextField();
-    private TextField viewCustomerType = new TextField();
-    private Button viewDeleteCustomer = new Button();
-    private Button viewHome = new Button();
-    private Button viewBack = new Button();
-
-
-    private TableView<Customer> customerTable;
-    private TableColumn<Customer, Integer> customerID;
-    private TableColumn<Customer, String> customerFirstname;
-    private TableColumn<Customer, String> customerSurname;
-    private TableColumn<Customer, String> customerAddress;
-    private TableColumn<Customer, String> customerPostcode;
-    private TableColumn<Customer, String> customerPhone;
-    private TableColumn<Customer, String> customerEmail;
-    private TableColumn<Customer, String> customerType;
 
 
 
@@ -97,14 +93,14 @@ public class CustomerController {
     {
         try
         {
-            String cID = addCustomerFirstname.getText();
-            String cFirstname = addCustomerFirstname.getText();
-            String cSurname = addCustomerSurname.getText();
-            String cAddress = addCustomerAddress.getText();
-            String cPostcode = addCustomerPostcode.getText();
-            String cPhone = addCustomerPhone.getText();
-            String cEmail = addCustomerEmail.getText();
-            //CustomerType cType = addCustomerType.getSelectionModel().getSelectedItem().toString().equals("Private");
+            String cID = addEditCustomerFirstname.getText();
+            String cFirstname = addEditCustomerFirstname.getText();
+            String cSurname = addEditCustomerSurname.getText();
+            String cAddress = addEditCustomerAddress.getText();
+            String cPostcode = addEditCustomerPostcode.getText();
+            String cPhone = addEditCustomerPhone.getText();
+            String cEmail = addEditCustomerEmail.getText();
+
             CustomerType cType = null;
 
 
@@ -113,12 +109,12 @@ public class CustomerController {
             //checking validity of all Customer fields
             if((!cID.equals(""))&&(!cFirstname.equals(""))&&(!cSurname.equals(""))&&(!cAddress.equals(""))&&(!cPostcode.equals(""))&&(cPostcode.length()<=8)&&(!cPhone.equals(""))&&(cPhone.length()>10)&&(cPhone.length()<14)&&(!cEmail.equals(""))&&(cEmail.contains("@")))
             {
-                if(addCustomerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
+                if(addEditCustomerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
                 {
                     cType = CustomerType.Private;
                     checkFields = true;
                 }
-                else if(addCustomerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
+                else if(addEditCustomerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
                 {
                     cType = CustomerType.Business;
                     checkFields = true;

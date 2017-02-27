@@ -12,7 +12,7 @@ import static logic.CriterionOperator.*;
 public class CustomerSystem {
 
     private static CustomerSystem instance;
-    private CriterionRepository persistence;
+    private CriterionRepository persistence = DatabaseRepository.getInstance();
 
 
     private CustomerSystem()

@@ -26,9 +26,9 @@ public class MenuController {
     Stage addBStage;
     Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
-    Stage addCustomerStage;
-    Stage editCustomerStage;
-    Stage searchCustomerStage;
+    //Stage addCustomerStage;
+    //Stage editCustomerStage;
+    //Stage searchCustomerStage;
     Stage PartModule;
 
 
@@ -42,14 +42,10 @@ public class MenuController {
     }
 
     public void openCustomersTab() {
-        BorderPane customerBasePane = new BorderPane();
         try
         {
-            FlowPane addCustomer = FXMLLoader.load(getClass().getResource("/resources/customer/AddCustomer.fxml"));
-            FlowPane viewCustomers = FXMLLoader.load(getClass().getResource("/resources/customer/SearchCustomer.fxml"));
+            BorderPane customerBasePane = FXMLLoader.load(getClass().getResource("/resources/customer/CustomerView.fxml"));
             customerBasePane.setVisible(true);
-            customerBasePane.setLeft(addCustomer);
-            customerBasePane.setCenter(viewCustomers);
             Main.getInstance().replaceTabContent(customerBasePane);
         }
         catch(IOException e)
@@ -212,7 +208,7 @@ public class MenuController {
     }
 
     //action listener for opening 'Add Customer' window
-    public void addCustomerListener() {
+    /*public void addCustomerListener() {
         try {
             if (addCustomerStage != null) {
                 if (addCustomerStage.isShowing()) {
@@ -231,10 +227,10 @@ public class MenuController {
         } catch (Exception e) {
             System.out.println("cant open");
         }
-    }
+    }*/
 
     //action listener for opening 'Edit Customer' window
-    public void editCustomerListener() {
+    /*public void editCustomerListener() {
         try {
             if (editCustomerStage != null) {
                 if (editCustomerStage.isShowing()) {
@@ -253,10 +249,10 @@ public class MenuController {
         } catch (Exception e) {
             System.out.println("cant open");
         }
-    }
+    }*/
 
     //action listener for opening 'Search Customer' window
-    public void searchCustomerListener() {
+    /*public void searchCustomerListener() {
         try {
             if (searchCustomerStage != null) {
                 if (searchCustomerStage.isShowing()) {
@@ -275,7 +271,7 @@ public class MenuController {
         } catch (Exception e) {
             System.out.println("cant open");
         }
-    }
+    }*/
 
     public void PartMenu() throws IOException {
 
