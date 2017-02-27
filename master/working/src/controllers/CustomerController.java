@@ -6,10 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import logic.Criterion;
 import logic.CriterionOperator;
+import logic.CustomerSystem;
 import persistence.DatabaseRepository;
 import java.util.*;
 import domain.Customer;
 import domain.CustomerType;
+import logic.CustomerSystem;
 
 
 /**
@@ -19,17 +21,31 @@ public class CustomerController {
 
     DatabaseRepository db = DatabaseRepository.getInstance();
 
+    //@FXML
+    //private CustomerSystem cSystem = CustomerSystem.getInstance();
+
     //for 'AddCustomer.fxml' instance variables
+    @FXML
     private TextField addCustomerID = new TextField();
+    @FXML
     private TextField addCustomerFirstname = new TextField();
+    @FXML
     private TextField addCustomerSurname = new TextField();
+    @FXML
     private TextField addCustomerAddress = new TextField();
+    @FXML
     private TextField addCustomerPostcode = new TextField();
+    @FXML
     private TextField addCustomerPhone = new TextField();
+    @FXML
     private TextField addCustomerEmail = new TextField();
+    @FXML
     private ComboBox addCustomerType = new ComboBox();
+    @FXML
     private Button addSaveCustomerButton = new Button();
+    @FXML
     private Button addResetCustomerButton = new Button();
+    @FXML
     private Button addBackCustomerButton = new Button();
 
     //for 'EditCustomer.fxml' instance variables

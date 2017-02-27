@@ -42,7 +42,20 @@ public class MenuController {
     }
 
     public void openCustomersTab() {
-
+        BorderPane customerBasePane = new BorderPane();
+        try
+        {
+            FlowPane addCustomer = FXMLLoader.load(getClass().getResource("/resources/customer/AddCustomer.fxml"));
+            FlowPane viewCustomers = FXMLLoader.load(getClass().getResource("/resources/customer/SearchCustomer.fxml"));
+            customerBasePane.setVisible(true);
+            customerBasePane.setLeft(addCustomer);
+            customerBasePane.setCenter(viewCustomers);
+            Main.getInstance().replaceTabContent(customerBasePane);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void openBookingsTab() {
@@ -208,7 +221,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/AddCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/AddCustomer.fxml"));
                 Parent menu = fxmlLoader.load();
                 addCustomerStage = new Stage();
                 addCustomerStage.setTitle("Add Customer");
@@ -230,7 +243,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/EditCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/EditCustomer.fxml"));
                 Parent menu = fxmlLoader.load();
                 editCustomerStage = new Stage();
                 editCustomerStage.setTitle("Edit Customer");
@@ -252,7 +265,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/SearchCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/SearchCustomer.fxml"));
                 Parent menu = fxmlLoader.load();
                 searchCustomerStage = new Stage();
                 searchCustomerStage.setTitle("Search Customer");
