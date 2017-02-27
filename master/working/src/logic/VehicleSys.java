@@ -57,4 +57,11 @@ public class VehicleSys {
         return instance;
     }
 
+    public boolean VehicleExists(String reg)
+    {
+        if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", EqualTo,reg)).isEmpty())
+            return true;
+        return false;
+    }
+
 }

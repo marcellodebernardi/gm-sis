@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.converter.LocalDateStringConverter;
-import logic.AuthenticationSystem;
-import logic.InvalidDateException;
-import logic.PartsSystem;
-import logic.SpecRepairSystem;
+import logic.*;
 import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 
@@ -28,6 +25,7 @@ public class SpecialistRepairController {
    SpecRepairSystem specRepairSystem = SpecRepairSystem.getInstance(databaseRepository);
    PartsSystem partsSystem = PartsSystem.getInstance(databaseRepository);
    AuthenticationSystem authenticationSystem = AuthenticationSystem.getInstance();
+   VehicleSys vehicleSys = VehicleSys.getInstance();
 
     @FXML
     private TextField bookingSPCID;
@@ -144,8 +142,7 @@ public class SpecialistRepairController {
     public void searchSRCToEdit()
     {
         spcIDEdit = Integer.parseInt(spcToEdit.getText());
-       List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(spcToEdit.getText()));
-       SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+       SpecialistRepairCenter specialistRepairCenter =  specRepairSystem.getByID(Integer.parseInt(spcToEdit.getText()));
        new_spcName.setText(specialistRepairCenter.getName());
        new_spcAdd.setText(specialistRepairCenter.getAddress());
        new_spcPho.setText(specialistRepairCenter.getPhone());
@@ -162,19 +159,24 @@ public class SpecialistRepairController {
     void allowBooking()
     {
         try {
-            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
-            SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             Date dD = format.parse(deliveryDate.getText());
             Date rD = format.parse(returnDate.getText());
             if(dD.before(rD)) {
                 if (vehicle_repair.isSelected()) {
+                    if(vehicleSys.VehicleExists(bookingItemID.getText()))
                     {
                         VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD, Double.parseDouble(bookingCost.getText()), 2, bookingItemID.getText());
                         specialistRepairCenter.addToBooking(vehicleRepair);
                         specRepairSystem.updateRepairCentre(specialistRepairCenter);
                         specRepairSystem.addSpecialistBooking(vehicleRepair);
                     }
+                    else
+                    {
+                        showAlert("This vehicle is not registered in our system, please register the vehicle : " + bookingItemID.getText() + " before continuing.");
+                    }
+
                 }
                 if (part_repair.isSelected()) {
                     PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD, Double.parseDouble(bookingCost.getText()), 2, Integer.parseInt(bookingItemID.getText()));
@@ -190,7 +192,7 @@ public class SpecialistRepairController {
         }
         catch (ParseException | InvalidDateException e)
         {
-            e.printStackTrace();
+            showAlert(e.getMessage());
         }
 
     }
@@ -205,8 +207,7 @@ public class SpecialistRepairController {
 
     @FXML
     void findSRCForBooking(){
-        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
-        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
         bookingSPCName.setText(specialistRepairCenter.getName());
         bookingSPCName.setEditable(false);
     }
@@ -222,8 +223,7 @@ public class SpecialistRepairController {
         String spcAdd = new_spcAdd.getText();
         String spcPho = new_spcPho.getText();
         String spcEmail = new_spcEmail.getText();
-        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(spcIDEdit);
-        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcIDEdit);
         if(!spcName.equals("") || !spcAdd.equals("") || !spcPho.equals("") && spcPho.trim().length() == 11 || spcEmail.equals("")) {
             specialistRepairCenter.setName(new_spcName.getText());
             specialistRepairCenter.setAddress(new_spcAdd.getText());

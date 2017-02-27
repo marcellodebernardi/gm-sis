@@ -119,9 +119,14 @@ public class SpecRepairSystem {
      *
      * @return true if an SRC is found
      */
-    public List<SpecialistRepairCenter>getByID(int spcID)
+    public SpecialistRepairCenter getByID(int spcID)
     {
-        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"spcID", EqualTo, spcID));
+        List<SpecialistRepairCenter> specialistRepairCenters =  persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"spcID", EqualTo, spcID));
+        if(specialistRepairCenters!=null)
+        {
+            return specialistRepairCenters.get(0);
+        }
+         return null;
     }
 
     /**
