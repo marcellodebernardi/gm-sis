@@ -31,7 +31,7 @@
             <TextField fx:id="customerAddress" layoutX="150.0" layoutY="170.0" promptText="Enter Address" />
             <TextField fx:id="customerPostcode" layoutX="150.0" layoutY="210.0" promptText="Enter Postcode" />
             <TextField fx:id="customerPhone" layoutX="150.0" layoutY="247.0" promptText="Enter Phone number" />
-            <TextField fx:id="customerEmail" layoutX="150.0" layoutY="285.0" promptText="Enter Email Address" />
+            <TextField fx:id="customerEmail" layoutX="150.0" layoutY="285.0" promptText="Enter Email address" />
             <ComboBox fx:id="customerType" layoutX="149.0" layoutY="323.0" prefWidth="150.0" promptText="Select Type" >
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -40,7 +40,7 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
+            <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
             <Button fx:id="saveCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" />
             <Button fx:id="deleteCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" text="Clear" />
             <Button fx:id="clearCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" text="Save" />

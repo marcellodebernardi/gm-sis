@@ -20,68 +20,41 @@ import persistence.DatabaseRepository;
  */
 public class CustomerController {
 
-    DatabaseRepository db = DatabaseRepository.getInstance();
+    //DatabaseRepository db = DatabaseRepository.getInstance();
+    @FXML
+    private CustomerSystem cSystem = CustomerSystem.getInstance();
 
-    //@FXML
-    //private CustomerSystem cSystem = CustomerSystem.getInstance();
 
-    //for 'CustomerView.fxml' instance variables
-    //left pane (add and edit customer view)
+
+    ////for 'CustomerView.fxml' instance variables
+    ////left pane (add and edit customer view)
     @FXML
-    private TextField customerID = new TextField();
-    @FXML
-    private TextField customerFirstname = new TextField();
-    @FXML
-    private TextField customerSurname = new TextField();
-    @FXML
-    private TextField customerAddress = new TextField();
-    @FXML
-    private TextField customerPostcode = new TextField();
-    @FXML
-    private TextField customerPhone = new TextField();
-    @FXML
-    private TextField customerEmail = new TextField();
+    private TextField customerID, customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail = new TextField();
     @FXML
     private ComboBox customerType = new ComboBox();
-    @FXML
-    private Button saveCustomerAndAddVehicleButton = new Button();
-    @FXML
-    private Button saveCustomerButton = new Button();
-    @FXML
-    private Button deleteCustomerButton = new Button();
-    @FXML
-    private Button clearCustomerButton = new Button();
+    //@FXML
+    //private Button saveCustomerAndAddVehicleButton, saveCustomerButton, deleteCustomerButton, clearCustomerButton = new Button();
 
 
-    //right pane (search customer)
+    ////right pane (search customer)
     @FXML
     private TextField customerSearch = new TextField();
     @FXML
     private Button customerSearchButton = new Button();
 
 
-    //right pane (customer table view)
+    ////right pane (customer table view)
     @FXML
     private TableView<Customer> customerTable;
     @FXML
     private TableColumn<Customer, Integer> customerTableColumnID;
     @FXML
-    private TableColumn<Customer, String> customerTableColumnFirstname;
+    private TableColumn<Customer, String> customerTableColumnFirstname, customerTableColumnSurname, customerTableColumnAddress, customerTableColumnPostcode, customerTableColumnPhone, customerTableColumnEmail;
     @FXML
-    private TableColumn<Customer, String> customerTableColumnSurname;
-    @FXML
-    private TableColumn<Customer, String> customerTableColumnAddress;
-    @FXML
-    private TableColumn<Customer, String> customerTableColumnPostcode;
-    @FXML
-    private TableColumn<Customer, String> customerTableColumnPhone;
-    @FXML
-    private TableColumn<Customer, String> customerTableColumnEmail;
-    @FXML
-    private TableColumn<Customer, String> customerTableColumnType;
+    private TableColumn<Customer, CustomerType> customerTableColumnType;
 
 
-    //for 'DeleteCustomerConfirmation.fxml' instance variables
+    ////for 'DeleteCustomerConfirmation.fxml' instance variables
     @FXML
     private Button deleteCustomerConfirmationYes = new Button();
     @FXML
@@ -89,10 +62,12 @@ public class CustomerController {
 
 
 
+    //method for adding customer to database
     public void addCustomerToDB() throws Exception
     {
         try
         {
+            //initialising variables
             String cID = customerFirstname.getText();
             String cFirstname = customerFirstname.getText();
             String cSurname = customerSurname.getText();
@@ -100,10 +75,7 @@ public class CustomerController {
             String cPostcode = customerPostcode.getText();
             String cPhone = customerPhone.getText();
             String cEmail = customerEmail.getText();
-
             CustomerType cType = null;
-
-
             boolean checkFields = false;
 
             //checking validity of all Customer fields
@@ -121,12 +93,11 @@ public class CustomerController {
                 }
             }
 
-
             if(checkFields)
             {
-                Customer newCustomer = new Customer(cFirstname, cSurname, cAddress, cPostcode, cPhone, cEmail, cType, null);
-                boolean addingCustomer = db.commitItem(newCustomer);
-                if(addingCustomer)
+                boolean addedCustomer = cSystem.addCustomer(cFirstname, cSurname, cAddress, cPostcode, cPhone, cEmail, cType);
+                //boolean addingCustomer = db.commitItem(newCustomer);
+                if(addedCustomer)
                 {
                     errorAlert("SUCCESSFULLY ADDED!!!");
                 }
@@ -140,13 +111,11 @@ public class CustomerController {
                 //error message if checkFields=false meaning one or more Customer fields were invalid
                 errorAlert("Cannot add customer. Ensure all fields have been entered correctly.");
             }
-
         }
         catch(Exception e)
         {
             System.out.println("Add Customer Error");
         }
-
     }
 
 

@@ -34,7 +34,7 @@ public class CustomerSystem {
         return persistence.getByCriteria(new Criterion<>(Customer.class));
     }
 
-    public boolean addCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
+    public boolean addCustomer(String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType)
     {
         Customer add = new Customer(customerFirstname, customerSurname, customerAddress,customerPostcode, customerPhone, customerEmail, customerType, null);
         return persistence.commitItem(add);
