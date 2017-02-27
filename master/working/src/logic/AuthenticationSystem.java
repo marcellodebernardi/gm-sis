@@ -3,9 +3,10 @@ package logic;
 import domain.User;
 import domain.UserType;
 import persistence.DatabaseRepository;
-import static logic.CriterionOperator.*;
 
 import java.util.List;
+
+import static logic.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi, Dillon Vaghela, Muhammad Shakib Hoque
@@ -42,8 +43,7 @@ public class AuthenticationSystem {
     }
 
 
-    public UserType getUserType()
-    {
+    public UserType getUserType() {
         return loginS;
     }
 
@@ -51,24 +51,21 @@ public class AuthenticationSystem {
         return loggedInUser;
     }
 
-    public boolean addEditUser(String userID, String pass, String firstName, String surname, UserType userType)
-    {
+    public boolean addEditUser(String userID, String pass, String firstName, String surname, UserType userType) {
         return persistence.commitItem(new User(userID, pass, firstName, surname, userType));
     }
 
-    public boolean deleteUser(String userID)
-    {
+    public boolean deleteUser(String userID) {
         return persistence.deleteItem(new Criterion<>(User.class, "userID", EqualTo, userID));
     }
 
-    public User searchAUser(String userID)
-    {
+    public User searchAUser(String userID) {
         List<User> results = persistence.getByCriteria(new Criterion<>(User.class,
                 "userID", EqualTo, userID));
-        return results !=null ? results.get(0) : null;
+        return results != null ? results.get(0) : null;
     }
 
-    public List<User> getUsersList(){
+    public List<User> getUsersList() {
         List<User> results = persistence.getByCriteria(new Criterion<>(User.class));
         return results;
     }

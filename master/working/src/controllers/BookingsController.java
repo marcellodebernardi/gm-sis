@@ -9,16 +9,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 import javafx.util.Callback;
 import logic.BookingSystem;
+import logic.Criterion;
+import logic.CustomerSystem;
 import main.Main;
+import persistence.DatabaseRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,12 +35,14 @@ public class BookingsController {
     private TextField searchBookings;
     @FXML
     private TableView<DiagRepBooking> bookingListTable;
+    @FXML
+    private TextField searchCustomers;
 
-    public void initialize() {
+    public BookingsController() {
         bookSys = BookingSystem.getInstance();
     }
 
-    public BookingsController() {
+    public void initialize() {
         bookSys = BookingSystem.getInstance();
     }
 
@@ -51,7 +53,7 @@ public class BookingsController {
     public void openNewBookingView() {
         loadBasePaneInstance();
         try {
-            FlowPane addView = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
+            BorderPane addView = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
             basePaneInstance.setLeft(addView);
             basePaneInstance.setVisible(true);
             Main.getInstance().replaceTabContent(basePaneInstance);
@@ -79,6 +81,31 @@ public class BookingsController {
         loadBasePaneInstance();
         try {
             BorderPane weekView = FXMLLoader.load(getClass().getResource("/resources/booking/weekView.fxml"));
+            GridPane dayGrid = new GridPane();
+            List<DiagRepBooking> dayBookings;
+
+            for (int day = 0; day < 7; day++) {
+                dayBookings = bookSys.getDayBookings(day);
+                ColumnConstraints constraint = new ColumnConstraints();
+                constraint.setPercentWidth(14);
+                dayGrid.getColumnConstraints().add(day, constraint);
+
+                for (int hour = 0; hour < 8; hour++) {
+                    Button hourBlock = new Button();
+                    hourBlock.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    GridPane.setConstraints(hourBlock, day, hour);
+                    GridPane.setFillWidth(hourBlock, true);
+                    GridPane.setFillHeight(hourBlock, true);
+                    dayGrid.getChildren().addAll(hourBlock);
+                }
+            }
+            for (int i = 0; i < 8; i++) {
+                RowConstraints constraint = new RowConstraints();
+                constraint.setPercentHeight(12.5);
+                dayGrid.getRowConstraints().add(i, constraint);
+            }
+
+            weekView.setCenter(dayGrid);
             basePaneInstance.setCenter(weekView);
             basePaneInstance.getCenter().setId("monthWeekList");
             basePaneInstance.setVisible(true);
@@ -124,21 +151,55 @@ public class BookingsController {
         }
     }
 
+    /*
+    @FXML
+    public void searchCustomers() {
+        loadBasePaneInstance();
+        try {
+            BorderPane addPane = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
+            // todo request convenience method in CustomerSystem
+            TableView<Customer> table =
+                    constructTable(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)));
+
+            listView.setCenter(table);
+
+            basePaneInstance.setCenter(listView);
+            basePaneInstance.getCenter().setId("monthWeekList");
+            basePaneInstance.setVisible(true);
+            Main.getInstance().replaceTabContent(basePaneInstance);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
     @FXML
     private void loadBasePaneInstance() {
         if (basePaneInstance == null) {
             try {
                 basePaneInstance = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
-                FlowPane addPane = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
+                BorderPane addPane = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
+                // ComboBox custDropDown = (ComboBox)addPane.lookup("#customerDropDown");
+
+                /* List<Customer> customers = DatabaseRepository
+                        .getInstance()
+                        .getByCriteria(new Criterion<>(Customer.class));
+                ObservableList<String> customerNames = FXCollections.observableArrayList();
+                for (Customer c : customers) {
+                    customerNames.add(c.getCustomerID() + ": " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
+                } */
+                // custDropDown.setItems(customerNames);
                 basePaneInstance.setLeft(addPane);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    /** Generates or updates the booking list table. Updates table regardless of whether
+    /**
+     * Generates or updates the booking list table. Updates table regardless of whether
      * return value is used.
+     *
      * @param bookings
      * @return
      */

@@ -11,4 +11,7 @@
             <Button text="Month View" onAction="#openMonthView"></Button>
         </HBox>
     </top>
+    <center>
+        
+    </center>
 </BorderPane>

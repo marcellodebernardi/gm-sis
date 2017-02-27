@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
-<FlowPane xmlns="http://javafx.com/javafx/8.0.111"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
-    <VBox>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-        <TextField></TextField>
-    </VBox>
-</FlowPane>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane id="addBookingPane" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
+    <top>
+        <HBox id="addBookingTitle">
+            <Text>
+                New Booking
+            </Text>
+        </HBox>
+    </top>
+    <center>
+        <GridPane>
+            <Label GridPane.rowIndex="0">Customer</Label>
+            <TextField GridPane.rowIndex="1" id="searchCustomers"
+                       fx:id="searchCustomers"></TextField>
+            <ListView id="customerListB" GridPane.rowIndex="2"></ListView>
+            <Label GridPane.rowIndex="3">Vehicle</Label>
+            <ComboBox id="vehicleDropDown" GridPane.rowIndex="4"></ComboBox>
+            <Label GridPane.rowIndex="5">Diagnosis Start Time</Label>
+            <TextField GridPane.rowIndex="6"></TextField>
+            <Label GridPane.rowIndex="7">Diagnosis End Time</Label>
+            <TextField GridPane.rowIndex="8"></TextField>
+            <Label GridPane.rowIndex="9">Description</Label>
+            <TextArea GridPane.rowIndex="10"></TextArea>
+        </GridPane>
+    </center>
+    <bottom>
+        <HBox id="addBookingButtons">
+            <Button>Add Booking</Button>
+            <Button>Clear Fields</Button>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,6 +1,7 @@
 package logic;
 
 import domain.DiagRepBooking;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import persistence.DatabaseRepository;
@@ -8,8 +9,8 @@ import persistence.DatabaseRepository;
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
-import static logic.CriterionOperator.EqualTo;
-import static logic.CriterionOperator.Regex;
+
+import static logic.CriterionOperator.*;
 
 /**
  * @author Marcello De Bernardi
@@ -70,11 +71,25 @@ public class BookingSystem {
         return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
     }
 
-    public List<DiagRepBooking> getTodayBookings() {
+    public List<DiagRepBooking> getDayBookings(int offset) {
+        long millisInDay = 86400000;
+        long rangeStart = new DateTime().withTimeAtStartOfDay().getMillis() + (millisInDay * offset);
+        long rangeEnd = rangeStart + millisInDay;
+
         try {
-            return persistence.getByCriteria(
-                    new Criterion<>(DiagRepBooking.class, "diagnosisDate", EqualTo, new LocalDate())
-                            .or("repairDate", EqualTo, new LocalDate()));
+            List<DiagRepBooking> bookingsOnDay =
+                    persistence
+                            .getByCriteria(new Criterion<>(
+                                    DiagRepBooking.class,
+                                    "diagnosisStart", MoreThan, rangeStart)
+                                    .and("diagnosisStart", LessThan, rangeEnd));
+            bookingsOnDay.addAll(persistence
+                            .getByCriteria(new Criterion<>(
+                                    DiagRepBooking.class,
+                                    "repairStart", MoreThan, rangeStart)
+                                    .and("repairStart", LessThan, rangeEnd)));
+            return bookingsOnDay;
+
         }
         catch(CriterionException e) {
             System.err.println(e.getMessage());
@@ -111,7 +126,6 @@ public class BookingSystem {
      * @return true if addition successful, false otherwise
      */
     public boolean addBooking(DiagRepBooking booking) {
-        // todo come up with way to ensure ID is not missing
         return isWithinOpenHours(booking)
                 && isNotOnHoliday(booking)
                 && persistence.commitItem(booking);
