@@ -5,6 +5,7 @@ import domain.PartRepair;
 import domain.Searchable;
 import domain.SpecialistRepairCenter;
 import domain.VehicleRepair;
+import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 
 import java.util.Date;
@@ -84,12 +85,17 @@ public class SpecRepairSystem {
     public List<VehicleRepair> getOutstandingV()
     {
         ///todo implement way to get all vehicle repairs with return dates past todays date
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, new Date()));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, new LocalDate().now()));
     }
 
     public List<PartRepair> getOutstandingP()
     {
         ///todo implement way to get all part repairs with return dates past todays date
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, new Date()));
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, new LocalDate().now()));
+    }
+
+    public List<SpecialistRepairCenter>getByID(int spcID)
+    {
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"spcID", EqualTo, spcID));
     }
 }

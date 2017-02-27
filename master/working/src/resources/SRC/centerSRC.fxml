@@ -14,7 +14,7 @@
    <children>
       <BorderPane prefHeight="46.0" prefWidth="384.0">
          <left>
-            <TextField fx:id="vehicle_reg" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="481.0" promptText="Enter a Specialist Repair Center ID or Vehicle Reg" BorderPane.alignment="CENTER" />
+            <TextField fx:id="itemToSearch" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="481.0" promptText="Enter a Specialist Repair Center ID or Vehicle Reg" BorderPane.alignment="CENTER" />
          </left>
          <right>
             <Button mnemonicParsing="false" onAction="#searchVehiclesSRC" prefHeight="27.0" prefWidth="157.0" text="Search" BorderPane.alignment="CENTER" />

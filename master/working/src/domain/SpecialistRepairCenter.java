@@ -10,6 +10,9 @@ import java.util.List;
 
 public class SpecialistRepairCenter implements Searchable {
     private int spcID;
+
+
+
     private String name;
     private String address;
     private String phone;
@@ -113,5 +116,25 @@ public class SpecialistRepairCenter implements Searchable {
     public void addToBooking(SpecRepBooking specRepBooking)
     {
         this.bookings.add(specRepBooking);
+    }
+
+    public List<SpecRepBooking> getBookings()
+    {
+        return this.bookings;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

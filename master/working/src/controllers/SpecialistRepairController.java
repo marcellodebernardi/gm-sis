@@ -3,32 +3,54 @@ package controllers;
 import domain.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import logic.Criterion;
-import logic.CriterionOperator;
+import javafx.util.converter.LocalDateStringConverter;
+import logic.AuthenticationSystem;
 import logic.PartsSystem;
 import logic.SpecRepairSystem;
+import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
-
-import javax.xml.soap.Text;
 import java.util.ArrayList;
+import java.util.Collections;
+import org.joda.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Button;
 public class SpecialistRepairController {
 
 
    DatabaseRepository databaseRepository = DatabaseRepository.getInstance();
    SpecRepairSystem specRepairSystem = SpecRepairSystem.getInstance(databaseRepository);
    PartsSystem partsSystem = PartsSystem.getInstance(databaseRepository);
+   AuthenticationSystem authenticationSystem = AuthenticationSystem.getInstance();
 
     @FXML
-    private TextField vehicle_reg;
+    private TextField bookingSPCID;
+
+    @FXML
+    private TextField bookingSPCName;
+
+    @FXML
+    private RadioButton vehicle_repair = new RadioButton();
+
+    @FXML
+    private ToggleGroup bookingType;
+
+    @FXML
+    private RadioButton part_repair = new RadioButton();
+
+    @FXML
+    private TextField bookingItemID;
+
+    @FXML
+    private DatePicker bookingReturnDate;
+
+    @FXML
+    private TextField itemToSearch;
 
     @FXML
     private TableView<?> specialistTable;
@@ -47,6 +69,7 @@ public class SpecialistRepairController {
 
     @FXML
     private TextField instaDate;//holds installation date
+
 
     @FXML
     private TextField reg_number;
@@ -73,9 +96,6 @@ public class SpecialistRepairController {
     private TextField part_name;
 
     @FXML
-    private ToggleGroup bookingType;
-
-    @FXML
     private TextField new_spcName;
 
     @FXML
@@ -90,37 +110,144 @@ public class SpecialistRepairController {
     @FXML
     private TextField spcIDtoDelete;
 
+    @FXML
+    private Button findSRCToEdit = new Button();
+
+    @FXML
+    private Button btn_submitSRC = new Button();
+
+    @FXML
+    private Button btn_deleteSRC = new Button();
+
+    @FXML
+    private Button btn_updateSRC = new Button();
+
+    @FXML
+    private TextField spcToEdit;
+
+    @FXML
+    private  TextField bookingCost;
+
+    private int spcIDEdit;
+
+
+    public void searchSRCToEdit()
+    {
+        spcIDEdit = Integer.parseInt(spcToEdit.getText());
+       List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(spcToEdit.getText()));
+       SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+       new_spcName.setText(specialistRepairCenter.getName());
+       new_spcAdd.setText(specialistRepairCenter.getAddress());
+       new_spcPho.setText(specialistRepairCenter.getPhone());
+       new_spcEmail.setText(specialistRepairCenter.getEmail());
+       new_spcName.setEditable(true);
+       new_spcAdd.setEditable(true);
+       new_spcPho.setEditable(true);
+       new_spcEmail.setEditable(true);
+
+    }
 
 
     @FXML
     void allowBooking() {
+        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        if(vehicle_repair.isSelected())
+        {
+            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()),null,null, Double.parseDouble(bookingCost.getText()),-1,bookingItemID.getText());
+            specialistRepairCenter.addToBooking(vehicleRepair);
+            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+        }
+        if(part_repair.isSelected())
+        {
+            PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), null,null,Double.parseDouble(bookingCost.getText()),-1,Integer.parseInt(bookingItemID.getText()));
+            specialistRepairCenter.addToBooking(partRepair);
+            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+        }
 
+    }
+
+    @FXML
+    void findSRCForBooking(){
+        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        bookingSPCName.setText(specialistRepairCenter.getName());
+        bookingSPCName.setEditable(false);
     }
 
     @FXML
     void deleteSRC() {
-
+        specRepairSystem.deleteRepairCenter(Integer.parseInt(spcIDtoDelete.getText()));
     }
 
     @FXML
     void updateSRC() {
+        String spcName = new_spcName.getText();
+        String spcAdd = new_spcAdd.getText();
+        String spcPho = new_spcPho.getText();
+        String spcEmail = new_spcEmail.getText();
+        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(spcIDEdit);
+        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+        if(!spcName.equals("") || !spcAdd.equals("") || !spcPho.equals("") && spcPho.trim().length() == 11 || spcEmail.equals("")) {
+            specialistRepairCenter.setName(new_spcName.getText());
+            specialistRepairCenter.setAddress(new_spcAdd.getText());
+            specialistRepairCenter.setPhone(new_spcPho.getText());
+            specialistRepairCenter.setEmail(new_spcEmail.getText());
+            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+        }
+        new_spcName.clear();
+        new_spcAdd.clear();
+        new_spcPho.clear();
+        new_spcEmail.clear();
     }
 
     @FXML
     void displayFields()
     {
+        spcToEdit.setVisible(false);
+        findSRCToEdit.setVisible(false);
         spcIDtoDelete.setVisible(false);
         new_spcName.setVisible(true);
         new_spcAdd.setVisible(true);
         new_spcPho.setVisible(true);
         new_spcEmail.setVisible(true);
+        btn_deleteSRC.setVisible(false);
+        btn_updateSRC.setVisible(false);
+        new_spcName.setEditable(true);
+        new_spcAdd.setEditable(true);
+        new_spcPho.setEditable(true);
+        new_spcEmail.setEditable(true);
+        btn_submitSRC.setVisible(true);
+
+    }
+
+    @FXML
+    void displayFieldsToEdit()
+    {
+        spcToEdit.setVisible(true);
+        findSRCToEdit.setVisible(true);
+        spcIDtoDelete.setVisible(false);
+        new_spcName.setVisible(true);
+        new_spcAdd.setVisible(true);
+        new_spcPho.setVisible(true);
+        new_spcEmail.setVisible(true);
+        new_spcName.setEditable(false);
+        new_spcAdd.setEditable(false);
+        new_spcPho.setEditable(false);
+        new_spcEmail.setEditable(false);
+        btn_submitSRC.setVisible(false);
+        btn_deleteSRC.setVisible(false);
+        btn_updateSRC.setVisible(true);
+
     }
 
     @FXML
     void addSRC() {
-
         specRepairSystem.addRepairCenter(new_spcName.getText(), new_spcAdd.getText(), new_spcPho.getText(), new_spcEmail.getText());
-
+        new_spcName.clear();
+        new_spcAdd.clear();
+        new_spcPho.clear();
+        new_spcEmail.clear();
     }
 
     @FXML
@@ -130,13 +257,13 @@ public class SpecialistRepairController {
        if(veh_selected.isSelected())
        {
 
-          List<VehicleRepair> vehicleRepairs =  specRepairSystem.getVehicleBookings(vehicle_reg.getText());
+          List<VehicleRepair> vehicleRepairs =  specRepairSystem.getVehicleBookings(itemToSearch.getText());
           //todo implement list into table view
            updateTableViewVehicleRepair(vehicleRepairs);
        }
-       else
+       else if(src_selected.isSelected())
        {
-           List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(vehicle_reg.getText());
+           List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(itemToSearch.getText());
            //todo implement list into table view
            updateTableViewSpecialistRepair(specialistRepairCenters);
        }
@@ -145,18 +272,23 @@ public class SpecialistRepairController {
    @FXML
    public void showID()
    {
+       spcToEdit.setVisible(false);
+       findSRCToEdit.setVisible(false);
        new_spcName.setVisible(false);
        new_spcAdd.setVisible(false);
        new_spcPho.setVisible(false);
        new_spcEmail.setVisible(false);
        spcIDtoDelete.setVisible(true);
-       specRepairSystem.deleteRepairCenter(Integer.parseInt(spcIDtoDelete.getText()));
+       spcIDtoDelete.setEditable(true);
+       btn_submitSRC.setVisible(false);
+       btn_submitSRC.setVisible(false);
+       btn_deleteSRC.setVisible(true);
+       btn_updateSRC.setVisible(false);
    }
 
    @FXML
-   private void updateTableViewVehicleRepair(List<VehicleRepair> repairs)
+   private <E> void updateTableViewVehicleRepair(List<E> repairs)
    {
-       specialistTable.getItems().clear();
 
    }
 
@@ -190,7 +322,6 @@ public class SpecialistRepairController {
    @FXML
     public void allowEdit()
    {
-
        partAbsID.setEditable(true);
        partOccID.setEditable(true);
        instaDate.setEditable(true);
@@ -220,6 +351,7 @@ public class SpecialistRepairController {
        stock_level.setVisible(false);
 
    }
+
     @FXML
         public void getOutStandingItems()
     {
