@@ -28,9 +28,13 @@
     -fx-background-radius: 10px;
     -fx-pref-width: 9em;
 }
+#calendarToggle TextField {
+    -fx-pref-width: 25em;
+    -fx-background-radius: 15px;
+}
 #bookingsTable columns TableColumn {
     -fx-pref-width: 45em;
 }
 #monthWeekList {
-    -fx-padding: 0.5em;
+    -fx-padding: 1em;
 }

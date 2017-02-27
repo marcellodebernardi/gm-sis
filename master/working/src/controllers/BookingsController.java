@@ -3,11 +3,7 @@ package controllers;
 
 import domain.Customer;
 import domain.DiagRepBooking;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.IntegerPropertyBase;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +31,10 @@ import java.util.List;
 public class BookingsController {
     private BorderPane basePaneInstance;
     private BookingSystem bookSys;
+    @FXML
+    private TextField searchBookings;
+    @FXML
+    private TableView<DiagRepBooking> bookingListTable;
 
     public void initialize() {
         bookSys = BookingSystem.getInstance();
@@ -42,6 +43,7 @@ public class BookingsController {
     public BookingsController() {
         bookSys = BookingSystem.getInstance();
     }
+
     /**
      * Open screen for new booking
      */
@@ -53,8 +55,7 @@ public class BookingsController {
             basePaneInstance.setLeft(addView);
             basePaneInstance.setVisible(true);
             Main.getInstance().replaceTabContent(basePaneInstance);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -105,8 +106,25 @@ public class BookingsController {
         }
     }
 
+    @FXML
+    public void searchBookings() {
+        loadBasePaneInstance();
+        try {
+            BorderPane listView = FXMLLoader.load(getClass().getResource("/resources/booking/listView.fxml"));
+            TableView<DiagRepBooking> table = constructTable(bookSys.searchBookings(searchBookings.getText()));
 
+            listView.setCenter(table);
 
+            basePaneInstance.setCenter(listView);
+            basePaneInstance.getCenter().setId("monthWeekList");
+            basePaneInstance.setVisible(true);
+            Main.getInstance().replaceTabContent(basePaneInstance);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void loadBasePaneInstance() {
         if (basePaneInstance == null) {
             try {
@@ -119,11 +137,15 @@ public class BookingsController {
         }
     }
 
+    /** Generates or updates the booking list table. Updates table regardless of whether
+     * return value is used.
+     * @param bookings
+     * @return
+     */
     private TableView<DiagRepBooking> constructTable(List<DiagRepBooking> bookings) {
-        TableView<DiagRepBooking> table = new TableView<>();
+        if (bookingListTable == null) bookingListTable = new TableView<>();
         ObservableList<DiagRepBooking> tableEntries = FXCollections.observableArrayList(bookings);
-        table.setItems(tableEntries);
-
+        bookingListTable.setItems(tableEntries);
 
         TableColumn<DiagRepBooking, Integer> bookingIDColumn = new TableColumn<>();
         TableColumn<DiagRepBooking, String> customerColumn = new TableColumn<>();
@@ -142,7 +164,7 @@ public class BookingsController {
 
 
         bookingIDColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, Integer>,
-                        ObservableValue<Integer>>() {
+                ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<DiagRepBooking, Integer> p) {
                 return new ReadOnlyObjectWrapper<>(p.getValue().getBookingID());
             }
@@ -152,7 +174,7 @@ public class BookingsController {
                 ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
                 Customer customer = p.getValue().getCustomer();
-                return customer == null ? new ReadOnlyObjectWrapper<>("") : new ReadOnlyObjectWrapper<>(customer.getCustomerSurname()   );
+                return customer == null ? new ReadOnlyObjectWrapper<>("") : new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
             }
         });
 
@@ -177,9 +199,10 @@ public class BookingsController {
             }
         });
 
-        table.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
+        bookingListTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
                 diagnosisDateColumn, repairDateColumn);
+        bookingListTable.refresh();
 
-        return table;
+        return bookingListTable;
     }
 }

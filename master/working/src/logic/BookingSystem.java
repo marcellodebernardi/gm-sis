@@ -9,6 +9,7 @@ import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import static logic.CriterionOperator.EqualTo;
+import static logic.CriterionOperator.Regex;
 
 /**
  * @author Marcello De Bernardi
@@ -81,8 +82,22 @@ public class BookingSystem {
         }
     }
 
-    public List<DiagRepBooking> getVBooking(String regNumber)
-    {
+    public List<DiagRepBooking> searchBookings(String query) {
+        try {
+            int queryAsInt = Integer.parseInt(query);
+            return persistence
+                    .getByCriteria(
+                            new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, queryAsInt)
+                                    .or("vehicleRegNumber", Regex, query));
+        }
+        catch(NumberFormatException e) {
+            return persistence.getByCriteria(
+                    new Criterion<>(
+                            DiagRepBooking.class, "vehicleRegNumber", Regex, query));
+        }
+    }
+
+    public List<DiagRepBooking> getVBooking(String regNumber) {
         List<DiagRepBooking> Results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber",EqualTo, regNumber));
         return Results !=null ? Results : null;
     }

@@ -132,8 +132,12 @@ class StatementNode implements Comparable<StatementNode> {
                 delim = ", ";
             }
 
-            return "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
-                    + primaryKey + " = " + primaryKeyValue + ";";
+            return numericTypes.contains(primaryKeyValue.getClass()) ?
+                    "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
+                    + primaryKey + " = " + primaryKeyValue + ";"
+                    :
+                    "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
+                            + primaryKey + " = '" + primaryKeyValue + "';";
         }
     }
 
