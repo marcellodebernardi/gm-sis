@@ -198,7 +198,7 @@ public class SpecialistRepairController {
     }
 
     @FXML
-    public void showAlert(String message) {
+    protected  void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Message");
         alert.setHeaderText(message);
