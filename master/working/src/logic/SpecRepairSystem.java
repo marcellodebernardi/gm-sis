@@ -1,10 +1,7 @@
 package logic;
 
 
-import domain.PartRepair;
-import domain.Searchable;
-import domain.SpecialistRepairCenter;
-import domain.VehicleRepair;
+import domain.*;
 import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 
@@ -67,35 +64,73 @@ public class SpecRepairSystem {
      return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete));
     }
 
+    /**
+     * @param edit SRC that is being updated
+     *
+     * @return true if modifying an SRC is successful.
+     */
     public boolean updateRepairCentre(SpecialistRepairCenter edit)
     {
         return persistence.commitItem(edit);
     }
 
+    /**
+     * @param regNumber Registration number used to search all Vehicle repairs with the respective vehicle reg
+     *
+     * @return true if vehicle reg is valid (will return true even if there are NO bookings with this reg)
+     */
     public List<VehicleRepair> getVehicleBookings(String regNumber)
     {
         return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleReg", EqualTo, regNumber));
     }
 
+    /**
+     * @param spcID used to get all the bookings of an SRC
+     *
+     * @return true if bookings are found
+     */
     public List<SpecialistRepairCenter>getAllBookings(String spcID)
     {
         return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, spcID));
     }
 
-    public List<VehicleRepair> getOutstandingV()
+    /**
+     * @param date Used to identify all the Vehicles that have not yet been returned
+     *
+     * @return
+     */
+    public List<VehicleRepair> getOutstandingV(Date date)
     {
-        ///todo implement way to get all vehicle repairs with return dates past todays date
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, new LocalDate().now()));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, date));
     }
 
-    public List<PartRepair> getOutstandingP()
+    /**
+     * @param date Used to identify all the Parts that have not yet been returned
+     *
+     * @return
+     */
+    public List<PartRepair> getOutstandingP(Date date)
     {
-        ///todo implement way to get all part repairs with return dates past todays date
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, new LocalDate().now()));
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, date));
     }
 
+    /**
+     * @param spcID used to identify an SRC with a matching ID
+     *
+     * @return true if an SRC is found
+     */
     public List<SpecialistRepairCenter>getByID(int spcID)
     {
         return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class,"spcID", EqualTo, spcID));
+    }
+
+    /**
+     * @param specRepBooking booking to be added
+     *
+     *@return true if commit is successful
+     */
+    public boolean addSpecialistBooking(SpecRepBooking specRepBooking)
+    {
+        return persistence.commitItem(specRepBooking);
     }
 }

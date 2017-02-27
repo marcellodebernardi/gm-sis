@@ -3,23 +3,24 @@ package controllers;
 import domain.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.converter.LocalDateStringConverter;
 import logic.AuthenticationSystem;
+import logic.InvalidDateException;
 import logic.PartsSystem;
 import logic.SpecRepairSystem;
 import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.joda.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Button;
+
 public class SpecialistRepairController {
 
 
@@ -128,8 +129,17 @@ public class SpecialistRepairController {
     @FXML
     private  TextField bookingCost;
 
+    @FXML
+    private Button btn_add_src, btn_del_src, btn_edit_src;
+
+    @FXML
     private int spcIDEdit;
 
+    @FXML
+    private TextField returnDate;
+
+    @FXML
+    private TextField deliveryDate;
 
     public void searchSRCToEdit()
     {
@@ -149,22 +159,48 @@ public class SpecialistRepairController {
 
 
     @FXML
-    void allowBooking() {
-        List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
-        SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
-        if(vehicle_repair.isSelected())
-        {
-            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()),null,null, Double.parseDouble(bookingCost.getText()),-1,bookingItemID.getText());
-            specialistRepairCenter.addToBooking(vehicleRepair);
-            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+    void allowBooking()
+    {
+        try {
+            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+            SpecialistRepairCenter specialistRepairCenter = specialistRepairCenters.get(0);
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date dD = format.parse(deliveryDate.getText());
+            Date rD = format.parse(returnDate.getText());
+            if(dD.before(rD)) {
+                if (vehicle_repair.isSelected()) {
+                    {
+                        VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD, Double.parseDouble(bookingCost.getText()), 2, bookingItemID.getText());
+                        specialistRepairCenter.addToBooking(vehicleRepair);
+                        specRepairSystem.updateRepairCentre(specialistRepairCenter);
+                        specRepairSystem.addSpecialistBooking(vehicleRepair);
+                    }
+                }
+                if (part_repair.isSelected()) {
+                    PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD, Double.parseDouble(bookingCost.getText()), 2, Integer.parseInt(bookingItemID.getText()));
+                    specialistRepairCenter.addToBooking(partRepair);
+                    specRepairSystem.updateRepairCentre(specialistRepairCenter);
+                    specRepairSystem.addSpecialistBooking(partRepair);
+                }
+            }
+            else
+            {
+                throw new InvalidDateException("Return date is before delivery date!");
+            }
         }
-        if(part_repair.isSelected())
+        catch (ParseException | InvalidDateException e)
         {
-            PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), null,null,Double.parseDouble(bookingCost.getText()),-1,Integer.parseInt(bookingItemID.getText()));
-            specialistRepairCenter.addToBooking(partRepair);
-            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+            e.printStackTrace();
         }
 
+    }
+
+    @FXML
+    public void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Message");
+        alert.setHeaderText(message);
+        alert.showAndWait();
     }
 
     @FXML
@@ -204,41 +240,54 @@ public class SpecialistRepairController {
     @FXML
     void displayFields()
     {
-        spcToEdit.setVisible(false);
-        findSRCToEdit.setVisible(false);
-        spcIDtoDelete.setVisible(false);
-        new_spcName.setVisible(true);
-        new_spcAdd.setVisible(true);
-        new_spcPho.setVisible(true);
-        new_spcEmail.setVisible(true);
-        btn_deleteSRC.setVisible(false);
-        btn_updateSRC.setVisible(false);
-        new_spcName.setEditable(true);
-        new_spcAdd.setEditable(true);
-        new_spcPho.setEditable(true);
-        new_spcEmail.setEditable(true);
-        btn_submitSRC.setVisible(true);
+        if(!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR)))
+        {
+            btn_add_src.setDisable(true);
+        }
+        else {
+            spcToEdit.setVisible(false);
+            findSRCToEdit.setVisible(false);
+            spcIDtoDelete.setVisible(false);
+            new_spcName.setVisible(true);
+            new_spcAdd.setVisible(true);
+            new_spcPho.setVisible(true);
+            new_spcEmail.setVisible(true);
+            btn_deleteSRC.setVisible(false);
+            btn_updateSRC.setVisible(false);
+            new_spcName.setEditable(true);
+            new_spcAdd.setEditable(true);
+            new_spcPho.setEditable(true);
+            new_spcEmail.setEditable(true);
+            btn_submitSRC.setVisible(true);
+            }
 
     }
 
     @FXML
     void displayFieldsToEdit()
     {
-        spcToEdit.setVisible(true);
-        findSRCToEdit.setVisible(true);
-        spcIDtoDelete.setVisible(false);
-        new_spcName.setVisible(true);
-        new_spcAdd.setVisible(true);
-        new_spcPho.setVisible(true);
-        new_spcEmail.setVisible(true);
-        new_spcName.setEditable(false);
-        new_spcAdd.setEditable(false);
-        new_spcPho.setEditable(false);
-        new_spcEmail.setEditable(false);
-        btn_submitSRC.setVisible(false);
-        btn_deleteSRC.setVisible(false);
-        btn_updateSRC.setVisible(true);
+        if(!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR)))
+        {
+            btn_edit_src.setDisable(true);
+        }
+        else
+            {
+            spcToEdit.setVisible(true);
+            findSRCToEdit.setVisible(true);
+            spcIDtoDelete.setVisible(false);
+            new_spcName.setVisible(true);
+            new_spcAdd.setVisible(true);
+            new_spcPho.setVisible(true);
+            new_spcEmail.setVisible(true);
+            new_spcName.setEditable(false);
+            new_spcAdd.setEditable(false);
+            new_spcPho.setEditable(false);
+            new_spcEmail.setEditable(false);
+            btn_submitSRC.setVisible(false);
+            btn_deleteSRC.setVisible(false);
+            btn_updateSRC.setVisible(true);
 
+            }
     }
 
     @FXML
@@ -272,18 +321,22 @@ public class SpecialistRepairController {
    @FXML
    public void showID()
    {
-       spcToEdit.setVisible(false);
-       findSRCToEdit.setVisible(false);
-       new_spcName.setVisible(false);
-       new_spcAdd.setVisible(false);
-       new_spcPho.setVisible(false);
-       new_spcEmail.setVisible(false);
-       spcIDtoDelete.setVisible(true);
-       spcIDtoDelete.setEditable(true);
-       btn_submitSRC.setVisible(false);
-       btn_submitSRC.setVisible(false);
-       btn_deleteSRC.setVisible(true);
-       btn_updateSRC.setVisible(false);
+       if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
+           btn_del_src.setDisable(true);
+       } else {
+           spcToEdit.setVisible(false);
+           findSRCToEdit.setVisible(false);
+           new_spcName.setVisible(false);
+           new_spcAdd.setVisible(false);
+           new_spcPho.setVisible(false);
+           new_spcEmail.setVisible(false);
+           spcIDtoDelete.setVisible(true);
+           spcIDtoDelete.setEditable(true);
+           btn_submitSRC.setVisible(false);
+           btn_submitSRC.setVisible(false);
+           btn_deleteSRC.setVisible(true);
+           btn_updateSRC.setVisible(false);
+       }
    }
 
    @FXML
@@ -355,9 +408,10 @@ public class SpecialistRepairController {
     @FXML
         public void getOutStandingItems()
     {
+        Date todaysDate = new Date();
         List<SpecRepBooking> specRepBookings = new ArrayList<>();
-        List<VehicleRepair> vehicleRepairs = specRepairSystem.getOutstandingV();
-        List<PartRepair> partRepairs = specRepairSystem.getOutstandingP();
+        List<VehicleRepair> vehicleRepairs = specRepairSystem.getOutstandingV(todaysDate);
+        List<PartRepair> partRepairs = specRepairSystem.getOutstandingP(todaysDate);
         specRepBookings.addAll(vehicleRepairs);
         specRepBookings.addAll(partRepairs);
         updateTableViewSpecialistBooking(specRepBookings);
