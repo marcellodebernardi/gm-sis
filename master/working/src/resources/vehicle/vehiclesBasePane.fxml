@@ -11,14 +11,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" prefHeight="485.0" prefWidth="1293.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
+<BorderPane maxHeight="-Infinity" prefHeight="638.0" prefWidth="1255.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VehicleController">
     <left>
         <FlowPane prefHeight="784.0" prefWidth="287.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>
@@ -263,7 +262,7 @@
         </FlowPane>
     </center>
    <bottom>
-      <FlowPane maxHeight="-Infinity" prefHeight="123.0" prefWidth="1242.0" BorderPane.alignment="CENTER">
+      <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="123.0" prefWidth="1254.0" BorderPane.alignment="CENTER">
          <children>
             <SplitPane dividerPositions="0.5" maxHeight="-Infinity" prefHeight="123.0" prefWidth="1253.0">
                <items>
@@ -298,11 +297,33 @@
                         </TableView>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                    </items>
+                  <SplitPane dividerPositions="0.19834710743801653" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                     <items>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Bookings Table" />
+                              <Label text="The vehicle Selected is:" GridPane.columnIndex="1" />
+                              <Label fx:id="SelectedVehicle" text="Click Bookings" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                              <Button fx:id="PartsUsed" disable="true" mnemonicParsing="false" onAction="#ShowParts" text="Parts" GridPane.columnIndex="3" />
+                           </children>
+                        </GridPane>
+                        <TableView fx:id="BookingsTable1" prefHeight="242.0" prefWidth="287.0">
+                           <columns>
+                              <TableColumn fx:id="tDS1" prefWidth="190.974609375" text="Diag Start" />
+                              <TableColumn fx:id="rRS1" prefWidth="219.02532958984375" text="Rep Start" />
+                              <TableColumn fx:id="tTC1" prefWidth="179.43310546875" text="Total Cost" />
+                           </columns>
+                        </TableView>
+                     </items>
                   </SplitPane>
                </items>
             </SplitPane>
@@ -310,36 +331,34 @@
       </FlowPane>
    </bottom>
    <right>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <SplitPane dividerPositions="0.48046875" orientation="VERTICAL" prefHeight="514.0" prefWidth="200.0">
-              <items>
-                  <GridPane prefHeight="438.0" prefWidth="198.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="198.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="0.0" prefWidth="0.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="407.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="360.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Button fx:id="addCustomerB" disable="true" mnemonicParsing="false" onAction="#ShowCustomerDetails" prefHeight="27.0" prefWidth="90.0" text="Customer" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                        <Label text="See Customer Details:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Label text="View Bookings:" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-                        <Button fx:id="bookingsB" disable="true" mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                        <Label text="View All Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
-                        <Button fx:id="ViewPartsB" disable="true" mnemonicParsing="false" onAction="#VehicleParts" text="Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                        <Label text="Parts Table" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-                     </children>
-                  </GridPane>
-                  <ListView fx:id="ListParts" prefHeight="243.0" prefWidth="283.0" />
-              </items>
-            </SplitPane>
-         </children>
-      </FlowPane>
+      <BorderPane prefHeight="515.0" prefWidth="161.0" BorderPane.alignment="CENTER">
+         <top>
+            <GridPane prefHeight="273.0" prefWidth="161.0" BorderPane.alignment="CENTER">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="198.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="0.0" prefWidth="0.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="407.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="360.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Button fx:id="addCustomerB" disable="true" mnemonicParsing="false" onAction="#ShowCustomerDetails" prefHeight="27.0" prefWidth="90.0" text="Customer" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label text="See Customer Details:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                  <Label text="View Bookings:" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                  <Button fx:id="bookingsB" disable="true" mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Label text="View All Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                  <Button fx:id="ViewPartsB" disable="true" mnemonicParsing="false" onAction="#VehicleParts" text="Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                  <Label text="Parts List" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+               </children>
+            </GridPane>
+         </top>
+         <bottom>
+            <ListView fx:id="ListParts" prefHeight="243.0" prefWidth="283.0" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
    </right>
 </BorderPane>
