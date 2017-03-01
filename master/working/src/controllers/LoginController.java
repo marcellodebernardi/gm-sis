@@ -1,13 +1,11 @@
 package controllers;
 
+import controllers.menu.MenuController;
+import controllers.menu.MenuHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import logic.AuthenticationSystem;
 import main.Main;
 
@@ -27,7 +25,7 @@ public class LoginController {
     @FXML
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
-            Parent menu = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
+            BorderPane menu = MenuHandler.getInstance().show();
             Main.getInstance().setRootPane((BorderPane)menu);
 
             // todo get TODAY pane into this as argument

@@ -1,5 +1,4 @@
-package controllers;
-
+package controllers.bookings;
 
 import domain.Customer;
 import domain.DiagRepBooking;
@@ -7,80 +6,108 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.util.Callback;
 import logic.BookingSystem;
-import logic.Criterion;
-import logic.CustomerSystem;
 import main.Main;
-import persistence.DatabaseRepository;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
  * @author Marcello De Bernardi
- * @version 0.1
- * @since 0.1
  */
-public class BookingsController {
-    private BorderPane basePaneInstance;
+public class BookingsHandler {
+    private static BookingsHandler instance;
     private BookingSystem bookSys;
-    @FXML
-    private TextField searchBookings;
-    @FXML
-    private TableView<DiagRepBooking> bookingListTable;
-    @FXML
-    private TextField searchCustomers;
 
-    public BookingsController() {
+    // base of the bookings view
+    private BorderPane view;
+    // pane with add/edit booking fields
+    private BorderPane leftPane;
+    // pane with month/week/list view
+    private BorderPane centerPane;
+
+    private TableView<DiagRepBooking> bookingsTable;
+
+
+    private BookingsHandler() throws IOException {
         bookSys = BookingSystem.getInstance();
+        view = new BorderPane();
+        leftPane = new BorderPane();
+        centerPane = new BorderPane();
+        view.setLeft(leftPane);
+        view.setCenter(centerPane);
     }
 
-    public void initialize() {
-        bookSys = BookingSystem.getInstance();
+    public static BookingsHandler getInstance() {
+        try {
+            if (instance == null) instance = new BookingsHandler();
+            return instance;
+        } catch (IOException e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+
+    /**
+     * Returns the scene graph for the booking screen. Creates it if it hasn't been
+     * created yet.
+     *
+     * @return bookings screen scene graph
+     */
+    public BorderPane show() {
+        openListView();
+        openNewBookingView();
+        return view;
     }
 
     /**
-     * Open screen for new booking
+     * Modifies the scene graph so as to open the list view in the bookings screen.
      */
-    @FXML
-    public void openNewBookingView() {
-        loadBasePaneInstance();
+    void openListView() {
         try {
-            BorderPane addView = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
-            basePaneInstance.setLeft(addView);
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
+            centerPane = FXMLLoader.load(getClass().getResource("/booking/TablePane.fxml"));
+            constructBookingTable(bookSys.getAllBookings());
+
+            view.setCenter(centerPane);
+            centerPane.setId("monthWeekList");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    public void openMonthView() {
-        loadBasePaneInstance();
+    /**
+     * Modifies the scene graph so as to open the month view in the bookings screen.
+     */
+    void openMonthView() {
         try {
-            BorderPane monthView = FXMLLoader.load(getClass().getResource("/resources/booking/monthView.fxml"));
-            basePaneInstance.setCenter(monthView);
-            basePaneInstance.getCenter().setId("monthWeekList");
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
+            BorderPane monthView = FXMLLoader.load(getClass().getResource("/booking/MonthPane.fxml"));
+            view.setCenter(monthView);
+            view.getCenter().setId("monthWeekList");
+            view.setVisible(true);
+            Main.getInstance().replaceTabContent(view);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    public void openWeekView() {
-        loadBasePaneInstance();
+    /**
+     * Modifies the scene graph so as to open the week view in the bookings screen.
+     */
+    void openWeekView() {
         try {
-            BorderPane weekView = FXMLLoader.load(getClass().getResource("/resources/booking/weekView.fxml"));
+            BorderPane weekView = FXMLLoader.load(getClass().getResource("/booking/WeekPane.fxml"));
             GridPane dayGrid = new GridPane();
             List<DiagRepBooking> dayBookings;
 
@@ -106,107 +133,39 @@ public class BookingsController {
             }
 
             weekView.setCenter(dayGrid);
-            basePaneInstance.setCenter(weekView);
-            basePaneInstance.getCenter().setId("monthWeekList");
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
+            view.setCenter(weekView);
+            view.getCenter().setId("monthWeekList");
+            view.setVisible(true);
+            Main.getInstance().replaceTabContent(view);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void openListView() {
-        loadBasePaneInstance();
-        try {
-            BorderPane listView = FXMLLoader.load(getClass().getResource("/resources/booking/listView.fxml"));
-            TableView<DiagRepBooking> table = constructTable(bookSys.getAllBookings());
-
-            listView.setCenter(table);
-
-            basePaneInstance.setCenter(listView);
-            basePaneInstance.getCenter().setId("monthWeekList");
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void searchBookings() {
-        loadBasePaneInstance();
-        try {
-            BorderPane listView = FXMLLoader.load(getClass().getResource("/resources/booking/listView.fxml"));
-            TableView<DiagRepBooking> table = constructTable(bookSys.searchBookings(searchBookings.getText()));
-
-            listView.setCenter(table);
-
-            basePaneInstance.setCenter(listView);
-            basePaneInstance.getCenter().setId("monthWeekList");
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-    @FXML
-    public void searchCustomers() {
-        loadBasePaneInstance();
-        try {
-            BorderPane addPane = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
-            // todo request convenience method in CustomerSystem
-            TableView<Customer> table =
-                    constructTable(DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)));
-
-            listView.setCenter(table);
-
-            basePaneInstance.setCenter(listView);
-            basePaneInstance.getCenter().setId("monthWeekList");
-            basePaneInstance.setVisible(true);
-            Main.getInstance().replaceTabContent(basePaneInstance);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    @FXML
-    private void loadBasePaneInstance() {
-        if (basePaneInstance == null) {
-            try {
-                basePaneInstance = FXMLLoader.load(getClass().getResource("/resources/booking/bookingsBasePane.fxml"));
-                BorderPane addPane = FXMLLoader.load(getClass().getResource("/resources/booking/addBooking.fxml"));
-                // ComboBox custDropDown = (ComboBox)addPane.lookup("#customerDropDown");
-
-                /* List<Customer> customers = DatabaseRepository
-                        .getInstance()
-                        .getByCriteria(new Criterion<>(Customer.class));
-                ObservableList<String> customerNames = FXCollections.observableArrayList();
-                for (Customer c : customers) {
-                    customerNames.add(c.getCustomerID() + ": " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
-                } */
-                // custDropDown.setItems(customerNames);
-                basePaneInstance.setLeft(addPane);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     /**
-     * Generates or updates the booking list table. Updates table regardless of whether
-     * return value is used.
-     *
-     * @param bookings
-     * @return
+     * Modifies the scene graph to as to open the New Booking section in the booking screen.
      */
-    private TableView<DiagRepBooking> constructTable(List<DiagRepBooking> bookings) {
-        if (bookingListTable == null) bookingListTable = new TableView<>();
+    void openNewBookingView() {
+        try {
+            leftPane = FXMLLoader.load(getClass().getResource("/booking/InfoPane.fxml"));
+            view.setLeft(leftPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Constructs, or updates, the list of bookings in the bookings screen using the given
+     * list of bookings.
+     *
+     * @param bookings list of bookings to put in table
+     */
+    void constructBookingTable(List<DiagRepBooking> bookings) {
+        if (bookingsTable == null) bookingsTable = new TableView<>();
+        centerPane.setCenter(bookingsTable);
+
         ObservableList<DiagRepBooking> tableEntries = FXCollections.observableArrayList(bookings);
-        bookingListTable.setItems(tableEntries);
+        bookingsTable.setItems(tableEntries);
 
         TableColumn<DiagRepBooking, Integer> bookingIDColumn = new TableColumn<>();
         TableColumn<DiagRepBooking, String> customerColumn = new TableColumn<>();
@@ -260,10 +219,15 @@ public class BookingsController {
             }
         });
 
-        bookingListTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
+        bookingsTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
                 diagnosisDateColumn, repairDateColumn);
-        bookingListTable.refresh();
+        bookingsTable.refresh();
+    }
 
-        return bookingListTable;
+    /** Constructs, or updates, the week view in the bookings screen using the given list
+     * of bookings.
+     */
+    void constructWeekView() {
+
     }
 }

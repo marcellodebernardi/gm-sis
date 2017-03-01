@@ -100,9 +100,6 @@ public class Main extends Application {
             ((Button)b).setPrefWidth(tabWidth);
         }
 
-        // todo make responsive
-        // http://stackoverflow.com/questions/38216268/how-to-listen-resize-event-of-stage-in-javafx\
-
         // set scene and stage
         mainScene = new Scene(applicationPane);
         primaryStage.setScene(mainScene);

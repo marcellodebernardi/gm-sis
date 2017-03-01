@@ -1,21 +1,17 @@
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookingsController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.bookings.WeekController">
     <top>
         <HBox id="calendarToggle">
-            <Label text="Search:"></Label>
-            <TextField id="searchBookings" fx:id="searchBookings" onAction="#searchBookings">
-            </TextField>
             <Button text="List View" onAction="#openListView"></Button>
             <Button text="Week View" onAction="#openWeekView"></Button>
             <Button text="Month View" onAction="#openMonthView"></Button>
         </HBox>
     </top>
     <center>
-        <TableView fx:id="bookingListTable">
-        </TableView>
+        
     </center>
 </BorderPane>

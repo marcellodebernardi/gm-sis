@@ -1,15 +1,13 @@
-package controllers;
+package controllers.menu;
 
-import domain.UserType;
+import controllers.bookings.BookingsHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import logic.AuthenticationSystem;
 import main.Main;
 
 import java.io.IOException;
@@ -20,21 +18,11 @@ import java.io.IOException;
  *         todo clean up and add comments
  */
 public class MenuController {
-
     // todo move these into module controllers
-    public Button UsersButton;
     Stage addBStage;
     Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
-    //Stage addCustomerStage;
-    //Stage editCustomerStage;
-    //Stage searchCustomerStage;
     Stage PartModule;
-
-
-    public void initialize() throws Exception {
-        setUserType();
-    }
 
 
     public void openTodayTab() {
@@ -42,22 +30,18 @@ public class MenuController {
     }
 
     public void openCustomersTab() {
-        try
-        {
+        try {
             BorderPane customerBasePane = FXMLLoader.load(getClass().getResource("/resources/customer/CustomerView.fxml"));
             customerBasePane.setVisible(true);
             Main.getInstance().replaceTabContent(customerBasePane);
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openBookingsTab() {
-        BookingsController bookingController = new BookingsController();
-        bookingController.openListView();
-        bookingController.openNewBookingView();
+        BookingsHandler handler = BookingsHandler.getInstance();
+        Main.getInstance().replaceTabContent(handler.show());
     }
 
     public void openVehiclesTab() {
@@ -84,8 +68,7 @@ public class MenuController {
 
     public void openSRCTab() {
         BorderPane specialistBasePane = new BorderPane();
-        try
-        {
+        try {
             FlowPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/centerSRC.fxml"));
             FlowPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/leftSRC.fxml"));
             specialistBasePane.setVisible(true);
@@ -94,9 +77,7 @@ public class MenuController {
             Main.getInstance().replaceTabContent(specialistBasePane);
 
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -121,36 +102,6 @@ public class MenuController {
         alert.setTitle("Error");
         alert.setHeaderText("This window is already open or another vehicle window is open");
         alert.showAndWait();
-    }
-
-
-    public void setUserType() {
-        if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
-            UsersButton.setDisable(false);
-        } else {
-            UsersButton.setDisable(true);
-        }
-    }
-
-    public void addBooking() {
-        try {
-            if (addBStage != null) {
-                if (addBStage.isShowing()) {
-                    showAlert();
-                    addBStage.setAlwaysOnTop(true);
-                    //addBStage.setFullScreen(true);
-                    return;
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/addBooking.fxml"));
-            Parent menu = fxmlLoader.load();
-            addBStage = new Stage();
-            addBStage.setTitle("Add Booking");
-            addBStage.setScene(new Scene(menu));
-            addBStage.show();
-        } catch (Exception e) {
-            System.out.println("cant open");
-        }
     }
 
 
@@ -272,17 +223,4 @@ public class MenuController {
             System.out.println("cant open");
         }
     }*/
-
-    public void PartMenu() throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/PartModule.fxml"));
-        Parent menu = fxmlLoader.load();
-        PartModule = new Stage();
-        PartModule.setTitle("Parts Module");
-        PartModule.setScene(new Scene(menu));
-        PartModule.show();
-
-    }
-
-
 }
