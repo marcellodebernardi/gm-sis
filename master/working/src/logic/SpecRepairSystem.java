@@ -2,6 +2,7 @@ package logic;
 
 
 import domain.*;
+import javafx.fxml.FXML;
 import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 
@@ -137,5 +138,15 @@ public class SpecRepairSystem {
     public boolean addSpecialistBooking(SpecRepBooking specRepBooking)
     {
         return persistence.commitItem(specRepBooking);
+    }
+
+    public boolean deleteVehicleRepair(String reg, int spcID, Date date)
+    {
+      return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo,reg).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
+    }
+
+    public boolean deletePartRepair(int partOccurrenceID, int spcID, Date date)
+    {
+        return persistence.deleteItem(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo,partOccurrenceID).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
     }
 }
