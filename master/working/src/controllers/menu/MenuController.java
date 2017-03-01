@@ -19,10 +19,8 @@ import java.io.IOException;
  */
 public class MenuController {
     // todo move these into module controllers
-    Stage addBStage;
     Stage addSpecialistBooking = new Stage();
     Stage deleteSpecialistBooking;
-    Stage PartModule;
 
 
     public void openTodayTab() {
@@ -106,8 +104,6 @@ public class MenuController {
 
 
     public void searchSRC() {
-
-
     }
 
 
