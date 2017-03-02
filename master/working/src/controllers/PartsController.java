@@ -1,16 +1,18 @@
 package controllers;
 
+import domain.Customer;
+import domain.Booking;
+import domain.DiagRepBooking;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
-import javafx.event.ActionEvent;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
+import logic.PartsSystem;
 import persistence.DatabaseRepository;
 import logic.Criterion;
 import javafx.event.EventHandler;
@@ -20,14 +22,9 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import java.net.URL;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,16 +36,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
-
-import javax.print.attribute.IntegerSyntax;
-
-import static logic.CriterionOperator.EqualTo;
 //import java.sql.Connection;
 //import org.controlsfx.control.textfield.TextFields;
 //import javax.swing.*;
 
 
 public class PartsController implements Initializable {
+
+    private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
 
     @FXML
     private TableView<PartAbstraction> PartsTable;
@@ -76,6 +71,12 @@ public class PartsController implements Initializable {
     private TableColumn<Installation, Integer> partOccID;
     @FXML
     private TableColumn<Installation, String> regNumber;
+    @FXML
+    private TableColumn<Installation, Integer> bookingID;
+    @FXML
+    private TableColumn<Installation, String> firstName;
+    @FXML
+    private TableColumn<Installation, String> surname;
 
     @FXML
     private TextField searchParts;
@@ -136,6 +137,7 @@ public class PartsController implements Initializable {
     public void updateTable() {
 
         Criterion c = new Criterion<>(PartAbstraction.class);
+        //Criterion test = new Criterion<>(Installation.class);
 
         List = instance.getByCriteria(c); //the data from Parts DB stored in this list
 
@@ -293,6 +295,11 @@ public class PartsController implements Initializable {
 
         Criterion c2 = new Criterion<>(Installation.class);
         List2 = instance.getByCriteria(c2);
+        List2.get(0).getPartOccurrence().getPartOccurrenceID();
+        System.out.println( List2.get(0).getPartOccurrence().getPartOccurrenceID());
+        System.out.println( List2.get(0).getVehicleRegNumber());
+        System.out.println( List2.get(0).getPartOccurrence().getBookingID());
+
 
         tableEntries2.removeAll(tableEntries2);
 
@@ -338,10 +345,35 @@ public class PartsController implements Initializable {
             }
         });
 
-        partOccID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partOccurrence"));
-        /**
-         * TODO: make editable, not working atm
-         */
+        partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                ObservableValue<Integer>>() {
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
+            }
+        });
+
+        bookingID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                ObservableValue<Integer>>() {
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getBookingID());
+            }
+        });
+
+        firstName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Installation, String> p) {
+                Customer customer = p.getValue().getCustomer();
+                return new ReadOnlyObjectWrapper<>(customer.getCustomerFirstname());
+            }
+        });
+
+        surname.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Installation, String> p) {
+                Customer customer = p.getValue().getCustomer();
+                return new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
+            }
+        });
 
         regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
         regNumber.setCellFactory(TextFieldTableCell.<Installation>forTableColumn());
@@ -401,7 +433,8 @@ public class PartsController implements Initializable {
         for(int i=0; i<tableEntries.size(); i++){
 
             PartsTable.getSelectionModel().select(i);
-            singlePart = PartsTable.getSelectionModel().getSelectedItem(); 
+            singlePart = PartsTable.getSelectionModel().getSelectedItem();
+            System.out.println(singlePart.getPartStockLevel());
             boolean c = instance.commitItem(singlePart);
 
         }
@@ -423,10 +456,6 @@ public class PartsController implements Initializable {
 
     }
 
-
-    /**
-     * TODO: Delete a part selected from database in the PartAbstraction Table
-     */
     public void deletePart(){
 
         try {
@@ -439,6 +468,13 @@ public class PartsController implements Initializable {
             }
             if ((!showConfirmation("Sure you want to delete this part?"))) {
                 return;
+            }
+            boolean result = pSys.deletePart(part.getPartAbstractionID());
+            if(result){
+                updateTable();
+            }
+            else{
+                showError("Part hasn't been deleted");
             }
 
 
