@@ -81,14 +81,11 @@ public class MenuController {
     }
 
     public void openUsersTab() {
-        BorderPane VehicleBasePane = new BorderPane();
+        BorderPane UserBasePane = new BorderPane();
         try {
-            FlowPane addEdit = FXMLLoader.load(getClass().getResource("/resources/user/addUser.fxml"));
-            FlowPane view = FXMLLoader.load(getClass().getResource("/resources/user/searchUser.fxml"));
-            VehicleBasePane.setVisible(true);
-            VehicleBasePane.setLeft(addEdit);
-            VehicleBasePane.setCenter(view);
-            Main.getInstance().replaceTabContent(VehicleBasePane);
+            UserBasePane = FXMLLoader.load(getClass().getResource("/resources/user/usersBasePane.fxml"));
+            UserBasePane.setVisible(true);
+            Main.getInstance().replaceTabContent(UserBasePane);
         } catch (IOException e) {
             e.printStackTrace();
         }

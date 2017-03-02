@@ -23,6 +23,8 @@ import persistence.DatabaseRepository;
 
 import javax.swing.text.html.*;
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1142,6 +1144,20 @@ public class VehicleController {
 
     public boolean CheckFormat()
     {
+        try {
+            //reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = dateFormat.parse(dLastServiced.getText());
+            date = dateFormat.parse(rDateMot.getText());
+            date = dateFormat.parse(wExpirationDate.getText());
+            
+
+            return false;
+        }
+        catch (ParseException | NumberFormatException e)
+        {
+            showAlert(e.getMessage());
+        }
         return false;
     }
 }
