@@ -72,4 +72,10 @@ public class VehicleRepair extends SpecRepBooking {
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
+
+    public void setVehicleRegNumber(String vehicleRegNumber)
+    {
+        this.vehicleRegNumber = vehicleRegNumber;
+    }
+
 }

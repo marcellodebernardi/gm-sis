@@ -54,7 +54,7 @@ public class PartRepair extends SpecRepBooking
         return super.getSpcID();
     }
 
-    public void setSpcID() {
+    public void setSpcID(int spcID) {
         // todo implement
     }
 

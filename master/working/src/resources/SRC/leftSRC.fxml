@@ -20,8 +20,8 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0" prefWidth="191.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="338.0" minHeight="10.0" prefHeight="241.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="436.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="338.0" minHeight="10.0" prefHeight="199.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="436.0" minHeight="10.0" prefHeight="370.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="289.0" minHeight="9.0" prefHeight="287.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -38,35 +38,41 @@
                   <TextField editable="false" layoutX="366.0" layoutY="148.0" prefHeight="40.0" prefWidth="174.0" promptText="Vehicle Fueltype:" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="304.0" prefWidth="575.0" GridPane.rowIndex="1">
+            <AnchorPane prefHeight="280.0" prefWidth="561.0" GridPane.rowIndex="1">
                <children>
-                  <TextField fx:id="bookingSPCID" layoutX="14.0" layoutY="74.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a Specialist Repair Center ID">
+                  <TextField fx:id="bookingSPCID" layoutX="16.0" layoutY="116.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a Specialist Repair Center ID">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="bookingSPCName" editable="false" layoutX="194.0" layoutY="74.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Name:" />
-                  <RadioButton fx:id="vehicle_repair" layoutX="21.0" layoutY="228.0" mnemonicParsing="false" selected="true" text="Vehicle Repair">
+                  <TextField fx:id="bookingSPCName" editable="false" layoutX="196.0" layoutY="116.0" prefHeight="40.0" prefWidth="174.0" promptText="SPC Name:" />
+                  <RadioButton fx:id="vehicle_repair" layoutX="23.0" layoutY="270.0" mnemonicParsing="false" selected="true" text="Vehicle Repair">
                      <toggleGroup>
                         <ToggleGroup fx:id="bookingType" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="part_repair" layoutX="208.0" layoutY="228.0" mnemonicParsing="false" text="Part Repair" toggleGroup="$bookingType" />
-                  <TextField fx:id="bookingItemID" layoutX="371.0" layoutY="74.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter the item ID:" />
-                  <Label layoutX="14.0" layoutY="25.0" prefHeight="0.0" prefWidth="367.0" text="Add new Specialist Repair Booking" />
-                  <TextField fx:id="bookingCost" layoutX="371.0" layoutY="139.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a value in GBP" />
-                  <TextField fx:id="deliveryDate" layoutX="14.0" layoutY="139.0" prefHeight="40.0" prefWidth="174.0" promptText="Delivery date: DD/MM/YYYY">
+                  <RadioButton fx:id="part_repair" layoutX="210.0" layoutY="270.0" mnemonicParsing="false" text="Part Repair" toggleGroup="$bookingType" />
+                  <TextField fx:id="bookingItemID" layoutX="373.0" layoutY="116.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter the item ID:" />
+                  <Label layoutX="56.0" layoutY="25.0" prefHeight="29.0" prefWidth="397.0" text="Add new Specialist Repair Booking">
+                     <font>
+                        <Font size="24.0" />
+                     </font></Label>
+                  <TextField fx:id="bookingCost" layoutX="373.0" layoutY="181.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a value in GBP" />
+                  <TextField fx:id="deliveryDate" layoutX="16.0" layoutY="181.0" prefHeight="40.0" prefWidth="174.0" promptText="Delivery date: DD/MM/YYYY">
                      <font>
                         <Font size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="returnDate" layoutX="194.0" layoutY="139.0" prefHeight="40.0" prefWidth="174.0" promptText="Return date: DD/MM/YYYY">
+                  <TextField fx:id="returnDate" layoutX="196.0" layoutY="181.0" prefHeight="40.0" prefWidth="174.0" promptText="Return date: DD/MM/YYYY">
                      <font>
                         <Font size="12.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="search_src_deletion" layoutX="210.0" layoutY="145.0" mnemonicParsing="false" onAction="#searchSRCDeletion" prefHeight="28.0" prefWidth="143.0" text="Search" visible="false" />
-                  <Button fx:id="cancelDeletion" layoutX="387.0" layoutY="146.0" mnemonicParsing="false" onAction="#promptFields" prefHeight="27.0" prefWidth="143.0" text="Cancel" visible="false" />
+                  <Button fx:id="search_src_deletion" layoutX="382.0" layoutY="187.0" mnemonicParsing="false" onAction="#searchSRCDeletion" prefHeight="28.0" prefWidth="143.0" text="Search" visible="false" />
+                  <Button fx:id="cancelDeletion" layoutX="389.0" layoutY="266.0" mnemonicParsing="false" onAction="#promptFields" prefHeight="27.0" prefWidth="143.0" text="Cancel" visible="false" />
+                  <TextField fx:id="edit_booking_ID" layoutX="16.0" layoutY="69.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter Booking ID:" visible="false" />
+                  <Button fx:id="findBookingToEdit" layoutX="212.0" layoutY="76.0" mnemonicParsing="false" onAction="#findBooking" prefHeight="27.0" prefWidth="143.0" text="Search" visible="false" />
+                  <Button fx:id="applyEditingChanges" layoutX="382.0" layoutY="76.0" mnemonicParsing="false" onAction="#submitChanges" prefHeight="27.0" prefWidth="143.0" text="Apply changes" visible="false" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -78,10 +84,10 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="searchForSRCBooking" layoutX="32.0" layoutY="78.0" mnemonicParsing="false" onAction="#findSRCForBooking" prefHeight="28.0" prefWidth="143.0" text="Search SRCs" />
+                  <Button fx:id="searchForSRCBooking" layoutX="32.0" layoutY="112.0" mnemonicParsing="false" onAction="#findSRCForBooking" prefHeight="28.0" prefWidth="143.0" text="Search SRCs" />
                   <Button fx:id="btn_add_booking" layoutX="32.0" layoutY="153.0" mnemonicParsing="false" onAction="#allowBooking" prefHeight="28.0" prefWidth="143.0" text="Add Booking" />
                   <Button fx:id="btn_del_booking" layoutX="32.0" layoutY="199.0" mnemonicParsing="false" onAction="#showDeletionField" prefHeight="26.0" prefWidth="143.0" text="Delete Booking" />
-                  <Button fx:id="btn_edit_booking" layoutX="32.0" layoutY="241.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="143.0" text="Edit Booking" />
+                  <Button fx:id="btn_edit_booking" layoutX="32.0" layoutY="241.0" mnemonicParsing="false" onAction="#showEditingFields" prefHeight="28.0" prefWidth="143.0" text="Edit Booking" />
                   <Button fx:id="delete_booking" layoutX="32.0" layoutY="78.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="18.0" prefWidth="143.0" text="Delete Booking" visible="false" />
                </children>
             </AnchorPane>

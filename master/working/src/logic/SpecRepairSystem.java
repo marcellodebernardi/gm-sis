@@ -140,13 +140,62 @@ public class SpecRepairSystem {
         return persistence.commitItem(specRepBooking);
     }
 
+    /**
+     * Deletes a vehicle repair booking
+     * @param reg the registration of the vehicle which was booked for repair
+     * @param spcID the ID of the specialist center responsible for the repair
+     * @param date the date on which the repair was scheduled
+     * @return true if deletion was successful
+     */
     public boolean deleteVehicleRepair(String reg, int spcID, Date date)
     {
       return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo,reg).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
     }
 
+    /**
+     * Deletes a part repair booking
+     * @param partOccurrenceID the ID of the part which was booked for repair
+     * @param spcID the ID of the specialist center responsible for the repair
+     * @param date the date on which the repair was scheduled
+     * @return true if the deletion was successful
+     */
     public boolean deletePartRepair(int partOccurrenceID, int spcID, Date date)
     {
         return persistence.deleteItem(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo,partOccurrenceID).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
     }
+
+    /**
+     * This method is designed to delete ALL BOOKINGS RELATED TO A PARTICULAR SRC ONCE IT HAS BEEN DELETED
+     * @param spcID The ID of the deleted SRC
+     * PLEASE NOTE THAT THIS METHOD **MUST** BE CALLED **BEFORE** EXECUTING DELETION METHOD OF THE SRC OR SQL WILL NOT FIND ANY BOOKINGS OF THE DELETED SRC (EVEN IF THEY EXIST)
+     */
+    public void deleteAllSubsequentBookings(int spcID)
+    {
+        persistence.deleteItem(new Criterion<>(PartRepair.class,"spcID",EqualTo,spcID));
+        persistence.deleteItem(new Criterion<>(VehicleRepair.class,"spcID",EqualTo,spcID));
+    }
+
+    public VehicleRepair findVehicleRepairBooking(int bookingID)
+    {
+         List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class,"spcRepID",EqualTo,bookingID));
+         if(vehicleRepairs!=null) {
+             return vehicleRepairs.get(0);
+         }
+         else return null;
+    }
+
+    public PartRepair findPartRepairBooking(int bookingID)
+    {
+        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class,"spcRepID",EqualTo,bookingID));
+        if(partRepairs!=null) {
+            return partRepairs.get(0);
+        }
+        else return null;
+    }
+
+    public void updateBookings(SpecRepBooking update)
+    {
+        persistence.commitItem(update);
+    }
+
 }

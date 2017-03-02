@@ -1,17 +1,14 @@
 package controllers;
 
-import com.sun.java.swing.action.OkAction;
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import logic.*;
 import persistence.DatabaseRepository;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,55 +19,59 @@ import java.util.List;
 public class SpecialistRepairController {
 
 
-    DatabaseRepository databaseRepository = DatabaseRepository.getInstance();
-    SpecRepairSystem specRepairSystem = SpecRepairSystem.getInstance(databaseRepository);
-    PartsSystem partsSystem = PartsSystem.getInstance(databaseRepository);
-    AuthenticationSystem authenticationSystem = AuthenticationSystem.getInstance();
-    VehicleSys vehicleSys = VehicleSys.getInstance();
+    private DatabaseRepository databaseRepository = DatabaseRepository.getInstance();
+    private SpecRepairSystem specRepairSystem = SpecRepairSystem.getInstance(databaseRepository);
+    private PartsSystem partsSystem = PartsSystem.getInstance(databaseRepository);
+    private AuthenticationSystem authenticationSystem = AuthenticationSystem.getInstance();
+    private VehicleSys vehicleSys = VehicleSys.getInstance();
 
 
     @FXML
     private RadioButton vehicle_repair,part_repair;
 
     @FXML
-    private ToggleGroup bookingType;
+    private TableView<SpecRepBooking> specialistTable;
 
     @FXML
-    private TableView<SpecRepBooking> specialistTable;
+    private TextField instID;//holds installationID
+
+    /*
+    @FXML
+    private ToggleGroup bookingType;
 
     @FXML
     private ToggleGroup searchCategory;
 
-    @FXML
-    private TextField instID;//holds installationID
 
     @FXML
     private TextField reg_number;
 
     @FXML
     private TextField spcID;
-
+*/
     @FXML
     private RadioButton veh_selected,src_selected;
 
     @FXML
-    private Button btn_add_src, btn_del_src, btn_edit_src,btn_updateSRC,btn_deleteSRC,btn_submitSRC,findSRCToEdit,btn_edit_booking, btn_add_booking, btn_del_booking, delete_booking,searchForSRCBooking,search_src_deletion, cancelDeletion;
+    private Button btn_add_src, btn_del_src, btn_edit_src,btn_updateSRC,btn_deleteSRC,btn_submitSRC,findSRCToEdit,btn_edit_booking, btn_add_booking, btn_del_booking, delete_booking,searchForSRCBooking,search_src_deletion, cancelDeletion, findBookingToEdit, applyEditingChanges;
 
-    @FXML
     private int spcIDEdit;
 
-    @FXML
-    private TextField returnDate,deliveryDate,bookingCost,spcToEdit,spcIDtoDelete,new_spcEmail,new_spcPho,new_spcAdd,new_spcName,part_name,part_cost,stock_level,part_des,instaDate,bookingSPCID,partAbsID,partOccID,bookingItemID,bookingSPCName,itemToSearch;
-
-    final ObservableList tableEntries = FXCollections.observableArrayList();
+    private int editBookingID;
 
     @FXML
-    private TableColumn<SpecRepBooking, String> TbookingTableItem, TbookingItemName, TbookingItemType, TbookingSRCName ;
+    private TextField returnDate,deliveryDate,bookingCost,spcToEdit,spcIDtoDelete,new_spcEmail,new_spcPho,new_spcAdd,new_spcName,part_name,part_cost,stock_level,part_des,instaDate,bookingSPCID,partAbsID,partOccID,bookingItemID,bookingSPCName,itemToSearch,edit_booking_ID;
+
+    private final ObservableList tableEntries = FXCollections.observableArrayList();
+
+   /* @FXML
+    private TableColumn<SpecRepBooking, String> TbookingTableItem, TbookingItemName, TbookingItemType, TbookingSRCName ;*/
 
     @FXML
     private TableColumn<SpecRepBooking, Integer> TbookingSRC;
 
-    @FXML
+
+    /*@FXML
     private void updateTableViewSpecialistBooking(List<SpecRepBooking> specRepBookings)
     {
         specialistTable.getItems().clear();
@@ -83,7 +84,7 @@ public class SpecialistRepairController {
         TbookingTableItem.setCellFactory(TextFieldTableCell.<SpecRepBooking>forTableColumn());
 
 
-    }
+    }*/
 
     /**
      * Search a specific SRC to edit
@@ -105,7 +106,7 @@ public class SpecialistRepairController {
 
     /**
      * Allows a booking to be made
-     * todo get partrepairs working
+     * todo get part repairs working
      * completed Vehicle repairs
      */
     @FXML
@@ -168,11 +169,11 @@ public class SpecialistRepairController {
      * Method used to search for an SRC for a specialist repair booking
      */
     @FXML
-    void findSRCForBooking()
+    public void findSRCForBooking()
     {
-        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
-        bookingSPCName.setText(specialistRepairCenter.getName());
-        bookingSPCName.setEditable(false);
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+            bookingSPCName.setText(specialistRepairCenter.getName());
+            bookingSPCName.setEditable(false);
     }
 
     /**
@@ -182,6 +183,7 @@ public class SpecialistRepairController {
     @FXML
     public void deleteSRC()
     {
+        specRepairSystem.deleteAllSubsequentBookings(Integer.parseInt(spcIDtoDelete.getText()));
         specRepairSystem.deleteRepairCenter(Integer.parseInt(spcIDtoDelete.getText()));
     }
 
@@ -200,7 +202,7 @@ public class SpecialistRepairController {
      * Updates the SRC upon making a few checks
      */
     @FXML
-    void updateSRC()
+    public void updateSRC()
     {
         String spcName = new_spcName.getText();
         String spcAdd = new_spcAdd.getText();
@@ -432,7 +434,7 @@ public class SpecialistRepairController {
         List<PartRepair> partRepairs = specRepairSystem.getOutstandingP(todaysDate);
         specRepBookings.addAll(vehicleRepairs);
         specRepBookings.addAll(partRepairs);
-        updateTableViewSpecialistBooking(specRepBookings);
+        //updateTableViewSpecialistBooking(specRepBookings);
 
     }
 
@@ -513,6 +515,7 @@ public class SpecialistRepairController {
     /**
      * Reset fields
      */
+    @FXML
     public void promptFields()
     {
         search_src_deletion.setVisible(false);
@@ -521,6 +524,8 @@ public class SpecialistRepairController {
         deliveryDate.clear();
         bookingSPCID.setPromptText("Enter a Specialist Repair Center ID");
         returnDate.setVisible(true);
+        returnDate.clear();
+        bookingCost.clear();
         searchForSRCBooking.setVisible(true);
         btn_add_booking.setVisible(true);
         btn_edit_booking.setVisible(true);
@@ -528,8 +533,129 @@ public class SpecialistRepairController {
         bookingCost.setVisible(true);
         delete_booking.setVisible(false);
         cancelDeletion.setVisible(false);
+        findBookingToEdit.setVisible(false);
+        applyEditingChanges.setVisible(false);
 
     }
+
+    @FXML
+    public void showEditingFields()
+    {
+        btn_add_booking.setVisible(false);
+        btn_del_booking.setVisible(false);
+        bookingSPCID.clear();
+        bookingSPCName.clear();
+        cancelDeletion.setVisible(true);
+        searchForSRCBooking.setVisible(false);
+        deliveryDate.clear();
+        returnDate.clear();
+        findBookingToEdit.setVisible(true);
+        edit_booking_ID.setVisible(true);
+
+    }
+
+    @FXML
+    public  void findBooking()
+    {
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String StringDeliveryDate = "";
+        String StringReturnDate = "";
+        applyEditingChanges.setVisible(true);
+        if(vehicle_repair.isSelected())
+        {
+            VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
+            editBookingID = vehicleRepair.getSpcRepID();
+            bookingSPCID.setText(Integer.toString(vehicleRepair.getSpcID()));
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(vehicleRepair.getSpcID());
+            bookingSPCName.setText(specialistRepairCenter.getName());
+            //todo check why it returns 1970-01-01 instead of actual booking date
+            System.out.println(vehicleRepair.getDeliveryDate());
+            StringDeliveryDate = format.format(vehicleRepair.getDeliveryDate());
+            deliveryDate.setText(StringDeliveryDate);
+            bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
+            StringReturnDate = format.format(vehicleRepair.getReturnDate());
+            returnDate.setText(StringReturnDate);
+        }
+        else if(part_repair.isSelected())
+        {
+            PartRepair partRepair = specRepairSystem.findPartRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
+            bookingSPCID.setText(Integer.toString(partRepair.getSpcID()));
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(partRepair.getSpcID());
+            bookingSPCName.setText(specialistRepairCenter.getName());
+            StringDeliveryDate = format.format(partRepair.getDeliveryDate());
+            //todo check why it returns 1970-01-01 instead of actual booking date
+            deliveryDate.setText(StringDeliveryDate);
+            bookingItemID.setText(Integer.toString(partRepair.getPartOccurrenceID()));
+            StringReturnDate = format.format(partRepair.getReturnDate());
+            returnDate.setText(StringReturnDate);
+        }
+    }
+
+    public void submitChanges() throws InvalidDateException
+    {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date delDate;
+            Date retDate;
+            int spcID = Integer.parseInt(bookingSPCID.getText());
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcID);
+            delDate = dateFormat.parse(deliveryDate.getText());
+            retDate = dateFormat.parse(returnDate.getText());
+            double cost = Double.parseDouble(bookingCost.getText());
+
+            if (vehicle_repair.isSelected())
+            {
+                VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(editBookingID);
+
+                String reg = bookingItemID.getText();
+                if(!(delDate.compareTo(retDate) == 1 )&&  !(delDate.compareTo(new Date())==-1)
+                        && specialistRepairCenter!=null && (!(cost <=-1) && !reg.equals("")))
+                {
+                    vehicleRepair.setVehicleRegNumber(reg);
+                    vehicleRepair.setCost(cost);
+                    vehicleRepair.setDeliveryDate(delDate);
+                    vehicleRepair.setReturnDate(retDate);
+                    vehicleRepair.setSpcID(spcID);
+                    specRepairSystem.updateBookings(vehicleRepair);
+                }
+                else
+                {
+                 throw new InvalidDateException("Invalid delivery date or return date!");
+                }
+
+            }
+
+            else if (part_repair.isSelected())
+            {
+                PartRepair partRepair = specRepairSystem.findPartRepairBooking(editBookingID);
+                int partOccurrenceID = Integer.parseInt(bookingItemID.getText());
+                if(!(delDate.compareTo(retDate) == 1 )&&  !(delDate.compareTo(new Date())==-1)
+                        && specialistRepairCenter!=null && !(cost <=-1) && partOccurrenceID!=-1)
+                {
+                        partRepair.setPartOccurrenceID(Integer.parseInt(bookingItemID.getText()));
+                        partRepair.setCost(cost);
+                        partRepair.setDeliveryDate(delDate);
+                        partRepair.setReturnDate(retDate);
+                        partRepair.setSpcID(spcID);
+                        specRepairSystem.updateBookings(partRepair);
+                }
+                else
+                {
+                    throw new InvalidDateException("Invalid delivery date or return date!");
+                }
+
+            }
+            promptFields();
+        }
+        catch (ParseException | InvalidDateException e)
+        {
+            promptFields();
+            showAlert(e.getMessage());
+        }
+
+
+    }
+
 
 
 }

@@ -108,4 +108,24 @@ public abstract class SpecRepBooking implements Searchable {
     public void setBookingID(int bookingID) {
         this.bookingID = bookingID;
     }
+
+    public void setSpcID(int spcID)
+    {
+        this.spcID = spcID;
+    }
+
+    public void setDeliveryDate(Date date)
+    {
+        this.deliveryDate = date;
+    }
+
+    public void setReturnDate(Date date)
+    {
+        this.returnDate = date;
+    }
+
+    public void setCost(double cost)
+    {
+        this.cost = cost;
+    }
 }
