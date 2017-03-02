@@ -86,12 +86,13 @@ public class PartsController implements Initializable {
     @FXML
     private TextField qty1, qty2, qty3, qty4, totalBill;
     @FXML
-    private TextField partIDFeild, partNameField, partPriceField, partStockLevelField;
+    private TextField partNameField, partPriceField, partStockLevelField;
     @FXML
     private TextArea partDescriptionField;
     @FXML
-    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn;
-
+    private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn, deleteInstBtn;
+    @FXML
+    private Button increaseStock, decreaseStock;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
@@ -147,13 +148,10 @@ public class PartsController implements Initializable {
             data.add(List.get(i).getPartName());
             CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
 
-
         }
 
-        setPartsTable();;
-
+        setPartsTable();
         PartsTable.setItems(tableEntries);
-
 
     }
 
@@ -278,11 +276,11 @@ public class PartsController implements Initializable {
         Double total=0.00;
 
         for(int i=0;i<4;i++){
+
             if(!prices[i].getText().equals("")&&!quantity[i].getText().equals("")){
                 total+=(Double.parseDouble(prices[i].getText())*Integer.parseInt(quantity[i].getText()));
             }
         }
-        //String.format("%1$,.2f", total);
         totalBill.setText("£ " + total.toString()+"");
     }
 
@@ -303,8 +301,6 @@ public class PartsController implements Initializable {
             tableEntries2.add(List2.get(i));
 
         }
-
-        //System.out.println(List2.size());
 
         installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
         installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
@@ -360,7 +356,6 @@ public class PartsController implements Initializable {
 
     }
 
-
     /**
      * The addToDb() method is responsible for adding new part items to the database, a new object is created which uses
      * the constructor from PartAbstraction and is then saved to the database using commitItem().
@@ -379,8 +374,13 @@ public class PartsController implements Initializable {
         partPriceField.clear();
         partStockLevelField.clear();
 
+        updateTable();
+
     }
 
+    /**
+     * This method just resets the text fields on the add part form
+     */
     public void clearAddForm(){
 
         partNameField.clear();
@@ -390,18 +390,23 @@ public class PartsController implements Initializable {
 
     }
 
+    /**
+     * TODO: WAIT FOR BUG FIX !!!
+     */
+
     public void saveChanges(){
 
         PartAbstraction singlePart;
 
         for(int i=0; i<tableEntries.size(); i++){
 
+            PartsTable.getSelectionModel().select(i);
+            singlePart = PartsTable.getSelectionModel().getSelectedItem(); 
+            boolean c = instance.commitItem(singlePart);
 
-            PartsTable.getSelectionModel().select(i); //selects whole row
-            singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
-            boolean c = instance.commitItem(singlePart); //saves the single changes (edit) to the database
+        }
 
-
+        PartsTable.getSelectionModel().clearSelection();
 
             /*
 
@@ -416,10 +421,129 @@ public class PartsController implements Initializable {
             }catch(SQLException e ){e.printStackTrace();}
             **/
 
+    }
+
+
+    /**
+     * TODO: Delete a part selected from database in the PartAbstraction Table
+     */
+    public void deletePart(){
+
+        try {
+
+            PartAbstraction part = PartsTable.getSelectionModel().getSelectedItem();
+
+            if (part == null)
+            {
+                throw new Exception();
+            }
+            if ((!showConfirmation("Sure you want to delete this part?"))) {
+                return;
+            }
+
+
+        } catch (Exception e) {
+
+            showError("No part has been selected");
+
         }
 
-       // PartsTable.getSelectionModel().clearSelection();
+    }
 
+    public void showError(String message){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+
+    }
+
+    public boolean showConfirmation(String message) {
+
+        Alert conAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conAlert.setTitle("Confirmation");
+        conAlert.setHeaderText(message);
+        conAlert.showAndWait();
+        if (conAlert.getResult() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * TODO: Increase part stock level by 1 with the selected part in table
+     */
+    public void increaseStockLevel(){
+
+
+        try{
+
+            PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
+
+            if (partIncrease == null)
+            {
+                throw new Exception();
+            }
+
+
+        }catch(Exception e){
+
+            showError("Please select a part first to increase stock");
+
+        }
+
+    }
+
+    /**
+     * TODO: Decrease part stock level by 1 with the selected part in table
+     */
+    public void decreaseStockLevel(){
+
+
+        try{
+
+            PartAbstraction partDecrease = PartsTable.getSelectionModel().getSelectedItem();
+
+            if (partDecrease == null)
+            {
+                throw new Exception();
+            }
+
+
+        }catch(Exception e){
+
+            showError("Please select a part first to decrease stock");
+
+        }
+
+    }
+
+    /**
+     * TODO: Be able to delete an installation directly from table view list
+     */
+    public void deleteInstallation(){
+
+
+        try{
+
+            Installation deleteInst = PartsBookings.getSelectionModel().getSelectedItem();
+
+            if (deleteInst == null)
+            {
+                throw new Exception();
+            }
+            if ((!showConfirmation("Sure you want to delete this installation?"))) {
+                return;
+            }
+
+
+        }catch(Exception e){
+
+            showError("Please select an installation first to delete");
+
+        }
 
     }
 
