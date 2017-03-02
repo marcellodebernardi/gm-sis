@@ -316,11 +316,11 @@
                               <Button fx:id="PartsUsed" disable="true" mnemonicParsing="false" onAction="#ShowParts" text="Parts" GridPane.columnIndex="3" />
                            </children>
                         </GridPane>
-                        <TableView fx:id="BookingsTable1" prefHeight="242.0" prefWidth="287.0">
+                        <TableView fx:id="BookingsTable" prefHeight="242.0" prefWidth="287.0">
                            <columns>
-                              <TableColumn fx:id="tDS1" prefWidth="190.974609375" text="Diag Start" />
-                              <TableColumn fx:id="rRS1" prefWidth="219.02532958984375" text="Rep Start" />
-                              <TableColumn fx:id="tTC1" prefWidth="179.43310546875" text="Total Cost" />
+                              <TableColumn fx:id="tDS" prefWidth="190.974609375" text="Diag Start" />
+                              <TableColumn fx:id="rRS" prefWidth="219.02532958984375" text="Rep Start" />
+                              <TableColumn fx:id="tTC" prefWidth="179.43310546875" text="Total Cost" />
                            </columns>
                         </TableView>
                      </items>
@@ -352,12 +352,13 @@
                   <Button fx:id="bookingsB" disable="true" mnemonicParsing="false" onAction="#ViewBookingDates" text="Bookings" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                   <Label text="View All Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
                   <Button fx:id="ViewPartsB" disable="true" mnemonicParsing="false" onAction="#VehicleParts" text="Parts" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                  <Label text="Parts List" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+                  <Label text="Parts List" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+                  <Label fx:id="PartLabel" text="Label" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </top>
          <bottom>
-            <ListView fx:id="ListParts" prefHeight="243.0" prefWidth="283.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="ListParts" prefHeight="243.0" prefWidth="140.0" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
    </right>

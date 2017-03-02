@@ -24,6 +24,7 @@ import persistence.DatabaseRepository;
 import javax.swing.text.html.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,11 +82,11 @@ public class VehicleController {
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
-    private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected;
+    private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected, PartLabel;
     @FXML
     private Button deleteV, ClearV, addV, PartsUsed, newVB, addCustomerB, bookingsB, DeleteVT, EditVehicle, ViewPartsB;
     @FXML
-    private ListView ListParts, PartsVehicle;
+    private ListView ListParts;
 
 
     public void showAlert(String message) {
@@ -121,6 +122,10 @@ public class VehicleController {
     }
 
     public void addEditVehicle() {
+        if (!CheckFormat())
+        {
+            return;
+        }
         String addOrEdit = "";
         if (AddEditL.getText().equals("Edit Vehicle")) {
             addOrEdit = "edit";
@@ -313,8 +318,16 @@ public class VehicleController {
             searchTable.setDisable(false);
             ViewPartsB.setDisable(false);
             tableEntries.removeAll(tableEntries);
+            ArrayList<Boolean> b = new ArrayList<Boolean>();
             for (int i = 0; i < arrayList.size(); i++) {
-
+                if(arrayList.get(i).isCoveredByWarranty())
+                {
+                    b.add(true);
+                }
+                else
+                {
+                    b.add(false);
+                }
                 tableEntries.add(arrayList.get(i));
             }
 
@@ -939,8 +952,12 @@ public class VehicleController {
     {
         try {
             DiagRepBooking DRB = BookingsTable.getSelectionModel().getSelectedItem();
-            RCL.setText(DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
             List<PartOccurrence> parts = DRB.getRequiredPartsList();
+            if (parts.size()==0)
+            {
+                showAlert("No parts for this Booking");
+                return;
+            }
             ObservableList<String> items = FXCollections.observableArrayList();
             for (int i = 0; i < parts.size(); i++)
             {
@@ -948,11 +965,12 @@ public class VehicleController {
                 PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
+            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
             ListParts.setItems(items);
         }
         catch (Exception e)
         {
-            showAlert("No part Selected");
+            showAlert("error");
         }
     }
 
@@ -1100,8 +1118,12 @@ public class VehicleController {
     {
         try {
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-            VehiclePartSelected.setText(vehicle.getRegNumber());
             List<Installation> Installations = vehicle.getInstallationList();
+            if (Installations.size() ==0)
+            {
+                showAlert("No parts installed for this Vehicle");
+                return;
+            }
             ObservableList<String> items = FXCollections.observableArrayList();
             for (int i = 0; i < Installations.size(); i++)
             {
@@ -1109,11 +1131,17 @@ public class VehicleController {
                 PartAbstraction PA = pSys.getPartbyID(A.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartsVehicle.setItems(items);
+            PartLabel.setText("Vehicle Reg: " +  vehicle.getRegNumber());
+            ListParts.setItems(items);
         }
         catch (Exception e)
         {
-            showAlert("No part Selected");
+            showAlert("error");
         }
+    }
+
+    public boolean CheckFormat()
+    {
+        return false;
     }
 }
