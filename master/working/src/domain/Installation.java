@@ -1,7 +1,12 @@
 package domain;
 
 
+import logic.Criterion;
+import logic.CriterionOperator;
+import persistence.DatabaseRepository;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by shakib on 14/02/2017.
@@ -14,6 +19,7 @@ public class Installation implements Searchable {
 
     // hierarchical links
     private PartOccurrence partOccurrence;
+    private int IDPO;
 
     // inverse hierarchical database links
     private String vehicleRegNumber;
@@ -22,6 +28,7 @@ public class Installation implements Searchable {
 
     /**
      * Creates a new installation
+     *
      * @param installationDate
      * @param endWarrantyDate
      * @param vehicleRegNumber
@@ -29,13 +36,14 @@ public class Installation implements Searchable {
      * @param partOccurrence
      */
     public Installation(Date installationDate, Date endWarrantyDate, String vehicleRegNumber,
-                         int partAbstractionID, PartOccurrence partOccurrence){
+                        int partAbstractionID, PartOccurrence partOccurrence) {
         this.installationID = -1;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
         this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;
+        //this.IDPO= instan.getPartOccurrenceID();
     }
 
     // reflection only, do not use
@@ -46,7 +54,7 @@ public class Installation implements Searchable {
                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
                          @Column(name = "partAbstractionID") int partAbstractionID,
                          @TableReference(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
-                                 PartOccurrence partOccurrence){
+                                 PartOccurrence partOccurrence) {
         this.installationID = installationID;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
@@ -109,4 +117,23 @@ public class Installation implements Searchable {
     public void setPartOccurrence(PartOccurrence partOccurrence) {
         this.partOccurrence = partOccurrence;
     }
+
+    public int getPartOccurrence(PartOccurrence partOccurrence) {
+        return partOccurrence.getPartOccurrenceID();
+    }
+
+
+    public Customer getCustomer() {
+        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "regNumber",
+                CriterionOperator.EqualTo, getVehicleRegNumber()));
+
+        if (vehicles.size() != 0) {
+            List<Customer> customers = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class, "customerID",
+                            CriterionOperator.EqualTo, vehicles.get(0).getCustomerID()));
+
+            if (customers.size() != 0) return customers.get(0);
+        }
+        return null;
+    }
+
 }

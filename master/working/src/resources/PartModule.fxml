@@ -35,9 +35,9 @@
                               <TableColumn fx:id="partAbsID" prefWidth="96.96728515625" text="Part ID" />
                               <TableColumn fx:id="partOccID" minWidth="0.0" prefWidth="77.534912109375" text="Part Occ" />
                               <TableColumn fx:id="regNumber" prefWidth="171.465087890625" text="Registration" />
-                  <TableColumn prefWidth="79.409912109375" text="Booking ID" />
-                  <TableColumn prefWidth="105.7781982421875" text="First Name" />
-                  <TableColumn prefWidth="126.4100341796875" text="Surname" />
+                  <TableColumn fx:id="bookingID" prefWidth="79.409912109375" text="Booking ID" />
+                  <TableColumn fx:id="firstName" prefWidth="105.7781982421875" text="First Name" />
+                  <TableColumn fx:id="surname" prefWidth="126.4100341796875" text="Surname" />
                            </columns>
                         </TableView>
                         <Separator layoutX="3.0" layoutY="281.0" prefHeight="11.0" prefWidth="1302.0" />

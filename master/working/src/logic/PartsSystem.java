@@ -52,6 +52,7 @@ public class PartsSystem {
     public boolean deletePart(int partAbstractionID){
 
         return persistence.deleteItem(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+
     }
 
     public boolean editPart(){

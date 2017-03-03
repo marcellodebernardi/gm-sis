@@ -85,7 +85,6 @@
                                 <Label text="Manufacturer" GridPane.rowIndex="3" />
                                 <Label text="Engine Size" GridPane.rowIndex="5" />
                                 <TextField fx:id="reg" promptText="Enter Vehicle Reg" GridPane.columnIndex="1" />
-                                <TextField fx:id="cID" promptText="Enter Customer ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 <ComboBox fx:id="vType" promptText="pick Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
@@ -130,6 +129,7 @@
                                 </ComboBox>
                                 <TextField fx:id="rDateMot" promptText="Enter renewal Date Mot" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                 <TextField fx:id="dLastServiced" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <ComboBox fx:id="cID" prefHeight="19.0" prefWidth="150.0" promptText="Chose Customer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>
                         <GridPane alignment="TOP_CENTER">
