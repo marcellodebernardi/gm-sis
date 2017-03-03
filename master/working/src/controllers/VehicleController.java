@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,6 +23,7 @@ import org.joda.time.DateTime;
 import persistence.DatabaseRepository;
 
 import javax.swing.text.html.*;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -29,11 +31,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by DillonVaghela on 2/9/17.
  */
-public class VehicleController {
+public class VehicleController implements Initializable
+{
 
 
     @FXML
@@ -45,9 +49,9 @@ public class VehicleController {
     @FXML
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
     @FXML
-    private TextField reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
+    private TextField reg, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
     @FXML
-    private ComboBox vType, fType, cByWarranty, VehicleS;
+    private ComboBox vType, fType, cByWarranty, VehicleS, cID;
     @FXML
     private TableView<Vehicle> searchTable;
     @FXML
@@ -81,6 +85,7 @@ public class VehicleController {
     final ObservableList tableEntries = FXCollections.observableArrayList();
     final ObservableList tableEntriesB = FXCollections.observableArrayList();
     final ObservableList tableEntriesC = FXCollections.observableArrayList();
+    final ObservableList comboEntriesC = FXCollections.observableArrayList();
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
@@ -89,6 +94,9 @@ public class VehicleController {
     private Button deleteV, ClearV, addV, PartsUsed, newVB, addCustomerB, bookingsB, DeleteVT, EditVehicle, ViewPartsB;
     @FXML
     private ListView ListParts;
+
+
+
 
 
     public void showAlert(String message) {
@@ -112,7 +120,7 @@ public class VehicleController {
 
     public boolean checkFields() {
         boolean check = false;
-        if ((!reg.getText().equals("")) && (!cID.getText().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
+        if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
             check = true;
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
                 if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getText().equals("")) {
@@ -166,9 +174,10 @@ public class VehicleController {
                 } else {
                     W = false;
                 }
+                int customerID =Character.getNumericValue(cID.getSelectionModel().getSelectedItem().toString().charAt(0));
                 boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this Vehicle, have you checked the vehicle details?");
                 if (add) {
-                    boolean checker = vSys.addEditVehicle(reg.getText(), Integer.parseInt(cID.getText()), vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                    boolean checker = vSys.addEditVehicle(reg.getText(),customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
                     showAlert("vehicle " + addOrEdit + ": " + Boolean.toString(checker));
                     if (checker) {
                         searchVehicleA();
@@ -266,7 +275,7 @@ public class VehicleController {
         newVB.setDisable(false);
         ClearV.setDisable(true);
         reg.setText(vehicle.getRegNumber());
-        cID.setText(Integer.toString(vehicle.getCustomerID()));
+        cID.setValue(Integer.toString(vehicle.getCustomerID()));
         vType.setValue(vehicle.getVehicleType().toString());
         mod.setText(vehicle.getModel());
         manuf.setText(vehicle.getManufacturer());
@@ -837,7 +846,7 @@ public class VehicleController {
     public void ClearFields()
     {
         reg.clear();
-        cID.clear();
+        cID.setValue(null);
         mod.clear();
         manuf.clear();
         eSize.clear();
@@ -984,11 +993,9 @@ public class VehicleController {
             vehicleS.setText(vehicle.getRegNumber());
             CustomerTable.setDisable(false);
             tableEntriesC.removeAll(tableEntriesC);
-            List<Customer> arrayList = cSys.getACustomers(vehicle.getCustomerID());
-            for (int i = 0; i < arrayList.size(); i++) {
+            Customer customer = cSys.getACustomers(vehicle.getCustomerID());
 
-                tableEntriesC.add(arrayList.get(i));
-            }
+                tableEntriesC.add(customer);
 
 
             ctID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerID"));
@@ -1083,12 +1090,14 @@ public class VehicleController {
                 DTD = DRB.getDiagnosisStart();
                 DTR = DRB.getRepairStart();
                 if (DTD.isAfterNow()) {
-                    if ((DTD.compareTo(nextDiagBooking)) < 0) {
+                    //showAlert("yes");
+                    //showAlert(Integer.toString(DTD.compareTo(nextDiagBooking)));
+                    if ((DTD.compareTo(nextDiagBooking)) > 0) {
                         nextDiagBooking = DTD;
                     }
                 }
                 if (DTR.isAfterNow()) {
-                    if ((DTR.compareTo(nextRepBooking)) < 0) {
+                    if ((DTR.compareTo(nextRepBooking)) > 0) {
                         nextRepBooking = DTR;
                     }
                 }
@@ -1113,6 +1122,9 @@ public class VehicleController {
         catch (Exception e)
         {
             showAlert("No Bookings");
+            showAlert(e.getMessage());
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -1145,19 +1157,52 @@ public class VehicleController {
     public boolean CheckFormat()
     {
         try {
-            //reg, cID, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse(dLastServiced.getText());
             date = dateFormat.parse(rDateMot.getText());
-            date = dateFormat.parse(wExpirationDate.getText());
-            
+            if (cByWarranty != null)
+            {
+            if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null))
+            {
+                date = dateFormat.parse(wExpirationDate.getText());
+            }}
 
-            return false;
+            Double engineSize = Double.parseDouble(eSize.getText());
+            int mileage = Integer.parseInt(mil.getText());
+             if (col.getText().matches(".*\\d+.*"))
+             {
+                 showAlert("Colour must be a string");
+                 return false;
+             }
+
+             if (vType == null || fType == null)
+             {
+                 showAlert("Pick fuel type and vehicle Type");
+                 return false;
+             }
+            return true;
         }
         catch (ParseException | NumberFormatException e)
         {
-            showAlert(e.getMessage());
+            showAlert(e.getMessage() + " and make sure all fields required are not blank");
+            return false;
         }
-        return false;
+
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setCustomerCombo();
+    }
+
+    public void setCustomerCombo()
+    {
+        List<Customer> list = cSys.getAllCustomers();
+        for (int i = 0;i<list.size();i++)
+        {
+            Customer customer = list.get(i);
+            comboEntriesC.add(customer.getCustomerID() + " " + customer.getCustomerFirstname() + " " + customer.getCustomerSurname());
+        }
+        cID.setItems(comboEntriesC);
     }
 }
