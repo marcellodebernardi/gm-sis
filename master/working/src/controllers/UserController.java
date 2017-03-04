@@ -43,6 +43,7 @@ public class UserController {
     final ObservableList tableEntries = FXCollections.observableArrayList();
 
     public void addEditUser() throws Exception {
+
         String addOrEdit;
         if (userLabel.equals("Edit User")) {
             addOrEdit = "edit";
@@ -55,6 +56,10 @@ public class UserController {
         if (!checkFields) {
             showAlert("complete all fields");
         } else {
+            if (!checkFieldFormat())
+            {
+                return;
+            }
             boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this User, have you checked the User details?");
             if (add) {
                 UserType userType;
@@ -65,10 +70,7 @@ public class UserController {
                 }
                 boolean checker = auth.addEditUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 showAlert("User " + addOrEdit + ": " + checker);
-                if (checker) {
-                    Stage addStage = (Stage) UID.getScene().getWindow();
-                    addStage.close();
-                }
+                
             }
         }
     }
@@ -280,6 +282,29 @@ public class UserController {
         clearButton.setDisable(false);
         newButton.setDisable(true);
         deleteButton.setDisable(true);
+    }
+
+    public boolean checkFieldFormat()
+    {
+        try {
+            int userID = Integer.parseInt(UID.getText());
+            if (!(FN.getText().matches("[a-zA-Z]+")))
+            {
+                showAlert("first name must not contains numbers");
+                return false;
+            }
+            if (!(SN.getText().matches("[a-zA-Z]+")))
+            {
+                showAlert("last name must not contains numbers");
+                return false;
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            showAlert(e.getMessage());
+            return false;
+        }
     }
 
 }
