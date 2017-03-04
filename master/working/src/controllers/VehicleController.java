@@ -174,6 +174,22 @@ public class VehicleController implements Initializable
                 } else {
                     W = false;
                 }
+                if (addOrEdit.equals("add"))
+                {
+                    try {
+                        Vehicle vehicle = vSys.searchAVehicle(reg.getText());
+                        if (vehicle != null)
+                        {
+                            showAlert("Cant add this vehicle as Registrations exists");
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
                 int customerID =Character.getNumericValue(cID.getSelectionModel().getSelectedItem().toString().charAt(0));
                 boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this Vehicle, have you checked the vehicle details?");
                 if (add) {
