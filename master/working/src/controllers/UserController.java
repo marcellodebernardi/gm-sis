@@ -5,6 +5,7 @@ import domain.UserType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -19,25 +20,31 @@ import java.util.List;
  */
 public class UserController {
 
-    public Button USBTN;
-    public TextField UID;
-    public TextField P;
-    public TextField FN;
-    public TextField SN;
-    public ComboBox UT;
-    public TextField SUID;
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
-    public TableView<User> tUsers;
-    public TableColumn<User, String> userID;
-    public TableColumn<User, String> password;
-    public TableColumn<User, String> firstname;
-    public TableColumn<User, String> surname;
-    public TableColumn<User, UserType> userType;
-    final ObservableList<User> tableEntries = FXCollections.observableArrayList();
+
+    @FXML
+    private Button addButton, newButton, clearButton, deleteButton;
+
+    @FXML
+    private Label userLabel;
+
+    @FXML
+    private TextField UID, P, FN, SN, sUID, sFN, sS;
+
+    @FXML
+    private ComboBox UT, sUT;
+
+    @FXML
+    private TableView tUsers;
+
+    @FXML
+    private TableColumn userID, password, firstname, surname, userType;
+
+    final ObservableList tableEntries = FXCollections.observableArrayList();
 
     public void addEditUser() throws Exception {
         String addOrEdit;
-        if (USBTN != null) {
+        if (userLabel.equals("Edit User")) {
             addOrEdit = "edit";
             // true is edit
         } else {
@@ -75,34 +82,44 @@ public class UserController {
                 if (!showAlertC("Sure you want to delete?")) {
                     return;
                 }
-                boolean check = auth.deleteUser(UID.getText());
-                showAlert("User deleted: " + check);
+                delete(UID.getText());
             }
         } catch (Exception e) {
             showAlert("cant delete User, check User ID entered");
         }
     }
 
-    public void sUser() {
+    public void DeleteFromList()
+    {
+        User user =((User) tUsers.getSelectionModel().getSelectedItem());
+        delete(user.getUserID());
+    }
+
+    public void delete(String userID)
+    {
         try {
-            User user = auth.searchAUser(SUID.getText());
-            showAlert("User Found!");
+            boolean check = auth.deleteUser(userID);
+            showAlert("User deleted: " + check);
+        }
+        catch (Exception e) {
+            showAlert("cant delete User, check User ID entered/selected");
+        }
+    }
+
+    public void getUser() {
+        try {
+            User user = ((User) tUsers.getSelectionModel().getSelectedItem());
             setUserDets(user);
         } catch (Exception e) {
-            showAlert("Registration Number invalid");
-            System.out.println(e);
+            showAlert("No selected Item");
         }
     }
 
     public void setUserDets(User user) {
         UID.setText(user.getUserID());
-        UID.setDisable(false);
         P.setText(user.getPassword());
-        P.setDisable(false);
         FN.setText(user.getFirstName());
-        FN.setDisable(false);
         SN.setText(user.getSurname());
-        SN.setDisable(false);
         String theUser;
         if (user.getUserType().toString().equals("NORMAL")) {
             theUser = "Normal";
@@ -110,7 +127,11 @@ public class UserController {
             theUser = "Admin";
         }
         UT.setValue(theUser);
-        UT.setDisable(false);
+        userLabel.setText("Edit User");
+        addButton.setText("Edit");
+        clearButton.setDisable(true);
+        newButton.setDisable(false);
+        deleteButton.setDisable(false);
     }
 
     public boolean checkFields() {
@@ -125,6 +146,21 @@ public class UserController {
         alert.setTitle("Message");
         alert.setHeaderText(message);
         alert.showAndWait();
+    }
+
+    public void SearchUsers()
+    {
+        UserType UT;
+         if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin"))
+         {
+             UT = UserType.ADMINISTRATOR;
+         }
+         else
+         {
+             UT = UserType.NORMAL;
+         }
+        List<User> arrayList = auth.searchUsers(sUID.getText(), sFN.getText(), sS.getText(), UT);
+        DisplayTable(arrayList);
     }
 
     public void AllUsers() {
@@ -145,6 +181,11 @@ public class UserController {
     }
 
     public void DisplayTable(List<User> arrayList) {
+        if (arrayList.size() == 0)
+        {
+            showAlert("Nothing to display");
+            return;
+        }
         try {
             tUsers.setDisable(false);
             tableEntries.removeAll(tableEntries);
@@ -217,11 +258,28 @@ public class UserController {
 
             tUsers.setItems(tableEntries);
         } catch (Exception e) {
-            System.out.println("not working");
-            e.printStackTrace();
-            System.out.println(e);
+            showAlert("Error Displaying table");
         }
 
+    }
+
+    public void ClearFields()
+    {
+        UID.clear();
+        P.clear();
+        FN.clear();
+        SN.clear();
+        UT.getSelectionModel().clearSelection();
+    }
+
+    public void NewVehicle()
+    {
+        ClearFields();
+        userLabel.setText("Add User");
+        addButton.setText("Add");
+        clearButton.setDisable(false);
+        newButton.setDisable(true);
+        deleteButton.setDisable(true);
     }
 
 }
