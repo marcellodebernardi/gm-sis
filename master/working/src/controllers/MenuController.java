@@ -1,6 +1,5 @@
-package controllers.menu;
+package controllers;
 
-import controllers.bookings.BookingsHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,7 +37,7 @@ public class MenuController {
     }
 
     public void openBookingsTab() {
-        BookingsHandler handler = BookingsHandler.getInstance();
+        BookingView handler = BookingView.getInstance();
         Main.getInstance().replaceTabContent(handler.show());
     }
 

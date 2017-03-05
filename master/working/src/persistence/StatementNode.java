@@ -125,6 +125,8 @@ class StatementNode implements Comparable<StatementNode> {
             String newInfo = "";
             String delim = "";
 
+            // todo detect if date and call timeMillis()
+
             for (String key : solvedValues.keySet()) {
                 Object value = solvedValues.get(key);
                 newInfo += numericTypes.contains(value.getClass()) ?

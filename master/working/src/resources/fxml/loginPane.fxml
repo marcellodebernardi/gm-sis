@@ -24,7 +24,7 @@
             <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             <Label id="passwordLabel" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="1">
             </Label>
-            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#loginHandler"/>
          <columnConstraints>
             <ColumnConstraints />
             <ColumnConstraints />

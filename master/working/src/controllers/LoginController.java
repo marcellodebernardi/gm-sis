@@ -1,9 +1,6 @@
 package controllers;
 
-import controllers.menu.MenuController;
-import controllers.menu.MenuHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import logic.AuthenticationSystem;

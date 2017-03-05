@@ -278,6 +278,7 @@ class ObjectRelationalMapper {
                             case "VehicleType":
                                 initArgs[i] = VehicleType.valueOf(results.getString(columnIndex));
                                 break;
+                                // todo handle null date fields
                             case "Date":
                                 initArgs[i] = new Date(results.getLong(columnIndex));
                                 break;

@@ -19,7 +19,6 @@ public class Installation implements Searchable {
 
     // hierarchical links
     private PartOccurrence partOccurrence;
-    private int IDPO;
 
     // inverse hierarchical database links
     private String vehicleRegNumber;
@@ -43,7 +42,6 @@ public class Installation implements Searchable {
         this.vehicleRegNumber = vehicleRegNumber;
         this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;
-        //this.IDPO= instan.getPartOccurrenceID();
     }
 
     // reflection only, do not use
