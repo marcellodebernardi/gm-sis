@@ -99,7 +99,7 @@ class StatementNode implements Comparable<StatementNode> {
      */
     public String toString() {
         if (!complete) {
-            System.err.println("StatementNode: calling toString() on incomplete node.");
+            System.err.println("StatementNode: calling toString() on incomplete node of type " + table);
             return null;
         }
 

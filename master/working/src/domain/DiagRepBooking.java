@@ -297,6 +297,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     }
 
     public List<DependencyConnection> getDependencies() {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         return dependencyConnections;
     }
 }

@@ -88,6 +88,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     }
 
     public List<DependencyConnection> getDependencies() {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         return dependencyConnections;
     }
 }
