@@ -157,7 +157,7 @@ public class DatabaseRepository implements CriterionRepository {
     }
 
     /**
-     * Allows running a raw SQL query on the database. Should be used minimally
+     * Allows running a raw SQL query on the database. Should be zused minimally
      * and carefully.
      */
     ResultSet runSQL(String query) {
