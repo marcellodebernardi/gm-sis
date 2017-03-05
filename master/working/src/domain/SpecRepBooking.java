@@ -1,6 +1,10 @@
 package domain;
 
 
+import logic.BookingSystem;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
@@ -17,6 +21,8 @@ public abstract class SpecRepBooking implements Searchable {
     // inverse hierarchical database links
     private int spcID;
     private int bookingID;
+
+    private BookingSystem bookingSystem = BookingSystem.getInstance();
 
     // dependency connection
 
@@ -105,27 +111,50 @@ public abstract class SpecRepBooking implements Searchable {
         return bookingID;
     }
 
+    /**
+     * Checks that a booking ID, when updated is from an existing bookig
+     *
+     * Efficiency could be improved drastically
+     *
+     * @param bookingID new ID which is modified
+     */
     public void setBookingID(int bookingID) {
-        this.bookingID = bookingID;
+        List<DiagRepBooking> bookingList = bookingSystem.getAllBookings();
+        List<Integer> bookingInfo = new ArrayList<>();
+        for(DiagRepBooking diagRepBooking: bookingList)
+        {
+            bookingInfo.add(diagRepBooking.getBookingID());
+        }
+        if(bookingInfo.contains(bookingID)) {
+            this.bookingID = bookingID;
+        }
     }
 
     public void setSpcID(int spcID)
     {
-        this.spcID = spcID;
+        if(spcID!=-1) {
+            this.spcID = spcID;
+        }
     }
 
     public void setDeliveryDate(Date date)
     {
-        this.deliveryDate = date;
+        if(date.after(new Date())) {
+            this.deliveryDate = date;
+        }
     }
 
     public void setReturnDate(Date date)
     {
+        if(date.after(this.deliveryDate))
         this.returnDate = date;
     }
 
     public void setCost(double cost)
     {
+        if(cost!=-1)
+        {
         this.cost = cost;
+        }
     }
 }

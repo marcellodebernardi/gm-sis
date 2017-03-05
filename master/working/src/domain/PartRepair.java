@@ -40,7 +40,7 @@ public class PartRepair extends SpecRepBooking
     }
 
 
-    @Column(name = "spcRepID")
+    @Column(name = "spcRepID", primary = true)
     public int getSpcRepID() {
         return super.getSpcRepID();
     }
@@ -49,7 +49,7 @@ public class PartRepair extends SpecRepBooking
         // todo implement
     }
 
-    @Column(name = "spcID", primary = true)
+    @Column(name = "spcID")
     public int getspcID() {
         return super.getSpcID();
     }

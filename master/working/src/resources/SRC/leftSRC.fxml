@@ -73,6 +73,8 @@
                   <TextField fx:id="edit_booking_ID" layoutX="16.0" layoutY="69.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter Booking ID:" visible="false" />
                   <Button fx:id="findBookingToEdit" layoutX="212.0" layoutY="76.0" mnemonicParsing="false" onAction="#findBooking" prefHeight="27.0" prefWidth="143.0" text="Search" visible="false" />
                   <Button fx:id="applyEditingChanges" layoutX="382.0" layoutY="76.0" mnemonicParsing="false" onAction="#submitChanges" prefHeight="27.0" prefWidth="143.0" text="Apply changes" visible="false" />
+                  <TextField fx:id="findBooking" layoutX="16.0" layoutY="69.0" prefHeight="40.0" prefWidth="174.0" promptText="Enter a booking ID:" />
+                  <Button fx:id="findBookingForSRC" layoutX="212.0" layoutY="76.0" mnemonicParsing="false" onAction="#findBookingForSRBooking" prefHeight="27.0" prefWidth="143.0" text="Find booking" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">

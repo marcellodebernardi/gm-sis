@@ -193,6 +193,11 @@ public class SpecRepairSystem {
         else return null;
     }
 
+    /**
+     * Updates an existing SRC
+     *
+     * @param update is the updated SRC
+     */
     public void updateBookings(SpecRepBooking update)
     {
         persistence.commitItem(update);
