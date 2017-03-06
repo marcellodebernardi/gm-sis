@@ -1118,14 +1118,12 @@ public class VehicleController implements Initializable
                 DTD = DRB.getDiagnosisStart();
                 DTR = DRB.getRepairStart();
                 if (DTD.isAfterNow()) {
-                    //showAlert("yes");
-                    //showAlert(Integer.toString(DTD.compareTo(nextDiagBooking)));
-                    if ((DTD.compareTo(nextDiagBooking)) > 0) {
+                    if ((DTD.isBefore(nextDiagBooking))) {
                         nextDiagBooking = DTD;
                     }
                 }
                 if (DTR.isAfterNow()) {
-                    if ((DTR.compareTo(nextRepBooking)) > 0) {
+                    if ((DTR.isBefore(nextRepBooking))) {
                         nextRepBooking = DTR;
                     }
                 }

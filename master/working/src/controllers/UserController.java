@@ -70,7 +70,7 @@ public class UserController {
                 }
                 boolean checker = auth.addEditUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 showAlert("User " + addOrEdit + ": " + checker);
-                
+
             }
         }
     }
