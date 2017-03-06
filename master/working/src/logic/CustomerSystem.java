@@ -27,7 +27,8 @@ public class CustomerSystem {
     }
 
     public List<Customer> getAllCustomers() {
-        return persistence.getByCriteria(new Criterion<>(Customer.class));
+        List<Customer> allCustomers = persistence.getByCriteria(new Criterion<>(Customer.class));
+        return allCustomers;
     }
 
     public boolean addCustomer(String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType) {
@@ -40,26 +41,50 @@ public class CustomerSystem {
         return persistence.commitItem(edit);
     }
 
-    //public boolean deleteCustomer()
-    //{}
-
-    public Customer searchCustomer(String customerFirstname, String customerSurname, String regNumber) {
-        if (customerFirstname != "") {
-            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", EqualTo, customerFirstname));
-            return customerDetails.get(0);
-        } else if (customerSurname != "") {
-            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerSurname", EqualTo, customerSurname));
-            return customerDetails.get(0);
-        }
-        //else if(regNumber!="")
-        //{
-        //    int customerIDFromRegNumber = Vehicle.getCustomerID();
-        //    List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerIDFromRegNumber));
-        //}
-        else {
-            return null;
-        }
+    public boolean deleteCustomer(int customerID)
+    {
+        return persistence.deleteItem(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
     }
+
+    public List<Customer> searchCustomerByFirstname(String customerFirstname)
+    {
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
+                "customerFirstname", Regex, customerFirstname));
+        return results;
+
+        //List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", Regex, customerFirstname).and("customerSurname", Regex, customerSurname));
+        //NOTE: Missing search by vehicle regNumber criteria
+        //return customerDetails;
+    }
+
+    public List<Customer> searchCustomerBySurname(String customerSurname)
+    {
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
+                "customerSurname", Regex, customerSurname));
+        return results;
+
+        //List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", Regex, customerFirstname).and("customerSurname", Regex, customerSurname));
+        //NOTE: Missing search by vehicle regNumber criteria
+        //return customerDetails;
+    }
+
+//    public Customer searchCustomer(String customerFirstname, String customerSurname, String regNumber) {
+//        if (customerFirstname != "") {
+//            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", EqualTo, customerFirstname));
+//            return customerDetails.get(0);
+//        } else if (customerSurname != "") {
+//            List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerSurname", EqualTo, customerSurname));
+//            return customerDetails.get(0);
+//        }
+//        //else if(regNumber!="")
+//        //{
+//        //    int customerIDFromRegNumber = Vehicle.getCustomerID();
+//        //    List<Customer> customerDetails = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerIDFromRegNumber));
+//        //}
+//        else {
+//            return null;
+//        }
+//    }
 
     public Customer getACustomers(int customerID) {
         List<Customer> results =  persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));

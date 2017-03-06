@@ -1,6 +1,6 @@
 package domain;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by EBUBECHUKWU on 08/02/2017.
@@ -64,6 +64,11 @@ public class Customer implements Searchable
     public int getCustomerID()
     {
         return customerID;
+    }
+
+    public void setCustomerID(int customerID)
+    {
+        this.customerID = customerID;
     }
 
     //gets customer's surname

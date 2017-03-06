@@ -41,17 +41,17 @@
                 </items>
             </ComboBox>
             <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
-            <Button fx:id="saveCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" />
-            <Button fx:id="deleteCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" text="Clear" />
-            <Button fx:id="clearCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+            <Button fx:id="clearCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" onAction="#clearCustomerFields" text="Clear" />
+            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" text="Save" />
          </children>
       </Pane>
    </left>
    <center>
       <Pane prefHeight="604.0" prefWidth="961.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="customerSearch" layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="911.0" promptText="by First name, Surname or Vehicle Registration number" />
-            <Button fx:id="customerSearchButton" layoutX="931.0" layoutY="62.0" mnemonicParsing="false" text="Search" />
+            <TextField fx:id="customerSearch" disable="false" layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="911.0" promptText="by First name, Surname or Vehicle Registration number" />
+            <Button fx:id="customerSearchButton" layoutX="931.0" layoutY="62.0" mnemonicParsing="false" onAction="#searchCustomerInDB" text="Search" />
             <TableView fx:id="customerTable" layoutX="11.0" layoutY="102.0" prefHeight="200.0" prefWidth="909.0">
               <columns>
                 <TableColumn fx:id="customerTableColumnID" prefWidth="66.0" text="ID" />
