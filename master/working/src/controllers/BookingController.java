@@ -2,6 +2,7 @@ package controllers;
 
 import domain.Customer;
 import domain.DiagRepBooking;
+import domain.Vehicle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import logic.BookingSystem;
 import logic.CustomerSystem;
+import logic.VehicleSys;
 import main.Main;
 import org.joda.time.DateTime;
 
@@ -28,15 +30,18 @@ import java.util.List;
 /**
  * @author Marcello De Bernardi
  */
-public class BookingView {
+public class BookingController {
     // singleton instance and booking system
-    private static BookingView instance;
+    private static BookingController instance;
     private BookingSystem bookSys;
     private CustomerSystem custSys;
+    private VehicleSys vehicleSys;
+
     // scene graph panes
     private BorderPane basePane;
     private BorderPane addBookingPane;
     private BorderPane rightPane;
+
     // scene graph elements (buttons, search bars, tables)
     // controls at the top of right pane
     private HBox listViewHBox;
@@ -46,25 +51,31 @@ public class BookingView {
     private Button listViewButton;
     private Button weekViewButton;
     private Button monthViewButton;
+
     // buttons and search bars in left pane
     private TextField customerSearchBar;
     private HBox leftBottomButtons;
     private Button addBookingButton;
     private Button deleteBookingButton;
     private Button editBookingButton;
+    private ComboBox vehicleComboBox;
+    private ComboBox customerComboBox;
+
     // tables and lists
     private TableView<DiagRepBooking> bookingsTable;
-    private ListView<String> customerList;
+
     // display data
     private ObservableList<DiagRepBooking> bookingsObservable;
     private ObservableList<String> customerInfoObservable;
+    private ObservableList<String> vehicleInfoObservable;
 
 
     ///////////////// INTERFACE TO APPLICATION /////////////////
-    private BookingView() {
+    private BookingController() {
         // booking system
         bookSys = BookingSystem.getInstance();
         custSys = CustomerSystem.getInstance();
+        vehicleSys = VehicleSys.getInstance();
 
         // base structure
         basePane = new BorderPane();
@@ -79,11 +90,16 @@ public class BookingView {
 
     }
 
-    public static BookingView getInstance() {
-        if (instance == null) instance = new BookingView();
+    public static BookingController getInstance() {
+        if (instance == null) instance = new BookingController();
         return instance;
     }
 
+    /**
+     * Return a reference to the root node, as well as send the root node to Main.
+     *
+     * @return
+     */
     public BorderPane show() {
         Main.getInstance().replaceTabContent(basePane);
         return basePane;
@@ -91,38 +107,46 @@ public class BookingView {
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////
+
     /**
      * Displays the pane for adding bookings.
      */
     private void displayAddBookingPane() {
         if (addBookingPane == null) {
+            // base
             addBookingPane = new BorderPane();
             addBookingPane.setId("addBookingPane");
 
+            // title
             HBox topTitle = new HBox();
             topTitle.setId("addBookingTitle");
             topTitle.getChildren().add(new Text("Add Booking"));
 
+            // grid
             GridPane dataFieldPane = new GridPane();
             dataFieldPane.add(new Label("Search customers"), 0, 0);
-            if (customerSearchBar == null) {
-                customerSearchBar = new TextField();
-                customerSearchBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        displayCustomerList(custSys.getAllCustomers());
-                    }
-                });
-            }
+
+            // customer search and table
+            customerSearchBar = new TextField();
+            customerSearchBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    // todo fix to actually search
+                    displayCustomerComboBox(custSys.getAllCustomers());
+                    displayVehicleComboBox(vehicleSys.getVehiclesList());
+                }
+            });
             dataFieldPane.add(customerSearchBar, 1, 0);
             dataFieldPane.add(new Label("Select customer"), 0, 1);
-            if (customerList == null) {
-                customerList = new ListView<>();
-                customerList.setId("customerListB");
-            }
-            dataFieldPane.add(customerList, 1, 1);
-            dataFieldPane.add(new Label("Vehicle"), 0, 2);
-            dataFieldPane.add(new TextField("Vehicle"), 1, 2);
+            customerComboBox = new ComboBox();
+            dataFieldPane.add(customerComboBox, 1, 1);
+
+            // vehicle combobox
+            dataFieldPane.add(new Label("Select vehicle"), 0, 2);
+            vehicleComboBox = new ComboBox();
+            dataFieldPane.add(vehicleComboBox, 1, 2);
+
+            // more data fields
             dataFieldPane.add(new Label("Diagnosis Start Time"), 0, 3);
             dataFieldPane.add(new TextField("dd/mm/yyyy"), 1, 3);
             dataFieldPane.add(new Label("Diagnosis End Time"), 0, 4);
@@ -130,31 +154,31 @@ public class BookingView {
             dataFieldPane.add(new Label("Description"), 0, 5);
             dataFieldPane.add(new TextField("Write a description"), 1, 5);
 
-            if (leftBottomButtons == null) {
-                leftBottomButtons = new HBox();
-                leftBottomButtons.setId("leftBottomButtons");
-                addBookingButton = new Button("Add booking");
-                addBookingButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        // todo get from fields
-                        DiagRepBooking booking = new DiagRepBooking(
-                                "1",
-                                "Description",
-                                20,
-                                false,
-                                1,
-                                new DateTime(),
-                                new DateTime(),
-                                null,
-                                null,
-                                null,
-                                null);
-                        bookSys.addBooking(booking);
-                    }
-                });
-                leftBottomButtons.getChildren().add(addBookingButton);
-            }
+            // buttons
+            leftBottomButtons = new HBox();
+            leftBottomButtons.setId("leftBottomButtons");
+            addBookingButton = new Button("Add booking");
+            addBookingButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    DiagRepBooking booking = new DiagRepBooking(
+                            "1",
+                            "Description",
+                            20,
+                            false,
+                            1,
+                            new DateTime(),
+                            new DateTime(),
+                            null,
+                            null,
+                            null,
+                            null);
+                    bookSys.addBooking(booking);
+                }
+            });
+
+            leftBottomButtons.getChildren().add(addBookingButton);
+
 
             addBookingPane.setTop(topTitle);
             addBookingPane.setCenter(dataFieldPane);
@@ -322,14 +346,30 @@ public class BookingView {
         bookingsTable.refresh();
     }
 
-    private void displayCustomerList(List<Customer> customers) {
-        if (customerList == null) customerList = new ListView<>();
+    /**
+     * Display the customer list in the add booking menu.
+     *
+     * @param customers
+     */
+    private void displayCustomerComboBox(List<Customer> customers) {
+        if (customerComboBox == null) customerComboBox = new ComboBox();
         List<String> customerInfo = new ArrayList<>();
         for (Customer c : customers) {
             customerInfo.add(c.getCustomerID() + ", " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
         }
 
         customerInfoObservable = FXCollections.observableArrayList(customerInfo);
-        customerList.setItems(customerInfoObservable);
+        customerComboBox.setItems(customerInfoObservable);
+    }
+
+    private void displayVehicleComboBox(List<Vehicle> vehicles) {
+        if (vehicleComboBox == null) vehicleComboBox = new ComboBox();
+        List<String> vehicleInfo = new ArrayList<>();
+        for (Vehicle v : vehicles) {
+            vehicleInfo.add(v.getRegNumber() + ": " + v.getManufacturer() + " " + v.getModel());
+        }
+
+        vehicleInfoObservable = FXCollections.observableArrayList(vehicleInfo);
+        vehicleComboBox.setItems(vehicleInfoObservable);
     }
 }

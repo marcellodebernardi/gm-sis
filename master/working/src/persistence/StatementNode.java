@@ -4,10 +4,12 @@ import domain.Searchable;
 import domain.User;
 import domain.Vehicle;
 import logic.Criterion;
+import org.joda.time.DateTime;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,18 +106,24 @@ class StatementNode implements Comparable<StatementNode> {
         }
 
         if (statementType == StatementType.INSERT) {
+            // column names
             String keys = solvedValues.keySet().toString();
             keys = keys.replace("[", "(");
             keys = keys.replace("]", "");
             keys += ", " + primaryKey + ")";
 
+            // values
             String values = "";
             String delim = "";
             for (Object value : solvedValues.values()) {
-                values += numericTypes.contains(value.getClass()) ?
-                        delim + value : delim + "'" + value + "'";
+                if (value.getClass() == Date.class) values += delim + ((Date)value).getTime();
+                else if (value.getClass() == DateTime.class) values += delim + ((DateTime)value).getMillis();
+                else if (numericTypes.contains(value.getClass())) values += delim + value;
+                else values += delim + "'" + value + "'";
+
                 delim = ", ";
             }
+            // primary key, with
             values = (table.equals(User.class) || table.equals(Vehicle.class)) ?
                     "(" + values + ", '" + primaryKeyValue + "')" : "(" + values + ", " + primaryKeyValue + ")";
 

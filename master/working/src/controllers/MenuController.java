@@ -37,7 +37,7 @@ public class MenuController {
     }
 
     public void openBookingsTab() {
-        BookingView handler = BookingView.getInstance();
+        BookingController handler = BookingController.getInstance();
         Main.getInstance().replaceTabContent(handler.show());
     }
 
