@@ -3,7 +3,7 @@ package persistence;
 import domain.*;
 import logic.Criterion;
 import org.joda.time.DateTime;
-import persistence.sqlhelper.*;
+import persistence.cellgetter.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -30,7 +30,7 @@ class ObjectRelationalMapper {
     // helpers
     private ForeignKeyResolver resolver;
     private DatabaseRepository persistence;
-    private HashMap<String, CellGetter> cellGetters;
+    private CellGetterInterface cellGetter;
 
     // reflection data
     private List<Class<? extends Searchable>> searchableList;
@@ -49,6 +49,7 @@ class ObjectRelationalMapper {
      */
     private ObjectRelationalMapper() {
         resolver = ForeignKeyResolver.getInstance();
+        cellGetter = new CellGetterDispatcher();
 
         // reflection information
         searchableList = new ArrayList<>();
@@ -98,23 +99,6 @@ class ObjectRelationalMapper {
         dateTypes.add(DateTime.class);
 
         numericTypes.addAll(dateTypes);
-
-        cellGetters = new HashMap<>();
-        cellGetters.put(int.class.getSimpleName(), new IntegerCellGetter());
-        cellGetters.put(Integer.class.getSimpleName(), new IntegerCellGetter());
-        cellGetters.put(float.class.getSimpleName(), new FloatCellGetter());
-        cellGetters.put(Float.class.getSimpleName(), new FloatCellGetter());
-        cellGetters.put(double.class.getSimpleName(), new DoubleCellGetter());
-        cellGetters.put(Double.class.getSimpleName(), new DoubleCellGetter());
-        cellGetters.put(boolean.class.getSimpleName(), new BooleanCellGetter());
-        cellGetters.put(Boolean.class.getSimpleName(), new BooleanCellGetter());
-        cellGetters.put(String.class.getSimpleName(), new StringCellGetter());
-        cellGetters.put(UserType.class.getSimpleName(), new UserTypeCellGetter());
-        cellGetters.put(VehicleType.class.getSimpleName(), new VehicleTypeCellGetter());
-        cellGetters.put(CustomerType.class.getSimpleName(), new CustomerTypeCellGetter());
-        cellGetters.put(FuelType.class.getSimpleName(), new FuelTypeCellGetter());
-        cellGetters.put(Date.class.getSimpleName(), new DateCellGetter());
-        cellGetters.put(DateTime.class.getSimpleName(), new DateTimeCellGetter());
     }
 
     /**
@@ -247,9 +231,7 @@ class ObjectRelationalMapper {
                         String columnName = ((Column) annotation).name();
                         int columnIndex = columnNames.indexOf(columnName) + 1;
 
-                        initArgs[i] = cellGetters
-                                .get(constructorArgumentTypes[i].getSimpleName())
-                                .getObject(results, columnIndex);
+                        initArgs[i] = cellGetter.getObject(constructorArgumentTypes[i], results, columnIndex);
                     }
                     // complex attribute
                     else if (annotation.annotationType().equals(TableReference.class)) {

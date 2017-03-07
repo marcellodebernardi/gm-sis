@@ -1,4 +1,4 @@
-package persistence.sqlhelper;
+package persistence.cellgetter;
 
 import domain.CustomerType;
 
@@ -8,8 +8,8 @@ import java.sql.SQLException;
 /**
  * @author Marcello De Bernardi
  */
-public class CustomerTypeCellGetter extends CellGetter {
-    public Object getObject(ResultSet results, int columnIndex) throws SQLException {
+class CustomerTypeCellGetter extends CellGetter {
+    Object getObject(ResultSet results, int columnIndex) throws SQLException {
         return CustomerType.valueOf(results.getString(columnIndex));
     }
 }

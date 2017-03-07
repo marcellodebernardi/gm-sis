@@ -1,4 +1,4 @@
-package persistence.sqlhelper;
+package persistence.cellgetter;
 
 import domain.FuelType;
 
@@ -8,8 +8,8 @@ import java.sql.SQLException;
 /**
  * @author Marcello De Bernardi
  */
-public class FuelTypeCellGetter extends CellGetter {
-    public Object getObject(ResultSet results, int columnIndex) throws SQLException {
+class FuelTypeCellGetter extends CellGetter {
+    Object getObject(ResultSet results, int columnIndex) throws SQLException {
         return FuelType.valueOf(results.getString(columnIndex));
     }
 }
