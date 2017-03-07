@@ -485,6 +485,10 @@ public class VehicleController implements Initializable
             tMOT.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
                 @Override
                 public String toString(Date object) {
+                    if (object == null)
+                    {
+                        return "n/a";
+                    }
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                     return format.format(object);
                 }
@@ -505,6 +509,10 @@ public class VehicleController implements Initializable
             tDLS.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
                 @Override
                 public String toString(Date object) {
+                    if (object == null)
+                    {
+                        return "n/a";
+                    }
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                     return format.format(object);
                 }
@@ -552,6 +560,10 @@ public class VehicleController implements Initializable
             tD.setCellFactory(TextFieldTableCell.<Vehicle, Date>forTableColumn(new StringConverter<Date>() {
                 @Override
                 public String toString(Date object) {
+                    if (object == null)
+                    {
+                        return "n/a";
+                    }
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                     return format.format(object);
                 }

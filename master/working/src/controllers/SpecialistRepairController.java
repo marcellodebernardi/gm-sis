@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.java.swing.action.OkAction;
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import logic.*;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
+
+import javax.swing.*;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -167,7 +172,7 @@ public class SpecialistRepairController {
         } catch (ParseException  | NumberFormatException e) {
             if(e instanceof NumberFormatException)
             {
-             showAlert("There is an error in one the fields. Please check all your fields before submitting");
+             showAlert("There is an error in one the fields. Please check all your fields before submitting.ad");
             }
             else {
                 showAlert(e.getMessage());
@@ -212,16 +217,8 @@ public class SpecialistRepairController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setContentText("Are you sure you want to delete this SRC?");
-        Button yes = new Button("Yes");
-        Button no = new Button("Yes");
-        yes.setVisible(true);
-        no.setVisible(true);
         alert.showAndWait();
-        if(yes.isPressed())
-        {
-            specRepairSystem.deleteAllSubsequentBookings(Integer.parseInt(spcIDtoDelete.getText()));
-            specRepairSystem.deleteRepairCenter(Integer.parseInt(spcIDtoDelete.getText()));
-        }
+
     }
 
 
@@ -545,6 +542,7 @@ public class SpecialistRepairController {
 
     @FXML
     public void showEditingFields() {
+        //System.out.println(edit_booking_ID.getText());
         btn_add_booking.setVisible(false);
         btn_del_booking.setVisible(false);
         bookingSPCID.clear();
@@ -558,6 +556,9 @@ public class SpecialistRepairController {
         bookingCost.clear();
         bookingItemID.clear();
         findBookingForSRC.setVisible(false);
+        findBooking.setVisible(false);
+
+
     }
 
     /**
@@ -566,35 +567,37 @@ public class SpecialistRepairController {
      */
     @FXML
     public void findBooking() {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String StringDeliveryDate = "";
-        String StringReturnDate = "";
-        applyEditingChanges.setVisible(true);
-        if (vehicle_repair.isSelected()) {
-            VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
-            editBookingID = vehicleRepair.getSpcRepID();
-            bookingSPCID.setText(Integer.toString(vehicleRepair.getSpcID()));
-            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(vehicleRepair.getSpcID());
-            bookingSPCName.setText(specialistRepairCenter.getName());
-            StringDeliveryDate = format.format(vehicleRepair.getDeliveryDate().getTime());
-            deliveryDate.setText(StringDeliveryDate);
-            bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
-            StringReturnDate = format.format(vehicleRepair.getReturnDate());
-            returnDate.setText(StringReturnDate);
-            bookingCost.setText(Double.toString(vehicleRepair.getCost()));
-            findBooking.setText(Integer.toString(vehicleRepair.getBookingID()));
-        } else if (part_repair.isSelected()) {
-            PartRepair partRepair = specRepairSystem.findPartRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
-            bookingSPCID.setText(Integer.toString(partRepair.getSpcID()));
-            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(partRepair.getSpcID());
-            bookingSPCName.setText(specialistRepairCenter.getName());
-            StringDeliveryDate = format.format(partRepair.getDeliveryDate());
-            deliveryDate.setText(StringDeliveryDate);
-            bookingItemID.setText(Integer.toString(partRepair.getPartOccurrenceID()));
-            StringReturnDate = format.format(partRepair.getReturnDate());
-            returnDate.setText(StringReturnDate);
-            bookingCost.setText(Double.toString(partRepair.getCost()));
-            findBooking.setText(Integer.toString(partRepair.getBookingID()));
+        try {
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            applyEditingChanges.setVisible(true);
+            if (vehicle_repair.isSelected()) {
+                System.out.println(edit_booking_ID.getText());
+                VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
+                editBookingID = vehicleRepair.getSpcRepID();
+                bookingSPCID.setText(Integer.toString(vehicleRepair.getSpcID()));
+                SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(vehicleRepair.getSpcID());
+                bookingSPCName.setText(specialistRepairCenter.getName());
+                deliveryDate.setText(format.format(vehicleRepair.getDeliveryDate()));
+                returnDate.setText(format.format(vehicleRepair.getReturnDate()));
+                bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
+                bookingCost.setText(Double.toString(vehicleRepair.getCost()));
+                findBooking.setText(Integer.toString(vehicleRepair.getBookingID()));
+            } else if (part_repair.isSelected()) {
+                PartRepair partRepair = specRepairSystem.findPartRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
+                bookingSPCID.setText(Integer.toString(partRepair.getSpcID()));
+                SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(partRepair.getSpcID());
+                bookingSPCName.setText(specialistRepairCenter.getName());
+                deliveryDate.setText(format.format(partRepair.getDeliveryDate().toString()));
+                returnDate.setText(format.format(partRepair.getReturnDate().toString()));
+                bookingItemID.setText(Integer.toString(partRepair.getPartOccurrenceID()));
+                bookingCost.setText(Double.toString(partRepair.getCost()));
+                findBooking.setText(Integer.toString(partRepair.getBookingID()));
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            showAlert(e.getMessage());
         }
     }
 
