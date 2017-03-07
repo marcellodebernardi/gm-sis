@@ -23,6 +23,7 @@ import logic.CustomerSystem;
 import logic.VehicleSys;
 import main.Main;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -330,14 +331,16 @@ public class BookingController {
         diagnosisDateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
                 ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getDiagnosisStart().toLocalDate().toString());
+                DateTime date = p.getValue().getDiagnosisStart();
+                return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
             }
         });
 
         repairDateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
                 ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getRepairStart().toLocalDate().toString());
+                DateTime date = p.getValue().getRepairStart();
+                return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
             }
         });
 

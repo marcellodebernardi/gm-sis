@@ -2,8 +2,8 @@ package persistence;
 
 import domain.*;
 import logic.Criterion;
-import domain.Searchable;
 import org.joda.time.DateTime;
+import persistence.sqlhelper.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -13,7 +13,6 @@ import java.lang.reflect.Modifier;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,12 +27,13 @@ class ObjectRelationalMapper {
     // singleton instance
     private static ObjectRelationalMapper instance;
 
-    // helper classes
+    // helpers
     private ForeignKeyResolver resolver;
     private DatabaseRepository persistence;
+    private HashMap<String, CellGetter> cellGetters;
 
-    // reflection data todo refactor and move persistence information upward in hierarchy to minimize repetition
-    private List<Class<? extends Searchable>> searchableClasses;
+    // reflection data
+    private List<Class<? extends Searchable>> searchableList;
     private HashMap<Class<? extends Searchable>, Constructor<?>> constructorMap;
     private HashMap<Class<? extends Searchable>, List<Method>> getterListMap;
     private HashMap<Class<? extends Searchable>, Method> primaryGetters;
@@ -44,26 +44,29 @@ class ObjectRelationalMapper {
     private HashMap<Class<? extends Searchable>, Class<? extends Searchable>> dependencyMap;
 
 
+    /**
+     * Singleton constructor for ObjectRelationalMapper
+     */
     private ObjectRelationalMapper() {
         resolver = ForeignKeyResolver.getInstance();
 
         // reflection information
-        searchableClasses = new ArrayList<>();
-        searchableClasses.add(Customer.class);
-        searchableClasses.add(DiagRepBooking.class);
-        searchableClasses.add(Installation.class);
-        searchableClasses.add(PartAbstraction.class);
-        searchableClasses.add(PartOccurrence.class);
-        searchableClasses.add(PartRepair.class);
-        searchableClasses.add(SpecialistRepairCenter.class);
-        searchableClasses.add(User.class);
-        searchableClasses.add(Vehicle.class);
-        searchableClasses.add(VehicleRepair.class);
+        searchableList = new ArrayList<>();
+        searchableList.add(Customer.class);
+        searchableList.add(DiagRepBooking.class);
+        searchableList.add(Installation.class);
+        searchableList.add(PartAbstraction.class);
+        searchableList.add(PartOccurrence.class);
+        searchableList.add(PartRepair.class);
+        searchableList.add(SpecialistRepairCenter.class);
+        searchableList.add(User.class);
+        searchableList.add(Vehicle.class);
+        searchableList.add(VehicleRepair.class);
 
         constructorMap = new HashMap<>();
         getterListMap = new HashMap<>();
         primaryGetters = new HashMap<>();
-        for (Class<? extends Searchable> eClass : searchableClasses) {
+        for (Class<? extends Searchable> eClass : searchableList) {
             for (Constructor<?> c : eClass.getDeclaredConstructors()) {
                 if (c.getDeclaredAnnotations().length != 0 && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
                     constructorMap.put(eClass, c);
@@ -71,7 +74,7 @@ class ObjectRelationalMapper {
                 }
             }
             getterListMap.put(eClass, getColumnGetters(eClass));
-            getterListMap.put(eClass,getTableGetters(eClass));
+            getterListMap.put(eClass, getTableGetters(eClass));
             primaryGetters.put(eClass, getPrimaryKeyGetter(eClass));
             getterListMap.remove(primaryGetters.get(eClass));
         }
@@ -95,6 +98,23 @@ class ObjectRelationalMapper {
         dateTypes.add(DateTime.class);
 
         numericTypes.addAll(dateTypes);
+
+        cellGetters = new HashMap<>();
+        cellGetters.put(int.class.getSimpleName(), new IntegerCellGetter());
+        cellGetters.put(Integer.class.getSimpleName(), new IntegerCellGetter());
+        cellGetters.put(float.class.getSimpleName(), new FloatCellGetter());
+        cellGetters.put(Float.class.getSimpleName(), new FloatCellGetter());
+        cellGetters.put(double.class.getSimpleName(), new DoubleCellGetter());
+        cellGetters.put(Double.class.getSimpleName(), new DoubleCellGetter());
+        cellGetters.put(boolean.class.getSimpleName(), new BooleanCellGetter());
+        cellGetters.put(Boolean.class.getSimpleName(), new BooleanCellGetter());
+        cellGetters.put(String.class.getSimpleName(), new StringCellGetter());
+        cellGetters.put(UserType.class.getSimpleName(), new UserTypeCellGetter());
+        cellGetters.put(VehicleType.class.getSimpleName(), new VehicleTypeCellGetter());
+        cellGetters.put(CustomerType.class.getSimpleName(), new CustomerTypeCellGetter());
+        cellGetters.put(FuelType.class.getSimpleName(), new FuelTypeCellGetter());
+        cellGetters.put(Date.class.getSimpleName(), new DateCellGetter());
+        cellGetters.put(DateTime.class.getSimpleName(), new DateTimeCellGetter());
     }
 
     /**
@@ -111,6 +131,7 @@ class ObjectRelationalMapper {
         this.persistence = persistence;
         resolver.initialize(persistence);
     }
+
 
     /**
      * Converts criterion to SQL SELECT query
@@ -177,7 +198,8 @@ class ObjectRelationalMapper {
                                             getPrimaryKeyGetter(attribute.getClass()).invoke(attribute)), persistence));
                         }
                     }
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                }
+                catch (IllegalAccessException | InvocationTargetException e) {
                     System.err.print(e.getMessage() + "DELETE: invoke @TableReference getter.");
                     return null;
                 }
@@ -190,48 +212,29 @@ class ObjectRelationalMapper {
      * Converts a ResultSet into a List<E> of objects
      */
     <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results, DatabaseRepository persistence) {
-        List<E> returnList = new ArrayList<>();
+        List<E> objects = new ArrayList<>();
 
         // reflection class data
-        Constructor<E> constructor;
-        Annotation[][] constructorAnnotations;
-        Class<?>[] constructorArgumentTypes;
+        Constructor<?> constructor = constructorMap.get(eClass);
+        Annotation[][] constructorAnnotations = constructor.getParameterAnnotations();
+        Class<?>[] constructorArgumentTypes = constructor.getParameterTypes();
+        constructor.setAccessible(true);
 
         // results metadata
-        int columnNumber;
         List<String> columnNames;
-
-        // obtain results metadata
         try {
-            columnNumber = results.getMetaData().getColumnCount();
             columnNames = new ArrayList<>();
-            for (int i = 1; i <= columnNumber; i++)
+            for (int i = 1; i <= results.getMetaData().getColumnCount(); i++)
                 columnNames.add(results.getMetaData().getColumnName(i));
-        } catch (SQLException e) {
-            System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
-            return null;
         }
-
-        // obtain reflection data
-        try {
-            constructorArgumentTypes = new Class<?>[0];
-            for (Constructor<?> c : eClass.getDeclaredConstructors()) {
-                if (c.getDeclaredAnnotations().length != 0
-                        && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
-                    constructorArgumentTypes = c.getParameterTypes();
-                    break;
-                }
-            }
-            constructor = eClass.getDeclaredConstructor(constructorArgumentTypes);
-            constructorAnnotations = constructor.getParameterAnnotations();
-        } catch (NoSuchMethodException e) {
-            System.err.print(e.getMessage() + " - Failed to obtain constructor and parameters.");
+        catch (SQLException e) {
+            System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
             return null;
         }
 
         // map results to objects and add
         try {
-            // for each row of resultset,
+            // rows of ResultSet
             while (results.next()) {
                 Object[] initArgs = new Object[constructorAnnotations.length];
 
@@ -239,59 +242,17 @@ class ObjectRelationalMapper {
                 for (int i = 0; i < constructorAnnotations.length; i++) {
                     Annotation annotation = constructorAnnotations[i][0];
 
+                    // simple attribute
                     if (annotation.annotationType().equals(Column.class)) {
-                        Column metadata = (Column) annotation;
-                        String columnName = metadata.name();
+                        String columnName = ((Column) annotation).name();
                         int columnIndex = columnNames.indexOf(columnName) + 1;
 
-                        /* This procedure is vulnerable to changes in the names of
-                        enumerated types used in the software, as well as to changes
-                        in the classes used in the program. If problems arise, make
-                        sure all expected data types have a switch case below.
-                        todo make more elegant by changing to something without switch
-                         */
-                        switch (constructorArgumentTypes[i].getSimpleName()) {
-                            case "String":
-                                initArgs[i] = results.getString(columnIndex);
-                                break;
-                            case "int":
-                                initArgs[i] = results.getInt(columnIndex);
-                                break;
-                            case "double":
-                                initArgs[i] = results.getDouble(columnIndex);
-                                break;
-                            case "float":
-                                initArgs[i] = results.getFloat(columnIndex);
-                                break;
-                            case "boolean":
-                                initArgs[i] = results.getBoolean(columnIndex);
-                                break;
-                            case "CustomerType": // todo fall-through behavior with Enum.valueOf
-                                initArgs[i] = CustomerType.valueOf(results.getString(columnIndex));
-                                break;
-                            case "FuelType":
-                                initArgs[i] = FuelType.valueOf(results.getString(columnIndex));
-                                break;
-                            case "UserType":
-                                initArgs[i] = UserType.valueOf(results.getString(columnIndex));
-                                break;
-                            case "VehicleType":
-                                initArgs[i] = VehicleType.valueOf(results.getString(columnIndex));
-                                break;
-                                // todo handle null date fields
-                            case "Date":
-                                initArgs[i] = new Date(results.getLong(columnIndex));
-                                break;
-                            case "DateTime":
-                                initArgs[i] = new DateTime(results.getLong(columnIndex));
-                                break;
-                            default:
-                                System.err.print("\nORM toObjects(): data type of constructor argument for database column "
-                                        + "(" + columnIndex + ", " + columnName + ") could not be identified."
-                                        + "Check DatabaseRepository.toObjects for missing switch cases.");
-                                return null;
-                        }
-                    } else if (annotation.annotationType().equals(TableReference.class)) {
+                        initArgs[i] = cellGetters
+                                .get(constructorArgumentTypes[i].getSimpleName())
+                                .getObject(results, columnIndex);
+                    }
+                    // complex attribute
+                    else if (annotation.annotationType().equals(TableReference.class)) {
                         TableReference metadata = (TableReference) annotation;
 
                         // the complex attribute is a list of some form
@@ -324,20 +285,24 @@ class ObjectRelationalMapper {
                                 }
                             }
                         }
-                    } else {
+                    }
+                    else {
                         System.out.println("Annotation type not detected");
                     }
                 }
-                constructor.setAccessible(true);
-                returnList.add(constructor.newInstance(initArgs));
-                constructor.setAccessible(false);
+                objects.add(eClass.cast(constructor.newInstance(initArgs)));
             }
-            return returnList;
-        } catch (SQLException e) {
+            constructor.setAccessible(false);
+            return objects;
+        }
+        catch (SQLException e) {
             System.err.print(e.getMessage() + " - Failed to map results to object.");
+            constructor.setAccessible(false);
             return null;
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+        }
+        catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             System.err.print(e.getMessage() + " - Failed to create object instance.");
+            constructor.setAccessible(false);
             return null;
         }
     }
@@ -416,10 +381,12 @@ class ObjectRelationalMapper {
                     Object attribute = column.invoke(item);
                     if (!(attribute == null || (numericTypes.contains(attribute.getClass()) && attribute.equals(-1))))
                         columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
-                } else if (annotation.primary()) {
+                }
+                else if (annotation.primary()) {
                     primaryKey = annotation.name();
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -454,7 +421,8 @@ class ObjectRelationalMapper {
                 else if (attribute != null) {
                     statementGraph.addAll(generateStatementGraph(tableRefAnn.baseType().cast(attribute), sN));
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
                 System.err.println(e.getMessage());
             }
         }
