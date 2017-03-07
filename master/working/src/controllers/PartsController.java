@@ -1,11 +1,8 @@
 package controllers;
 
 import domain.Customer;
-import domain.Booking;
-import domain.DiagRepBooking;
 import domain.Installation;
 import domain.PartAbstraction;
-import domain.PartOccurrence;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
@@ -38,7 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
 //import java.sql.Connection;
 //import org.controlsfx.control.textfield.TextFields;
-//import javax.swing.*;
+//import javax.swing.*;d
 
 
 public class PartsController implements Initializable {
@@ -428,31 +425,32 @@ public class PartsController implements Initializable {
 
     public void saveChanges(){
 
-        PartAbstraction singlePart;
 
-        for(int i=0; i<tableEntries.size(); i++){
 
-            PartsTable.getSelectionModel().select(i);
-            singlePart = PartsTable.getSelectionModel().getSelectedItem();
-            System.out.println(singlePart.getPartStockLevel());
-            boolean c = instance.commitItem(singlePart);
+            PartAbstraction singlePart;
 
-        }
+            for (int i = 0; i < tableEntries.size(); i++) {
 
-        PartsTable.getSelectionModel().clearSelection();
+                PartsTable.getSelectionModel().select(i);
+                singlePart = PartsTable.getSelectionModel().getSelectedItem();
+                System.out.println(singlePart.getPartStockLevel());
+                boolean c = instance.commitItem(singlePart);
 
-            /*
+            }
 
-            PartsTable.getSelectionModel().select(i); //selects whole row
-            singlePart = PartsTable.getSelectionModel().getSelectedItem(); //returns selected object
-            try {
 
-                Statement stm = instance.connection.createStatement();
-                String Query="UPDATE PartAbstraction SET partStockLevel ='"+singlePart.getPartStockLevel()+"' WHERE partAbstractionID='"+singlePart.getPartAbstractionID()+"'";
-                stm.executeUpdate(Query);
+            showInfo("Changes have been saved");
+            PartsTable.getSelectionModel().clearSelection();
 
-            }catch(SQLException e ){e.printStackTrace();}
-            **/
+
+    }
+
+    public void showInfo(String message){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Updated to Database");
+        alert.setHeaderText(message);
+        alert.showAndWait();
 
     }
 

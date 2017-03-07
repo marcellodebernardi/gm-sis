@@ -1,5 +1,6 @@
 package domain;
 
+import javafx.scene.control.TableColumn;
 import persistence.DependencyConnection;
 
 import java.util.ArrayList;
