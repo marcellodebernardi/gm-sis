@@ -40,7 +40,7 @@ public class VehicleController implements Initializable
 {
 
 
-    @FXML
+
     private VehicleSys vSys = VehicleSys.getInstance();
     @FXML
     private CustomerSystem cSys = CustomerSystem.getInstance();
