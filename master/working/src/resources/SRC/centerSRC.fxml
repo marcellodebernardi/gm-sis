@@ -22,13 +22,13 @@
       </BorderPane>
       <AnchorPane>
          <children>
-            <TableView fx:id="specialistTable" layoutY="34.0" prefHeight="319.0" prefWidth="638.0">
+            <TableView fx:id="VehicleRepairs" layoutY="34.0" prefHeight="327.0" prefWidth="644.0">
               <columns>
-                <TableColumn fx:id="TbookingTableItem" prefWidth="112.0" text="Item ID:" />
-                <TableColumn fx:id="TbookingItemName" prefWidth="186.0" text="Item Name:" />
-                  <TableColumn fx:id="TbookingItemType" prefWidth="97.0" text="Item Type:" />
-                  <TableColumn fx:id="TbookingSRC" prefWidth="87.0" text="Specialist ID:" />
-                  <TableColumn fx:id="TbookingSRCName" prefWidth="155.0" text="Specialist Name:" />
+                <TableColumn fx:id="TbookingTableItem" prefWidth="150.0" text="Vehicle Registration" />
+                <TableColumn fx:id="TbookingItemName" prefWidth="152.0" text="SPC ID:" />
+                  <TableColumn fx:id="TbookingItemType" prefWidth="93.0" text="SPC ID" />
+                  <TableColumn fx:id="TbookingSRC" prefWidth="127.0" text="Delivery Date:" />
+                  <TableColumn fx:id="TbookingSRCName" prefWidth="121.0" text="Return Date:" />
               </columns>
             </TableView>
             <RadioButton fx:id="veh_selected" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" selected="true" text="Vehicle Search">

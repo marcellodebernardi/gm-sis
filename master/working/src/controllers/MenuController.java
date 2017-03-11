@@ -18,8 +18,6 @@ import java.io.IOException;
  */
 public class MenuController {
     // todo move these into module controllers
-    Stage addSpecialistBooking = new Stage();
-    Stage deleteSpecialistBooking;
 
 
     public void openTodayTab() {
@@ -67,10 +65,10 @@ public class MenuController {
         BorderPane specialistBasePane = new BorderPane();
         try {
             FlowPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/centerSRC.fxml"));
-            FlowPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/leftSRC.fxml"));
+            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newLeftPane.fxml"));
             specialistBasePane.setVisible(true);
             specialistBasePane.setLeft(leftPane);
-            specialistBasePane.setCenter(centerPane);
+            specialistBasePane.setRight(centerPane);
             Main.getInstance().replaceTabContent(specialistBasePane);
 
 
@@ -99,6 +97,7 @@ public class MenuController {
     }
 
 
+    /*
     public void searchSRC() {
     }
 
@@ -148,7 +147,7 @@ public class MenuController {
 
     public void editSRCBooking() {
 
-    }
+    }*/
 
     //action listener for opening 'Add Customer' window
     /*public void addCustomerListener() {

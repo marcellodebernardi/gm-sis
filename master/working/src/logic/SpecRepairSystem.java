@@ -82,7 +82,7 @@ public class SpecRepairSystem {
      */
     public List<VehicleRepair> getVehicleBookings(String regNumber)
     {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleReg", EqualTo, regNumber));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, regNumber));
     }
 
     /**
@@ -202,5 +202,49 @@ public class SpecRepairSystem {
     {
         persistence.commitItem(update);
     }
+
+    public List<PartRepair> getAllPartRepairs(int partID)
+    {
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID",EqualTo, partID));
+    }
+
+    public List<Installation> getVehicleInstallations(String reg)
+    {
+        return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber",Regex,reg));
+    }
+
+    public boolean deleteByRepIDV(int rep)
+    {
+        return persistence.deleteItem(new Criterion<>(VehicleRepair.class,"spcRepID",EqualTo,rep));
+    }
+
+    public boolean deleteByRepIDP(int rep)
+    {
+        return persistence.deleteItem(new Criterion<>(PartRepair.class,"spcRepID",EqualTo,rep));
+    }
+
+    public Installation getByInstallationID(int InstallationID)
+    {
+        try {
+            List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "installationID", EqualTo, InstallationID));
+            return installations.get(0);
+        }
+        catch (NullPointerException e)
+        {
+            return null;
+        }
+
+    }
+
+    public boolean updateInstallation(Installation installation)
+    {
+        return persistence.commitItem(installation);
+    }
+
+    public boolean deleteInstallation(int InstallationID)
+    {
+        return persistence.deleteItem(new Criterion<>(Installation.class,"installationID",EqualTo,InstallationID));
+    }
+
 
 }

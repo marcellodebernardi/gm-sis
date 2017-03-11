@@ -5,6 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 import logic.*;
 import persistence.DatabaseRepository;
 
@@ -29,7 +32,7 @@ public class SpecialistRepairController {
     private RadioButton vehicle_repair, part_repair;
 
     @FXML
-    private TableView<SpecRepBooking> specialistTable;
+    private TableView<VehicleRepair> VehicleRepairs;
 
     @FXML
     private TextField instID;//holds installationID
@@ -54,40 +57,89 @@ public class SpecialistRepairController {
     @FXML
     private Button btn_add_src, btn_del_src, btn_edit_src, btn_updateSRC, btn_deleteSRC, btn_submitSRC,
             findSRCToEdit, btn_edit_booking, btn_add_booking, btn_del_booking, delete_booking, searchForSRCBooking,
-            search_src_deletion, cancelDeletion, findBookingToEdit, applyEditingChanges, findBookingForSRC;
+            search_src_deletion, cancelDeletion, findBookingToEdit, applyEditingChanges,findBookingForSRC;
 
     private int spcIDEdit, editBookingID;
     private int bookingID = 0;
 
 
     @FXML
-    private TextField returnDate, deliveryDate, bookingCost, spcToEdit, spcIDtoDelete, new_spcEmail, new_spcPho, new_spcAdd, new_spcName,
-            part_name, part_cost, stock_level, part_des, instaDate, bookingSPCID, partAbsID, partOccID, bookingItemID, bookingSPCName,
-            itemToSearch, edit_booking_ID, findBooking;
+    private TextField bookingCost, spcToEdit, spcIDtoDelete, new_spcEmail, new_spcPho, new_spcAdd, new_spcName,
+            part_name, part_cost, stock_level, part_des, instaDate, bookingSPCID, partAbsID, partOccID, bookingItemID, bookingSPCName,returnDate, deliveryDate,
+            itemToSearch, edit_booking_ID,findBooking;
 
-    private final ObservableList tableEntries = FXCollections.observableArrayList();
-
-   /* @FXML
-    private TableColumn<SpecRepBooking, String> TbookingTableItem, TbookingItemName, TbookingItemType, TbookingSRCName ;*/
+    private final ObservableList<VehicleRepair> tableEntries = FXCollections.observableArrayList();
 
     @FXML
-    private TableColumn<SpecRepBooking, Integer> TbookingSRC;
+    private TableColumn<VehicleRepair, String> reg_of_vehicle_for_srbooking;
+
+    @FXML
+    private TableColumn<VehicleRepair, Integer> spcRep_ID_of_Booking, spcID_of_vehiclerepair;
+
+
+    @FXML
+    private TableColumn<VehicleRepair, Date> TbookingSRCName,TbookingSRC;
 
 
     /*@FXML
     private void updateTableViewSpecialistBooking(List<SpecRepBooking> specRepBookings)
     {
-        specialistTable.getItems().clear();
+        VehicleRepairs.getItems().clear();
         tableEntries.removeAll(tableEntries);
         for (SpecRepBooking specRepBooking: specRepBookings)
         {
             tableEntries.add(specRepBooking);
         }
-        TbookingTableItem.setCellValueFactory(new PropertyValueFactory<SpecRepBooking, String>("spcRepID"));
-        TbookingTableItem.setCellFactory(TextFieldTableCell.<SpecRepBooking>forTableColumn());
+        reg_of_vehicle_for_srbooking.setCellValueFactory(new PropertyValueFactory<SpecRepBooking, String>("spcRepID"));
+        reg_of_vehicle_for_srbooking.setCellFactory(TextFieldTableCell.<SpecRepBooking>forTableColumn());
 
 
     }*/
+
+    /**
+     * Search for a vehicle in db of specialist repair bookings
+     */
+    @FXML
+    public void searchVehiclesSRC() {
+
+        if (veh_selected.isSelected()) {
+
+            List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(itemToSearch.getText());
+            //todo implement list into table view
+            for(VehicleRepair vehicleRepairs1: vehicleRepairs)
+            {
+                System.out.println(vehicleRepairs1.getSpcRepID());
+            }
+            updateTableViewVehicleRepair(vehicleRepairs);
+        } else if (src_selected.isSelected()) {
+            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(itemToSearch.getText());
+            //todo implement list into table view
+            updateTableViewSpecialistRepair(specialistRepairCenters);
+        }
+    }
+
+    @FXML
+    private void updateTableViewVehicleRepair(List<VehicleRepair> vehicleRepairs)
+    {
+        VehicleRepairs = new TableView<>();
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        tableEntries.addAll(vehicleRepairs);
+        //tableEntries.addAll(vehicleRepairs);
+        reg_of_vehicle_for_srbooking = new TableColumn<>();
+        spcID_of_vehiclerepair = new TableColumn<>();
+        spcRep_ID_of_Booking = new TableColumn<>();
+        reg_of_vehicle_for_srbooking.setCellValueFactory(new PropertyValueFactory<VehicleRepair, String>("vehicleRegNumber"));
+        reg_of_vehicle_for_srbooking.setCellFactory(TextFieldTableCell.<VehicleRepair>forTableColumn());
+        spcRep_ID_of_Booking.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Integer>("spcRepID"));
+        spcRep_ID_of_Booking.setCellFactory(TextFieldTableCell.<VehicleRepair, Integer>forTableColumn(new IntegerStringConverter()));
+        spcID_of_vehiclerepair.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Integer>("spcID"));
+        spcID_of_vehiclerepair.setCellFactory(TextFieldTableCell.<VehicleRepair, Integer>forTableColumn(new IntegerStringConverter()));
+        //TbookingSRC.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Date>("deliveryDate"));
+        //TbookingSRCName.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Date>("returnDate"));
+        //  VehicleRepairs.getColumns().setAll(reg_of_vehicle_for_srbooking, spcRep_ID_of_Booking, spcID_of_vehiclerepair);
+        //VehicleRepairs.setVisible(true);
+        VehicleRepairs.setItems(tableEntries);
+    }
 
     /**
      * Search a specific SRC to edit
@@ -107,14 +159,16 @@ public class SpecialistRepairController {
     }
 
     @FXML
-    public void findBookingForSRBooking() {
+    public void findBookingForSRBooking()
+    {
         try {
             List<DiagRepBooking> diagRepBookings = bookingSystem.searchBookings(findBooking.getText());
             DiagRepBooking diagRepBooking = diagRepBookings.get(0);
             bookingID = diagRepBooking.getBookingID();
 
         }
-        catch (IndexOutOfBoundsException | NullPointerException e) {
+        catch (IndexOutOfBoundsException | NullPointerException e)
+        {
             showAlert("No relevant booking found. Please enter a valid Booking ID, if you do not know what this is please search in the Bookings system.");
         }
 
@@ -124,8 +178,6 @@ public class SpecialistRepairController {
 
     /**
      * Allows a booking to be made
-     * todo implement way of getting bookings to be integrated!
-     * todo IMPLEMENT PROPER TIME INPUT.
      */
     @FXML
     public void allowBooking() {
@@ -134,39 +186,46 @@ public class SpecialistRepairController {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             Date dD = format.parse(deliveryDate.getText());
             Date rD = format.parse(returnDate.getText());
-            if (bookingID != 0) {
-                if (vehicle_repair.isSelected()) {
-                    if (vehicleSys.VehicleExists(bookingItemID.getText())) {
-                        VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD,
-                                Double.parseDouble(bookingCost.getText()), bookingID, bookingItemID.getText());
-                        specialistRepairCenter.addToBooking(vehicleRepair);
+            if(dD.compareTo(new Date())>=0 && dD.compareTo(rD) == -1) {
+                if (bookingID != 0) {
+                    if (vehicle_repair.isSelected()) {
+                        if (vehicleSys.VehicleExists(bookingItemID.getText())) {
+                            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD,
+                                    Double.parseDouble(bookingCost.getText()), bookingID, bookingItemID.getText());
+                            specialistRepairCenter.addToBooking(vehicleRepair);
+                            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+                            specRepairSystem.addSpecialistBooking(vehicleRepair);
+                        } else {
+                            showAlert("This vehicle is not registered in our system, please register the vehicle : " + bookingItemID.getText() + " before continuing.");
+                        }
+
+                    }
+                    if (part_repair.isSelected()) {
+                        PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD,
+                                Double.parseDouble(bookingCost.getText()), bookingID, Integer.parseInt(bookingItemID.getText()));
+                        specialistRepairCenter.addToBooking(partRepair);
                         specRepairSystem.updateRepairCentre(specialistRepairCenter);
-                        specRepairSystem.addSpecialistBooking(vehicleRepair);
+                        specRepairSystem.addSpecialistBooking(partRepair);
                     }
-                    else {
-                        showAlert("This vehicle is not registered in our system, please register the vehicle : " + bookingItemID.getText() + " before continuing.");
-                    }
-
-                }
-                if (part_repair.isSelected()) {
-                    PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), dD, rD,
-                            Double.parseDouble(bookingCost.getText()), bookingID, Integer.parseInt(bookingItemID.getText()));
-                    specialistRepairCenter.addToBooking(partRepair);
-                    specRepairSystem.updateRepairCentre(specialistRepairCenter);
-                    specRepairSystem.addSpecialistBooking(partRepair);
                 }
             }
-            else {
-                showAlert("Please enter a valid booking ID");
+            else
+            {
+                throw new InvalidDateException("Invalid Dates entered");
             }
 
-        }
-        catch (ParseException | NumberFormatException e) {
-            if (e instanceof NumberFormatException) {
-                showAlert("There is an error in one the fields. Please check all your fields before submitting.ad");
+        } catch (ParseException  | NumberFormatException | InvalidDateException e) {
+            if(e instanceof NumberFormatException)
+            {
+             showAlert("There is an error in one the fields. Please check all your fields before submitting.ad");
             }
-            else {
+            if(e instanceof InvalidDateException)
+            {
                 showAlert(e.getMessage());
+            }
+            if(e instanceof  ParseException)
+            {
+                showAlert("Please enter a valid date!");
             }
         }
 
@@ -190,9 +249,23 @@ public class SpecialistRepairController {
      */
     @FXML
     public void findSRCForBooking() {
-        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
-        bookingSPCName.setText(specialistRepairCenter.getName());
-        bookingSPCName.setEditable(false);
+        try {
+            SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+            bookingSPCName.setText(specialistRepairCenter.getName());
+            bookingSPCName.setEditable(false);
+        }
+        catch (IndexOutOfBoundsException | NumberFormatException e)
+        {
+            if(e instanceof IndexOutOfBoundsException)
+            {
+            showAlert("Please enter a valid Specialist repair center ID.");
+            }
+            if(e instanceof  NumberFormatException)
+            {
+                showAlert("Please enter a numerical value.");
+            }
+
+        }
     }
 
     /**
@@ -201,16 +274,16 @@ public class SpecialistRepairController {
      */
     @FXML
     public void deleteSRC() {
-        confirmDelete(Integer.parseInt(spcIDtoDelete.getText()));
+        //confirmDelete(Integer.parseInt(spcIDtoDelete.getText()));
     }
 
-    private void confirmDelete(int spcToDelete) {
+   /* private void confirmDelete(int spcToDelete) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setContentText("Are you sure you want to delete this SRC?");
         alert.showAndWait();
 
-    }
+    }/*
 
 
     /**
@@ -244,8 +317,7 @@ public class SpecialistRepairController {
     void displayFields() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
             btn_add_src.setDisable(true);
-        }
-        else {
+        } else {
             spcToEdit.setVisible(false);
             findSRCToEdit.setVisible(false);
             spcIDtoDelete.setVisible(false);
@@ -272,8 +344,7 @@ public class SpecialistRepairController {
     void displayFieldsToEdit() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
             btn_edit_src.setDisable(true);
-        }
-        else {
+        } else {
             spcToEdit.setVisible(true);
             findSRCToEdit.setVisible(true);
             spcIDtoDelete.setVisible(false);
@@ -310,24 +381,6 @@ public class SpecialistRepairController {
         }
     }
 
-    /**
-     * Search for a vehicle in db of specialist repair bookings
-     */
-    @FXML
-    public void searchVehiclesSRC() {
-
-        if (veh_selected.isSelected()) {
-
-            List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(itemToSearch.getText());
-            //todo implement list into table view
-            updateTableViewVehicleRepair(vehicleRepairs);
-        }
-        else if (src_selected.isSelected()) {
-            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(itemToSearch.getText());
-            //todo implement list into table view
-            updateTableViewSpecialistRepair(specialistRepairCenters);
-        }
-    }
 
     /**
      * Displays relevant fields for deletion of an SRC, hides all other irrelevant parts
@@ -337,8 +390,7 @@ public class SpecialistRepairController {
     public void showID() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
             btn_del_src.setDisable(true);
-        }
-        else {
+        } else {
             spcToEdit.setVisible(false);
             findSRCToEdit.setVisible(false);
             new_spcName.setVisible(false);
@@ -354,14 +406,11 @@ public class SpecialistRepairController {
         }
     }
 
-    @FXML
-    private <E> void updateTableViewVehicleRepair(List<E> repairs) {
 
-    }
 
     @FXML
     private void updateTableViewSpecialistRepair(List<SpecialistRepairCenter> specialistRepairCenters) {
-        specialistTable.getItems().clear();
+        VehicleRepairs.getItems().clear();
 
     }
 
@@ -470,7 +519,7 @@ public class SpecialistRepairController {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse(deliveryDate.getText());
             if (date.compareTo(new Date()) == -1) {
-                throw new InvalidDateException("This booking has already been done.");
+                throw new InvalidDateException("This booking may have already been completed.");
             }
             if (vehicle_repair.isSelected()) {
                 if (specRepairSystem.deleteVehicleRepair(bookingItemID.getText(), spcIDEdit, date))
@@ -479,8 +528,7 @@ public class SpecialistRepairController {
                     showAlert("Deletion failed, check fields");
                 }
 
-            }
-            else if (part_repair.isSelected()) {
+            } else if (part_repair.isSelected()) {
                 if (specRepairSystem.deletePartRepair(Integer.parseInt(bookingItemID.getText()), spcIDEdit, date))
                     showAlert("Deletion confirmed");
                 else {
@@ -490,8 +538,7 @@ public class SpecialistRepairController {
             }
             promptFields();
 
-        }
-        catch (ParseException | InvalidDateException e) {
+        } catch (ParseException | InvalidDateException e) {
             promptFields();
             showAlert(e.getMessage());
         }
@@ -539,7 +586,6 @@ public class SpecialistRepairController {
 
     @FXML
     public void showEditingFields() {
-        //System.out.println(edit_booking_ID.getText());
         btn_add_booking.setVisible(false);
         btn_del_booking.setVisible(false);
         bookingSPCID.clear();
@@ -559,7 +605,7 @@ public class SpecialistRepairController {
     }
 
     /**
-     * todo insure that a valid and proper date is shown
+     *
      */
     @FXML
     public void findBooking() {
@@ -578,8 +624,7 @@ public class SpecialistRepairController {
                 bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
                 bookingCost.setText(Double.toString(vehicleRepair.getCost()));
                 findBooking.setText(Integer.toString(vehicleRepair.getBookingID()));
-            }
-            else if (part_repair.isSelected()) {
+            } else if (part_repair.isSelected()) {
                 PartRepair partRepair = specRepairSystem.findPartRepairBooking(Integer.parseInt(edit_booking_ID.getText()));
                 bookingSPCID.setText(Integer.toString(partRepair.getSpcID()));
                 SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(partRepair.getSpcID());
@@ -591,7 +636,8 @@ public class SpecialistRepairController {
                 findBooking.setText(Integer.toString(partRepair.getBookingID()));
             }
         }
-        catch (Exception e) {
+        catch(Exception e)
+        {
             e.printStackTrace();
             showAlert(e.getMessage());
         }
@@ -616,8 +662,7 @@ public class SpecialistRepairController {
                     vehicleRepair.setReturnDate(retDate);
                     vehicleRepair.setSpcID(spcID);
                     specRepairSystem.updateBookings(vehicleRepair);
-                }
-                else if (part_repair.isSelected()) {
+                } else if (part_repair.isSelected()) {
                     PartRepair partRepair = specRepairSystem.findPartRepairBooking(editBookingID);
                     int partOccurrenceID = Integer.parseInt(bookingItemID.getText());
                     partRepair.setPartOccurrenceID(partOccurrenceID);
@@ -629,7 +674,8 @@ public class SpecialistRepairController {
                 }
                 promptFields();
             }
-            else {
+            else
+            {
                 throw new InvalidDateException("Error in dates, check that delivery date is NOT in the past and the return day is after the delivery date!");
             }
         }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="918.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SpecialistController">
+   <center>
+      <TableView fx:id="specialistBookings" onMouseClicked="#showDetails" prefHeight="417.0" prefWidth="613.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="itemID" prefWidth="131.0" text="Item ID:" />
+          <TableColumn fx:id="deliveryDateOfBooking" prefWidth="100.0" text="Delivery Date:" />
+            <TableColumn fx:id="returnDateOfBooking" prefWidth="93.0" text="Return Date:" />
+            <TableColumn fx:id="costOfBooking" prefWidth="83.0" text="Cost:" />
+            <TableColumn fx:id="spcIDOfBooking" prefWidth="90.0" text="SPC ID:" />
+            <TableColumn fx:id="bookingIDOfBooking" prefWidth="144.0" text="Booking ID" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <Pane prefHeight="648.0" prefWidth="853.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="bookingID" layoutX="14.0" layoutY="28.0" promptText="Enter a booking ID" />
+            <Label layoutX="14.0" layoutY="6.0" prefHeight="16.0" prefWidth="168.0" text="Booking ID:" />
+            <Button layoutX="189.0" layoutY="28.0" mnemonicParsing="false" text="Find" />
+            <TextField fx:id="bookingItemID" layoutX="246.0" layoutY="28.0" promptText="Enter an item ID:" />
+            <Button layoutX="420.0" layoutY="28.0" mnemonicParsing="false" text="Find" />
+            <Label layoutX="247.0" layoutY="6.0" prefHeight="16.0" prefWidth="168.0" text="Item ID:" />
+            <Group layoutX="480.0" layoutY="10.0">
+               <children>
+                  <DatePicker fx:id="bookingDeliveryDate" layoutY="19.0" prefHeight="19.0" prefWidth="168.0" promptText="Select a delivery date:" />
+                  <Label text="Select delivery date:" />
+               </children>
+            </Group>
+            <Group layoutX="664.0" layoutY="10.0">
+               <children>
+                  <Label layoutX="2.0" text="Select a return date:" />
+                  <DatePicker fx:id="bookingReturnDate" layoutY="19.0" prefHeight="19.0" prefWidth="168.0" promptText="Select a delivery date:" />
+               </children>
+            </Group>
+            <Group layoutX="14.0" layoutY="65.0">
+               <children>
+                  <TextField fx:id="bookingSPCID" layoutY="23.0" />
+                  <Label layoutX="1.0" prefHeight="16.0" prefWidth="168.0" text="Specialist repair center ID:" />
+                  <Button layoutX="175.0" layoutY="23.0" mnemonicParsing="false" text="Find" />
+               </children>
+            </Group>
+            <TextField fx:id="bookingSPCName" editable="false" layoutX="246.0" layoutY="91.0" />
+            <Label layoutX="251.0" layoutY="66.0" prefHeight="17.0" prefWidth="160.0" text="SPC name:" />
+            <Button fx:id="addSRBooking" layoutX="523.0" layoutY="91.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="27.0" prefWidth="129.0" text="Add Booking" />
+            <TableView fx:id="Installations" layoutX="14.0" layoutY="224.0" onMouseClicked="#showInstallationDetails" prefHeight="253.0" prefWidth="640.0">
+              <columns>
+                <TableColumn fx:id="instDate" prefWidth="150.0" text="Installation Date:" />
+                  <TableColumn fx:id="warrDate" prefWidth="150.0" text="Warranty End Date:" />
+                  <TableColumn fx:id="partOccID" prefWidth="150.0" text="Part Serial Number:" />
+                  <TableColumn fx:id="VehicleReg" prefWidth="189.0" text="Vehicle Registration:" />
+              </columns>
+            </TableView>
+            <Button fx:id="hideInstalls" layoutX="523.0" layoutY="492.0" mnemonicParsing="false" onAction="#hideInstallations" prefHeight="26.0" prefWidth="129.0" text="Hide Installations" visible="false" />
+            <ComboBox fx:id="bookingType" layoutX="664.0" layoutY="91.0" prefHeight="27.0" prefWidth="167.0" />
+            <Label layoutX="420.0" layoutY="66.0" prefHeight="17.0" prefWidth="160.0" text="Cost:" />
+            <TextField fx:id="bookingCost" layoutX="420.0" layoutY="91.0" prefHeight="16.0" prefWidth="96.0" />
+            <Button fx:id="cancelEdit" layoutX="14.0" layoutY="137.0" mnemonicParsing="false" onAction="#cancelEditing" prefHeight="29.0" prefWidth="135.0" text="Cancel Editing" visible="false" />
+            <Button fx:id="updateSRBooking" layoutX="523.0" layoutY="91.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="26.0" prefWidth="129.0" text="Update Booking" visible="false" />
+            <DatePicker fx:id="instaDate" layoutX="14.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Installation Date" />
+            <DatePicker fx:id="wEndDate" layoutX="211.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Warranty End Date" />
+            <TextField fx:id="instaAbsID" layoutX="411.0" layoutY="506.0" promptText="Part Abstraction ID:" />
+            <TextField fx:id="instaOccID" layoutX="596.0" layoutY="506.0" promptText="Part Occurence ID:" />
+            <Button fx:id="addInsta" layoutX="684.0" layoutY="224.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="26.0" prefWidth="129.0" text="Add Installation" />
+            <Button fx:id="deleteInsta" layoutX="684.0" layoutY="287.0" mnemonicParsing="false" onAction="#deleteInstallation" prefHeight="26.0" prefWidth="129.0" text="Delete Installation" />
+            <Button fx:id="editInsta" layoutX="684.0" layoutY="351.0" mnemonicParsing="false" onAction="#editInstallation" prefHeight="26.0" prefWidth="129.0" text="Edit Installation" />
+            <TextField fx:id="instaVReg" layoutX="14.0" layoutY="556.0" promptText="Vehicle Reg:" />
+            <Button fx:id="allowUpdate" layoutX="211.0" layoutY="556.0" mnemonicParsing="false" onAction="#updateInstallation" prefHeight="23.0" prefWidth="130.0" text="Update" />
+            <Button fx:id="cancelInstallationUpdate" layoutX="355.0" layoutY="556.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" />
+         </children>
+      </Pane>
+   </bottom>
+   <left>
+      <Pane prefHeight="286.0" prefWidth="10.0" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Pane prefHeight="0.0" prefWidth="201.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="editSRBooking" layoutX="22.0" layoutY="68.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="27.0" prefWidth="129.0" text="Edit Booking" />
+            <Button fx:id="deleteSRBooking" layoutX="23.0" layoutY="120.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="27.0" prefWidth="129.0" text="Delete Booking" />
+            <Button fx:id="viewVehicleInstallations" layoutX="23.0" layoutY="14.0" mnemonicParsing="false" onAction="#showInstallations" prefHeight="27.0" prefWidth="129.0" text="View Parts" />
+         </children>
+      </Pane>
+   </right>
+   <top>
+      <Pane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="idOfBookingItem" layoutX="11.0" layoutY="19.0" prefHeight="27.0" prefWidth="415.0" promptText="Enter a vehicle registration" />
+            <Button fx:id="searchForBookings" layoutX="466.0" layoutY="19.0" mnemonicParsing="false" onAction="#findSRCBookings" prefHeight="27.0" prefWidth="105.0" text="Search" />
+         </children>
+      </Pane>
+   </top>
+</BorderPane>
