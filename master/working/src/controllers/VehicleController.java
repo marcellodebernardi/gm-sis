@@ -1005,11 +1005,12 @@ public class VehicleController implements Initializable
                 items.add(PA.getPartName());
             }
             PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
+            PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
         catch (Exception e)
         {
-            showAlert("error");
+            showAlert("No Booking selected");
         }
     }
 
@@ -1109,6 +1110,10 @@ public class VehicleController implements Initializable
 
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            if (arrayList.size() == 0)
+            {
+                return;
+            }
             DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
             DateTime nextRepBooking = arrayList.get(0).getRepairStart();
             DateTime DTD = new DateTime();
@@ -1148,7 +1153,6 @@ public class VehicleController implements Initializable
         catch (Exception e)
         {
             showAlert("No Bookings");
-            showAlert(e.getMessage());
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -1172,6 +1176,7 @@ public class VehicleController implements Initializable
                 items.add(PA.getPartName());
             }
             PartLabel.setText("Vehicle Reg: " +  vehicle.getRegNumber());
+            PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
         catch (Exception e)
