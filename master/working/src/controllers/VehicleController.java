@@ -338,12 +338,12 @@ public class VehicleController implements Initializable
 
     public void DisplayTable(List<Vehicle> arrayList) {
         try {
-            addCustomerB.setDisable(false);
-            bookingsB.setDisable(false);
+            //addCustomerB.setDisable(false);
+            //bookingsB.setDisable(false);
             DeleteVT.setDisable(false);
             EditVehicle.setDisable(false);
             searchTable.setDisable(false);
-            ViewPartsB.setDisable(false);
+            //ViewPartsB.setDisable(false);
             tableEntries.removeAll(tableEntries);
             ArrayList<Boolean> b = new ArrayList<Boolean>();
             for (int i = 0; i < arrayList.size(); i++) {
@@ -562,7 +562,7 @@ public class VehicleController implements Initializable
                 public String toString(Date object) {
                     if (object == null)
                     {
-                        return "n/a";
+                        return null;
                     }
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                     return format.format(object);
@@ -930,7 +930,7 @@ public class VehicleController implements Initializable
     public void ViewBookingDates()
     {
         Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-        SelectedVehicle.setText(vehicle.getRegNumber());
+        //SelectedVehicle.setText(vehicle.getRegNumber());
         PartsUsed.setDisable(false);
         try {
             BookingsTable.setDisable(false);
@@ -1018,8 +1018,9 @@ public class VehicleController implements Initializable
     {
         try {
             setNextBookingDate();
+            ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
-            vehicleS.setText(vehicle.getRegNumber());
+            //vehicleS.setText(vehicle.getRegNumber());
             CustomerTable.setDisable(false);
             tableEntriesC.removeAll(tableEntriesC);
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
@@ -1107,7 +1108,7 @@ public class VehicleController implements Initializable
     public void setNextBookingDate()
     {
         try {
-
+            VehicleParts();
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
             if (arrayList.size() == 0)

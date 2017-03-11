@@ -122,4 +122,7 @@
          </items>
       </SplitPane>
    </center>
+   <right>
+      <BorderPane prefHeight="638.0" prefWidth="9.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>
