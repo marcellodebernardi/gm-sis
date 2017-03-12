@@ -95,11 +95,8 @@ public class VehicleController implements Initializable
     @FXML
     private ListView ListParts;
 
-    @FXML
-    public void initialize() {
-        searchVehicleA();
-        showAlert("hiii");
-    }
+
+
 
 
 
@@ -1241,7 +1238,9 @@ public class VehicleController implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         setCustomerCombo();
+        searchVehicleA();
     }
 
     public void setCustomerCombo()
