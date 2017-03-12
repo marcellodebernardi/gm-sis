@@ -137,17 +137,22 @@ public abstract class SpecRepBooking implements Searchable {
         }
     }
 
-    public void setDeliveryDate(Date date)
+    public boolean setDeliveryDate(Date date)
     {
         if(date.after(new Date())) {
             this.deliveryDate = date;
+            return true;
         }
+        return false;
     }
 
-    public void setReturnDate(Date date)
+    public boolean setReturnDate(Date date)
     {
-        if(date.after(this.deliveryDate))
-        this.returnDate = date;
+        if(date.after(this.deliveryDate)) {
+            this.returnDate = date;
+            return true;
+        }
+                return false;
     }
 
     public void setCost(double cost)
