@@ -57,6 +57,7 @@ public class SpecialistController implements Initializable{
     }
     @FXML
     private ComboBox<String> bookingType;
+
     public void setValues()
     {
         bookingType.getItems().addAll("Vehicle", "Part");
@@ -102,13 +103,13 @@ public class SpecialistController implements Initializable{
             bookingID.setEditable(false);
             bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
             bookingItemID.setEditable(false);
-            Instant instant = vehicleRepair.getDeliveryDate().toInstant();
-            ZoneId defaultZoneId = ZoneId.systemDefault();
-            java.time.LocalDate deliveryDate = instant.atZone(defaultZoneId).toLocalDate();
+           // Instant instant = vehicleRepair.getDeliveryDate().toInstant();
+            //ZoneId defaultZoneId = ZoneId.systemDefault();
+            java.time.LocalDate deliveryDate = toLocalDate(vehicleRepair.getDeliveryDate());
             bookingDeliveryDate.setValue(deliveryDate);
             bookingDeliveryDate.setEditable(false);
-            Instant returnInstant = vehicleRepair.getReturnDate().toInstant();
-            java.time.LocalDate returnDate = returnInstant.atZone(defaultZoneId).toLocalDate();
+            //Instant returnInstant = vehicleRepair.getReturnDate().toInstant();
+            java.time.LocalDate returnDate = toLocalDate(vehicleRepair.getReturnDate());
             bookingReturnDate.setValue(returnDate);
             bookingReturnDate.setEditable(false);
             SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(vehicleRepair.getSpcID());
@@ -141,7 +142,6 @@ public class SpecialistController implements Initializable{
         bookingID.setEditable(false);
         bookingItemID.setEditable(false);
         bookingSPCID.setEditable(false);
-        //bookingSPCName.setEditable(false);
         bookingCost.setEditable(false);
         cancelEdit.setVisible(false);
         bookingType.setVisible(true);
@@ -233,7 +233,7 @@ public class SpecialistController implements Initializable{
             }
             else
             {
-                System.out.println("Please select the correct type of booking");
+               showAlert("Please select the correct type of booking");
             }
 
         }
@@ -255,6 +255,7 @@ public class SpecialistController implements Initializable{
     }
 
     //todo fix up the date issue
+    //think it works now lol
     private void displaySpecRepBookings(List<VehicleRepair> vehicleRepairs)
     {
         specialistBookings.getItems().clear();
@@ -278,10 +279,6 @@ public class SpecialistController implements Initializable{
         returnDateOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Date>forTableColumn(new StringConverter<Date>() {
             @Override
             public String toString(Date object) {
-                if (object == null)
-                {
-                    return "n/a";
-                }
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 return format.format(object);
             }
@@ -317,6 +314,8 @@ public class SpecialistController implements Initializable{
     private DatePicker instaDate, wEndDate = new DatePicker();
     @FXML
     private TextField instaAbsID, instaOccID, instaVReg;
+    @FXML
+    private Label instaAbsID_lbl, instaOccID_lbl, instaVReg_lbl,instaDate_lbl, wEndDate_lbl = new Label();
 
 
     public void showInstallations()
@@ -335,6 +334,11 @@ public class SpecialistController implements Initializable{
         instaAbsID.setVisible(true);
         instaOccID.setVisible(true);
         instaVReg.setVisible(true);
+        instaAbsID_lbl.setVisible(true);
+        instaDate_lbl.setVisible(true);
+        instaOccID_lbl.setVisible(true);
+        instaVReg_lbl.setVisible(true);
+        wEndDate_lbl.setVisible(true);
 
     }
 
@@ -376,37 +380,49 @@ public class SpecialistController implements Initializable{
                 return new Date(string);
             }
         }));
-        /*
+
         partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                 ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
                 return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
             }
         });
-
         partOccID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
-        */
+
         Installations.setItems(installationObservableList);
     }
 
     @FXML
     public void showInstallationDetails()
     {
-        Installation installation = Installations.getSelectionModel().getSelectedItem();
-        instaVReg.setText(installation.getVehicleRegNumber());
-        //PartOccurrence partOccurrence = installation.getPartOccurrence();
-        instaAbsID.setText(Integer.toString(installation.getPartAbstractionID()));
-        installationID = installation.getInstallationID();
-       // instaOccID.setText(Integer.toString(partOccurrence.getPartOccurrenceID()));
-        Instant instant = installation.getInstallationDate().toInstant();
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        java.time.LocalDate installationDate = instant.atZone(defaultZoneId).toLocalDate();
-        Instant returnInstant = installation.getEndWarrantyDate().toInstant();
-        java.time.LocalDate returnDate = returnInstant.atZone(defaultZoneId).toLocalDate();
-        instaDate.setValue(installationDate);
-        wEndDate.setValue(returnDate);
-
+        try {
+            Installation installation = Installations.getSelectionModel().getSelectedItem();
+            instaVReg.setText(installation.getVehicleRegNumber());
+            instaAbsID.setText(Integer.toString(installation.getPartAbstractionID()));
+            installationID = installation.getInstallationID();
+            //showAlert(Integer.toString(installationID));
+            instaOccID.setText(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
+            //methods required to sort out date
+            //Instant instant = installation.getInstallationDate().toInstant();
+            //ZoneId defaultZoneId = ZoneId.systemDefault();
+           // java.time.LocalDate installationDate = instant.atZone(defaultZoneId).toLocalDate();
+            // Instant returnInstant = installation.getEndWarrantyDate().toInstant();
+            //PartOccurrence partOccurrence = installation.getPartOccurrence();
+            //showAlert(Integer.toString(partOccurrence.getPartOccurrenceID()));
+            java.time.LocalDate installationDate = toLocalDate(installation.getInstallationDate());
+            java.time.LocalDate returnDate = toLocalDate(installation.getEndWarrantyDate());
+            instaDate.setValue(installationDate);
+            wEndDate.setValue(returnDate);
+        }
+        catch (NullPointerException e)
+        {
+            showAlert("No available installations.");
+            //showAlert("An error has occurred...please stand by");
+        }
     }
+
+
+
 
     public void hideInstallations()
     {
@@ -420,10 +436,21 @@ public class SpecialistController implements Initializable{
         instaAbsID.setVisible(false);
         instaOccID.setVisible(false);
         instaVReg.setVisible(false);
+        instaDate.setValue(null);
+        wEndDate.setValue(null);
+        instaAbsID.clear();
+        instaVReg.clear();
+        instaOccID.clear();
+        instaAbsID_lbl.setVisible(false);
+        instaDate_lbl.setVisible(false);
+        instaOccID_lbl.setVisible(false);
+        instaVReg_lbl.setVisible(false);
+        wEndDate_lbl.setVisible(false);
     }
 
     //add an SRC Booking
     //todo fix up the date problem
+    //think i fixed it lol
     public void addBooking()
     {
         try {
@@ -433,11 +460,13 @@ public class SpecialistController implements Initializable{
                 Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
                 diagRepBooking.setBill(bill);
                 bookingSystem.addBooking(diagRepBooking);
-                ZoneId defaultZoneId = ZoneId.systemDefault();
-                java.time.LocalDate delDate = bookingDeliveryDate.getValue();
-                java.time.LocalDate retDate = bookingReturnDate.getValue();
-                Date deliveryDate = Date.from(delDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Date returnDate = Date.from(retDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                //ZoneId defaultZoneId = ZoneId.systemDefault();
+                //java.time.LocalDate delDate = bookingDeliveryDate.getValue();
+                //java.time.LocalDate retDate = bookingReturnDate.getValue();
+                //Date deliveryDate = Date.from(delDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                //Date returnDate = Date.from(retDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
+                Date returnDate = fromLocalDate(bookingReturnDate.getValue());
                 if (!deliveryDate.before(new Date()) && returnDate.after(deliveryDate)) {
                     if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
                         VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
@@ -470,6 +499,18 @@ public class SpecialistController implements Initializable{
         }
     }
 
+    private java.time.LocalDate toLocalDate(Date date)
+    {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Instant instant = date.toInstant();
+        return instant.atZone(zoneId).toLocalDate();
+    }
+
+    private Date fromLocalDate(java.time.LocalDate localDate)
+    {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
     //todo fix this shit up
     public void addInstallation()
     {
@@ -484,7 +525,7 @@ public class SpecialistController implements Initializable{
         allowUpdate.setVisible(true);
 
     }
-
+    //cannot update any date related issue
     public void updateInstallation() {
         Installation installation = specRepairSystem.getByInstallationID(installationID);
         installation.setVehicleRegNumber(instaVReg.getText());
@@ -504,7 +545,6 @@ public class SpecialistController implements Initializable{
     {
         try {
             Installation installation = specRepairSystem.getByInstallationID(installationID);
-            System.out.println(installation.getInstallationID());
             if (deleteConfirmation("Are you sure you want to delete this installation?")) {
                 specRepairSystem.deleteInstallation(installation.getInstallationID());
             }

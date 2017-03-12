@@ -79,6 +79,11 @@
             <TextField fx:id="instaVReg" layoutX="14.0" layoutY="556.0" promptText="Vehicle Reg:" visible="false" />
             <Button fx:id="allowUpdate" layoutX="211.0" layoutY="556.0" mnemonicParsing="false" onAction="#updateInstallation" prefHeight="23.0" prefWidth="130.0" text="Update" visible="false" />
             <Button fx:id="cancelInstallationUpdate" layoutX="355.0" layoutY="556.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" visible="false" />
+            <Label fx:id="instaAbsID_lbl" layoutX="412.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Part Description ID:" visible="false" />
+            <Label fx:id="wEndDate_lbl" layoutX="212.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Warranty End date:" visible="false" />
+            <Label fx:id="instaDate_lbl" layoutX="15.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Installation Date:" visible="false" />
+            <Label fx:id="instaOccID_lbl" layoutX="596.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Part Occurrence ID:" visible="false" />
+            <Label fx:id="instaVReg_lbl" layoutX="15.0" layoutY="539.0" prefHeight="0.0" prefWidth="176.0" text="Vehicle Registration:" visible="false" />
          </children>
       </Pane>
    </bottom>
