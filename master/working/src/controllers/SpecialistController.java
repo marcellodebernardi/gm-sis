@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.crypto.provider.DHKeyAgreement;
 import com.sun.tools.corba.se.idl.InterfaceGen;
 import com.sun.tools.internal.xjc.reader.dtd.bindinfo.BIAttribute;
 import domain.*;
@@ -25,12 +26,13 @@ import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 import domain.PartRepair;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-//import java.time.LocalDate;
 import java.util.Date;
 import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.time.*;
 
 /**
  * @author: Muhammad Murad Ahmed 11/03/2017.
@@ -98,19 +100,24 @@ public class SpecialistController implements Initializable{
             bookingID.setEditable(false);
             bookingItemID.setText(vehicleRepair.getVehicleRegNumber());
             bookingItemID.setEditable(false);
-            //bookingDeliveryDate.setValue(new LocalDate());
-            //bookingReturnDate.setValue(new LocalDate());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = simpleDateFormat.parse(vehicleRepair.getDeliveryDate().toString());
+            Instant instant = date.toInstant();
+            ZoneId defaultZoneId = ZoneId.systemDefault();
+            java.time.LocalDate deliveryDate = instant.atZone(defaultZoneId).toLocalDate();
+            bookingDeliveryDate.setValue(deliveryDate);
+            java.time.LocalDate returnDate = instant.atZone(defaultZoneId).toLocalDate();
+            bookingReturnDate.setValue(returnDate);
             SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(vehicleRepair.getSpcID());
             bookingSPCID.setText(Integer.toString(specialistRepairCenter.getSpcID()));
             bookingSPCID.setEditable(false);
             bookingSPCName.setText(specialistRepairCenter.getName());
-            //bookingSPCName.setEditable(false);
             bookingCost.setText(Double.toString(vehicleRepair.getCost()));
             bookingCost.setEditable(false);
             spcRepID = vehicleRepair.getSpcRepID();
 
         }
-        catch (NullPointerException e)
+        catch (NullPointerException | ParseException e)
         {
             e.printStackTrace();
         }
@@ -184,7 +191,7 @@ public class SpecialistController implements Initializable{
         }
         else
         {
-            System.out.println("No booking was found of this type!");
+            showAlert("No booking was found of this type!");
         }
         cancelEditing();
     }
@@ -363,9 +370,9 @@ public class SpecialistController implements Initializable{
         Installation installation = Installations.getSelectionModel().getSelectedItem();
         instaVReg.setText(installation.getVehicleRegNumber());
         PartOccurrence partOccurrence = installation.getPartOccurrence();
-        instaOccID.setText(Integer.toString(partOccurrence.getPartOccurrenceID()));
         instaAbsID.setText(Integer.toString(installation.getPartAbstractionID()));
         installationID = installation.getInstallationID();
+        instaOccID.setText(Integer.toString(partOccurrence.getPartOccurrenceID()));
         //instaDate.setValue();
        // wEndDate.setValue();
 
@@ -396,22 +403,26 @@ public class SpecialistController implements Initializable{
                 Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
                 diagRepBooking.setBill(bill);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                java.time.LocalDate delDate = bookingDeliveryDate.getValue();
+                java.time.LocalDate retDate = bookingReturnDate.getValue();
+                Date deliveryDate = Date.from(delDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date returnDate = Date.from(retDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
-                    VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), new Date(), new Date(), Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
+                    VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
                     specRepairSystem.addSpecialistBooking(vehicleRepair);
                 } else {
-                    PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), new Date(), new Date(), Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
+                    PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
                     specRepairSystem.addSpecialistBooking(partRepair);
                 }
             }
             else
                 {
-                    System.out.println("Please enter a valid booking ID!");
+                    showAlert("Please enter a valid booking ID!");
                 }
         }
         catch (NumberFormatException e)
         {
-            System.out.println("Entered a non numerical value for a part ID.");
+            showAlert("Entered a non numerical value for a part ID.");
         }
     }
 

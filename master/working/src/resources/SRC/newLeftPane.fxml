@@ -63,7 +63,7 @@
                   <TableColumn fx:id="VehicleReg" prefWidth="189.0" text="Vehicle Registration:" />
               </columns>
             </TableView>
-            <Button fx:id="hideInstalls" layoutX="523.0" layoutY="492.0" mnemonicParsing="false" onAction="#hideInstallations" prefHeight="26.0" prefWidth="129.0" text="Hide Installations" visible="false" />
+            <Button fx:id="hideInstalls" layoutX="684.0" layoutY="413.0" mnemonicParsing="false" onAction="#hideInstallations" prefHeight="26.0" prefWidth="129.0" text="Hide Installations" visible="false" />
             <ComboBox fx:id="bookingType" layoutX="664.0" layoutY="91.0" prefHeight="27.0" prefWidth="167.0" />
             <Label layoutX="420.0" layoutY="66.0" prefHeight="17.0" prefWidth="160.0" text="Cost:" />
             <TextField fx:id="bookingCost" layoutX="420.0" layoutY="91.0" prefHeight="16.0" prefWidth="96.0" />
