@@ -49,7 +49,7 @@
    <center>
       <Pane prefHeight="604.0" prefWidth="961.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="customerSearch" disable="false" layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="911.0" promptText="by First name, Surname or Vehicle Registration number" />
+            <TextField fx:id="customerSearch" disable="false" layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="911.0" promptText="by Customer's First name, Surname or Vehicle Registration number" />
             <Button fx:id="customerSearchButton" layoutX="931.0" layoutY="62.0" mnemonicParsing="false" onAction="#searchCustomerInDB" text="Search" />
             <TableView fx:id="customerTable" layoutX="11.0" layoutY="102.0" prefHeight="200.0" prefWidth="909.0">
               <columns>
