@@ -56,6 +56,7 @@ class ObjectRelationalMapper {
         searchableList.add(Customer.class);
         searchableList.add(DiagRepBooking.class);
         searchableList.add(Installation.class);
+        searchableList.add(Mechanic.class);
         searchableList.add(PartAbstraction.class);
         searchableList.add(PartOccurrence.class);
         searchableList.add(PartRepair.class);

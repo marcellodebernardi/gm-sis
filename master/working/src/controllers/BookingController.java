@@ -2,9 +2,9 @@ package controllers;
 
 import domain.Customer;
 import domain.DiagRepBooking;
+import domain.Mechanic;
 import domain.Vehicle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,15 +17,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 import logic.BookingSystem;
 import logic.CustomerSystem;
 import logic.VehicleSys;
 import main.Main;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,12 +54,17 @@ public class BookingController {
 
     // buttons and search bars in left pane
     private TextField customerSearchBar;
+    private TextField diagnosisStartField;
+    private TextField diagnosisEndField;
+    private TextField descriptionField;
     private HBox leftBottomButtons;
     private Button addBookingButton;
     private Button deleteBookingButton;
     private Button editBookingButton;
+    private Button clearBookingButton;
     private ComboBox vehicleComboBox;
     private ComboBox customerComboBox;
+    private ComboBox mechanicComboBox;
 
     // tables and lists
     private TableView<DiagRepBooking> bookingsTable;
@@ -69,6 +73,7 @@ public class BookingController {
     private ObservableList<DiagRepBooking> bookingsObservable;
     private ObservableList<String> customerInfoObservable;
     private ObservableList<String> vehicleInfoObservable;
+    private ObservableList<String> mechanicInfoObservable;
 
 
     ///////////////// INTERFACE TO APPLICATION /////////////////
@@ -108,6 +113,7 @@ public class BookingController {
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////
+
     /**
      * Displays the pane for adding bookings.
      */
@@ -129,9 +135,9 @@ public class BookingController {
             // customer search and table
             customerSearchBar = new TextField();
             customerSearchBar.setOnKeyPressed(event -> {
-                    // todo fix to actually search
-                    displayCustomerComboBox(custSys.getAllCustomers());
-                    displayVehicleComboBox(vehicleSys.getVehiclesList());
+                // todo fix to actually search
+                displayCustomerComboBox(custSys.getAllCustomers());
+                displayVehicleComboBox(vehicleSys.getVehiclesList());
             });
             dataFieldPane.add(customerSearchBar, 1, 0);
             dataFieldPane.add(new Label("Select customer"), 0, 1);
@@ -145,33 +151,62 @@ public class BookingController {
 
             // more data fields
             dataFieldPane.add(new Label("Diagnosis Start Time"), 0, 3);
-            dataFieldPane.add(new TextField("dd/mm/yyyy"), 1, 3);
+            diagnosisStartField = new TextField("dd/mm/yyyy");
+            dataFieldPane.add(diagnosisStartField, 1, 3);
             dataFieldPane.add(new Label("Diagnosis End Time"), 0, 4);
-            dataFieldPane.add(new TextField("dd/mm/yyyy"), 1, 4);
+            diagnosisEndField = new TextField("dd/mm/yyyy");
+            dataFieldPane.add(diagnosisEndField, 1, 4);
             dataFieldPane.add(new Label("Description"), 0, 5);
-            dataFieldPane.add(new TextField("Write a description"), 1, 5);
+            descriptionField = new TextField("Write a description");
+            dataFieldPane.add(descriptionField, 1, 5);
+
+            // mechanic combobox
+            dataFieldPane.add(new Label("Select mechanic"), 0, 6);
+            mechanicComboBox = new ComboBox();
+            dataFieldPane.add(mechanicComboBox, 1, 6);
+            displayMechanicComboBox(bookSys.getAllMechanics()); // todo mechanic list
 
             // buttons
             leftBottomButtons = new HBox();
             leftBottomButtons.setId("leftBottomButtons");
             addBookingButton = new Button("Add booking");
             addBookingButton.setOnAction(event -> {
-                    DiagRepBooking booking = new DiagRepBooking(
-                            "1",
-                            "Description",
-                            20,
-                            false,
-                            1,
-                            new DateTime(),
-                            new DateTime(),
-                            null,
-                            null,
-                            null,
-                            null);
-                    bookSys.addBooking(booking);
+                Vehicle v = vehicleSys
+                        .searchAVehicle(vehicleComboBox
+                                .getSelectionModel()
+                                .getSelectedItem()
+                                .toString()
+                                .split(":")[0]
+                        );
+                int mechanicID = Integer.parseInt(mechanicComboBox
+                        .getSelectionModel()
+                        .getSelectedItem()
+                        .toString()
+                        .split(":")[0]);
+
+                DiagRepBooking booking = new DiagRepBooking(
+                        v.getRegNumber(),
+                        descriptionField.getText(),
+                        bookSys.getMechanicByID(mechanicID).getHourlyRate(),
+                        v.isCoveredByWarranty(),
+                        mechanicID,
+                        new DateTime(diagnosisStartField.getText()),
+                        new DateTime(diagnosisEndField.getText()),
+                        null,
+                        null,
+                        null,
+                        null);
+                bookSys.addBooking(booking);
+            });
+            clearBookingButton = new Button("Clear fields");
+            clearBookingButton.setOnAction(event -> {
+                customerSearchBar.clear();
+                diagnosisStartField.clear();
+                diagnosisEndField.clear();
+                descriptionField.clear();
             });
 
-            leftBottomButtons.getChildren().add(addBookingButton);
+            leftBottomButtons.getChildren().addAll(addBookingButton, clearBookingButton);
 
 
             addBookingPane.setTop(topTitle);
@@ -181,7 +216,7 @@ public class BookingController {
         basePane.setLeft(addBookingPane);
     }
 
-    private void displayViewBookingPane() {
+    private void displayViewBookingPane(DiagRepBooking booking) {
     }
 
     /**
@@ -302,22 +337,22 @@ public class BookingController {
         bookingIDColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBookingID())
         );
-        customerColumn.setCellValueFactory(p-> {
-                Customer customer = p.getValue().getCustomer();
-                return customer == null ?
-                        new ReadOnlyObjectWrapper<>("") :
-                        new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
+        customerColumn.setCellValueFactory(p -> {
+            Customer customer = p.getValue().getCustomer();
+            return customer == null ?
+                    new ReadOnlyObjectWrapper<>("") :
+                    new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
         });
         vehicleRegColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
         );
         diagnosisDateColumn.setCellValueFactory(p -> {
-                DateTime date = p.getValue().getDiagnosisStart();
-                return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
+            DateTime date = p.getValue().getDiagnosisStart();
+            return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
         });
         repairDateColumn.setCellValueFactory(p -> {
-                DateTime date = p.getValue().getRepairStart();
-                return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
+            DateTime date = p.getValue().getRepairStart();
+            return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
         });
 
         bookingsTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
@@ -350,5 +385,15 @@ public class BookingController {
 
         vehicleInfoObservable = FXCollections.observableArrayList(vehicleInfo);
         vehicleComboBox.setItems(vehicleInfoObservable);
+    }
+
+    private void displayMechanicComboBox(List<Mechanic> mechanics) {
+        if (mechanicComboBox == null) mechanicComboBox = new ComboBox();
+        List<String> mechanicInfo = new ArrayList<>();
+        for (Mechanic m : mechanics) {
+            mechanicInfo.add(m.getMechanicID() + ": " + m.getFirstName() + " " + m.getSurname());
+        }
+        mechanicInfoObservable = FXCollections.observableArrayList(mechanicInfo);
+        mechanicComboBox.setItems(mechanicInfoObservable);
     }
 }

@@ -4,7 +4,7 @@ package domain;
  * @author Marcello De Bernardi
  *
  */
-public class Mechanic {
+public class Mechanic implements Searchable {
     private int mechanicID;
     private String firstName;
     private String surname;

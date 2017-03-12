@@ -1,6 +1,7 @@
 package logic;
 
 import domain.DiagRepBooking;
+import domain.Mechanic;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -71,6 +72,15 @@ public class BookingSystem {
         return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
     }
 
+    /**
+     * Returns a list of all mechanics.
+     *
+     * @return list of mechanics
+     */
+    public List<Mechanic> getAllMechanics() {
+        return persistence.getByCriteria(new Criterion<>(Mechanic.class));
+    }
+
     public List<DiagRepBooking> getDayBookings(int offset) {
         long millisInDay = 86400000;
         long rangeStart = new DateTime().withTimeAtStartOfDay().getMillis() + (millisInDay * offset);
@@ -110,6 +120,11 @@ public class BookingSystem {
                     new Criterion<>(
                             DiagRepBooking.class, "vehicleRegNumber", Regex, query));
         }
+    }
+
+    public Mechanic getMechanicByID(int mechanicID) {
+        List<Mechanic> result =  persistence.getByCriteria(new Criterion<>(Mechanic.class, "mechanicID", EqualTo, mechanicID));
+        return result != null ? result.get(0) : null;
     }
 
     public List<DiagRepBooking> getVBooking(String regNumber) {
