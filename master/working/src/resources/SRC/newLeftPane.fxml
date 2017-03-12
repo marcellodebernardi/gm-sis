@@ -55,7 +55,7 @@
             <TextField fx:id="bookingSPCName" editable="false" layoutX="246.0" layoutY="91.0" />
             <Label layoutX="251.0" layoutY="66.0" prefHeight="17.0" prefWidth="160.0" text="SPC name:" />
             <Button fx:id="addSRBooking" layoutX="523.0" layoutY="91.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="27.0" prefWidth="129.0" text="Add Booking" />
-            <TableView fx:id="Installations" layoutX="14.0" layoutY="224.0" onMouseClicked="#showInstallationDetails" prefHeight="253.0" prefWidth="640.0">
+            <TableView fx:id="Installations" layoutX="14.0" layoutY="224.0" onMouseClicked="#showInstallationDetails" prefHeight="253.0" prefWidth="640.0" visible="false">
               <columns>
                 <TableColumn fx:id="instDate" prefWidth="150.0" text="Installation Date:" />
                   <TableColumn fx:id="warrDate" prefWidth="150.0" text="Warranty End Date:" />
@@ -69,16 +69,16 @@
             <TextField fx:id="bookingCost" layoutX="420.0" layoutY="91.0" prefHeight="16.0" prefWidth="96.0" />
             <Button fx:id="cancelEdit" layoutX="14.0" layoutY="137.0" mnemonicParsing="false" onAction="#cancelEditing" prefHeight="29.0" prefWidth="135.0" text="Cancel Editing" visible="false" />
             <Button fx:id="updateSRBooking" layoutX="523.0" layoutY="91.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="26.0" prefWidth="129.0" text="Update Booking" visible="false" />
-            <DatePicker fx:id="instaDate" layoutX="14.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Installation Date" />
-            <DatePicker fx:id="wEndDate" layoutX="211.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Warranty End Date" />
-            <TextField fx:id="instaAbsID" layoutX="411.0" layoutY="506.0" promptText="Part Abstraction ID:" />
-            <TextField fx:id="instaOccID" layoutX="596.0" layoutY="506.0" promptText="Part Occurence ID:" />
-            <Button fx:id="addInsta" layoutX="684.0" layoutY="224.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="26.0" prefWidth="129.0" text="Add Installation" />
-            <Button fx:id="deleteInsta" layoutX="684.0" layoutY="287.0" mnemonicParsing="false" onAction="#deleteInstallation" prefHeight="26.0" prefWidth="129.0" text="Delete Installation" />
-            <Button fx:id="editInsta" layoutX="684.0" layoutY="351.0" mnemonicParsing="false" onAction="#editInstallation" prefHeight="26.0" prefWidth="129.0" text="Edit Installation" />
-            <TextField fx:id="instaVReg" layoutX="14.0" layoutY="556.0" promptText="Vehicle Reg:" />
-            <Button fx:id="allowUpdate" layoutX="211.0" layoutY="556.0" mnemonicParsing="false" onAction="#updateInstallation" prefHeight="23.0" prefWidth="130.0" text="Update" />
-            <Button fx:id="cancelInstallationUpdate" layoutX="355.0" layoutY="556.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" />
+            <DatePicker fx:id="instaDate" layoutX="14.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Installation Date" visible="false" />
+            <DatePicker fx:id="wEndDate" layoutX="211.0" layoutY="505.0" prefHeight="29.0" prefWidth="177.0" promptText="Warranty End Date" visible="false" />
+            <TextField fx:id="instaAbsID" layoutX="411.0" layoutY="506.0" promptText="Part Abstraction ID:" visible="false" />
+            <TextField fx:id="instaOccID" layoutX="596.0" layoutY="506.0" promptText="Part Occurence ID:" visible="false" />
+            <Button fx:id="addInsta" layoutX="684.0" layoutY="224.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="26.0" prefWidth="129.0" text="Add Installation" visible="false" />
+            <Button fx:id="deleteInsta" layoutX="684.0" layoutY="287.0" mnemonicParsing="false" onAction="#deleteInstallation" prefHeight="26.0" prefWidth="129.0" text="Delete Installation" visible="false" />
+            <Button fx:id="editInsta" layoutX="684.0" layoutY="351.0" mnemonicParsing="false" onAction="#editInstallation" prefHeight="26.0" prefWidth="129.0" text="Edit Installation" visible="false" />
+            <TextField fx:id="instaVReg" layoutX="14.0" layoutY="556.0" promptText="Vehicle Reg:" visible="false" />
+            <Button fx:id="allowUpdate" layoutX="211.0" layoutY="556.0" mnemonicParsing="false" onAction="#updateInstallation" prefHeight="23.0" prefWidth="130.0" text="Update" visible="false" />
+            <Button fx:id="cancelInstallationUpdate" layoutX="355.0" layoutY="556.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" visible="false" />
          </children>
       </Pane>
    </bottom>

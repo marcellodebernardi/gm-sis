@@ -83,8 +83,10 @@ public class SpecialistController implements Initializable{
     //for displaying details onto text box
     @FXML
     private TextField bookingID,bookingItemID,bookingSPCID,bookingSPCName,bookingCost;
+
     @FXML
     private DatePicker bookingDeliveryDate = new DatePicker();
+    @FXML
     private DatePicker bookingReturnDate = new DatePicker();
 
     @FXML
