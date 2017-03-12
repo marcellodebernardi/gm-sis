@@ -197,6 +197,12 @@ public class CustomerController
             {
                 searchCustomerList = cSystem.searchCustomerBySurname(customerSearch.getText());
                 tableViewOfCustomersFromDB(searchCustomerList);
+                if(searchCustomerList.size()==0)
+                {
+                    searchCustomerList = cSystem.searchCustomerByVehicleRegistrationNumber(customerSearch.getText());
+                    tableViewOfCustomersFromDB(searchCustomerList);
+                    return;
+                }
                 return;
             }
             tableViewOfCustomersFromDB(searchCustomerList);
