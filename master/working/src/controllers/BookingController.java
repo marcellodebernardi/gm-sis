@@ -108,7 +108,6 @@ public class BookingController {
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////
-
     /**
      * Displays the pane for adding bookings.
      */
@@ -129,13 +128,10 @@ public class BookingController {
 
             // customer search and table
             customerSearchBar = new TextField();
-            customerSearchBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
+            customerSearchBar.setOnKeyPressed(event -> {
                     // todo fix to actually search
                     displayCustomerComboBox(custSys.getAllCustomers());
                     displayVehicleComboBox(vehicleSys.getVehiclesList());
-                }
             });
             dataFieldPane.add(customerSearchBar, 1, 0);
             dataFieldPane.add(new Label("Select customer"), 0, 1);
@@ -159,9 +155,7 @@ public class BookingController {
             leftBottomButtons = new HBox();
             leftBottomButtons.setId("leftBottomButtons");
             addBookingButton = new Button("Add booking");
-            addBookingButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
+            addBookingButton.setOnAction(event -> {
                     DiagRepBooking booking = new DiagRepBooking(
                             "1",
                             "Description",
@@ -175,7 +169,6 @@ public class BookingController {
                             null,
                             null);
                     bookSys.addBooking(booking);
-                }
             });
 
             leftBottomButtons.getChildren().add(addBookingButton);
@@ -296,52 +289,35 @@ public class BookingController {
         TableColumn<DiagRepBooking, String> diagnosisDateColumn = new TableColumn<>();
         TableColumn<DiagRepBooking, String> repairDateColumn = new TableColumn<>();
 
-        vehicleRegColumn.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, String>("vehicleRegNumber"));
+        vehicleRegColumn.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
         vehicleRegColumn.setCellFactory(TextFieldTableCell.<DiagRepBooking>forTableColumn());
 
-        diagnosisDateColumn.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, String>("bookingID"));
+        diagnosisDateColumn.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
         diagnosisDateColumn.setCellFactory(TextFieldTableCell.<DiagRepBooking>forTableColumn());
 
-        repairDateColumn.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, String>("bookingID"));
+        repairDateColumn.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
         repairDateColumn.setCellFactory(TextFieldTableCell.<DiagRepBooking>forTableColumn());
 
-
-        bookingIDColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, Integer>,
-                ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<DiagRepBooking, Integer> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getBookingID());
-            }
-        });
-
-        customerColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
+        // table columns
+        bookingIDColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getBookingID())
+        );
+        customerColumn.setCellValueFactory(p-> {
                 Customer customer = p.getValue().getCustomer();
-                return customer == null ? new ReadOnlyObjectWrapper<>("") : new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
-            }
+                return customer == null ?
+                        new ReadOnlyObjectWrapper<>("") :
+                        new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
         });
-
-        vehicleRegColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber());
-            }
-        });
-
-        diagnosisDateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
+        vehicleRegColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
+        );
+        diagnosisDateColumn.setCellValueFactory(p -> {
                 DateTime date = p.getValue().getDiagnosisStart();
                 return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
-            }
         });
-
-        repairDateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DiagRepBooking, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<DiagRepBooking, String> p) {
+        repairDateColumn.setCellValueFactory(p -> {
                 DateTime date = p.getValue().getRepairStart();
                 return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
-            }
         });
 
         bookingsTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
