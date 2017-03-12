@@ -12,11 +12,11 @@ import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import jfxtras.scene.control.agenda.Agenda;
 import logic.BookingSystem;
 import logic.CustomerSystem;
 import logic.VehicleSys;
@@ -24,7 +24,6 @@ import main.Main;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,9 +53,13 @@ public class BookingController {
 
     // buttons and search bars in left pane
     private TextField customerSearchBar;
-    private TextField diagnosisStartField;
-    private TextField diagnosisEndField;
     private TextField descriptionField;
+    private TextField diagnosisStartTimeField;
+    private TextField diagnosisEndTimeField;
+    private TextField repairStartTimeField;
+    private TextField repairEndTimeField;
+    private DatePicker diagnosisDatePicker;
+    private DatePicker repairDatePicker;
     private HBox leftBottomButtons;
     private Button addBookingButton;
     private Button deleteBookingButton;
@@ -68,6 +71,7 @@ public class BookingController {
 
     // tables and lists
     private TableView<DiagRepBooking> bookingsTable;
+    private Agenda weekView;
 
     // display data
     private ObservableList<DiagRepBooking> bookingsObservable;
@@ -150,12 +154,12 @@ public class BookingController {
             dataFieldPane.add(vehicleComboBox, 1, 2);
 
             // more data fields
-            dataFieldPane.add(new Label("Diagnosis Start Time"), 0, 3);
-            diagnosisStartField = new TextField("dd/mm/yyyy");
-            dataFieldPane.add(diagnosisStartField, 1, 3);
-            dataFieldPane.add(new Label("Diagnosis End Time"), 0, 4);
-            diagnosisEndField = new TextField("dd/mm/yyyy");
-            dataFieldPane.add(diagnosisEndField, 1, 4);
+            dataFieldPane.add(new Label("Diagnosis date"), 0, 3);
+            diagnosisDatePicker = new DatePicker();
+            dataFieldPane.add(diagnosisDatePicker, 1, 3);
+            dataFieldPane.add(new Label("Repair date"), 0, 4);
+            repairDatePicker = new DatePicker();
+            dataFieldPane.add(repairDatePicker, 1, 4);
             dataFieldPane.add(new Label("Description"), 0, 5);
             descriptionField = new TextField("Write a description");
             dataFieldPane.add(descriptionField, 1, 5);
@@ -190,8 +194,8 @@ public class BookingController {
                         bookSys.getMechanicByID(mechanicID).getHourlyRate(),
                         v.isCoveredByWarranty(),
                         mechanicID,
-                        new DateTime(diagnosisStartField.getText()),
-                        new DateTime(diagnosisEndField.getText()),
+                        new DateTime(diagnosisDatePicker.toString()),
+                        new DateTime(repairDatePicker.toString()),
                         null,
                         null,
                         null,
@@ -201,8 +205,6 @@ public class BookingController {
             clearBookingButton = new Button("Clear fields");
             clearBookingButton.setOnAction(event -> {
                 customerSearchBar.clear();
-                diagnosisStartField.clear();
-                diagnosisEndField.clear();
                 descriptionField.clear();
             });
 
@@ -216,7 +218,7 @@ public class BookingController {
         basePane.setLeft(addBookingPane);
     }
 
-    private void displayViewBookingPane(DiagRepBooking booking) {
+    private void populateBookingPaneFields(DiagRepBooking booking) {
     }
 
     /**
@@ -267,37 +269,22 @@ public class BookingController {
 
             searchLabel = new Label("Search");
             bookingSearchBar = new TextField();
-            bookingSearchBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    displayTable(bookSys.searchBookings(bookingSearchBar.getText()));
-                }
-            });
-
+            bookingSearchBar.setOnKeyPressed(event ->
+                    displayTable(bookSys.searchBookings(bookingSearchBar.getText()))
+            );
             listViewButton = new Button("List View");
-            listViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
+            listViewButton.setOnAction(event -> {
                     displayTableTopBar();
                     displayTable(bookSys.getAllBookings());
-                }
             });
-
             weekViewButton = new Button("Week View");
-            weekViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    displayCalendarTopBar();
-                }
+            weekViewButton.setOnAction(event -> {
+                displayCalendarTopBar();
+                displayAgenda();
             });
 
             monthViewButton = new Button("Month View");
-            monthViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    displayCalendarTopBar();
-                }
-            });
+            monthViewButton.setOnAction(event -> displayCalendarTopBar());
 
             listViewHBox.getChildren().addAll(searchLabel, bookingSearchBar, listViewButton, weekViewButton,
                     monthViewButton);
@@ -358,6 +345,13 @@ public class BookingController {
         bookingsTable.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
                 diagnosisDateColumn, repairDateColumn);
         bookingsTable.refresh();
+    }
+
+    private void displayAgenda() {
+        if (weekView == null) {
+            weekView = new Agenda();
+        }
+        rightPane.setCenter(weekView);
     }
 
     /**
