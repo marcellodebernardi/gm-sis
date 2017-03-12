@@ -19,7 +19,6 @@ import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.*;
-import org.joda.time.DateTime;
 import persistence.DatabaseRepository;
 
 import javax.swing.text.html.*;
@@ -28,6 +27,8 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +64,7 @@ public class VehicleController implements Initializable
     @FXML
     private TableColumn<Vehicle, Integer>  tMil, tCID;
     @FXML
-    private TableColumn<DiagRepBooking, DateTime>  rRS, tDS;
+    private TableColumn<DiagRepBooking, ZonedDateTime>  rRS, tDS;
     @FXML
     private TableColumn<DiagRepBooking, Double> tTC;
     @FXML
@@ -946,37 +947,37 @@ public class VehicleController implements Initializable
             }
 
 
-            tDS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("diagnosisStart"));
-            tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
+            tDS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, ZonedDateTime>("diagnosisStart"));
+            tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, ZonedDateTime>forTableColumn(new StringConverter<ZonedDateTime>() {
                 @Override
-                public String toString(DateTime object) {
+                public String toString(ZonedDateTime object) {
                 if (object == null)
                 {
                     return null;
                 }
-                    return object.toString( "dd/MM/yyyy HH:mm");
+                    return object.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 }
 
                 @Override
-                public DateTime fromString(String string) {
-                    return DateTime.parse(string);
+                public ZonedDateTime fromString(String string) {
+                    return ZonedDateTime.parse(string);
                 }
             }));
 
-            rRS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("repairStart"));
-            rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
+            rRS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, ZonedDateTime>("repairStart"));
+            rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, ZonedDateTime>forTableColumn(new StringConverter<ZonedDateTime>() {
                 @Override
-                public String toString(DateTime object) {
+                public String toString(ZonedDateTime object) {
                     if (object == null)
                     {
                         return null;
                     }
-                    return object.toString( "dd/MM/yyyy HH:mm");
+                    return object.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 }
 
                 @Override
-                public DateTime fromString(String string) {
-                    return DateTime.parse(string);
+                public ZonedDateTime fromString(String string) {
+                    return ZonedDateTime.parse(string);
                 }
             }));
 
@@ -1009,7 +1010,7 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
+            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
@@ -1119,24 +1120,24 @@ public class VehicleController implements Initializable
             {
                 return;
             }
-            DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
-            DateTime nextRepBooking = arrayList.get(0).getRepairStart();
-            DateTime DTD = new DateTime();
-            DateTime DTR = new DateTime();
+            ZonedDateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
+            ZonedDateTime nextRepBooking = arrayList.get(0).getRepairStart();
+            ZonedDateTime DTD;
+            ZonedDateTime DTR;
             for (int i = 1; i < arrayList.size(); i++) {
                 DiagRepBooking DRB = arrayList.get(i);
                 DTD = DRB.getDiagnosisStart();
                 DTR = DRB.getRepairStart();
                 if (DTD != null)
                 {
-                if (DTD.isAfterNow()) {
+                if (DTD.isAfter(ZonedDateTime.now())) {
                     if ((DTD.isBefore(nextDiagBooking))) {
                         nextDiagBooking = DTD;
                     }
                 }}
                 if (DTR != null)
                 {
-                if (DTR.isAfterNow()) {
+                if (DTR.isAfter(ZonedDateTime.now())) {
                     if ((DTR.isBefore(nextRepBooking))) {
                         nextRepBooking = DTR;
                     }
@@ -1144,19 +1145,19 @@ public class VehicleController implements Initializable
             }
             if (nextDiagBooking !=null)
             {
-            if (nextDiagBooking.isAfterNow()) {
+            if (nextDiagBooking.isAfter(ZonedDateTime.now())) {
                 DSLL.setVisible(true);
-                DSL.setText(nextDiagBooking.toString("dd/MM/yyyy HH:mm"));
+                DSL.setText(nextDiagBooking.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }} else {
                 DSLL.setVisible(true);
                 DSL.setText("N/A");
             }
             if (nextRepBooking !=null)
             {
-            if (nextRepBooking.isAfterNow()) {
+            if (nextRepBooking.isAfter(ZonedDateTime.now())) {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);
-                RSL.setText(nextRepBooking.toString("dd/MM/yyyy HH:mm"));
+                RSL.setText(nextRepBooking.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }} else {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);

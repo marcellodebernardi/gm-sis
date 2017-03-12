@@ -1,14 +1,9 @@
 package controllers;
 
-import domain.Customer;
-import domain.DiagRepBooking;
-import domain.Mechanic;
-import domain.Vehicle;
+import domain.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -22,8 +17,14 @@ import logic.CustomerSystem;
 import logic.VehicleSys;
 import main.Main;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import persistence.DatabaseRepository;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,8 +49,9 @@ public class BookingController {
     private Label searchLabel;
     private TextField bookingSearchBar;
     private Button listViewButton;
-    private Button weekViewButton;
-    private Button monthViewButton;
+    private Button calendarViewButton;
+    private DatePicker calendarWeekPicker;
+    private ComboBox calendarMechanicComboBox;
 
     // buttons and search bars in left pane
     private TextField customerSearchBar;
@@ -65,6 +67,7 @@ public class BookingController {
     private Button deleteBookingButton;
     private Button editBookingButton;
     private Button clearBookingButton;
+    private Button subcontractToSPCButton;
     private ComboBox vehicleComboBox;
     private ComboBox customerComboBox;
     private ComboBox mechanicComboBox;
@@ -72,12 +75,15 @@ public class BookingController {
     // tables and lists
     private TableView<DiagRepBooking> bookingsTable;
     private Agenda weekView;
+    private TableView<PartOccurrence> partsTable;
 
     // display data
     private ObservableList<DiagRepBooking> bookingsObservable;
     private ObservableList<String> customerInfoObservable;
     private ObservableList<String> vehicleInfoObservable;
     private ObservableList<String> mechanicInfoObservable;
+    private ObservableList<String> calendarMechanicInfoObersvable;
+    private ObservableList<PartOccurrence> partsObservable;
 
 
     ///////////////// INTERFACE TO APPLICATION /////////////////
@@ -117,7 +123,6 @@ public class BookingController {
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////
-
     /**
      * Displays the pane for adding bookings.
      */
@@ -153,22 +158,40 @@ public class BookingController {
             vehicleComboBox = new ComboBox();
             dataFieldPane.add(vehicleComboBox, 1, 2);
 
-            // more data fields
+            // diagnosis data and time
             dataFieldPane.add(new Label("Diagnosis date"), 0, 3);
             diagnosisDatePicker = new DatePicker();
             dataFieldPane.add(diagnosisDatePicker, 1, 3);
-            dataFieldPane.add(new Label("Repair date"), 0, 4);
+            dataFieldPane.add(new Label("Diagnosis Time:"), 0, 4);
+            diagnosisStartTimeField = new TextField();
+            diagnosisEndTimeField = new TextField();
+            dataFieldPane.add(diagnosisStartTimeField, 1, 4);
+            dataFieldPane.add(diagnosisEndTimeField, 2, 4);
+
+            // repair date and time
+            dataFieldPane.add(new Label("Repair date"), 0, 5);
             repairDatePicker = new DatePicker();
-            dataFieldPane.add(repairDatePicker, 1, 4);
-            dataFieldPane.add(new Label("Description"), 0, 5);
+            dataFieldPane.add(repairDatePicker, 1, 5);
+            dataFieldPane.add(new Label("Repair time"), 0, 6);
+            repairStartTimeField = new TextField();
+            repairEndTimeField = new TextField();
+            dataFieldPane.add(repairStartTimeField, 1, 6);
+            dataFieldPane.add(repairEndTimeField, 2, 6);
+            dataFieldPane.add(new Label("Description"), 0, 7);
             descriptionField = new TextField("Write a description");
-            dataFieldPane.add(descriptionField, 1, 5);
+            dataFieldPane.add(descriptionField, 1, 7);
 
             // mechanic combobox
-            dataFieldPane.add(new Label("Select mechanic"), 0, 6);
+            dataFieldPane.add(new Label("Select mechanic"), 0, 8);
             mechanicComboBox = new ComboBox();
-            dataFieldPane.add(mechanicComboBox, 1, 6);
+            dataFieldPane.add(mechanicComboBox, 1, 8);
             displayMechanicComboBox(bookSys.getAllMechanics()); // todo mechanic list
+
+            // repair parts
+            TableView<PartOccurrence> partOccurrenceTableView = new TableView<>();
+            displayPartsTable(Collections.emptyList());
+            dataFieldPane.add(new Label("Parts for repair"), 0, 9);
+            dataFieldPane.add(partOccurrenceTableView, 1, 9);
 
             // buttons
             leftBottomButtons = new HBox();
@@ -194,13 +217,17 @@ public class BookingController {
                         bookSys.getMechanicByID(mechanicID).getHourlyRate(),
                         v.isCoveredByWarranty(),
                         mechanicID,
-                        new DateTime(diagnosisDatePicker.toString()),
-                        new DateTime(repairDatePicker.toString()),
+                        ZonedDateTime.now(),
+                        ZonedDateTime.now(),
                         null,
                         null,
                         null,
                         null);
                 bookSys.addBooking(booking);
+            });
+            subcontractToSPCButton = new Button("Subcontract to SPC");
+            subcontractToSPCButton.setOnAction(event -> {
+                // todo talk to Murad on how to do this
             });
             clearBookingButton = new Button("Clear fields");
             clearBookingButton.setOnAction(event -> {
@@ -208,7 +235,7 @@ public class BookingController {
                 descriptionField.clear();
             });
 
-            leftBottomButtons.getChildren().addAll(addBookingButton, clearBookingButton);
+            leftBottomButtons.getChildren().addAll(addBookingButton, subcontractToSPCButton, clearBookingButton);
 
 
             addBookingPane.setTop(topTitle);
@@ -229,32 +256,24 @@ public class BookingController {
             calendarHBox = new HBox();
             calendarHBox.setId("calendarToggle");
 
+            displayCalendarMechanicComboBox(bookSys.getAllMechanics());
+
+            calendarWeekPicker = new DatePicker();
+            calendarWeekPicker.setOnAction(event ->
+                    weekView.setDisplayedLocalDateTime(LocalDateTime.of(calendarWeekPicker.getValue(), LocalTime.now()))
+            );
+
             listViewButton = new Button("List View");
-            listViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    displayTableTopBar();
-                    displayTable(bookSys.getAllBookings());
-                }
+            listViewButton.setOnAction(event -> {
+                displayTableTopBar();
+                displayTable(bookSys.getAllBookings());
             });
 
-            weekViewButton = new Button("Week View");
-            weekViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    displayCalendarTopBar();
-                }
-            });
+            calendarViewButton = new Button("Calendar View");
+            calendarViewButton.setOnAction(event -> displayCalendarTopBar());
 
-            monthViewButton = new Button("Month View");
-            monthViewButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    displayCalendarTopBar();
-                }
-            });
-
-            calendarHBox.getChildren().addAll(listViewButton, weekViewButton, monthViewButton);
+            calendarHBox.getChildren().addAll(calendarMechanicComboBox, calendarWeekPicker, listViewButton,
+                    calendarViewButton);
         }
         rightPane.setTop(calendarHBox);
     }
@@ -274,20 +293,16 @@ public class BookingController {
             );
             listViewButton = new Button("List View");
             listViewButton.setOnAction(event -> {
-                    displayTableTopBar();
-                    displayTable(bookSys.getAllBookings());
+                displayTableTopBar();
+                displayTable(bookSys.getAllBookings());
             });
-            weekViewButton = new Button("Week View");
-            weekViewButton.setOnAction(event -> {
+            calendarViewButton = new Button("Calendar View");
+            calendarViewButton.setOnAction(event -> {
                 displayCalendarTopBar();
-                displayAgenda();
+                displayAgenda(null);
             });
 
-            monthViewButton = new Button("Month View");
-            monthViewButton.setOnAction(event -> displayCalendarTopBar());
-
-            listViewHBox.getChildren().addAll(searchLabel, bookingSearchBar, listViewButton, weekViewButton,
-                    monthViewButton);
+            listViewHBox.getChildren().addAll(searchLabel, bookingSearchBar, listViewButton, calendarViewButton);
         }
         rightPane.setTop(listViewHBox);
     }
@@ -334,11 +349,11 @@ public class BookingController {
                 new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
         );
         diagnosisDateColumn.setCellValueFactory(p -> {
-            DateTime date = p.getValue().getDiagnosisStart();
+            ZonedDateTime date = p.getValue().getDiagnosisStart();
             return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
         });
         repairDateColumn.setCellValueFactory(p -> {
-            DateTime date = p.getValue().getRepairStart();
+            ZonedDateTime date = p.getValue().getRepairStart();
             return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().toString());
         });
 
@@ -347,10 +362,33 @@ public class BookingController {
         bookingsTable.refresh();
     }
 
-    private void displayAgenda() {
+    private void displayAgenda(Mechanic mechanic) {
         if (weekView == null) {
             weekView = new Agenda();
         }
+        List<DiagRepBooking> bookings = bookSys.getAllBookings();
+
+        for (DiagRepBooking booking : bookings) {
+            if (booking.getDiagnosisStart() != null && booking.getDiagnosisEnd() != null)
+            weekView.appointments().add(new Agenda.AppointmentImplLocal()
+                    .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisStart().toInstant(),
+                            booking.getDiagnosisStart().getZone()))
+                    .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisEnd().toInstant(),
+                            booking.getDiagnosisEnd().getZone()))
+                    .withDescription(booking.getDescription())
+            );
+            else if (booking.getRepairStart() != null && booking.getRepairEnd() != null)
+            weekView.appointments().add(new Agenda.AppointmentImplLocal()
+                    .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getRepairStart().toInstant(),
+                            booking.getRepairStart().getZone()))
+                    .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getRepairEnd().toInstant(),
+                            booking.getRepairEnd().getZone()))
+                    .withDescription(booking.getDescription())
+            );
+        }
+
+        weekView.setAllowDragging(true);
+        weekView.setAllowResize(true);
         rightPane.setCenter(weekView);
     }
 
@@ -389,5 +427,48 @@ public class BookingController {
         }
         mechanicInfoObservable = FXCollections.observableArrayList(mechanicInfo);
         mechanicComboBox.setItems(mechanicInfoObservable);
+    }
+
+    private void displayCalendarMechanicComboBox(List<Mechanic> mechanics) {
+        if (calendarMechanicComboBox == null) calendarMechanicComboBox = new ComboBox();
+        List<String> mechanicInfo = new ArrayList<>();
+        for (Mechanic m : mechanics) {
+            mechanicInfo.add(m.getMechanicID() + ": " + m.getFirstName() + " " + m.getSurname());
+        }
+        calendarMechanicComboBox.setOnAction(event -> {
+            Mechanic mechanic = bookSys.getMechanicByID(Integer.parseInt(calendarMechanicComboBox
+                    .getSelectionModel()
+                    .getSelectedItem()
+                    .toString()
+                    .split(":")[0])
+            );
+            displayAgenda(mechanic);
+        });
+        calendarMechanicInfoObersvable = FXCollections.observableArrayList(mechanicInfo);
+        calendarMechanicComboBox.setItems(calendarMechanicInfoObersvable);
+    }
+
+    private void displayPartsTable(List<PartOccurrence> parts) {
+        if (partsTable == null) partsTable = new TableView<>();
+        partsObservable = FXCollections.observableArrayList(parts);
+
+        partsTable.setItems(partsObservable);
+        rightPane.setCenter(partsTable);
+
+        TableColumn<PartOccurrence, Integer> partOccurrenceID = new TableColumn<>();
+        TableColumn<PartOccurrence, String> partAbstractionName = new TableColumn<>();
+
+        partOccurrenceID.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrenceID()));
+
+        partAbstractionName.setCellValueFactory(p -> {
+            PartAbstraction stockItem = p.getValue().getPartAbstraction();
+            return stockItem == null ?
+                    new ReadOnlyObjectWrapper<>("") :
+                    new ReadOnlyObjectWrapper<>(stockItem.getPartName());
+        });
+
+        partsTable.getColumns().setAll(partOccurrenceID, partAbstractionName);
+        partsTable.refresh();
     }
 }

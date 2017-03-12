@@ -95,7 +95,7 @@
                   <TextField fx:id="sUID" prefHeight="27.0" prefWidth="210.0" promptText="Enter User ID" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
                   <Label text="firstName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="sFN" promptText="enter first Name" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#DeleteFromList" text="Delete" GridPane.columnIndex="6" GridPane.halignment="RIGHT" />
+                  <Button mnemonicParsing="false" onAction="#deleteFromList" text="Delete" GridPane.columnIndex="6" GridPane.halignment="RIGHT" />
                   <Button mnemonicParsing="false" onAction="#getUser" text="Edit" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                   <Label text="Surname" GridPane.columnIndex="4" />
                   <Label text="UserType" GridPane.columnIndex="4" GridPane.rowIndex="1" />

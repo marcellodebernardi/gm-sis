@@ -1,6 +1,9 @@
 package domain;
 
 import javafx.scene.control.TableColumn;
+import logic.Criterion;
+import logic.CriterionOperator;
+import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
 
 import java.util.ArrayList;
@@ -21,19 +24,14 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     // dependency connections
     List<DependencyConnection> dependencyConnections;
 
-    @Reflective
-    private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
-                          @Column(name = "partAbstractionID") int partAbstractionID,
-                          @Column(name = "installationID") int installationID,
-                          @Column(name = "bookingID") int bookingID,
-                          @Column(name = "specRepID") int specRepID){
-        this.partOccurrenceID = partOccurrenceID;
-        this.partAbstractionID = partAbstractionID;
-        this.installationID = installationID;
-        this.bookingID = bookingID;
-        this.specRepID = specRepID;
-    }
 
+    /**
+     * Constructor for PartOccurrence.
+     *
+     * @param partAbstractionID id of the type of part this occurrence belongs to
+     * @param installationID if installed on a vehicle, id of the installation
+     * @param specRepID if sent to SPC, id of specialist repair center
+     */
     public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
         partOccurrenceID = -1;
         this.partAbstractionID = partAbstractionID;
@@ -42,13 +40,23 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         this.specRepID = specRepID;
     }
 
+
+    @Reflective
+    private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
+                           @Column(name = "partAbstractionID") int partAbstractionID,
+                           @Column(name = "installationID") int installationID,
+                           @Column(name = "bookingID") int bookingID,
+                           @Column(name = "specRepID") int specRepID){
+        this.partOccurrenceID = partOccurrenceID;
+        this.partAbstractionID = partAbstractionID;
+        this.installationID = installationID;
+        this.bookingID = bookingID;
+        this.specRepID = specRepID;
+    }
+
     @Column(name = "partOccurrenceID", primary = true)
     public int getPartOccurrenceID() {
         return partOccurrenceID;
-    }
-
-    public void setPartOccurrenceID(int partOccurrenceID) {
-        this.partOccurrenceID = partOccurrenceID;
     }
 
     @Column(name = "partAbstractionID")
@@ -56,17 +64,9 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return partAbstractionID;
     }
 
-    public void setPartAbstractionID(int partAbstractionID) {
-        this.partAbstractionID = partAbstractionID;
-    }
-
     @Column(name = "installationID")
     public int getInstallationID() {
         return installationID;
-    }
-
-    public void setInstallationID(int installationID) {
-        this.installationID = installationID;
     }
 
     @Column(name = "bookingID")
@@ -74,22 +74,49 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return bookingID;
     }
 
-    public void setBooking(DependencyConnection pair) {
-        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
-        dependencyConnections.add(pair);
-    }
-
     @Column(name = "specRepID")
     public int getSpecRepID() {
         return specRepID;
     }
 
-    public void setSpecRepID(int specRepID) {
-        this.specRepID = specRepID;
-    }
-
+    @DependencyHandler
     public List<DependencyConnection> getDependencies() {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         return dependencyConnections;
+    }
+
+    @DependencyHandler
+    public void setBooking(DependencyConnection pair) {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
+        dependencyConnections.add(pair);
+    }
+
+    @Lazy
+    public PartAbstraction getPartAbstraction() {
+        List<PartAbstraction> partTypes = DatabaseRepository
+                .getInstance()
+                .getByCriteria(new Criterion<>(
+                        PartAbstraction.class,
+                        "partAbstractionID",
+                        CriterionOperator.EqualTo,
+                        partOccurrenceID));
+        return partTypes != null ? partTypes.get(0) : null;
+    }
+
+
+    public void setPartOccurrenceID(int partOccurrenceID) {
+        this.partOccurrenceID = partOccurrenceID;
+    }
+
+    public void setPartAbstractionID(int partAbstractionID) {
+        this.partAbstractionID = partAbstractionID;
+    }
+
+    public void setInstallationID(int installationID) {
+        this.installationID = installationID;
+    }
+
+    public void setSpecRepID(int specRepID) {
+        this.specRepID = specRepID;
     }
 }

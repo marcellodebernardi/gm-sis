@@ -107,6 +107,10 @@ public class BookingSystem {
         }
     }
 
+    public List<DiagRepBooking> getWeekBookings() {
+        return null;
+    }
+
     public List<DiagRepBooking> searchBookings(String query) {
         try {
             int queryAsInt = Integer.parseInt(query);
@@ -175,19 +179,21 @@ public class BookingSystem {
 
     /* Checks time validity in terms of opening and closing hours as well as weekdays. */
     private boolean isWithinOpenHours(DiagRepBooking booking) {
-        return (!(booking.getDiagnosisInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
+        /* return (!(booking.getDiagnosisInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
                 || booking.getDiagnosisInterval().getEnd().toLocalTime().compareTo(CLOSING_HOUR) > 0
                 || booking.getRepairInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
                 || booking.getRepairInterval().getEnd().toLocalTime().compareTo(CLOSING_HOUR) > 0
                 || booking.getDiagnosisInterval().getStart().toLocalDate().getDayOfWeek() < 1
                 || booking.getDiagnosisInterval().getStart().toLocalDate().getDayOfWeek() > 5
                 || booking.getRepairInterval().getStart().toLocalDate().getDayOfWeek() > 5
-                || booking.getRepairInterval().getStart().toLocalDate().getDayOfWeek() > 5));
+                || booking.getRepairInterval().getStart().toLocalDate().getDayOfWeek() > 5)); */
+        return true;
     }
 
     /* Checks the booking is not for a bank or public holiday */
     private boolean isNotOnHoliday(DiagRepBooking booking) {
-        return (!(HOLIDAYS.contains(booking.getDiagnosisInterval().getStart().toLocalDate())
-                || HOLIDAYS.contains(booking.getRepairInterval().getStart().toLocalDate())));
+        /*return (!(HOLIDAYS.contains(booking.getDiagnosisInterval().getStart().toLocalDate())
+                || HOLIDAYS.contains(booking.getRepairInterval().getStart().toLocalDate())));*/
+        return true;
     }
 }

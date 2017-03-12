@@ -2,12 +2,10 @@ package domain;
 
 import logic.Criterion;
 import logic.CriterionOperator;
-import logic.VehicleSys;
-import org.joda.time.DateTime;
-import org.joda.time.MutableInterval;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,46 +15,40 @@ import java.util.List;
  * @since 0.1
  */
 public class DiagRepBooking extends Booking implements DependencyConnectable {
-    private DateTime diagnosisStart;
-    private DateTime diagnosisEnd;
-    private DateTime repairStart;
-    private DateTime repairEnd;
-    private MutableInterval diagnosisInterval;
-    private MutableInterval repairInterval;
-
+    // dependency connections
+    List<DependencyConnection> dependencyConnections;
+    private ZonedDateTime diagnosisStart;
+    private ZonedDateTime diagnosisEnd;
+    private ZonedDateTime repairStart;
+    private ZonedDateTime repairEnd;
     // direction inversion in database
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
-
-    // dependency connections
-    List<DependencyConnection> dependencyConnections;
 
 
     /**
      * Creates a new diagnosis and repair booking.
      *
-     * @param vehicleRegNumber
-     * @param description
-     * @param billAmount
-     * @param billSettled
-     * @param mechanicID
-     * @param diagnosisStart
-     * @param diagnosisEnd
-     * @param repairStart
-     * @param repairEnd
-     * @param specRepBooking
+     * @param vehicleRegNumber registration number
+     * @param description      description of booking
+     * @param billAmount       amount for customer (or warranty firm) to pay
+     * @param billSettled      whether the bill has been settled or not
+     * @param mechanicID       mechanic tasked on the booking
+     * @param diagnosisStart   start time of diagnosis
+     * @param diagnosisEnd     end time of diagnosis
+     * @param repairStart      start time of repair
+     * @param repairEnd        end time of repair
+     * @param specRepBooking   potential specialist repair booking
      */
     public DiagRepBooking(String vehicleRegNumber, String description, double billAmount,
-                          boolean billSettled, int mechanicID, DateTime diagnosisStart, DateTime diagnosisEnd,
-                          DateTime repairStart, DateTime repairEnd, SpecRepBooking specRepBooking,
+                          boolean billSettled, int mechanicID, ZonedDateTime diagnosisStart, ZonedDateTime diagnosisEnd,
+                          ZonedDateTime repairStart, ZonedDateTime repairEnd, SpecRepBooking specRepBooking,
                           List<PartOccurrence> repairParts) {
         super(-1, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
-        this.diagnosisInterval = new MutableInterval(diagnosisStart, diagnosisEnd);
         this.repairStart = repairStart;
         this.repairEnd = repairEnd;
-        this.repairInterval = new MutableInterval(repairStart, repairEnd);
         this.specRepBooking = specRepBooking;
         for (PartOccurrence part : repairParts) {
             addRequiredPart(part);
@@ -71,19 +63,17 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                            @Column(name = "billAmount") double billAmount,
                            @Column(name = "billSettled") boolean billSettled,
                            @Column(name = "mechanicID") int mechanicID,
-                           @Column(name = "diagnosisStart") DateTime diagnosisStart,
-                           @Column(name = "diagnosisEnd") DateTime diagnosisEnd,
-                           @Column(name = "repairStart") DateTime repairStart,
-                           @Column(name = "repairEnd") DateTime repairEnd,
+                           @Column(name = "diagnosisStart") ZonedDateTime diagnosisStart,
+                           @Column(name = "diagnosisEnd") ZonedDateTime diagnosisEnd,
+                           @Column(name = "repairStart") ZonedDateTime repairStart,
+                           @Column(name = "repairEnd") ZonedDateTime repairEnd,
                            @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                    SpecRepBooking specRepBooking) {
         super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
-        this.diagnosisInterval = new MutableInterval(diagnosisStart, diagnosisEnd);
         this.repairStart = repairStart;
         this.repairEnd = repairEnd;
-        this.repairInterval = new MutableInterval(repairStart, repairEnd);
         this.specRepBooking = specRepBooking;
     }
 
@@ -155,6 +145,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
 
     /**
      * Get the settling status of the bill associated with this booking
+     *
      * @return
      */
     @Column(name = "billSettled")
@@ -178,7 +169,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      * @return start time of diagnosis
      */
     @Column(name = "diagnosisStart")
-    public DateTime getDiagnosisStart() {
+    public ZonedDateTime getDiagnosisStart() {
         return diagnosisStart;
     }
 
@@ -188,7 +179,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      * @return end time of diagnosis
      */
     @Column(name = "diagnosisEnd")
-    public DateTime getDiagnosisEnd() {
+    public ZonedDateTime getDiagnosisEnd() {
         return diagnosisEnd;
     }
 
@@ -198,7 +189,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      * @return start time of repair
      */
     @Column(name = "repairStart")
-    public DateTime getRepairStart() {
+    public ZonedDateTime getRepairStart() {
         return diagnosisStart;
     }
 
@@ -208,33 +199,8 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      * @return end time of repair
      */
     @Column(name = "repairEnd")
-    public DateTime getRepairEnd() {
+    public ZonedDateTime getRepairEnd() {
         return diagnosisEnd;
-    }
-
-    /**
-     * Returns the date on which the diagnosis check is to be carried out.
-     *
-     * @return date of diagnosis check
-     */
-    public MutableInterval getDiagnosisInterval() {
-        return diagnosisInterval;
-    }
-
-    /**
-     * Sets the diagnosis date.
-     */
-    public void setDiagnosisInterval(MutableInterval diagnosisInterval) {
-        this.diagnosisInterval = diagnosisInterval;
-    }
-
-    /**
-     * Returns the allotted time slot for the repair.
-     *
-     * @return end of repair session
-     */
-    public MutableInterval getRepairInterval() {
-        return repairInterval;
     }
 
     /**
@@ -247,15 +213,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return specRepBooking;
     }
 
-    /**
-     * Sets the start time of the repair session.
-     *
-     * @param repairInterval allotted time slot for repair work
-     */
-    public void setRepairInterval(MutableInterval repairInterval) {
-        this.repairInterval = repairInterval;
-    }
-
+    @Lazy
     public List<PartOccurrence> getRequiredPartsList() {
         if (requiredPartsList == null)
             requiredPartsList = DatabaseRepository
@@ -265,12 +223,14 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return requiredPartsList;
     }
 
+    @DependencyHandler
     public void addRequiredPart(PartOccurrence part) {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
         part.setBooking(transmitter.pair());
     }
 
+    @Lazy
     public Customer getCustomer() {
         List<Vehicle> vehicles = DatabaseRepository
                 .getInstance()
@@ -296,6 +256,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return null;
     }
 
+    @DependencyHandler
     public List<DependencyConnection> getDependencies() {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         return dependencyConnections;
