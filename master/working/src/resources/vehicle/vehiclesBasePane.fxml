@@ -2,7 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -28,10 +27,7 @@
                             <center>
                                 <BorderPane>
                                     <left>
-                                        <Label fx:id="AddEditL" text="Add Vehicle" BorderPane.alignment="CENTER">
-                                 <padding>
-                                    <Insets left="5.0" />
-                                 </padding></Label>
+                                        <Label fx:id="AddEditL" text="Add Vehicle" BorderPane.alignment="CENTER" />
                                     </left>
                                     <right>
                                         <ComboBox fx:id="VehicleS" onAction="#selectVehicle" prefWidth="150.0" promptText="Pick A Vehicle" BorderPane.alignment="CENTER">
@@ -61,8 +57,7 @@
                         </BorderPane>
                         <GridPane>
                             <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="62.0" minWidth="10.0" prefWidth="19.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="87.0" prefWidth="130.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" />
                                 <ColumnConstraints hgrow="SOMETIMES" />
                             </columnConstraints>
                             <rowConstraints>
@@ -83,14 +78,14 @@
                                 <RowConstraints vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="Vehicle Reg" GridPane.columnIndex="1" />
-                                <Label text="CustomerID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <Label text="Vehicle Type" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <Label text="Model" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                <Label text="Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <Label text="Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                <TextField fx:id="reg" promptText="Enter Vehicle Reg" GridPane.columnIndex="2" />
-                                <ComboBox fx:id="vType" promptText="pick Vehicle" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                <Label text="Vehicle Reg" />
+                                <Label text="CustomerID" GridPane.rowIndex="1" />
+                                <Label text="Vehicle Type" GridPane.rowIndex="2" />
+                                <Label text="Model" GridPane.rowIndex="4" />
+                                <Label text="Manufacturer" GridPane.rowIndex="3" />
+                                <Label text="Engine Size" GridPane.rowIndex="5" />
+                                <TextField fx:id="reg" promptText="Enter Vehicle Reg" GridPane.columnIndex="1" />
+                                <ComboBox fx:id="vType" promptText="pick Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="Car" />
@@ -99,11 +94,11 @@
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
-                                <TextField fx:id="mod" promptText="Enter model" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                                <TextField fx:id="manuf" promptText="Enter Manufacturer" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                <TextField fx:id="eSize" promptText="Enter Engine Size" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                <Label text="Fuel Type" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                <ComboBox fx:id="fType" promptText="pick Fuel" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                                <TextField fx:id="mod" promptText="Enter model" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField fx:id="manuf" promptText="Enter Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField fx:id="eSize" promptText="Enter Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                <Label text="Fuel Type" GridPane.rowIndex="6" />
+                                <ComboBox fx:id="fType" promptText="pick Fuel" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="Diesel" />
@@ -111,20 +106,20 @@
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
-                                <Label text="Colour" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                <Label text="Mileage" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                <Label text="MOT renewal Date" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                <TextField fx:id="col" promptText="Enter Colour" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                <Label text="Date Last Serviced" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                                <Label text="Warranty?" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                                <Label prefHeight="33.0" prefWidth="116.0" text="Company Address" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                                <Label prefHeight="17.0" prefWidth="94.0" text="Expiration Date" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-                                <TextField fx:id="wCompAddress" promptText="Enter Address" GridPane.columnIndex="2" GridPane.rowIndex="13" />
-                                <TextField fx:id="wExpirationDate" promptText="Enter Date" GridPane.columnIndex="2" GridPane.rowIndex="14" />
-                                <TextField fx:id="mil" promptText="Enter Mileage" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                                <Label text="Name" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                                <TextField fx:id="wName" promptText="Enter Name" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-                                <ComboBox fx:id="cByWarranty" onAction="#hiddenWarranty" promptText="Pick True/False" GridPane.columnIndex="2" GridPane.rowIndex="11">
+                                <Label text="Colour" GridPane.rowIndex="7" />
+                                <Label text="Mileage" GridPane.rowIndex="8" />
+                                <Label text="MOT renewal Date" GridPane.rowIndex="9" />
+                                <TextField fx:id="col" promptText="Enter Colour" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                <Label text="Date Last Serviced" GridPane.rowIndex="10" />
+                                <Label text="Warranty?" GridPane.rowIndex="11" />
+                                <Label prefHeight="33.0" prefWidth="116.0" text="Company Address" GridPane.rowIndex="13" />
+                                <Label prefHeight="17.0" prefWidth="94.0" text="Expiration Date" GridPane.rowIndex="14" />
+                                <TextField fx:id="wCompAddress" promptText="Enter Address" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                                <TextField fx:id="wExpirationDate" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                                <TextField fx:id="mil" promptText="Enter Mileage" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                <Label text="Name" GridPane.rowIndex="12" />
+                                <TextField fx:id="wName" promptText="Enter Name" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                                <ComboBox fx:id="cByWarranty" onAction="#hiddenWarranty" promptText="Pick True/False" GridPane.columnIndex="1" GridPane.rowIndex="11">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="True" />
@@ -132,27 +127,26 @@
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
-                                <TextField fx:id="rDateMot" promptText="Enter renewal Date Mot" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-                                <TextField fx:id="dLastServiced" promptText="Enter Date" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                        <ComboBox fx:id="cID" prefHeight="19.0" prefWidth="150.0" promptText="Chose Customer" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <TextField fx:id="rDateMot" promptText="Enter renewal Date Mot" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                <TextField fx:id="dLastServiced" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <ComboBox fx:id="cID" prefHeight="19.0" prefWidth="150.0" promptText="Chose Customer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>
                         <GridPane alignment="TOP_CENTER">
                             <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="8.0" prefWidth="8.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="87.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="82.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="84.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="69.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="135.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="82.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="addV" mnemonicParsing="false" onAction="#addEditVehicle" prefHeight="27.0" prefWidth="70.0" text="Add" GridPane.columnIndex="1" />
-                                <Button fx:id="deleteV" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="27.0" prefWidth="66.0" text="Delete" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-                                <Button fx:id="ClearV" mnemonicParsing="false" onAction="#ClearFields" prefHeight="27.0" prefWidth="59.0" text="Clear" textAlignment="RIGHT" GridPane.columnIndex="4" GridPane.halignment="RIGHT" />
-                        <Button fx:id="newVB" disable="true" mnemonicParsing="false" onAction="#newVehicle" prefHeight="27.0" prefWidth="85.0" text="New" GridPane.columnIndex="2" />
+                                <Button fx:id="addV" mnemonicParsing="false" onAction="#addEditVehicle" text="Add" />
+                                <Button fx:id="deleteV" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="27.0" prefWidth="66.0" text="Delete" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                <Button fx:id="ClearV" mnemonicParsing="false" onAction="#ClearFields" prefHeight="27.0" prefWidth="66.0" text="Clear" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                        <Button fx:id="newVB" disable="true" mnemonicParsing="false" onAction="#newVehicle" prefHeight="27.0" prefWidth="65.0" text="New" GridPane.columnIndex="1" />
                             </children>
                         </GridPane>
                     </items>
@@ -163,30 +157,26 @@
     <center>
         <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>
-                <SplitPane dividerPositions="0.21983914209115282, 0.8284182305630027" orientation="VERTICAL" prefHeight="375.0" prefWidth="806.0">
+                <SplitPane dividerPositions="0.11528150134048257, 0.8284182305630027" orientation="VERTICAL" prefHeight="375.0" prefWidth="806.0">
                     <items>
                         <BorderPane>
                             <center>
                                 <GridPane BorderPane.alignment="CENTER">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="91.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="362.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="142.92987060546875" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.07012939453125" minWidth="10.0" prefWidth="155.07012939453125" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="98.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="394.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="87.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="219.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label prefHeight="17.0" prefWidth="155.0" text="Vehicle Reg" />
-                                        <Label prefHeight="17.0" prefWidth="150.0" text="Manufacturer" GridPane.rowIndex="1" />
-                                        <TextField fx:id="regS" promptText="enter reg" GridPane.columnIndex="1" />
-                                        <TextField fx:id="manufS" promptText="enter manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <Button mnemonicParsing="false" onAction="#searchVehicle" prefHeight="27.0" prefWidth="61.0" text="Search" GridPane.columnIndex="2" />
-                                        <Button mnemonicParsing="false" onAction="#searchVehicleA" text="View All" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <Button fx:id="DeleteVT" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete Vehicle" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit Vehicle" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                        <Label prefHeight="17.0" prefWidth="155.0" text="Search Bar" />
+                                        <TextField fx:id="regS" onKeyTyped="#searchVehicle" promptText="enter reg or manufacturer" GridPane.columnIndex="1" />
+                                        <Button mnemonicParsing="false" onAction="#searchVehicleA" text="View All" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                        <Button fx:id="DeleteVT" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete Vehicle" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit Vehicle" GridPane.columnIndex="3" GridPane.halignment="LEFT" />
                                     </children>
                                 </GridPane>
                             </center>

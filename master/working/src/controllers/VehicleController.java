@@ -95,7 +95,11 @@ public class VehicleController implements Initializable
     @FXML
     private ListView ListParts;
 
-
+    @FXML
+    public void initialize() {
+        searchVehicleA();
+        showAlert("hiii");
+    }
 
 
 
@@ -316,9 +320,10 @@ public class VehicleController implements Initializable
     }
 
     public void searchVehicle() {
+        searchTable.setDisable(false);
         try {
 
-                List<Vehicle> arrayList = vSys.searchVehicle(regS.getText(), manufS.getText());
+                List<Vehicle> arrayList = vSys.searchVehicle(regS.getText(), regS.getText());
                 DisplayTable(arrayList);
 
 
@@ -338,12 +343,9 @@ public class VehicleController implements Initializable
 
     public void DisplayTable(List<Vehicle> arrayList) {
         try {
-            //addCustomerB.setDisable(false);
-            //bookingsB.setDisable(false);
             DeleteVT.setDisable(false);
             EditVehicle.setDisable(false);
             searchTable.setDisable(false);
-            //ViewPartsB.setDisable(false);
             tableEntries.removeAll(tableEntries);
             ArrayList<Boolean> b = new ArrayList<Boolean>();
             for (int i = 0; i < arrayList.size(); i++) {
@@ -930,7 +932,6 @@ public class VehicleController implements Initializable
     public void ViewBookingDates()
     {
         Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-        //SelectedVehicle.setText(vehicle.getRegNumber());
         PartsUsed.setDisable(false);
         try {
             BookingsTable.setDisable(false);
@@ -952,7 +953,10 @@ public class VehicleController implements Initializable
             tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
                 @Override
                 public String toString(DateTime object) {
-
+                if (object == null)
+                {
+                    return null;
+                }
                     return object.toString( "dd/MM/yyyy HH:mm");
                 }
 
@@ -966,6 +970,10 @@ public class VehicleController implements Initializable
             rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
                 @Override
                 public String toString(DateTime object) {
+                    if (object == null)
+                    {
+                        return null;
+                    }
                     return object.toString( "dd/MM/yyyy HH:mm");
                 }
 
@@ -1020,7 +1028,6 @@ public class VehicleController implements Initializable
             setNextBookingDate();
             ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
-            //vehicleS.setText(vehicle.getRegNumber());
             CustomerTable.setDisable(false);
             tableEntriesC.removeAll(tableEntriesC);
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
@@ -1123,29 +1130,37 @@ public class VehicleController implements Initializable
                 DiagRepBooking DRB = arrayList.get(i);
                 DTD = DRB.getDiagnosisStart();
                 DTR = DRB.getRepairStart();
+                if (DTD != null)
+                {
                 if (DTD.isAfterNow()) {
                     if ((DTD.isBefore(nextDiagBooking))) {
                         nextDiagBooking = DTD;
                     }
-                }
+                }}
+                if (DTR != null)
+                {
                 if (DTR.isAfterNow()) {
                     if ((DTR.isBefore(nextRepBooking))) {
                         nextRepBooking = DTR;
                     }
-                }
+                }}
             }
+            if (nextDiagBooking !=null)
+            {
             if (nextDiagBooking.isAfterNow()) {
                 DSLL.setVisible(true);
                 DSL.setText(nextDiagBooking.toString("dd/MM/yyyy HH:mm"));
-            } else {
+            }} else {
                 DSLL.setVisible(true);
                 DSL.setText("N/A");
             }
+            if (nextRepBooking !=null)
+            {
             if (nextRepBooking.isAfterNow()) {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);
                 RSL.setText(nextRepBooking.toString("dd/MM/yyyy HH:mm"));
-            } else {
+            }} else {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);
                 RSL.setText("N/A");
@@ -1166,7 +1181,9 @@ public class VehicleController implements Initializable
             List<Installation> Installations = vehicle.getInstallationList();
             if (Installations.size() ==0)
             {
-                showAlert("No parts installed for this Vehicle");
+                //showAlert("No parts installed for this Vehicle");
+                PartLabel.setText("No parts");
+                PartLabel.setVisible(true);
                 return;
             }
             ObservableList<String> items = FXCollections.observableArrayList();
