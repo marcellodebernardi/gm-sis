@@ -157,6 +157,44 @@ public class CustomerController
         try
         {
             String cID = customerID.getText();
+
+            boolean check = false;
+
+            if(cID.equals(""))
+            {
+                errorAlert("Customer has not yet been selected for deletion. Check Customer ID");
+                return;
+            }
+            if(deleteConfirmation("Are you sure you want to delete Customer?") == false)
+            {
+                return;
+            }
+            check = true;
+            if(check) {
+                boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
+                if (deletedCustomer) {
+                    errorAlert("Customer has been deleted");
+                } else {
+                    errorAlert("Can't find Customer record to delete");
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Delete Customer Error");
+            e.printStackTrace();
+        }
+    }
+
+
+    //method for deleting customer from database
+    public void deleteTableSelectedCustomerFromDB() throws Exception
+    {
+        try
+        {
+            Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
+            String cID = Integer.toString(customer.getCustomerID());
+
             boolean check = false;
 
             if(cID.equals(""))
@@ -276,6 +314,32 @@ public class CustomerController
         catch(Exception e)
         {
             System.out.println("Customer Table view Error");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void editTableSelectedCustomerFromDB() throws Exception
+    {
+        try
+        {
+            Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
+            if(customer == null)
+            {
+                throw new Exception();
+            }
+            customerID.setText(Integer.toString(customer.getCustomerID()));
+            customerFirstname.setText(customer.getCustomerFirstname());
+            customerSurname.setText(customer.getCustomerSurname());
+            customerAddress.setText(customer.getCustomerAddress());
+            customerPostcode.setText(customer.getCustomerPostcode());
+            customerPhone.setText(customer.getCustomerPhone());
+            customerEmail.setText(customer.getCustomerEmail());
+            customerType.setValue(customer.getCustomerType().toString());
+        }
+        catch(Exception e)
+        {
+            System.out.println("Edit Customer Error");
             e.printStackTrace();
         }
     }
