@@ -42,4 +42,13 @@ public class Bill implements Searchable {
     public void setBillSettled(boolean billSettled) {
         this.billSettled = billSettled;
     }
+
+    /**
+     * Sets the amount to be paid for the bill.
+     *
+     * @param billAmount new amount to be paid
+     */
+    public void setBillAmount(double billAmount) {
+        this.billAmount = billAmount;
+    }
 }
