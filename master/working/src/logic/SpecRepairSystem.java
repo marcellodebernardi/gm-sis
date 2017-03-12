@@ -246,5 +246,17 @@ public class SpecRepairSystem {
         return persistence.deleteItem(new Criterion<>(Installation.class,"installationID",EqualTo,InstallationID));
     }
 
+    public PartOccurrence getPartOcc(int partOcc)
+    {
+        try{
+            List<PartOccurrence> partOccurrences = persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partOcc));
+            return partOccurrences.get(0);
+        }
+        catch(NullPointerException e)
+        {
+            return null;
+        }
+    }
+
 
 }
