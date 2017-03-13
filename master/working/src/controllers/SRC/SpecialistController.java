@@ -1,6 +1,5 @@
-package controllers;
+package controllers.SRC;
 
-import com.sun.crypto.provider.DHKeyAgreement;
 // import com.sun.tools.corba.se.idl.InterfaceGen;
 // import com.sun.tools.internal.xjc.reader.dtd.bindinfo.BIAttribute;
 import domain.*;
@@ -8,29 +7,21 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
+        import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.BooleanStringConverter;
-import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import logic.BookingSystem;
-import logic.InvalidDateException;
-import logic.SpecRepairSystem;
-import logic.VehicleSys;
+import logic.*;
 import persistence.DatabaseRepository;
 import domain.PartRepair;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.time.*;
@@ -46,18 +37,21 @@ public class SpecialistController implements Initializable{
     private BookingSystem bookingSystem = BookingSystem.getInstance();
     private int spcRepID, installationID;
 
+
     public void initialize(URL location, ResourceBundle resources){
+
 
         try {
            setValues();
 
         }catch(NullPointerException e){e.printStackTrace();}
+        //afindSRCBookings();
 
     }
     @FXML
-    private ComboBox<String> bookingType;
+    private ComboBox<String> bookingType = new ComboBox<>();
 
-    public void setValues()
+    private void setValues()
     {
         bookingType.getItems().addAll("Vehicle", "Part");
         bookingType.setValue("Vehicle");
@@ -92,6 +86,8 @@ public class SpecialistController implements Initializable{
     private DatePicker bookingDeliveryDate = new DatePicker();
     @FXML
     private DatePicker bookingReturnDate = new DatePicker();
+
+    private int spcID;
 
     @FXML
     public void showDetails()
@@ -166,20 +162,21 @@ public class SpecialistController implements Initializable{
     public void updateBooking()
     {
         try {
-            java.time.LocalDate delDate = bookingDeliveryDate.getValue();
-            java.time.LocalDate retDate = bookingReturnDate.getValue();
-            ZoneId defaultZoneId = ZoneId.systemDefault();
-            Date deliveryDate = Date.from(delDate.atStartOfDay(defaultZoneId).toInstant());
-            Date returnDate = Date.from(retDate.atStartOfDay(defaultZoneId).toInstant());
+            //java.time.LocalDate delDate = bookingDeliveryDate.getValue();
+            //java.time.LocalDate retDate = bookingReturnDate.getValue();
+            //ZoneId defaultZoneId = ZoneId.systemDefault();
+           // Date deliveryDate = Date.from(delDate.atStartOfDay(defaultZoneId).toInstant());
+            Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
+            Date returnDate = fromLocalDate(bookingReturnDate.getValue());
+           // Date returnDate = Date.from(retDate.atStartOfDay(defaultZoneId).toInstant());
             if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
                 VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(spcRepID);
                 if (vehicleRepair != null) {
                     vehicleRepair.setVehicleRegNumber(bookingItemID.getText());
                     vehicleRepair.setCost(Double.parseDouble(bookingCost.getText()));
                     vehicleRepair.setSpcID(Integer.parseInt(bookingSPCID.getText()));
-                    showAlert(deliveryDate.toString());
                     if (!(vehicleRepair.setDeliveryDate(deliveryDate) || vehicleRepair.setReturnDate(returnDate))) {
-                        throw new InvalidDateException("Check dates!");
+                        throw new InvalidDateException("The delivery date is before the current date : " + new Date().toString() + "or the return date is before the delivery date");
                     }
                     vehicleRepair.setReturnDate(deliveryDate);
                     vehicleRepair.setDeliveryDate(returnDate);
@@ -208,7 +205,6 @@ public class SpecialistController implements Initializable{
                 {
                 showAlert("No booking was found of this type!");
             }
-
             cancelEditing();
         }
                 catch(InvalidDateException e)
@@ -239,17 +235,14 @@ public class SpecialistController implements Initializable{
 
     }
 
-    public boolean deleteConfirmation(String message)
+    @FXML
+    private boolean deleteConfirmation(String message)
     {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
         deleteAlert.setTitle("Delete Booking");
         deleteAlert.setHeaderText(message);
         deleteAlert.showAndWait();
-        if(deleteAlert.getResult() == ButtonType.OK)
-        {
-            return true;
-        }
-            return false;
+        return deleteAlert.getResult() == ButtonType.OK;
 
     }
 
@@ -260,9 +253,9 @@ public class SpecialistController implements Initializable{
         specialistBookings.getItems().clear();
         vehicleRepairsObservableList.addAll(vehicleRepairs);
         itemID.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
-        itemID.setCellFactory(TextFieldTableCell.<VehicleRepair>forTableColumn());
+        itemID.setCellFactory(TextFieldTableCell.forTableColumn());
         deliveryDateOfBooking.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
-        deliveryDateOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Date>forTableColumn(new StringConverter<Date>() {
+        deliveryDateOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Date>() {
             @Override
             public String toString(Date object) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -275,7 +268,7 @@ public class SpecialistController implements Initializable{
             }
         }));
         returnDateOfBooking.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Date>("returnDate"));
-        returnDateOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Date>forTableColumn(new StringConverter<Date>() {
+        returnDateOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Date>() {
             @Override
             public String toString(Date object) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -288,11 +281,11 @@ public class SpecialistController implements Initializable{
             }
         }));
         costOfBooking.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        costOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Double>forTableColumn(new DoubleStringConverter()));
+        costOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         spcIDOfBooking.setCellValueFactory(new PropertyValueFactory<>("spcID"));
-        spcIDOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Integer>forTableColumn(new IntegerStringConverter()));
+        spcIDOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         bookingIDOfBooking.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
-        bookingIDOfBooking.setCellFactory(TextFieldTableCell.<VehicleRepair, Integer>forTableColumn(new IntegerStringConverter()));
+        bookingIDOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         specialistBookings.setItems(vehicleRepairsObservableList);
     }
 
@@ -308,7 +301,7 @@ public class SpecialistController implements Initializable{
     @FXML
     private ObservableList<Installation> installationObservableList = FXCollections.observableArrayList();
     @FXML
-    private Button hideInstalls, addInsta, editInsta, deleteInsta,cancelInstallationUpdate,allowUpdate;
+    private Button hideInstalls, addInsta, editInsta, deleteInsta,cancelInstallationUpdate,allowUpdate,clearPartsFields;
     @FXML
     private DatePicker instaDate, wEndDate = new DatePicker();
     @FXML
@@ -338,7 +331,17 @@ public class SpecialistController implements Initializable{
         instaOccID_lbl.setVisible(true);
         instaVReg_lbl.setVisible(true);
         wEndDate_lbl.setVisible(true);
+        clearPartsFields.setVisible(true);
 
+    }
+
+    public void clearFields()
+    {
+        instaDate.setValue(null);
+        wEndDate.setValue(null);
+        instaAbsID.clear();
+        instaOccID.clear();
+        instaVReg.clear();
     }
 
     //todo get part occurrence ID to show and the dates to show
@@ -346,9 +349,9 @@ public class SpecialistController implements Initializable{
         Installations.getItems().clear();
         installationObservableList.addAll(installations);
         VehicleReg.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
-        VehicleReg.setCellFactory(TextFieldTableCell.<Installation>forTableColumn());
+        VehicleReg.setCellFactory(TextFieldTableCell.forTableColumn());
         instDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
-        instDate.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new StringConverter<Date>() {
+        instDate.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Date>() {
             @Override
             public String toString(Date object) {
                 if (object == null) {
@@ -364,7 +367,7 @@ public class SpecialistController implements Initializable{
             }
         }));
         warrDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
-        warrDate.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new StringConverter<Date>() {
+        warrDate.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Date>() {
             @Override
             public String toString(Date object) {
                 if (object == null) {
@@ -386,7 +389,7 @@ public class SpecialistController implements Initializable{
                 return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
             }
         });
-        partOccID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
+        partOccID.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
         Installations.setItems(installationObservableList);
     }
@@ -445,6 +448,7 @@ public class SpecialistController implements Initializable{
         instaOccID_lbl.setVisible(false);
         instaVReg_lbl.setVisible(false);
         wEndDate_lbl.setVisible(false);
+        clearPartsFields.setVisible(false);
     }
 
     //add an SRC Booking
@@ -455,32 +459,35 @@ public class SpecialistController implements Initializable{
         try {
             List<DiagRepBooking> diagRepBookings = bookingSystem.searchBookings(bookingID.getText());//check if booking exist
             if(diagRepBookings.get(0)!=null) {
-                DiagRepBooking diagRepBooking = diagRepBookings.get(0);
-                Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
-                diagRepBooking.setBill(bill);
-                bookingSystem.addBooking(diagRepBooking);
-                //ZoneId defaultZoneId = ZoneId.systemDefault();
-                //java.time.LocalDate delDate = bookingDeliveryDate.getValue();
-                //java.time.LocalDate retDate = bookingReturnDate.getValue();
-                //Date deliveryDate = Date.from(delDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                //Date returnDate = Date.from(retDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+               // DiagRepBooking diagRepBooking = diagRepBookings.get(0);
+                //Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
+                //diagRepBooking.setBill(bill);
+
+                if(!isBefore(bookingDeliveryDate.getValue()))
+                {
+                  throw new  InvalidDateException("Delivery date before today's date.");
+                }
+
                 Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
                 Date returnDate = fromLocalDate(bookingReturnDate.getValue());
-                if (!deliveryDate.before(new Date()) && returnDate.after(deliveryDate)) {
-                    if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
-                        VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
-                        specRepairSystem.addSpecialistBooking(vehicleRepair);
-                        showAlert("Successfully added vehicle booking: " + vehicleRepair.getSpcRepID());
-                    } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
-                        PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
-                        specRepairSystem.addSpecialistBooking(partRepair);
-                        showAlert("Successfully added part booking: " + partRepair.getSpcRepID());
-                    }
+
+                if(returnDate.before(deliveryDate))
+                {
+                    throw new InvalidDateException("Return date before delivery date.");
                 }
                 else
                 {
-                    throw new InvalidDateException("Please check the selected dates");
-                }
+                    if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
+                        VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
+                        specRepairSystem.addSpecialistBooking(vehicleRepair);
+                        showAlert("Successfully added vehicle booking");
+                    } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
+                        PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
+                        specRepairSystem.addSpecialistBooking(partRepair);
+                        showAlert("Successfully added part booking ");
+                    }
+               }
+
             }
             else{
                 showAlert("Please enter a valid booking ID!");
@@ -496,6 +503,12 @@ public class SpecialistController implements Initializable{
             }
 
         }
+    }
+
+    private boolean isBefore(LocalDate localDate)
+    {
+        LocalDate now = LocalDate.now();
+        return !localDate.isBefore(now);
     }
 
     private java.time.LocalDate toLocalDate(Date date)
@@ -550,7 +563,7 @@ public class SpecialistController implements Initializable{
         }
         catch (NullPointerException e)
         {
-            showAlert(e.getMessage());
+            showAlert("Unable to delete...");
         }
     }
 
@@ -561,6 +574,11 @@ public class SpecialistController implements Initializable{
         alert.setHeaderText(message);
         alert.showAndWait();
     }
+
+    //code for the right side of the fxml
+
+
+
 
 
 }

@@ -66,11 +66,27 @@ public class MenuController {
     public void openSRCTab() {
         BorderPane specialistBasePane = new BorderPane();
         try {
-            FlowPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/centerSRC.fxml"));
+           // BorderPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newCenterSRC.fxml"));
             BorderPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newLeftPane.fxml"));
             specialistBasePane.setVisible(true);
             specialistBasePane.setLeft(leftPane);
-            specialistBasePane.setRight(centerPane);
+           // specialistBasePane.setRight(centerPane);
+            Main.getInstance().replaceTabContent(specialistBasePane);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openSRCManagementTab() {
+        BorderPane specialistBasePane = new BorderPane();
+        try {
+            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newCenterSRC.fxml"));
+           // BorderPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newLeftPane.fxml"));
+            specialistBasePane.setVisible(true);
+           // specialistBasePane.setLeft(leftPane);
+            specialistBasePane.setCenter(centerPane);
             Main.getInstance().replaceTabContent(specialistBasePane);
 
 

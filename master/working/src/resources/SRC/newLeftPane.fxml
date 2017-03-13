@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="918.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SpecialistController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="918.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SRC.SpecialistController">
    <center>
       <TableView fx:id="specialistBookings" onMouseClicked="#showDetails" prefHeight="417.0" prefWidth="613.0" BorderPane.alignment="CENTER">
         <columns>
@@ -84,6 +84,7 @@
             <Label fx:id="instaDate_lbl" layoutX="15.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Installation Date:" visible="false" />
             <Label fx:id="instaOccID_lbl" layoutX="596.0" layoutY="487.0" prefHeight="0.0" prefWidth="176.0" text="Part Occurrence ID:" visible="false" />
             <Label fx:id="instaVReg_lbl" layoutX="15.0" layoutY="539.0" prefHeight="0.0" prefWidth="176.0" text="Vehicle Registration:" visible="false" />
+            <Button fx:id="clearPartsFields" layoutX="204.0" layoutY="556.0" mnemonicParsing="false" onAction="#clearFields" text="Clear" visible="false" />
          </children>
       </Pane>
    </bottom>

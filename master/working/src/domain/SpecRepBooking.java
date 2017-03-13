@@ -139,7 +139,7 @@ public abstract class SpecRepBooking implements Searchable {
 
     public boolean setDeliveryDate(Date date)
     {
-        if(date.after(new Date())) {
+        if(!date.before(new Date())) {
             this.deliveryDate = date;
             return true;
         }

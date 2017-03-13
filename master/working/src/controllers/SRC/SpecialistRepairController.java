@@ -1,9 +1,10 @@
-package controllers;
+package controllers.SRC;
 
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -11,14 +12,16 @@ import javafx.util.converter.IntegerStringConverter;
 import logic.*;
 import persistence.DatabaseRepository;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class SpecialistRepairController {
+public class SpecialistRepairController implements Initializable{
 
 
     private DatabaseRepository databaseRepository = DatabaseRepository.getInstance();
@@ -28,7 +31,174 @@ public class SpecialistRepairController {
     private VehicleSys vehicleSys = VehicleSys.getInstance();
     private BookingSystem bookingSystem = BookingSystem.getInstance();
 
+    private int spcID;
+
     @FXML
+    private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        if(AuthenticationSystem.getInstance().getUserType().equals(UserType.NORMAL))
+        {
+            btn_addSRC.setDisable(true);
+            btn_updateSRC.setDisable(true);
+            btn_deleteSRC.setDisable(true);
+        }
+        findSRC();
+
+    }
+    @FXML
+    private TableView<SpecialistRepairCenter> SpecialistRepairCenters;
+
+    @FXML
+    private TableColumn<SpecialistController, Integer> spc_id_column;
+
+    @FXML
+    private TableColumn<SpecialistController, String> spc_name_column,spc_phone_column,spc_address_column,spc_email_column = new TableColumn<>();
+
+    @FXML
+    private TextField searchSRC,src_id,src_name,src_address,src_email, src_phone = new TextField();
+
+    @FXML
+    private ObservableList<SpecialistRepairCenter> specialistRepairCenterObservableList = FXCollections.observableArrayList();
+
+    @FXML
+    public void findSRC() {
+
+        try{
+            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(Integer.parseInt(searchSRC.getText()));
+            displayCentersToTable(specialistRepairCenters);
+
+        }
+        catch (NumberFormatException | NullPointerException e)
+        {
+            if(e instanceof  NumberFormatException)
+            {
+                List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getBookingsByName(searchSRC.getText());
+                displayCentersToTable(specialistRepairCenters);
+            }
+
+        }
+
+
+    }
+
+    private void displayCentersToTable(List<SpecialistRepairCenter> specialistRepairCenters)
+    {
+        SpecialistRepairCenters.getItems().clear();
+        specialistRepairCenterObservableList.addAll(specialistRepairCenters);
+        spc_id_column.setCellValueFactory(new PropertyValueFactory<>("spcID"));
+        spc_id_column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        spc_name_column.setCellValueFactory(new PropertyValueFactory<>("name"));
+        spc_name_column.setCellFactory(TextFieldTableCell.forTableColumn());
+        spc_address_column.setCellValueFactory(new PropertyValueFactory<>("address"));
+        spc_address_column.setCellFactory(TextFieldTableCell.forTableColumn());
+        spc_email_column.setCellValueFactory(new PropertyValueFactory<>("email"));
+        spc_email_column.setCellFactory(TextFieldTableCell.forTableColumn());
+        spc_phone_column.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        spc_phone_column.setCellFactory(TextFieldTableCell.forTableColumn());
+        SpecialistRepairCenters.setItems(specialistRepairCenterObservableList);
+    }
+
+    public void showSpcDetails()
+    {
+        SpecialistRepairCenter specialistRepairCenter = SpecialistRepairCenters.getSelectionModel().getSelectedItem();
+        src_id.setText(Integer.toString(specialistRepairCenter.getSpcID()));
+        src_name.setText(specialistRepairCenter.getName());
+        src_phone.setText(specialistRepairCenter.getPhone());
+        src_email.setText(specialistRepairCenter.getEmail());
+        src_address.setText(specialistRepairCenter.getAddress());
+        src_name.setText(specialistRepairCenter.getName());
+        spcID = specialistRepairCenter.getSpcID();
+    }
+
+    public void clearSRCFields()
+    {
+        src_id.clear();
+        src_name.clear();
+        src_phone.clear();
+        src_address.clear();
+        src_email.clear();
+    }
+
+    public void addNewSRC()
+    {
+        if(src_phone.getText().length() == 11 && !src_name.getText().equals("") && !src_address.equals("") && !src_email.equals("")) {
+            if(addConfirmation()) {
+                specRepairSystem.addRepairCenter(src_name.getText(), src_address.getText(), src_phone.getText(), src_email.getText());
+            }
+        }
+    }
+
+    public void deleteSRC()
+    {
+        try {
+            if(deleteConfirmation("Are you sure you want to delete this Specialist repair center?"))
+                specRepairSystem.deleteAllSubsequentBookings(spcID);
+            specRepairSystem.deleteRepairCenter(spcID);
+        }
+        catch (NullPointerException e)
+        {
+            showAlert("No SPC Selected.");
+        }
+    }
+
+    public void updateSRC()
+    {
+        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcID);
+        if(updateConfirmation("Are you sure you want to update this SPC?"))
+        {
+            specialistRepairCenter.setEmail(src_email.getText());
+            specialistRepairCenter.setName(src_name.getText());
+            specialistRepairCenter.setAddress(src_address.getText());
+            specialistRepairCenter.setPhone(src_phone.getText());
+            specRepairSystem.updateRepairCentre(specialistRepairCenter);
+        }
+    }
+
+    private boolean addConfirmation()
+    {
+        Alert addAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        addAlert.setTitle("Add Specialist Repair Center");
+        addAlert.setHeaderText("Are you sure you want to add this center?");
+        addAlert.showAndWait();
+        return addAlert.getResult() == ButtonType.OK;
+
+    }
+
+    @FXML
+    private boolean deleteConfirmation(String message)
+    {
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle("Delete Booking");
+        deleteAlert.setHeaderText(message);
+        deleteAlert.showAndWait();
+        return deleteAlert.getResult() == ButtonType.OK;
+
+    }
+
+    @FXML
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Message");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+    }
+
+    private boolean updateConfirmation(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Update specialist center");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+        return alert.getResult() == ButtonType.OK;
+    }
+
+
+
+    /*
+    @FXML
+
     private RadioButton vehicle_repair, part_repair;
 
     @FXML
@@ -50,7 +220,7 @@ public class SpecialistRepairController {
 
     @FXML
     private TextField spcID;
-*/
+
     @FXML
     private RadioButton veh_selected, src_selected;
 
@@ -94,11 +264,12 @@ public class SpecialistRepairController {
         reg_of_vehicle_for_srbooking.setCellFactory(TextFieldTableCell.<SpecRepBooking>forTableColumn());
 
 
-    }*/
+    }
 
     /**
      * Search for a vehicle in db of specialist repair bookings
      */
+    /*
     @FXML
     public void searchVehiclesSRC() {
 
@@ -112,7 +283,7 @@ public class SpecialistRepairController {
             }
             updateTableViewVehicleRepair(vehicleRepairs);
         } else if (src_selected.isSelected()) {
-            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(itemToSearch.getText());
+          //  List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(itemToSearch.getText());
             //todo implement list into table view
             updateTableViewSpecialistRepair(specialistRepairCenters);
         }
@@ -141,9 +312,9 @@ public class SpecialistRepairController {
         VehicleRepairs.setItems(tableEntries);
     }
 
-    /**
-     * Search a specific SRC to edit
-     */
+
+      Search a specific SRC to edit
+
     public void searchSRCToEdit() {
         spcIDEdit = Integer.parseInt(spcToEdit.getText());
         SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(spcToEdit.getText()));
@@ -176,9 +347,9 @@ public class SpecialistRepairController {
     }
 
 
-    /**
-     * Allows a booking to be made
-     */
+
+      Allows a booking to be made
+
     @FXML
     public void allowBooking() {
         try {
@@ -235,7 +406,7 @@ public class SpecialistRepairController {
      * Shows a relevant alert message
      *
      * @param message message displayed to user
-     */
+
     @FXML
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -246,7 +417,7 @@ public class SpecialistRepairController {
 
     /**
      * Method used to search for an SRC for a specialist repair booking
-     */
+
     @FXML
     public void findSRCForBooking() {
         try {
@@ -271,7 +442,7 @@ public class SpecialistRepairController {
     /**
      * Deletes an SRC
      * todo implement a confirmation message
-     */
+
     @FXML
     public void deleteSRC() {
         //confirmDelete(Integer.parseInt(spcIDtoDelete.getText()));
@@ -283,12 +454,12 @@ public class SpecialistRepairController {
         alert.setContentText("Are you sure you want to delete this SRC?");
         alert.showAndWait();
 
-    }/*
+    }
 
 
     /**
      * Updates the SRC upon making a few checks
-     */
+
     @FXML
     public void updateSRC() {
         String spcName = new_spcName.getText();
@@ -312,7 +483,7 @@ public class SpecialistRepairController {
     /**
      * Displays relevant fields for adding of an SRC, hides all other irrelevant parts
      * todo implement system which will ensure it only shows when user is administrator
-     */
+
     @FXML
     void displayFields() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
@@ -339,7 +510,7 @@ public class SpecialistRepairController {
     /**
      * Displays relevant fields for editing of an SRC, hides all other irrelevant parts
      * todo implement system which will ensure it only shows when user is administrator
-     */
+
     @FXML
     void displayFieldsToEdit() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
@@ -365,7 +536,7 @@ public class SpecialistRepairController {
 
     /**
      * Adds a new SRC to database
-     */
+
     @FXML
     void addSRC() {
         String spcName = new_spcName.getText();
@@ -385,7 +556,7 @@ public class SpecialistRepairController {
     /**
      * Displays relevant fields for deletion of an SRC, hides all other irrelevant parts
      * todo implement system which will ensure it only shows when user is administrator
-     */
+
     @FXML
     public void showID() {
         if (!(authenticationSystem.getUserType().equals(UserType.ADMINISTRATOR))) {
@@ -417,7 +588,7 @@ public class SpecialistRepairController {
 
     /**
      * Submits part changes on a specific part
-     */
+
     @FXML
     public void submitPartsChanges() {
         //todo implement updating part system (talk to Shakib)
@@ -434,7 +605,7 @@ public class SpecialistRepairController {
 
     /**
      * Sets the editable fields for a part
-     */
+
     @FXML
     public void allowEdit() {
         partAbsID.setEditable(true);
@@ -446,7 +617,7 @@ public class SpecialistRepairController {
     /**
      * ADDS A PART TO THE DB
      * todo needs to be fixed - Talk to Shakib
-     */
+
     @FXML
     public void addPart() {
         partAbsID.clear();
@@ -473,7 +644,7 @@ public class SpecialistRepairController {
 
     /**
      * SHOWS ALL THE OUTSTANDING ITEMS AT REPAIR CENTERS
-     */
+
     @FXML
     public void getOutStandingItems() {
         Date todaysDate = new Date();
@@ -511,7 +682,7 @@ public class SpecialistRepairController {
      * Specified booking through SPC ID, Item(part or vehicle) ID(reg or occurrence ID) and date
      *
      * @throws InvalidDateException
-     */
+
     @FXML
     public void deleteBooking() throws InvalidDateException {
         try {
@@ -546,7 +717,7 @@ public class SpecialistRepairController {
 
     /**
      * Search the SRC Responsible for repair for deletion and set text for SRC Name
-     */
+
     @FXML
     public void searchSRCDeletion() {
         SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
@@ -556,7 +727,7 @@ public class SpecialistRepairController {
 
     /**
      * Reset fields
-     */
+
     @FXML
     public void promptFields() {
         search_src_deletion.setVisible(false);
@@ -606,7 +777,7 @@ public class SpecialistRepairController {
 
     /**
      *
-     */
+
     @FXML
     public void findBooking() {
         try {
@@ -686,5 +857,6 @@ public class SpecialistRepairController {
         }
 
 
-    }
+    }*/
+
 }

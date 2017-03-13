@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,9 +11,6 @@ import java.util.List;
 
 public class SpecialistRepairCenter implements Searchable {
     private int spcID;
-
-
-
     private String name;
     private String address;
     private String phone;
@@ -123,18 +121,37 @@ public class SpecialistRepairCenter implements Searchable {
         return this.bookings;
     }
     public void setName(String name) {
-        this.name = name;
+        if(!name.equals("")) {
+            this.name = name;
+        }
     }
 
     public void setAddress(String address) {
+        if(!address.equals(""))
         this.address = address;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        if(phone.length() == 11 && containsChar(phone)) {
+            this.phone = phone;
+        }
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if(!email.equals("")  && email.contains("@")) {
+            this.email = email;
+        }
+    }
+
+    private boolean containsChar(String number)
+    {
+        try{
+            final int i = Integer.parseInt(number);
+            return true;
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
     }
 }

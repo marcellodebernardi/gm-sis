@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
     <top>
         <HBox id="tabTilePane">
-            <Button onAction="#openTodayTab" text="Today"/>
-            <Button onAction="#openCustomersTab" text="Customers"/>
-            <Button onAction="#openBookingsTab" text="Bookings"/>
-            <Button onAction="#openVehiclesTab" text="Vehicles"/>
-            <Button onAction="#openPartsTab" text="Parts"/>
-            <Button onAction="#openSRCTab" text="Specialist Repairs"/>
-            <Button fx:id="UsersButton" onAction="#openUsersTab" text="Users"/>
+            <Button onAction="#openTodayTab" text="Today" />
+            <Button onAction="#openCustomersTab" text="Customers" />
+            <Button onAction="#openBookingsTab" text="Bookings" />
+            <Button onAction="#openVehiclesTab" text="Vehicles" />
+            <Button onAction="#openPartsTab" text="Parts" />
+            <Button onAction="#openSRCTab" text="Specialist Repairs" />
+         <Button onAction="#openSRCManagementTab" text="Specialist Center Management" />
+            <Button fx:id="UsersButton" onAction="#openUsersTab" text="Users" />
         </HBox>
     </top>
     <center>

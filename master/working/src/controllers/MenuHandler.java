@@ -16,6 +16,7 @@ public class MenuHandler {
     private BorderPane view;
     private Button usersButton;
 
+
     private MenuHandler() throws IOException {
         view = FXMLLoader.load(getClass().getResource("/common/applicationPane.fxml"));
         usersButton = (Button) view.lookup("#UsersButton");
