@@ -1,10 +1,14 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import logic.AuthenticationSystem;
 import main.Main;
+
+import javax.swing.border.Border;
+import java.io.IOException;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque, Marcello De Bernardi
@@ -24,9 +28,7 @@ public class LoginController {
         if (authentication.login(username.getText(), password.getText())) {
             BorderPane menu = MenuHandler.getInstance().show();
             Main.getInstance().setRootPane((BorderPane)menu);
-
-            // todo get TODAY pane into this as argument
-            // Main.getInstance().replaceTabContent(FXMLLoader.load());
+            (new MenuController()).openTodayTab();
         }
         else {
             showAlert();
