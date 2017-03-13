@@ -59,7 +59,7 @@ public class VehicleController implements Initializable
     @FXML
     private DatePicker rDateMot, dLastServiced, wExpirationDate;
     @FXML
-    private ComboBox vType, fType, cByWarranty, VehicleS, cID;
+    private ComboBox vType, fType, cByWarranty, VehicleS, cID, typeS, VehicleTS;
     @FXML
     private TableView<Vehicle> searchTable;
     @FXML
@@ -366,11 +366,21 @@ public class VehicleController implements Initializable
     public void searchVehicle() {
         searchTable.setDisable(false);
         try {
-
-                List<Vehicle> arrayList = vSys.searchVehicle(regS.getText(), regS.getText());
+            VehicleType vT;
+            List<Vehicle> arrayList;
+            if (typeS.getSelectionModel().getSelectedItem() !=null)
+            {
+            if (typeS.getSelectionModel().getSelectedItem().toString().equals("Car")) {
+                vT = VehicleType.Car;
+            } else if (typeS.getSelectionModel().getSelectedItem().toString().equals("Van")) {
+                vT = VehicleType.Van;
+            } else {
+                vT = VehicleType.Truck;
+            }
+                arrayList = vSys.searchVehicleT(regS.getText(), manufS.getText(), vT);}
+                else {
+                arrayList = vSys.searchVehicle(regS.getText(), manufS.getText());}
                 DisplayTable(arrayList);
-
-
 
         } catch (Exception e) {
             System.out.println("Search Vehicle Error");
@@ -906,6 +916,72 @@ public class VehicleController implements Initializable
         {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
         }
+    }
+
+    public void selectVehicleS()
+    {
+        List<Vehicle> arrayList;
+        if (VehicleTS.getSelectionModel().isSelected(0))
+        {
+            arrayList = vSys.searchByTemplate("Civic", "Honda", 1.6, VehicleType.Car, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(1))
+        {
+            arrayList = vSys.searchByTemplate("Focus", "Ford", 1.2,  VehicleType.Car, FuelType.diesel);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(2))
+        {
+            arrayList = vSys.searchByTemplate("5 Series", "BMw", 2.2,  VehicleType.Car, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(3))
+        {
+            arrayList = vSys.searchByTemplate("3 Series", "BMw", 2.9, VehicleType.Car, FuelType.diesel);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(4))
+        {
+            arrayList = vSys.searchByTemplate("A Class", "Mercedes", 3.0,  VehicleType.Car, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(5))
+        {
+            arrayList = vSys.searchByTemplate("Transit", "Ford", 2.2,  VehicleType.Van, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(6))
+        {
+            arrayList = vSys.searchByTemplate("Roadster", "Nissan", 1.2, VehicleType.Truck, FuelType.diesel);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(7))
+        {
+            arrayList = vSys.searchByTemplate("Y-8 Van", "Audi", 3.6, VehicleType.Van, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(8))
+        {
+            arrayList = vSys.searchByTemplate("Enzo", "Ferrari", 4.4, VehicleType.Car,FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(9))
+        {
+            arrayList = vSys.searchByTemplate("Truckster", "Ford", 2.8, VehicleType.Truck, FuelType.diesel);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(10))
+        {
+            arrayList = vSys.searchByTemplate("Hybrid Van", "Renault", 2.3, VehicleType.Car, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(11))
+        {
+            arrayList = vSys.searchByTemplate("Sport", "MG", 2.0, VehicleType.Car, FuelType.diesel);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(12))
+        {
+            arrayList = vSys.searchByTemplate("Model S", "Acura", 2.2, VehicleType.Car, FuelType.petrol);
+        }
+        else if (VehicleTS.getSelectionModel().isSelected(13))
+        {
+            arrayList = vSys.searchByTemplate("Arnage", "Bentley", 4.0, VehicleType.Car, FuelType.petrol);
+        }
+        else
+        {
+            arrayList = vSys.searchByTemplate("Fire Truck", "DAF", 3.8, VehicleType.Truck,FuelType.diesel);
+        }
+        DisplayTable(arrayList);
     }
 
     public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType)
