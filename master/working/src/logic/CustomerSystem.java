@@ -38,10 +38,15 @@ public class CustomerSystem {
         return persistence.commitItem(add);
     }
 
-    public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType) {
-        Customer edit = new Customer(customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail, customerType, null);
-        return persistence.commitItem(edit);
+    public boolean editCustomer(Customer customer)
+    {
+        return persistence.commitItem(customer);
     }
+
+//    public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType) {
+//        Customer edit = new Customer(customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail, customerType, null);
+//        return persistence.commitItem(edit);
+//    }
 
     public boolean deleteCustomer(int customerID)
     {

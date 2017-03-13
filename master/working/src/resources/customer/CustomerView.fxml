@@ -42,7 +42,7 @@
             <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
             <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" />
             <Button fx:id="clearCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" onAction="#clearCustomerFields" text="Clear" />
-            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" onAction="#updateCustomerInDB" text="Save" />
          </children>
       </Pane>
    </left>

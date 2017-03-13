@@ -59,7 +59,7 @@ public class CustomerController
 
 
 
-    ////for 'CustomerView.common' instance variables
+    ////for 'CustomerView.fxml' instance variables
     ////left pane (add and edit customer view)
     @FXML
     private TextField customerID, customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail = new TextField();
@@ -87,7 +87,7 @@ public class CustomerController
     private TableColumn<Customer, CustomerType> customerTableColumnType;
 
 
-    ////for 'DeleteCustomerConfirmation.common' instance variables
+    ////for 'DeleteCustomerConfirmation.fxml' instance variables
     @FXML
     private Button deleteCustomerConfirmationYes = new Button();
     @FXML
@@ -258,7 +258,7 @@ public class CustomerController
     {
         try
         {
-            Customer customers = customerTable.getSelectionModel().getSelectedItem();
+            //Customer customers = customerTable.getSelectionModel().getSelectedItem();
 
             customerTable.setDisable(false);
             tableEntries.removeAll(tableEntries);
@@ -323,7 +323,8 @@ public class CustomerController
     {
         try
         {
-            Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
+            //Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
+            Customer customer = customerTable.getSelectionModel().getSelectedItem();
             if(customer == null)
             {
                 throw new Exception();
@@ -340,6 +341,72 @@ public class CustomerController
         catch(Exception e)
         {
             System.out.println("Edit Customer Error");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCustomerInDB() throws Exception
+    {
+        try
+        {
+            String cFirstname = customerFirstname.getText();
+            String cSurname = customerSurname.getText();
+            String cAddress = customerAddress.getText();
+            String cPostcode = customerPostcode.getText();
+            String cPhone = customerPhone.getText();
+            String cEmail = customerEmail.getText();
+            CustomerType cType = null;
+
+            boolean checkFields = false;
+
+            //checking validity of all Customer fields
+            if((!cFirstname.equals(""))&&(!cSurname.equals(""))&&(!cAddress.equals(""))&&(!cPostcode.equals(""))&&(cPostcode.length()<=8)&&(!cPhone.equals(""))&&(cPhone.length()>10)&&(cPhone.length()<14)&&(!cEmail.equals(""))&&(cEmail.contains("@")))
+            {
+                if(customerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
+                {
+                    cType = CustomerType.Private;
+                    checkFields = true;
+                }
+                else if(customerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
+                {
+                    cType = CustomerType.Business;
+                    checkFields = true;
+                }
+            }
+
+            Customer customer = cSystem.getACustomers(Integer.parseInt(customerID.getText()));
+
+            if(checkFields)
+            {
+                customer.setCustomerID(Integer.parseInt(customerID.getText()));
+                customer.setCustomerFirstname(cFirstname);
+                customer.setCustomerSurname(cSurname);
+                customer.setCustomerAddress(cAddress);
+                customer.setCustomerPostcode(cPostcode);
+                customer.setCustomerPhone(cPhone);
+                customer.setCustomerEmail(cEmail);
+                customer.setCustomerType(cType);
+
+                boolean editedCustomer = cSystem.editCustomer(customer);
+
+                if(editedCustomer)
+                {
+                    errorAlert("SUCCESSFULLY UPDATED CUSTOMER'S DETAIL!!!");
+                }
+                else
+                {
+                    errorAlert("Cannot update customer. Ensure all fields have been entered correctly.");
+                }
+            }
+            else
+            {
+                //error message if checkFields=false meaning one or more Customer fields were invalid
+                errorAlert("Cannot update customer. Ensure all fields have been entered correctly.");
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Update Customer Error");
             e.printStackTrace();
         }
     }
@@ -385,8 +452,5 @@ public class CustomerController
     }
 
 }
-
-
-
 
 

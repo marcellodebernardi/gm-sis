@@ -21,7 +21,7 @@ public class Customer implements Searchable
     private List<Vehicle> vehicles;
 
 
-    public Customer(String customerSurname, String customerFirstname, String customerAddress,
+    public Customer(String customerFirstname, String customerSurname, String customerAddress,
                     String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType,
                     List<Vehicle> vehicles) {
         customerID = -1;
