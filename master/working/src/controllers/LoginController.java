@@ -1,14 +1,13 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import logic.AuthenticationSystem;
 import main.Main;
-
-import javax.swing.border.Border;
-import java.io.IOException;
 
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque, Marcello De Bernardi
@@ -27,7 +26,7 @@ public class LoginController {
     public void loginHandler() throws Exception {
         if (authentication.login(username.getText(), password.getText())) {
             BorderPane menu = MenuHandler.getInstance().show();
-            Main.getInstance().setRootPane((BorderPane)menu);
+            Main.getInstance().setRootPane((BorderPane) menu);
             (new MenuController()).openTodayTab();
         }
         else {
