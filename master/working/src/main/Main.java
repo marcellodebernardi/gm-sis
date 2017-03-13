@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import persistence.DatabaseRepository;
 
+import javax.swing.border.*;
+import javax.swing.border.Border;
 import java.io.IOException;
 
 /**

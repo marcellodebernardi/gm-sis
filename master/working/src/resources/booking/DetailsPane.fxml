@@ -12,6 +12,7 @@
 <?import javafx.scene.control.TableView?>
 
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.booking.DetailsPaneController"
             id="detailsPane" fx:id="detailsPane">
@@ -32,41 +33,45 @@
             <ComboBox GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2"
                       fx:id="vehicleComboBox"></ComboBox>
 
+            <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Description</Label>
+            <TextArea GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                      fx:id="descriptionTextArea" id="descriptionTextArea"></TextArea>
+
             <!-- Diagnosis date and time -->
-            <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Diagnosis Date</Label>
-            <DatePicker GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Date</Label>
+            <DatePicker GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
                         fx:id="diagnosisDatePicker"></DatePicker>
-            <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Time</Label>
-            <TextField GridPane.rowIndex="3" GridPane.columnIndex="1"
+            <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Time</Label>
+            <TextField GridPane.rowIndex="4" GridPane.columnIndex="1"
                        fx:id="diagnosisStartTimeTextField"></TextField>
-            <TextField GridPane.rowIndex="3" GridPane.columnIndex="2"
+            <TextField GridPane.rowIndex="4" GridPane.columnIndex="2"
                        fx:id="diagnosisEndTimeTextField"></TextField>
 
             <!-- Repair date and time -->
-            <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Repair Date</Label>
-            <DatePicker GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Repair Date</Label>
+            <DatePicker GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"
                         fx:id="repairDatePicker"></DatePicker>
-            <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Repair Time</Label>
-            <TextField GridPane.rowIndex="5" GridPane.columnIndex="1"
+            <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Repair Time</Label>
+            <TextField GridPane.rowIndex="6" GridPane.columnIndex="1"
                        fx:id="repairStartTimeTextField"></TextField>
-            <TextField GridPane.rowIndex="5" GridPane.columnIndex="2"
+            <TextField GridPane.rowIndex="6" GridPane.columnIndex="2"
                        fx:id="repairEndTimeTextField"></TextField>
 
             <!-- Mechanic tasked on repair -->
-            <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Mechanic</Label>
-            <ComboBox GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
+            <ComboBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
                       fx:id="mechanicComboBox"></ComboBox>
 
             <!-- Parts needed for repair -->
-            <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Parts</Label>
-            <TableView GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
+            <TableView GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="bookingPartsTable" fx:id="partsTable"></TableView>
         </GridPane>
     </center>
     <bottom>
         <HBox id="detailsButtons">
-            <Button>Add booking</Button>
-            <Button>Subcontract to SPC</Button>
+            <Button onAction="#addBooking">Add booking</Button>
+            <Button>Subcontract</Button>
             <Button>Clear</Button>
         </HBox>
     </bottom>

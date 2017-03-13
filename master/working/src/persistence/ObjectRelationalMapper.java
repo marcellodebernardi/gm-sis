@@ -12,6 +12,10 @@ import java.lang.reflect.Modifier;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -96,6 +100,10 @@ class ObjectRelationalMapper {
 
         dateTypes = new ArrayList<>();
         dateTypes.add(Date.class);
+        dateTypes.add(LocalDateTime.class);
+        dateTypes.add(LocalDate.class);
+        dateTypes.add(LocalTime.class);
+        dateTypes.add(ZonedDateTime.class);
 
         numericTypes.addAll(dateTypes);
     }

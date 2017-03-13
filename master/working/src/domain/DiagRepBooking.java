@@ -83,8 +83,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      *
      * @return booking ID
      */
-    @Column(name = "bookingID", primary = true)
-    @Override
+    @Column(name = "bookingID", primary = true) @Override
     public int getBookingID() {
         return super.getBookingID();
     }
@@ -94,8 +93,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      *
      * @return vehicle registration number
      */
-    @Column(name = "vehicleRegNumber")
-    @Override
+    @Column(name = "vehicleRegNumber") @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
     }
@@ -117,8 +115,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      *
      * @return booking description
      */
-    @Column(name = "description")
-    @Override
+    @Column(name = "description") @Override
     public String getDescription() {
         return super.getDescription();
     }
@@ -158,7 +155,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      *
      * @return ID of mechanic
      */
-    @Column(name = "mechanidID")
+    @Column(name = "mechanicID")
     public int getMechanicID() {
         return super.getMechanicID();
     }
@@ -212,6 +209,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }
+
 
     @Lazy
     public List<PartOccurrence> getRequiredPartsList() {

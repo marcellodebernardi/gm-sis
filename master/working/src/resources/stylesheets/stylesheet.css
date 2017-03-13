@@ -2,6 +2,7 @@
 
 .root {
     -fx-alignment: center;
+    -fx-font-family: arial;
 }
 
 #tabTilePane {
@@ -12,7 +13,20 @@
 
 #tabTilePane Button {
     -fx-pref-height: 3.5em;
-    -fx-border-style: none;
+    -fx-background-color: white;
+    -fx-border-radius: 0px;
+}
+#tabTilePane Button:hover {
+    -fx-border-style: solid;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: black;
+    -fx-background-color: #e0e0e0;
+}
+#tabTilePane Button:selected {
+    -fx-border-style: solid;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: black;
+    -fx-background-color: lightgray;
 }
 
 
@@ -50,6 +64,9 @@
 #detailsGridPane {
     -fx-vgap: 10px;
 }
+#descriptionTextArea {
+    -fx-pref-height: 10em;
+}
 #bookingPartsTable {
     -fx-pref-height: 10em;
 }
@@ -57,4 +74,7 @@
     -fx-padding: 0em 0.8em 1em 0em;
     -fx-alignment: center;
     -fx-spacing: 2em;
+}
+#detailsButtons Button {
+    -fx-pref-width: 11em;
 }

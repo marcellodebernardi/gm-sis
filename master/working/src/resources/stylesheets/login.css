@@ -2,6 +2,7 @@
 
 #BorderPane {
     -fx-padding: 5em;
+    -fx-font-family: arial;
 }
 
 #GridPane {

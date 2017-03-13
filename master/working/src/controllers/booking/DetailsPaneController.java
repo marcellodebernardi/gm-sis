@@ -8,8 +8,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logic.BookingSystem;
 import logic.CustomerSystem;
+import logic.VehicleSys;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +25,15 @@ public class DetailsPaneController {
     private BookingController master;
     private CustomerSystem customerSystem;
     private BookingSystem bookingSystem;
+    private VehicleSys vehicleSystem;
+    private DateTimeFormatter timeFormatter;
+    private DateTimeFormatter dateFormatter;
 
     // customer and vehicle ComboBoxes
     @FXML private TextField customerSearchBar;
     @FXML private ComboBox<String> vehicleComboBox;
+    // description
+    @FXML private TextArea descriptionTextArea;
     // mechanic and parts
     @FXML private ComboBox<String> mechanicComboBox;
     @FXML private TableView<PartOccurrence> partsTable;
@@ -38,8 +48,14 @@ public class DetailsPaneController {
 
     public DetailsPaneController() {
         master = BookingController.getInstance();
+
         customerSystem = CustomerSystem.getInstance();
         bookingSystem = BookingSystem.getInstance();
+        vehicleSystem = VehicleSys.getInstance();
+
+        timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        dateFormatter = DateTimeFormatter.ofPattern("dd:MM:yyyy");
+
     }
 
     @FXML private void initialize() {
@@ -53,11 +69,25 @@ public class DetailsPaneController {
 
 
     //////////////////// EVENT HANDLERS /////////////////////////
-        @FXML private void selectCustomer() {
-        Customer customer = customerSystem.getACustomers(Integer.parseInt(customerSearchBar
-                .getText()
-                .split(":")[0]));
-        populateVehicleComboBox(customer.getVehicles());
+    @FXML private void selectCustomer() {
+        populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
+    }
+
+    // todo make check for broken shit
+    @FXML private void addBooking() {
+        bookingSystem.addBooking(new DiagRepBooking(
+                getVehicleRegFromComboBox(),
+                getDescriptionFromTextArea(),
+                0,
+                false,
+                getMechanicIDFromComboBox(),
+                getDiagnosisStartTime(),
+                getDiagnosisEndTime(),
+                getRepairStartTime(),
+                getRepairEndTime(),
+                null,
+                getPartsListFromList()
+        ));
     }
 
 
@@ -108,5 +138,73 @@ public class DetailsPaneController {
 
         partsTable.getColumns().setAll(partOccurrenceID, partAbstractionName);
         partsTable.refresh();
+    }
+
+
+    //////////////////////// HELPERS ///////////////////////////
+    // Returns the customer selected in the customer search bar
+    private Customer getCustomerFromSearchBar() {
+        return customerSystem.getACustomers(Integer.parseInt(customerSearchBar
+                .getText()
+                .split(":")[0]));
+    }
+
+    // returns the vehicle reg of the selected vehicle
+    private String getVehicleRegFromComboBox() {
+        return vehicleComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .split(":")[0];
+    }
+
+    // gets the description of the booking
+    private String getDescriptionFromTextArea() {
+        return descriptionTextArea.getText();
+    }
+
+    // returns the mechanic selected in the mechanic ComboBox
+    private int getMechanicIDFromComboBox() {
+        return Integer.parseInt(mechanicComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .split(":")[0]);
+    }
+
+    // returns the diagnosis start time
+    private ZonedDateTime getDiagnosisStartTime() {
+        return ZonedDateTime.of(
+                diagnosisDatePicker.getValue(),
+                LocalTime.parse(diagnosisStartTimeTextField.getText(), timeFormatter),
+                ZoneId.systemDefault());
+    }
+
+    // returns the diagnosis end time
+    private ZonedDateTime getDiagnosisEndTime() {
+        return ZonedDateTime.of(
+                diagnosisDatePicker.getValue(),
+                LocalTime.parse(diagnosisEndTimeTextField.getText(), timeFormatter),
+                ZoneId.systemDefault());
+    }
+
+    // returns the repair start time
+    private ZonedDateTime getRepairStartTime() {
+        return ZonedDateTime.of(
+                repairDatePicker.getValue(),
+                LocalTime.parse(repairStartTimeTextField.getText(), timeFormatter),
+                ZoneId.systemDefault());
+    }
+
+    // returns the repair end time
+    private ZonedDateTime getRepairEndTime() {
+        return ZonedDateTime.of(
+                repairDatePicker.getValue(),
+                LocalTime.parse(repairEndTimeTextField.getText(), timeFormatter),
+                ZoneId.systemDefault());
+    }
+
+    private List<PartOccurrence> getPartsListFromList() {
+        List<PartOccurrence> parts = new ArrayList<>();
+        parts.addAll(partsTable.getItems());
+        return parts;
     }
 }
