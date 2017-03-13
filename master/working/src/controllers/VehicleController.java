@@ -20,7 +20,6 @@ import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.*;
-import org.joda.time.DateTime;
 import persistence.DatabaseRepository;
 
 import javax.swing.text.html.*;
