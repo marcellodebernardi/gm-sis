@@ -13,7 +13,7 @@
             <Button onAction="#openVehiclesTab" text="Vehicles" />
             <Button onAction="#openPartsTab" text="Parts" />
             <Button onAction="#openSRCTab" text="Specialist Repairs" />
-         <Button onAction="#openSRCManagementTab" text="Specialist Center Management" />
+            <Button onAction="#openSRCManagementTab" text="Specialist Center Management" />
             <Button fx:id="UsersButton" onAction="#openUsersTab" text="Users" />
         </HBox>
     </top>
