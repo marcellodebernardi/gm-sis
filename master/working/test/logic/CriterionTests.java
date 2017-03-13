@@ -5,8 +5,9 @@ import domain.User;
 
 import static logic.CriterionOperator.EqualTo;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
+
+import java.time.ZonedDateTime;
 
 /**
  * @author Marcello De Bernardi
@@ -27,7 +28,7 @@ public class CriterionTests {
     @Test
     public void testCriterionDateHandling() {
         try {
-            System.out.println(new Criterion<>(DiagRepBooking.class, "diagnosisStart", EqualTo, new DateTime()));
+            System.out.println(new Criterion<>(DiagRepBooking.class, "diagnosisStart", EqualTo, ZonedDateTime.now()));
         }
         catch (CriterionException e) {
             System.out.println(e.getMessage());

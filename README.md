@@ -13,7 +13,7 @@ Repository for GM-SIS system, by Team 31.
     5. Should primarily use only BorderPane, HBox, VBox, StackPane, Gridpane and Flowpane,
     because they are the only ones that resize automatically.
 2. Add additional *lazy-loading* getters on domain classes
-3. Eventually move fxml files into resources/fxml and css into
+3. Eventually move common files into resources/common and css into
 resources/stylesheets
 
 
@@ -44,7 +44,7 @@ The Main class has private instance variables for the main Stage, which
 is never deleted. It also has a private instance variable for the main
 Scene, which is also never deleted. 
 
-The main scene contains the "skeleton" FXML file, called ApplicationPane.fxml,
+The main scene contains the "skeleton" FXML file, called ApplicationPane.common,
 which defines the TabPane we're using for the tab behavior. MenuController is
 the controller with event listeners for the tab buttons, and **only** the tab
 buttons. These controllers are responsible for loading the default view of each

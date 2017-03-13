@@ -2,12 +2,9 @@ package logic;
 
 import domain.DiagRepBooking;
 import domain.Mechanic;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import persistence.DatabaseRepository;
 
-import javax.xml.crypto.Data;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,35 +18,13 @@ import static logic.CriterionOperator.*;
 public class BookingSystem {
     private static BookingSystem instance;
     private CriterionRepository persistence;
-    private LocalTime OPENING_HOUR = new LocalTime(9, 0);
-    private LocalTime CLOSING_HOUR = new LocalTime(17, 0);
-    private ArrayList<LocalDate> HOLIDAYS;
+    private ZonedDateTime OPENING_HOUR = ZonedDateTime.now();
+    private ZonedDateTime CLOSING_HOUR = ZonedDateTime.now();
+    private ArrayList<ZonedDateTime> HOLIDAYS;
 
 
     private BookingSystem() {
         this.persistence = DatabaseRepository.getInstance();
-
-        // todo make more flexible
-        HOLIDAYS = new ArrayList<>();
-        HOLIDAYS.add(new LocalDate(2017, 1, 1));
-        HOLIDAYS.add(new LocalDate(2017, 3, 17));
-        HOLIDAYS.add(new LocalDate(2017, 4, 17));
-
-        HOLIDAYS.add(new LocalDate(2017, 5, 1));
-        HOLIDAYS.add(new LocalDate(2017, 5, 29));
-        HOLIDAYS.add(new LocalDate(2017, 8, 7));
-        HOLIDAYS.add(new LocalDate(2017, 8, 28));
-        HOLIDAYS.add(new LocalDate(2017, 11, 30));
-        HOLIDAYS.add(new LocalDate(2017, 12, 25));
-        HOLIDAYS.add(new LocalDate(2017, 12, 26));
-        HOLIDAYS.add(new LocalDate(2018, 1, 1));
-        HOLIDAYS.add(new LocalDate(2018, 3, 30));
-        HOLIDAYS.add(new LocalDate(2018, 4, 2));
-        HOLIDAYS.add(new LocalDate(2018, 5, 7));
-        HOLIDAYS.add(new LocalDate(2018, 5, 28));
-        HOLIDAYS.add(new LocalDate(2018, 8, 27));
-        HOLIDAYS.add(new LocalDate(2018, 12, 25));
-        HOLIDAYS.add(new LocalDate(2018, 12, 26));
     }
 
 
@@ -79,32 +54,6 @@ public class BookingSystem {
      */
     public List<Mechanic> getAllMechanics() {
         return persistence.getByCriteria(new Criterion<>(Mechanic.class));
-    }
-
-    public List<DiagRepBooking> getDayBookings(int offset) {
-        long millisInDay = 86400000;
-        long rangeStart = new DateTime().withTimeAtStartOfDay().getMillis() + (millisInDay * offset);
-        long rangeEnd = rangeStart + millisInDay;
-
-        try {
-            List<DiagRepBooking> bookingsOnDay =
-                    persistence
-                            .getByCriteria(new Criterion<>(
-                                    DiagRepBooking.class,
-                                    "diagnosisStart", MoreThan, rangeStart)
-                                    .and("diagnosisStart", LessThan, rangeEnd));
-            bookingsOnDay.addAll(persistence
-                            .getByCriteria(new Criterion<>(
-                                    DiagRepBooking.class,
-                                    "repairStart", MoreThan, rangeStart)
-                                    .and("repairStart", LessThan, rangeEnd)));
-            return bookingsOnDay;
-
-        }
-        catch(CriterionException e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
     }
 
     public List<DiagRepBooking> getWeekBookings() {

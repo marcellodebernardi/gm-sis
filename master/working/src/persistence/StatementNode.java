@@ -4,7 +4,6 @@ import domain.Searchable;
 import domain.User;
 import domain.Vehicle;
 import logic.Criterion;
-import org.joda.time.DateTime;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -117,7 +116,6 @@ class StatementNode implements Comparable<StatementNode> {
             String delim = "";
             for (Object value : solvedValues.values()) {
                 if (value.getClass() == Date.class) values += delim + ((Date)value).getTime();
-                else if (value.getClass() == DateTime.class) values += delim + ((DateTime)value).getMillis();
                 else if (numericTypes.contains(value.getClass())) values += delim + value;
                 else values += delim + "'" + value + "'";
 

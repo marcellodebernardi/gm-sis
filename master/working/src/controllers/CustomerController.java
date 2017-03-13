@@ -59,7 +59,7 @@ public class CustomerController
 
 
 
-    ////for 'CustomerView.fxml' instance variables
+    ////for 'CustomerView.common' instance variables
     ////left pane (add and edit customer view)
     @FXML
     private TextField customerID, customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail = new TextField();
@@ -87,7 +87,7 @@ public class CustomerController
     private TableColumn<Customer, CustomerType> customerTableColumnType;
 
 
-    ////for 'DeleteCustomerConfirmation.fxml' instance variables
+    ////for 'DeleteCustomerConfirmation.common' instance variables
     @FXML
     private Button deleteCustomerConfirmationYes = new Button();
     @FXML

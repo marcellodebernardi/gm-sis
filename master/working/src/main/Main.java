@@ -4,8 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -55,7 +53,7 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
 
         try {
-            BorderPane loginPane = FXMLLoader.load(getClass().getResource("/fxml/loginPane.fxml"));
+            BorderPane loginPane = FXMLLoader.load(getClass().getResource("/common/loginPane.fxml"));
             this.primaryStage.setScene(new Scene(loginPane));
             primaryStage.getScene().getStylesheets().add("/resources/stylesheets/login.css");
             this.primaryStage.show();
@@ -114,7 +112,7 @@ public class Main extends Application {
      */
     public void replaceTabContent(BorderPane pane) {
         try {
-            BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/fxml/applicationPane.fxml")).load();
+            BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/common/applicationPane.fxml")).load();
             newApplicationPane.setCenter(pane);
 
             for (Node b : ((HBox)newApplicationPane.getTop()).getChildren()) {

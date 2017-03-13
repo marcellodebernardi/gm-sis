@@ -1,12 +1,10 @@
 package controllers;
 
+import controllers.booking.BookingController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
 import main.Main;
 
 import java.io.IOException;
@@ -35,8 +33,7 @@ public class MenuController {
     }
 
     public void openBookingsTab() {
-        BookingController handler = BookingController.getInstance();
-        Main.getInstance().replaceTabContent(handler.show());
+        BookingController.getInstance().show();
     }
 
     public void openVehiclesTab() {
@@ -112,7 +109,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/AddSRCB.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/AddSRCB.common"));
             Parent menu = fxmlLoader.load();
             addSpecialistBooking = new Stage();
             addSpecialistBooking.setTitle("Add Booking");
@@ -134,7 +131,7 @@ public class MenuController {
                     return;
                 }
             }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/DeleteSRB.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SRC/DeleteSRB.common"));
             Parent menu = fxmlLoader.load();
             deleteSpecialistBooking = new Stage();
             deleteSpecialistBooking.setTitle("Delete Booking");
@@ -159,7 +156,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/AddCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/AddCustomer.common"));
                 Parent menu = fxmlLoader.load();
                 addCustomerStage = new Stage();
                 addCustomerStage.setTitle("Add Customer");
@@ -181,7 +178,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/EditCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/EditCustomer.common"));
                 Parent menu = fxmlLoader.load();
                 editCustomerStage = new Stage();
                 editCustomerStage.setTitle("Edit Customer");
@@ -203,7 +200,7 @@ public class MenuController {
                     return;
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/SearchCustomer.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/customer/SearchCustomer.common"));
                 Parent menu = fxmlLoader.load();
                 searchCustomerStage = new Stage();
                 searchCustomerStage.setTitle("Search Customer");

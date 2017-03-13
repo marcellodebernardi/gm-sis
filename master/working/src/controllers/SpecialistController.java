@@ -24,7 +24,6 @@ import logic.BookingSystem;
 import logic.InvalidDateException;
 import logic.SpecRepairSystem;
 import logic.VehicleSys;
-import org.joda.time.LocalDate;
 import persistence.DatabaseRepository;
 import domain.PartRepair;
 import java.net.URL;

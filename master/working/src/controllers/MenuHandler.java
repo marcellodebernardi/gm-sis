@@ -17,7 +17,7 @@ public class MenuHandler {
     private Button usersButton;
 
     private MenuHandler() throws IOException {
-        view = FXMLLoader.load(getClass().getResource("/fxml/applicationPane.fxml"));
+        view = FXMLLoader.load(getClass().getResource("/common/applicationPane.fxml"));
         usersButton = (Button) view.lookup("#UsersButton");
         setUserType();
     }

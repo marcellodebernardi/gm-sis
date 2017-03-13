@@ -4,7 +4,6 @@ import domain.CustomerType;
 import domain.FuelType;
 import domain.UserType;
 import domain.VehicleType;
-import org.joda.time.DateTime;
 import persistence.CellGetterInterface;
 
 import java.sql.Date;
@@ -36,7 +35,6 @@ public class CellGetterDispatcher implements CellGetterInterface {
         cellGetterMap.put(CustomerType.class.getSimpleName(), new CustomerTypeCellGetter());
         cellGetterMap.put(FuelType.class.getSimpleName(), new FuelTypeCellGetter());
         cellGetterMap.put(Date.class.getSimpleName(), new DateCellGetter());
-        cellGetterMap.put(DateTime.class.getSimpleName(), new DateTimeCellGetter());
         cellGetterMap.put(ZonedDateTime.class.getSimpleName(), new ZonedDateTimeCellGetter());
     }
 

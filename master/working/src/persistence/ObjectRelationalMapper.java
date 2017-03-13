@@ -2,8 +2,7 @@ package persistence;
 
 import domain.*;
 import logic.Criterion;
-import org.joda.time.DateTime;
-import persistence.cellgetter.*;
+import persistence.cellgetter.CellGetterDispatcher;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -97,7 +96,6 @@ class ObjectRelationalMapper {
 
         dateTypes = new ArrayList<>();
         dateTypes.add(Date.class);
-        dateTypes.add(DateTime.class);
 
         numericTypes.addAll(dateTypes);
     }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.booking.ListPaneController"
+            id="listPane" fx:id="listPane">
+    <top>
+        <HBox id="listPaneTopControls">
+            <Label>Search:</Label>
+            <TextField id="listSearchBar" fx:id="listSearchBar" onKeyReleased="#searchBookings"></TextField>
+            <Button>List View</Button>
+            <Button onAction="#openCalendarPane">Calendar View</Button>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="bookingTableView">
+            <columns>
+                <TableColumn text="Booking ID" fx:id="bookingIDColumn" prefWidth="11"></TableColumn>
+                <TableColumn text="Customer" fx:id="customerColumn"></TableColumn>
+                <TableColumn text="Vehicle Reg" fx:id="vehicleRegColumn"></TableColumn>
+                <TableColumn text="Diagnosis Date" fx:id="diagnosisDateColumn"></TableColumn>
+                <TableColumn text="Diagnosis Time" fx:id="diagnosisTimeColumn"></TableColumn>
+                <TableColumn text="Repair Date" fx:id="repairDateColumn"></TableColumn>
+                <TableColumn text="Repair Time" fx:id="repairTimeColumn"></TableColumn>
+                <TableColumn text="Bill" fx:id="billAmountColumn"></TableColumn>
+                <TableColumn text="Settled" fx:id="billSettledColumn"></TableColumn>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
