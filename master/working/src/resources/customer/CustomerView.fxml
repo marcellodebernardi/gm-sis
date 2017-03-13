@@ -15,7 +15,7 @@
    <left>
       <Pane prefHeight="604.0" prefWidth="309.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="115.0" layoutY="14.0" text="Add Customer" />
+            <Label fx:id="formName" layoutX="115.0" layoutY="14.0" text="Add Customer" />
             <Label layoutX="10.0" layoutY="61.0" text="Customer ID" />
             <Label layoutX="10.0" layoutY="97.0" text="Customer First name" />
             <Label layoutX="10.0" layoutY="135.0" text="Customer Surname" />
@@ -40,9 +40,9 @@
                 </items>
             </ComboBox>
             <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
-            <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+            <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" visible="false" />
             <Button fx:id="clearCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" onAction="#clearCustomerFields" text="Clear" />
-            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" onAction="#updateCustomerInDB" text="Save" />
+            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" onAction="#updateCustomerInDB" text="Save" visible="false" />
          </children>
       </Pane>
    </left>
@@ -63,8 +63,9 @@
                   <TableColumn fx:id="customerTableColumnType" prefWidth="76.0" text="Type" />
               </columns>
             </TableView>
-            <Button fx:id="editSelectedCustomerButton" layoutX="931.0" layoutY="102.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" onAction="#editTableSelectedCustomerFromDB" text="Edit" />
-            <Button fx:id="deleteSelectedCustomerButton" layoutX="931.0" layoutY="142.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" onAction="#deleteTableSelectedCustomerFromDB" text="Delete" />
+            <Button fx:id="editSelectedCustomerButton" layoutX="931.0" layoutY="143.0" mnemonicParsing="false" onAction="#editTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Edit" />
+            <Button fx:id="deleteSelectedCustomerButton" layoutX="931.0" layoutY="183.0" mnemonicParsing="false" onAction="#deleteTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+            <Button fx:id="newCustomerFormButton" layoutX="931.0" layoutY="102.0" mnemonicParsing="false" onAction="#newCustomerForm" prefHeight="25.0" prefWidth="51.0" text="New" />
          </children>
       </Pane>
    </center>

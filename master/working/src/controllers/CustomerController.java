@@ -62,18 +62,20 @@ public class CustomerController
     ////for 'CustomerView.fxml' instance variables
     ////left pane (add and edit customer view)
     @FXML
+    private Label formName = new Label();
+    @FXML
     private TextField customerID, customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail = new TextField();
     @FXML
     private ComboBox customerType = new ComboBox();
-    //@FXML
-    //private Button saveCustomerAndAddVehicleButton, saveCustomerButton, deleteCustomerButton, clearCustomerButton = new Button();
+    @FXML
+    private Button saveCustomerAndAddVehicleButton, saveCustomerButton, deleteCustomerButton, clearCustomerButton = new Button();
 
 
     ////right pane (search customer)
     @FXML
     private TextField customerSearch = new TextField();
     @FXML
-    private Button customerSearchButton = new Button();
+    private Button customerSearchButton, newCustomerFormButton, editSelectedCustomerButton, deleteSelectedCustomerButton = new Button();
 
 
     ////right pane (customer table view)
@@ -102,6 +104,9 @@ public class CustomerController
         {
             //initialising variables
             //String cID = customerID.getText();
+
+
+
             String cFirstname = customerFirstname.getText();
             String cSurname = customerSurname.getText();
             String cAddress = customerAddress.getText();
@@ -337,6 +342,12 @@ public class CustomerController
             customerPhone.setText(customer.getCustomerPhone());
             customerEmail.setText(customer.getCustomerEmail());
             customerType.setValue(customer.getCustomerType().toString());
+            formName.setText("Edit Customer");
+            saveCustomerAndAddVehicleButton.setVisible(false);
+            saveCustomerButton.setVisible(true);
+            clearCustomerButton.setVisible(false);
+            deleteCustomerButton.setVisible(true);
+
         }
         catch(Exception e)
         {
@@ -411,6 +422,15 @@ public class CustomerController
         }
     }
 
+    public void newCustomerForm()
+    {
+        clearCustomerFields();
+        formName.setText("Add Customer");
+        saveCustomerAndAddVehicleButton.setVisible(true);
+        saveCustomerButton.setVisible(false);
+        clearCustomerButton.setVisible(true);
+        deleteCustomerButton.setVisible(false);
+    }
 
     public void clearCustomerFields()
     {
