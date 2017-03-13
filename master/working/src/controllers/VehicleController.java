@@ -13,12 +13,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.*;
+import org.joda.time.DateTime;
 import persistence.DatabaseRepository;
 
 import javax.swing.text.html.*;
@@ -27,7 +29,9 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +45,6 @@ public class VehicleController implements Initializable
 {
 
 
-
     private VehicleSys vSys = VehicleSys.getInstance();
     @FXML
     private CustomerSystem cSys = CustomerSystem.getInstance();
@@ -50,7 +53,9 @@ public class VehicleController implements Initializable
     @FXML
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
     @FXML
-    private TextField reg, mod, manuf, eSize, col, mil, rDateMot, dLastServiced, wName, wCompAddress, wExpirationDate, regS, manufS;
+    private TextField reg, mod, manuf, eSize, col, mil, wName, wCompAddress, regS, manufS;
+    @FXML
+    private DatePicker rDateMot, dLastServiced, wExpirationDate;
     @FXML
     private ComboBox vType, fType, cByWarranty, VehicleS, cID;
     @FXML
@@ -64,7 +69,7 @@ public class VehicleController implements Initializable
     @FXML
     private TableColumn<Vehicle, Integer>  tMil, tCID;
     @FXML
-    private TableColumn<DiagRepBooking, ZonedDateTime>  rRS, tDS;
+    private TableColumn<DiagRepBooking, DateTime>  rRS, tDS;
     @FXML
     private TableColumn<DiagRepBooking, Double> tTC;
     @FXML
@@ -122,10 +127,10 @@ public class VehicleController implements Initializable
 
     public boolean checkFields() {
         boolean check = false;
-        if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getText().equals("")) && (!dLastServiced.getText().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
+        if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
             check = true;
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
-                if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getText().equals("")) {
+                if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getValue().equals("")) {
                     check = false;
                 }
             }
@@ -150,11 +155,11 @@ public class VehicleController implements Initializable
             boolean check = checkFields();
             if (check) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date rdm = format.parse(rDateMot.getText());
-                Date dls = format.parse(dLastServiced.getText());
+                Date rdm = java.sql.Date.valueOf(rDateMot.getValue());
+                Date dls = java.sql.Date.valueOf(dLastServiced.getValue());
                 Date wed = new Date();
-                if ((!wExpirationDate.getText().equals(""))) {
-                    wed = format.parse(wExpirationDate.getText());
+                if ((!wExpirationDate.getValue().equals(""))) {
+                    wed = java.sql.Date.valueOf(wExpirationDate.getValue());
                 }
                 VehicleType vT;
                 if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
@@ -302,9 +307,10 @@ public class VehicleController implements Initializable
         fType.setValue(VT.substring(0, 1).toUpperCase() + VT.substring(1, VT.length()));
         col.setText(vehicle.getColour());
         mil.setText(Integer.toString(vehicle.getMileage()));
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        rDateMot.setText(format.format(vehicle.getRenewalDateMot()));
-        dLastServiced.setText(format.format(vehicle.getDateLastServiced()));
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        rDateMot.setValue(LocalDate.parse(df.format(vehicle.getRenewalDateMot()), formatter));
+        dLastServiced.setValue(LocalDate.parse(df.format(vehicle.getDateLastServiced()), formatter));
         if (vehicle.isCoveredByWarranty()) {
             cByWarranty.setValue("True");
         } else {
@@ -312,7 +318,9 @@ public class VehicleController implements Initializable
         }
         wName.setText(vehicle.getWarrantyName());
         wCompAddress.setText(vehicle.getWarrantyCompAddress());
-        wExpirationDate.setText(format.format(vehicle.getWarrantyExpirationDate()));
+        if (vehicle.isCoveredByWarranty()) {
+            wExpirationDate.setValue(LocalDate.parse(df.format(vehicle.getWarrantyExpirationDate()), formatter));
+        }
         hiddenWarranty();
 
     }
@@ -603,7 +611,7 @@ public class VehicleController implements Initializable
             wExpirationDate.setDisable(true);
             wName.clear();
             wCompAddress.clear();
-            wExpirationDate.clear();
+            wExpirationDate.setValue(null);
         }}
         catch (Exception e)
         {
@@ -880,11 +888,11 @@ public class VehicleController implements Initializable
         eSize.clear();
         col.clear();
         mil.clear();
-        rDateMot.clear();
-        dLastServiced.clear();
+        rDateMot.setValue(null);
+        dLastServiced.setValue(null);
         wName.clear();
         wCompAddress.clear();
-        wExpirationDate.clear();
+        wExpirationDate.setValue(null);
         vType.setValue(null);
         fType.setValue(null);
         cByWarranty.setValue(null);
@@ -947,37 +955,37 @@ public class VehicleController implements Initializable
             }
 
 
-            tDS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, ZonedDateTime>("diagnosisStart"));
-            tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, ZonedDateTime>forTableColumn(new StringConverter<ZonedDateTime>() {
+            tDS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("diagnosisStart"));
+            tDS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
                 @Override
-                public String toString(ZonedDateTime object) {
+                public String toString(DateTime object) {
                 if (object == null)
                 {
                     return null;
                 }
-                    return object.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                    return object.toString( "dd/MM/yyyy HH:mm");
                 }
 
                 @Override
-                public ZonedDateTime fromString(String string) {
-                    return ZonedDateTime.parse(string);
+                public DateTime fromString(String string) {
+                    return DateTime.parse(string);
                 }
             }));
 
-            rRS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, ZonedDateTime>("repairStart"));
-            rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, ZonedDateTime>forTableColumn(new StringConverter<ZonedDateTime>() {
+            rRS.setCellValueFactory(new PropertyValueFactory<DiagRepBooking, DateTime>("repairStart"));
+            rRS.setCellFactory(TextFieldTableCell.<DiagRepBooking, DateTime>forTableColumn(new StringConverter<DateTime>() {
                 @Override
-                public String toString(ZonedDateTime object) {
+                public String toString(DateTime object) {
                     if (object == null)
                     {
                         return null;
                     }
-                    return object.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                    return object.toString( "dd/MM/yyyy HH:mm");
                 }
 
                 @Override
-                public ZonedDateTime fromString(String string) {
-                    return ZonedDateTime.parse(string);
+                public DateTime fromString(String string) {
+                    return DateTime.parse(string);
                 }
             }));
 
@@ -1010,7 +1018,7 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString("dd/MM/yyyy HH:mm"));
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
@@ -1022,6 +1030,10 @@ public class VehicleController implements Initializable
 
     public void ShowCustomerDetails()
     {
+        if (searchTable.getSelectionModel().getSelectedItem() == null)
+        {
+            return;
+        }
         try {
             setNextBookingDate();
             ViewBookingDates();
@@ -1120,24 +1132,24 @@ public class VehicleController implements Initializable
             {
                 return;
             }
-            ZonedDateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
-            ZonedDateTime nextRepBooking = arrayList.get(0).getRepairStart();
-            ZonedDateTime DTD;
-            ZonedDateTime DTR;
+            DateTime nextDiagBooking = arrayList.get(0).getDiagnosisStart();
+            DateTime nextRepBooking = arrayList.get(0).getRepairStart();
+            DateTime DTD = new DateTime();
+            DateTime DTR = new DateTime();
             for (int i = 1; i < arrayList.size(); i++) {
                 DiagRepBooking DRB = arrayList.get(i);
                 DTD = DRB.getDiagnosisStart();
                 DTR = DRB.getRepairStart();
                 if (DTD != null)
                 {
-                if (DTD.isAfter(ZonedDateTime.now())) {
+                if (DTD.isAfterNow()) {
                     if ((DTD.isBefore(nextDiagBooking))) {
                         nextDiagBooking = DTD;
                     }
                 }}
                 if (DTR != null)
                 {
-                if (DTR.isAfter(ZonedDateTime.now())) {
+                if (DTR.isAfterNow()) {
                     if ((DTR.isBefore(nextRepBooking))) {
                         nextRepBooking = DTR;
                     }
@@ -1145,19 +1157,19 @@ public class VehicleController implements Initializable
             }
             if (nextDiagBooking !=null)
             {
-            if (nextDiagBooking.isAfter(ZonedDateTime.now())) {
+            if (nextDiagBooking.isAfterNow()) {
                 DSLL.setVisible(true);
-                DSL.setText(nextDiagBooking.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                DSL.setText(nextDiagBooking.toString("dd/MM/yyyy HH:mm"));
             }} else {
                 DSLL.setVisible(true);
                 DSL.setText("N/A");
             }
             if (nextRepBooking !=null)
             {
-            if (nextRepBooking.isAfter(ZonedDateTime.now())) {
+            if (nextRepBooking.isAfterNow()) {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);
-                RSL.setText(nextRepBooking.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                RSL.setText(nextRepBooking.toString("dd/MM/yyyy HH:mm"));
             }} else {
                 RSLL.setVisible(true);
                 RSL.setVisible(true);
@@ -1204,14 +1216,13 @@ public class VehicleController implements Initializable
     public boolean CheckFormat()
     {
         try {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = dateFormat.parse(dLastServiced.getText());
-            date = dateFormat.parse(rDateMot.getText());
+            Date date = java.sql.Date.valueOf(dLastServiced.getValue());
+            date = java.sql.Date.valueOf(rDateMot.getValue());
             if (cByWarranty != null)
             {
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null))
             {
-                date = dateFormat.parse(wExpirationDate.getText());
+                date = java.sql.Date.valueOf(wExpirationDate.getValue());
             }}
 
             Double engineSize = Double.parseDouble(eSize.getText());
@@ -1229,7 +1240,7 @@ public class VehicleController implements Initializable
              }
             return true;
         }
-        catch (ParseException | NumberFormatException e)
+        catch (Exception e)
         {
             showAlert(e.getMessage() + " and make sure all fields required are not blank");
             return false;
@@ -1239,10 +1250,61 @@ public class VehicleController implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         setCustomerCombo();
         searchVehicleA();
+        rDateMot.setDayCellFactory(motDayFactory);
+        dLastServiced.setDayCellFactory(dlsDayFactory);
+        wExpirationDate.setDayCellFactory(weDayFactory);
+
     }
+
+    private Callback<DatePicker, DateCell> motDayFactory = dp1 -> new DateCell()
+    {
+        @Override
+        public void updateItem( LocalDate item , boolean empty )
+        {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isBefore(LocalDate.now()))
+            {
+                this.setStyle(" -fx-background-color: #ff6666; ");
+                this.setDisable ( true );
+            }
+        }
+    };
+
+    private Callback<DatePicker, DateCell> dlsDayFactory = dp2 -> new DateCell()
+    {
+        @Override
+        public void updateItem( LocalDate item , boolean empty )
+        {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isAfter(LocalDate.now()))
+            {
+                this.setStyle(" -fx-background-color: #ff6666; ");
+                this.setDisable ( true );
+            }
+        }
+    };
+
+    private Callback<DatePicker, DateCell> weDayFactory = dp3 -> new DateCell()
+    {
+        @Override
+        public void updateItem( LocalDate item , boolean empty )
+        {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isBefore(LocalDate.now()))
+            {
+                this.setStyle(" -fx-background-color: #ff6666; ");
+                this.setDisable ( true );
+            }
+        }
+    };
 
     public void setCustomerCombo()
     {

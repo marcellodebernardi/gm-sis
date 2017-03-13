@@ -4,6 +4,7 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
@@ -85,7 +86,7 @@
                                 <Label text="Manufacturer" GridPane.rowIndex="3" />
                                 <Label text="Engine Size" GridPane.rowIndex="5" />
                                 <TextField fx:id="reg" promptText="Enter Vehicle Reg" GridPane.columnIndex="1" />
-                                <ComboBox fx:id="vType" promptText="pick Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <ComboBox fx:id="vType" prefHeight="27.0" prefWidth="167.0" promptText="pick Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="Car" />
@@ -98,7 +99,7 @@
                                 <TextField fx:id="manuf" promptText="Enter Manufacturer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                 <TextField fx:id="eSize" promptText="Enter Engine Size" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                 <Label text="Fuel Type" GridPane.rowIndex="6" />
-                                <ComboBox fx:id="fType" promptText="pick Fuel" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                <ComboBox fx:id="fType" prefHeight="27.0" prefWidth="167.0" promptText="pick Fuel" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="Diesel" />
@@ -115,11 +116,10 @@
                                 <Label prefHeight="33.0" prefWidth="116.0" text="Company Address" GridPane.rowIndex="13" />
                                 <Label prefHeight="17.0" prefWidth="94.0" text="Expiration Date" GridPane.rowIndex="14" />
                                 <TextField fx:id="wCompAddress" promptText="Enter Address" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                                <TextField fx:id="wExpirationDate" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="14" />
                                 <TextField fx:id="mil" promptText="Enter Mileage" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                 <Label text="Name" GridPane.rowIndex="12" />
                                 <TextField fx:id="wName" promptText="Enter Name" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                                <ComboBox fx:id="cByWarranty" onAction="#hiddenWarranty" promptText="Pick True/False" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                                <ComboBox fx:id="cByWarranty" onAction="#hiddenWarranty" prefHeight="27.0" prefWidth="167.0" promptText="Pick True/False" GridPane.columnIndex="1" GridPane.rowIndex="11">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="True" />
@@ -127,9 +127,10 @@
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
-                                <TextField fx:id="rDateMot" promptText="Enter renewal Date Mot" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                <TextField fx:id="dLastServiced" promptText="Enter Date" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <ComboBox fx:id="cID" prefHeight="19.0" prefWidth="150.0" promptText="Chose Customer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="cID" prefHeight="27.0" prefWidth="167.0" promptText="Chose Customer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="rDateMot" prefHeight="27.0" prefWidth="167.0" promptText="Select MOT date" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <DatePicker fx:id="dLastServiced" prefHeight="27.0" prefWidth="167.0" promptText="Select service Date" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <DatePicker fx:id="wExpirationDate" prefHeight="27.0" prefWidth="167.0" promptText="Select Expiry Date" GridPane.columnIndex="1" GridPane.rowIndex="14" />
                             </children>
                         </GridPane>
                         <GridPane alignment="TOP_CENTER">
