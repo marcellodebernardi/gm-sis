@@ -11,6 +11,7 @@ import logic.CustomerSystem;
 import logic.VehicleSys;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -65,6 +66,8 @@ public class DetailsPaneController {
         repairDatePicker.setPrefWidth(Double.MAX_VALUE);
         populateCustomerTextField(customerSystem.getAllCustomers());
         populateMechanicComboBox(bookingSystem.getAllMechanics());
+
+        master.setController(DetailsPaneController.class, this);
     }
 
 
@@ -88,6 +91,33 @@ public class DetailsPaneController {
                 null,
                 getPartsListFromList()
         ));
+    }
+
+    void populateDetailFields(DiagRepBooking booking) {
+        Customer customer = booking.getCustomer();
+        Vehicle vehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
+        ZonedDateTime diagnosisStart = booking.getDiagnosisStart();
+        ZonedDateTime diagnosisEnd = booking.getDiagnosisEnd();
+        ZonedDateTime repairStart = booking.getRepairStart();
+        ZonedDateTime repairEnd = booking.getRepairEnd();
+        Mechanic mechanic = bookingSystem.getMechanicByID(booking.getMechanicID());
+
+        customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
+                + customer.getCustomerSurname());
+        vehicleComboBox.getSelectionModel().select(vehicle.getRegNumber() + ": " + vehicle.getModel());
+        descriptionTextArea.setText(booking.getDescription());
+
+        diagnosisDatePicker.setValue(diagnosisStart.toLocalDate());
+        diagnosisStartTimeTextField.setText(diagnosisStart.format(timeFormatter));
+        diagnosisEndTimeTextField.setText(diagnosisEnd.format(timeFormatter));
+        repairDatePicker.setValue(repairStart.toLocalDate());
+        repairStartTimeTextField.setText(repairStart.format(timeFormatter));
+        repairEndTimeTextField.setText(repairEnd.format(timeFormatter));
+
+        populatePartsTable(booking.getRequiredPartsList());
+        mechanicComboBox.getSelectionModel().select(mechanic.getMechanicID() + ": "
+                + mechanic.getFirstName() + " " + mechanic.getSurname());
+
     }
 
 
