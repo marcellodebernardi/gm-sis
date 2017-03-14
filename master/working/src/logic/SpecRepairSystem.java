@@ -1,6 +1,7 @@
 package logic;
 
 
+import com.sun.org.apache.regexp.internal.RE;
 import domain.*;
 import persistence.DatabaseRepository;
 
@@ -264,6 +265,17 @@ public class SpecRepairSystem {
         {
             return null;
         }
+    }
+
+    public List<VehicleRepair> getBySpcID(int spcID)
+    {
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class,"spcID",EqualTo,spcID));
+    }
+
+    public Customer getByCustomerID(int customerID)
+    {
+        List<Customer> customers = persistence.getByCriteria(new Criterion<>(Customer.class,"customerID",EqualTo, customerID));
+        return customers.get(0);
     }
 
 
