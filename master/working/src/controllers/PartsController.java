@@ -419,13 +419,7 @@ public class PartsController implements Initializable {
 
     }
 
-    /**
-     * TODO: WAIT FOR BUG FIX !!!
-     */
-
     public void saveChanges(){
-
-
 
             PartAbstraction singlePart;
 
@@ -507,7 +501,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * TODO: Increase part stock level by 1 with the selected part in table
+     *  This method increases stock by 1 when selecting a part from table and pressing +Stock
      */
     public void increaseStockLevel(){
 
@@ -515,11 +509,13 @@ public class PartsController implements Initializable {
         try{
 
             PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
+            int c=partIncrease.getPartStockLevel()+1;
+            System.out.println(c);
 
-            if (partIncrease == null)
-            {
-                throw new Exception();
-            }
+            partIncrease.setPartStockLevel(c);
+
+            saveChanges();
+            updateTable();
 
 
         }catch(Exception e){
@@ -531,7 +527,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * TODO: Decrease part stock level by 1 with the selected part in table
+     * This method decreases stock by 1 when selecting a part from table and pressing -Stock
      */
     public void decreaseStockLevel(){
 
@@ -540,10 +536,13 @@ public class PartsController implements Initializable {
 
             PartAbstraction partDecrease = PartsTable.getSelectionModel().getSelectedItem();
 
-            if (partDecrease == null)
-            {
-                throw new Exception();
-            }
+            int c=partDecrease.getPartStockLevel()-1;
+            System.out.println(c);
+
+            partDecrease.setPartStockLevel(c);
+
+            saveChanges();
+            updateTable();
 
 
         }catch(Exception e){
@@ -555,7 +554,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * TODO: Be able to delete an installation directly from table view list
+     * This method deletes a stock item by selecting a part from the table and pressing delete 
      */
     public void deleteInstallation(){
 
