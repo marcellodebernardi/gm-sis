@@ -75,6 +75,16 @@ public class BookingSystem {
         }
     }
 
+    public DiagRepBooking getBookingByID(int bookingID) {
+        List<DiagRepBooking> result = persistence.getByCriteria(new Criterion<>(
+                DiagRepBooking.class,
+                "bookingID",
+                EqualTo,
+                bookingID));
+
+        return result != null && result.size() != 0 ? result.get(0) : null;
+    }
+
     public Mechanic getMechanicByID(int mechanicID) {
         List<Mechanic> result =  persistence.getByCriteria(new Criterion<>(Mechanic.class, "mechanicID", EqualTo, mechanicID));
         return result != null ? result.get(0) : null;

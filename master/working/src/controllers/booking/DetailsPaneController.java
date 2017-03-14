@@ -66,12 +66,15 @@ public class DetailsPaneController {
     @FXML private void initialize() {
         bookingIDTextField.setDisable(true);
 
+        populateCustomerTextField(customerSystem.getAllCustomers());
+        populateMechanicComboBox(bookingSystem.getAllMechanics());
+
         vehicleComboBox.setPrefWidth(Double.MAX_VALUE);
         mechanicComboBox.setPrefWidth(Double.MAX_VALUE);
         diagnosisDatePicker.setPrefWidth(Double.MAX_VALUE);
         repairDatePicker.setPrefWidth(Double.MAX_VALUE);
-        populateCustomerTextField(customerSystem.getAllCustomers());
-        populateMechanicComboBox(bookingSystem.getAllMechanics());
+
+        descriptionTextArea.setWrapText(true);
 
         // todo change to method reference?
         dayCellFactory = datePicker -> new DateCell() {
@@ -99,7 +102,7 @@ public class DetailsPaneController {
 
     // todo make check for broken shit
     @FXML private void addBooking() {
-        bookingSystem.addBooking(new DiagRepBooking(
+        DiagRepBooking booking =(new DiagRepBooking(
                 getVehicleRegFromComboBox(),
                 getDescriptionFromTextArea(),
                 0,
@@ -112,6 +115,22 @@ public class DetailsPaneController {
                 null,
                 getPartsListFromList()
         ));
+
+        if (bookingSystem.addBooking(booking)) {
+            ((ListPaneController)master.getController(ListPaneController.class))
+                    .refreshBookingTable();
+            ((CalendarPaneController)master.getController(CalendarPaneController.class))
+                    .addBookingAppointment(booking);
+        }
+    }
+
+    @FXML private void deleteBooking() {
+        if (bookingIDTextField.getText().equals("")) return;
+        else if (bookingSystem.deleteBooking(Integer.parseInt(bookingIDTextField.getText()))) {
+            ((ListPaneController)master.getController(ListPaneController.class)).refreshBookingTable();
+            ((CalendarPaneController)master.getController(CalendarPaneController.class)).refreshAGenda();
+            clearDetails();
+        }
     }
 
     @FXML private void clearDetails() {

@@ -76,7 +76,7 @@
                 <TextField fx:id="addCustomerAddress" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="221.0" promptText="Customer's Address" />
                 <TextField fx:id="addCustomerPostcode" layoutX="122.0" layoutY="193.0" prefHeight="25.0" prefWidth="221.0" promptText="Customer's Postcode" />
                 <TextField fx:id="addCustomerPhone" layoutX="122.0" layoutY="221.0" prefHeight="25.0" prefWidth="221.0" promptText="Customer's Phone number" />
-                <TextField fx:id="addCustomerEmail" layoutX="122.0" layoutY="249.0" prefHeight="25.0" prefWidth="221.0" promptText="Customer's Email Address" />
+                <TextField fx:id="ddCustomerEmail" layoutX="122.0" layoutY="249.0" prefHeight="25.0" prefWidth="221.0" promptText="Customer's Email Address" />
                 <Button fx:id="addSaveCustomerButton" layoutX="45.0" layoutY="334.0" mnemonicParsing="false" text="Save" />
                 <Button fx:id="addResetCustomerButton" layoutX="157.0" layoutY="334.0" mnemonicParsing="false" text="Reset" />
                 <Button fx:id="addBackCustomerButton" layoutX="268.0" layoutY="334.0" mnemonicParsing="false" text="Back" />

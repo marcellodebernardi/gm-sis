@@ -8,6 +8,9 @@ import logic.Criterion;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -116,9 +119,12 @@ class StatementNode implements Comparable<StatementNode> {
             String values = "";
             String delim = "";
             for (Object value : solvedValues.values()) {
-                if (value.getClass() == Date.class) values += delim + ((Date)value).getTime();
-                else if (numericTypes.contains(value.getClass())) values += delim + value;
-                else values += delim + "'" + value + "'";
+                values += delim;
+                if (value.getClass() == Date.class) values += ((Date)value).getTime();
+                else if (value.getClass() == LocalDateTime.class) values += ((LocalDateTime)value).toEpochSecond(ZoneOffset.UTC) * 1000;
+                else if (value.getClass() == ZonedDateTime.class) values += ((ZonedDateTime)value).toEpochSecond() * 1000;
+                else if (numericTypes.contains(value.getClass())) values += value;
+                else values += "'" + value + "'";
 
                 delim = ", ";
             }

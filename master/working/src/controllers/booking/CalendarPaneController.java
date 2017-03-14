@@ -39,6 +39,13 @@ public class CalendarPaneController {
         populateCalendarMechanicComboBox(bookingSystem.getAllMechanics());
         populateAgenda(bookingSystem.getAllBookings());
 
+        bookingAgenda.setActionCallback((appointment) -> {
+            DiagRepBooking booking = bookingSystem.getBookingByID(Integer.parseInt(appointment.getDescription()));
+            ((DetailsPaneController) master.getController(DetailsPaneController.class)).populateDetailFields(booking);
+            return null;
+        });
+        bookingAgenda.setEditAppointmentCallback((appointment) -> null );
+
         master.setController(CalendarPaneController.class, this);
     }
 
@@ -69,6 +76,21 @@ public class CalendarPaneController {
 
 
     //////////////////// DATA MANIPULATIONS /////////////////////////
+    void refreshAGenda() {
+        bookingAgenda.appointments().clear();
+        populateAgenda(bookingSystem.getAllBookings());
+    }
+
+    void addBookingAppointment(DiagRepBooking booking) {
+        this.bookingAgenda.appointments().add(new Agenda.AppointmentImplLocal()
+                .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisStart().toInstant(),
+                        booking.getDiagnosisStart().getZone()))
+                .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisEnd().toInstant(),
+                        booking.getDiagnosisEnd().getZone()))
+                .withDescription(booking.getDescription())
+        );
+    }
+
     private void populateCalendarMechanicComboBox(List<Mechanic> mechanics) {
         List<String> mechanicInfo = new ArrayList<>();
         for (Mechanic m : mechanics) {
@@ -86,7 +108,7 @@ public class CalendarPaneController {
                                 booking.getDiagnosisStart().getZone()))
                         .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisEnd().toInstant(),
                                 booking.getDiagnosisEnd().getZone()))
-                        .withDescription(booking.getDescription())
+                        .withDescription(booking.getBookingID() + "")
                 );
             else if (booking.getRepairStart() != null && booking.getRepairEnd() != null)
                 bookingAgenda.appointments().add(new Agenda.AppointmentImplLocal()
@@ -94,7 +116,7 @@ public class CalendarPaneController {
                                 booking.getRepairStart().getZone()))
                         .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getRepairEnd().toInstant(),
                                 booking.getRepairEnd().getZone()))
-                        .withDescription(booking.getDescription())
+                        .withDescription(booking.getBookingID() + "")
                 );
         }
         bookingAgenda.setAllowDragging(true);

@@ -71,6 +71,10 @@ public class ListPaneController {
         }
     }
 
+    void refreshBookingTable() {
+        populateBookingListView(bookingSystem.getAllBookings());
+    }
+
 
     /////////////////// DATA MANIPULATIONS ////////////////////
     private void populateBookingListView(List<DiagRepBooking> bookings) {

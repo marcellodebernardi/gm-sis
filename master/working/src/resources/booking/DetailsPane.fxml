@@ -78,6 +78,7 @@
             <Button onAction="#addBooking">Save Booking</Button>
             <Button>Subcontract</Button>
             <Button onAction="#clearDetails">New Booking</Button>
+            <Button onAction="#deleteBooking">Delete</Button>
         </HBox>
     </bottom>
 </BorderPane>
