@@ -3,6 +3,7 @@ package controllers;
 import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
+import domain.PartOccurrence;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
@@ -120,6 +121,8 @@ public class PartsController implements Initializable {
             CB3.setItems(CB);
             CB4.setItems(CB);
             addPartID.setItems(CB);
+            updateTable();
+            viewAllBookingsClick();
 
         }catch(NullPointerException e){e.printStackTrace();}
 
@@ -554,7 +557,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * This method deletes a stock item by selecting a part from the table and pressing delete 
+     * This method deletes a stock item by selecting a part from the table and pressing delete
      */
     public void deleteInstallation(){
 

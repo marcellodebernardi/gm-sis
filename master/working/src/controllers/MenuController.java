@@ -2,10 +2,7 @@ package controllers;
 
 import controllers.booking.BookingController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import main.Main;
 
 import java.io.IOException;
@@ -55,7 +52,7 @@ public class MenuController {
     public void openPartsTab() {
         BorderPane partsBasePane;
         try {
-            partsBasePane = FXMLLoader.load(getClass().getResource("/resources/PartModule.fxml"));
+            partsBasePane = FXMLLoader.load(getClass().getResource("/resources/parts/PartModule.fxml"));
             partsBasePane.setVisible(true);
             Main.getInstance().replaceTabContent(partsBasePane);
         } catch (IOException e) {
