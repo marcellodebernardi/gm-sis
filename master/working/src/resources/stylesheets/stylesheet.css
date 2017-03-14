@@ -2,7 +2,7 @@
 
 .root {
     -fx-alignment: center;
-    -fx-font-family: arial;
+    -fx-font-family: 'Roboto Light';
     -fx-background-color: white;
 }
 

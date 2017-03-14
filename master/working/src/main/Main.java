@@ -9,6 +9,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import jfxtras.resources.JFXtrasFontRoboto;
 import persistence.DatabaseRepository;
 
 import javax.swing.border.*;
@@ -53,6 +54,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        JFXtrasFontRoboto.loadAll();
 
         try {
             BorderPane loginPane = FXMLLoader.load(getClass().getResource("/common/loginPane.fxml"));
