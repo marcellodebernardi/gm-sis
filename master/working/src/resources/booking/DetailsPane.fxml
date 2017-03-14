@@ -24,7 +24,7 @@
     <center>
         <GridPane id="detailsGridPane" fx:id="detailsGridPane">
             <!-- Select a customer -->
-            <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Search customers</Label>
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
             <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        fx:id="customerSearchBar" onAction="#selectCustomer"></TextField>
 
