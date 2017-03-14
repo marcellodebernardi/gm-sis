@@ -3,7 +3,6 @@ package controllers.booking;
 import domain.Customer;
 import domain.DiagRepBooking;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +51,9 @@ public class ListPaneController {
         setBookingTableCellValueFactories();
         populateBookingListView(bookingSystem.getAllBookings());
         setColumnWidths();
+        setSelectionListener();
+
+        master.setController(ListPaneController.class, this);
     }
 
 
@@ -100,8 +102,8 @@ public class ListPaneController {
             ZonedDateTime diagnosisEnd = p.getValue().getDiagnosisEnd();
             return new ReadOnlyObjectWrapper<>(
                     diagnosisStart != null ?
-                    diagnosisStart.format(timeFormatter) + " - " + diagnosisEnd.format(timeFormatter)
-                    : "");
+                            diagnosisStart.format(timeFormatter) + " - " + diagnosisEnd.format(timeFormatter)
+                            : "");
         });
         repairDateColumn.setCellValueFactory(p -> {
             ZonedDateTime date = p.getValue().getRepairStart();
@@ -119,7 +121,7 @@ public class ListPaneController {
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillAmount())
         );
         billSettledColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>( p.getValue().getBillSettled() ? "Yes" : "No"));
+                new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));
 
         bookingTableView.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
                 diagnosisDateColumn, diagnosisTimeColumn, repairDateColumn, repairTimeColumn,
@@ -140,5 +142,15 @@ public class ListPaneController {
         repairTimeColumn.prefWidthProperty().bind(binding);
         billAmountColumn.prefWidthProperty().bind(binding);
         billSettledColumn.prefWidthProperty().bind(binding);
+    }
+
+    private void setSelectionListener() {
+        bookingTableView
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((obs, oldSelection, newSelection) ->
+                        ((DetailsPaneController) master.getController(DetailsPaneController.class))
+                                .populateDetailFields(newSelection)
+                );
     }
 }

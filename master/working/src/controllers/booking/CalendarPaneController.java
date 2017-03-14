@@ -38,6 +38,8 @@ public class CalendarPaneController {
     @FXML private void initialize() {
         populateCalendarMechanicComboBox(bookingSystem.getAllMechanics());
         populateAgenda(bookingSystem.getAllBookings());
+
+        master.setController(CalendarPaneController.class, this);
     }
 
     ///////////////////// EVENT HANDLERS ////////////////////////////

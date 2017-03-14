@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="org.jfxtras:jfxtras-font-roboto:8.0-r5" type="repository">
+    <properties maven-id="org.jfxtras:jfxtras-font-roboto:8.0-r5" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-font-roboto-8.0-r5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-font-roboto-8.0-r5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

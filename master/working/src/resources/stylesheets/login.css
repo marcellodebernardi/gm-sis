@@ -2,7 +2,7 @@
 
 #BorderPane {
     -fx-padding: 5em;
-    -fx-font-family: arial;
+    -fx-font-family: "Roboto Light";
 }
 
 #GridPane {
