@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TodayController"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.today.TodayController"
             fx:id="todayPane">
     <right>
         <Agenda fx:id="todayBookingsAgenda"></Agenda>

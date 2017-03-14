@@ -1,4 +1,4 @@
-package controllers;
+package controllers.vehicle;
 
 import domain.*;
 import javafx.beans.value.ChangeListener;

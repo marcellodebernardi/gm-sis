@@ -1,4 +1,4 @@
-package controllers;
+package controllers.common;
 
 import controllers.booking.BookingController;
 import javafx.fxml.FXMLLoader;

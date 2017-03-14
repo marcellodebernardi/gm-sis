@@ -1,4 +1,4 @@
-package controllers;
+package controllers.user;
 
 import domain.User;
 import domain.UserType;

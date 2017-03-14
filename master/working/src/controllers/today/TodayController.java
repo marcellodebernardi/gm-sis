@@ -1,4 +1,4 @@
-package controllers;
+package controllers.today;
 
 import domain.DiagRepBooking;
 import domain.Mechanic;

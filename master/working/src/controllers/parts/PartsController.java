@@ -1,4 +1,4 @@
-package controllers;
+package controllers.parts;
 
 import domain.Customer;
 import domain.Installation;

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.customer;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;

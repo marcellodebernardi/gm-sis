@@ -1,5 +1,7 @@
-package controllers;
+package controllers.login;
 
+import controllers.common.MenuController;
+import controllers.common.MenuHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;

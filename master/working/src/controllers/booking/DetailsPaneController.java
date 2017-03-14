@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import logic.BookingSystem;
 import logic.CustomerSystem;
 import logic.VehicleSys;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,8 +31,10 @@ public class DetailsPaneController {
     private VehicleSys vehicleSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
+    private Callback<DatePicker, DateCell> dayCellFactory;
 
     // customer and vehicle ComboBoxes
+    @FXML private TextField bookingIDTextField;
     @FXML private TextField customerSearchBar;
     @FXML private ComboBox<String> vehicleComboBox;
     // description
@@ -60,12 +64,29 @@ public class DetailsPaneController {
     }
 
     @FXML private void initialize() {
+        bookingIDTextField.setDisable(true);
+
         vehicleComboBox.setPrefWidth(Double.MAX_VALUE);
         mechanicComboBox.setPrefWidth(Double.MAX_VALUE);
         diagnosisDatePicker.setPrefWidth(Double.MAX_VALUE);
         repairDatePicker.setPrefWidth(Double.MAX_VALUE);
         populateCustomerTextField(customerSystem.getAllCustomers());
         populateMechanicComboBox(bookingSystem.getAllMechanics());
+
+        // todo change to method reference?
+        dayCellFactory = datePicker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item.isBefore(LocalDate.now())) {
+                        this.setDisable(true);
+                        this.setStyle(" -fx-background-color: #ff6666; ");
+                    }
+                }
+            };
+
+        diagnosisDatePicker.setDayCellFactory(dayCellFactory);
+        repairDatePicker.setDayCellFactory(dayCellFactory);
 
         master.setController(DetailsPaneController.class, this);
     }
@@ -93,6 +114,22 @@ public class DetailsPaneController {
         ));
     }
 
+    @FXML private void clearDetails() {
+        bookingIDTextField.clear();
+        customerSearchBar.clear();
+        populateVehicleComboBox(Collections.emptyList());
+        vehicleComboBox.getSelectionModel().select("");
+        descriptionTextArea.clear();
+        diagnosisDatePicker.setValue(null);
+        diagnosisStartTimeTextField.clear();
+        diagnosisEndTimeTextField.clear();
+        repairDatePicker.setValue(null);
+        repairStartTimeTextField.clear();
+        repairEndTimeTextField.clear();
+        mechanicComboBox.getSelectionModel().clearSelection();
+        populatePartsTable(Collections.emptyList());
+    }
+
     void populateDetailFields(DiagRepBooking booking) {
         Customer customer = booking.getCustomer();
         Vehicle vehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
@@ -102,6 +139,7 @@ public class DetailsPaneController {
         ZonedDateTime repairEnd = booking.getRepairEnd();
         Mechanic mechanic = bookingSystem.getMechanicByID(booking.getMechanicID());
 
+        bookingIDTextField.setText(booking.getBookingID() + "");
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
         vehicleComboBox.getSelectionModel().select(vehicle.getRegNumber() + ": " + vehicle.getModel());

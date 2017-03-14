@@ -1,4 +1,4 @@
-package controllers;
+package controllers.common;
 
 import domain.UserType;
 import javafx.fxml.FXMLLoader;

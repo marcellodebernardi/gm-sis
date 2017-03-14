@@ -20,7 +20,7 @@
 
 
 
-<BorderPane prefHeight="779.0" prefWidth="1388.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CustomerController">
+<BorderPane prefHeight="779.0" prefWidth="1388.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.customer.CustomerController">
 
     <left>
         <FlowPane  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
@@ -100,7 +100,7 @@
 
 
 
-<!--<FlowPane  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CustomerController">
+<!--<FlowPane  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.customer.CustomerController">
     <children>
         <Label layoutX="115.0" layoutY="14.0" text="Add Customer">
             <font>
