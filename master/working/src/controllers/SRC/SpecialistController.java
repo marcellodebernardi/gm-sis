@@ -37,15 +37,24 @@ public class SpecialistController implements Initializable{
     private BookingSystem bookingSystem = BookingSystem.getInstance();
     private int spcRepID, installationID;
 
+    @FXML
+    private DatePicker bookingDeliveryDate = new DatePicker();
+    @FXML
+    private DatePicker bookingReturnDate = new DatePicker();
+    @FXML
+    private DatePicker instaDate, wEndDate = new DatePicker();
 
     public void initialize(URL location, ResourceBundle resources){
-
+        bookingDeliveryDate.setDayCellFactory(dateChecker);
+        bookingReturnDate.setDayCellFactory(dateChecker);
+        instaDate.setDayCellFactory(dateChecker);
+        wEndDate.setDayCellFactory(dateChecker);
 
         try {
            setValues();
 
         }catch(NullPointerException e){e.printStackTrace();}
-        //afindSRCBookings();
+        findSRCBookings();
 
     }
     @FXML
@@ -56,6 +65,22 @@ public class SpecialistController implements Initializable{
         bookingType.getItems().addAll("Vehicle", "Part");
         bookingType.setValue("Vehicle");
     }
+
+    private Callback<DatePicker, DateCell> dateChecker = dp1 -> new DateCell()
+    {
+        @Override
+        public void updateItem( LocalDate item , boolean empty )
+        {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isBefore(LocalDate.now()))
+            {
+                this.setStyle(" -fx-background-color: #ff6666; ");
+                this.setDisable ( true );
+            }
+        }
+    };
     //required fields for searching a booking
     @FXML
     private TextField idOfBookingItem;
@@ -82,10 +107,7 @@ public class SpecialistController implements Initializable{
     @FXML
     private TextField bookingID,bookingItemID,bookingSPCID,bookingSPCName,bookingCost;
 
-    @FXML
-    private DatePicker bookingDeliveryDate = new DatePicker();
-    @FXML
-    private DatePicker bookingReturnDate = new DatePicker();
+
 
     private int spcID;
 
@@ -302,8 +324,7 @@ public class SpecialistController implements Initializable{
     private ObservableList<Installation> installationObservableList = FXCollections.observableArrayList();
     @FXML
     private Button hideInstalls, addInsta, editInsta, deleteInsta,cancelInstallationUpdate,allowUpdate,clearPartsFields;
-    @FXML
-    private DatePicker instaDate, wEndDate = new DatePicker();
+
     @FXML
     private TextField instaAbsID, instaOccID, instaVReg;
     @FXML
@@ -478,13 +499,19 @@ public class SpecialistController implements Initializable{
                 else
                 {
                     if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
-                        VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
-                        specRepairSystem.addSpecialistBooking(vehicleRepair);
-                        showAlert("Successfully added vehicle booking");
+                        Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(bookingItemID.getText());
+                        if(vehicle !=null) {
+                            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
+                            specRepairSystem.addSpecialistBooking(vehicleRepair);
+                            showAlert("Successfully added vehicle booking");
+                        }
                     } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
-                        PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
-                        specRepairSystem.addSpecialistBooking(partRepair);
-                        showAlert("Successfully added part booking ");
+                        Installation installation = specRepairSystem.checkIfInstalled(Integer.parseInt(bookingItemID.getText()));
+                        if(installation!=null) {
+                            PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
+                            specRepairSystem.addSpecialistBooking(partRepair);
+                            showAlert("Successfully added part booking ");
+                        }
                     }
                }
 
@@ -493,13 +520,17 @@ public class SpecialistController implements Initializable{
                 showAlert("Please enter a valid booking ID!");
             }
         }
-        catch (NumberFormatException | InvalidDateException e) {
+        catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException e) {
             if (e instanceof InvalidDateException) {
                 showAlert(e.getMessage());
             }
             if (e instanceof NumberFormatException)
             {
                 showAlert("Please check all fields have been entered correctly.");
+            }
+            if(e instanceof IndexOutOfBoundsException)
+            {
+                showAlert(e.getMessage());
             }
 
         }

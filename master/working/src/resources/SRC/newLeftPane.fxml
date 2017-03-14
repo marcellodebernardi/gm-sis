@@ -103,7 +103,7 @@
    <top>
       <Pane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="idOfBookingItem" layoutX="11.0" layoutY="19.0" prefHeight="27.0" prefWidth="415.0" promptText="Enter a vehicle registration" />
+            <TextField fx:id="idOfBookingItem" layoutX="11.0" layoutY="19.0" onKeyReleased="#findSRCBookings" prefHeight="27.0" prefWidth="415.0" promptText="Enter a vehicle registration" />
             <Button fx:id="searchForBookings" layoutX="466.0" layoutY="19.0" mnemonicParsing="false" onAction="#findSRCBookings" prefHeight="27.0" prefWidth="105.0" text="Search" />
          </children>
       </Pane>

@@ -278,5 +278,13 @@ public class SpecRepairSystem {
         return customers.get(0);
     }
 
+    public Installation checkIfInstalled(int partOccurrence) throws IndexOutOfBoundsException {
+        List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, partOccurrence));
+        if(installations.get(0)!=null)
+        {
+            return installations.get(0);
+        }
+        throw new IndexOutOfBoundsException("No such installations");
+    }
 
 }
