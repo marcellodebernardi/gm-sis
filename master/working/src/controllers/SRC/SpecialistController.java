@@ -700,5 +700,9 @@ public class SpecialistController implements Initializable{
 
     //code for the right side of the fxml
 
+    public void doNothing()
+    {
+
+    }
 
 }
