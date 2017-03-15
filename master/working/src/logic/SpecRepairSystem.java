@@ -5,6 +5,7 @@ import com.sun.org.apache.regexp.internal.RE;
 import domain.*;
 import persistence.DatabaseRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,7 +82,12 @@ public class SpecRepairSystem {
      */
     public List<VehicleRepair> getVehicleBookings(String regNumber)
     {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, regNumber));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, regNumber));
+        if(vehicleRepairs.size()>0)
+        {
+            return vehicleRepairs;
+        }
+        throw new NullPointerException(regNumber);
     }
 
     /**
@@ -100,23 +106,40 @@ public class SpecRepairSystem {
     }
 
     /**
-     * @param date Used to identify all the Vehicles that have not yet been returned
+     *
      *
      * @return
      */
-    public List<VehicleRepair> getOutstandingV(Date date)
+    public List<VehicleRepair> getOutstandingV()
     {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "returnDate", MoreThan, date));
+        List<VehicleRepair> vehicleRepairs =  persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, ""));
+        List<VehicleRepair> outstanding = new ArrayList<>();
+        for(VehicleRepair v: vehicleRepairs)
+        {
+            if(v.getReturnDate().after(new Date()))
+            {
+                outstanding.add(v);
+            }
+        }
+        return outstanding;
     }
 
     /**
-     * @param date Used to identify all the Parts that have not yet been returned
      *
-     * @return
+     * @returnad
      */
-    public List<PartRepair> getOutstandingP(Date date)
+    public List<PartRepair> getOutstandingP()
     {
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "returnDate", MoreThan, date));
+        List<PartRepair> partRepairs =  persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo, 2));
+        List<PartRepair> outstanding = new ArrayList<>();
+        for(PartRepair p: partRepairs)
+        {
+            if(p.getReturnDate().after(new Date()))
+            {
+                outstanding.add(p);
+            }
+        }
+        return outstanding;
     }
 
     /**
@@ -217,6 +240,15 @@ public class SpecRepairSystem {
         return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID",EqualTo, partID));
     }
 
+    public List<PartRepair> returnAllPartRepairs()
+    {
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID",Regex, ""));
+    }
+    public List<VehicleRepair> returnAllVehicleRepairs()
+    {
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber",Regex, ""));
+    }
+
     public List<Installation> getVehicleInstallations(String reg)
     {
         return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber",Regex,reg));
@@ -279,12 +311,27 @@ public class SpecRepairSystem {
     }
 
     public Installation checkIfInstalled(int partOccurrence) throws IndexOutOfBoundsException {
-        List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, partOccurrence));
+        PartOccurrence part = persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partOccurrence)).get(0);
+            List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, part.getPartOccurrenceID()));
         if(installations.get(0)!=null)
         {
             return installations.get(0);
         }
         throw new IndexOutOfBoundsException("No such installations");
     }
+
+    public VehicleRepair getBySpcRepID(int spcRep)
+    {
+
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class,"spcRepID",EqualTo,spcRep));
+        if(vehicleRepairs.get(0)!=null)
+        {
+            return vehicleRepairs.get(0);
+        }
+        return null;
+
+
+    }
+
 
 }

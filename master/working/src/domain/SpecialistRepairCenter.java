@@ -120,34 +120,43 @@ public class SpecialistRepairCenter implements Searchable {
     {
         return this.bookings;
     }
-    public void setName(String name) {
+    public boolean setName(String name) {
         if(!name.equals("")) {
             this.name = name;
+            return true;
         }
+        return false;
     }
 
-    public void setAddress(String address) {
-        if(!address.equals(""))
-        this.address = address;
+    public boolean setAddress(String address) {
+        if(!address.equals("")) {
+            this.address = address;
+            return true;
+        }
+        return false;
     }
 
-    public void setPhone(String phone) {
+    public boolean setPhone(String phone) {
         if(phone.length() == 11 && containsChar(phone)) {
             this.phone = phone;
+            return true;
         }
+        return false;
     }
 
-    public void setEmail(String email) {
+    public boolean setEmail(String email) {
         if(!email.equals("")  && email.contains("@")) {
             this.email = email;
+            return true;
         }
+        return false;
     }
 
     private boolean containsChar(String number)
     {
         try{
-            final int i = Integer.parseInt(number);
-            return true;
+           double d  = Double.parseDouble(number);
+           return true;
         }
         catch (NumberFormatException e)
         {

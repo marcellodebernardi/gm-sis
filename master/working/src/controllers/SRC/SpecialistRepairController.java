@@ -1,6 +1,8 @@
 package controllers.SRC;
 
 import domain.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.*;
@@ -15,6 +18,7 @@ import persistence.DatabaseRepository;
 
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,10 +52,10 @@ public class SpecialistRepairController implements Initializable{
     private TableView<SpecialistRepairCenter> SpecialistRepairCenters;
 
     @FXML
-    private TableColumn<SpecialistController, Integer> spc_id_column;
+    private TableColumn<SpecialistRepairCenter, Integer> spc_id_column;
 
     @FXML
-    private TableColumn<SpecialistController, String> spc_name_column,spc_phone_column,spc_address_column,spc_email_column = new TableColumn<>();
+    private TableColumn<SpecialistRepairCenter, String> spc_name_column,spc_phone_column,spc_address_column,spc_email_column = new TableColumn<>();
 
     @FXML
     private TextField searchSRC,src_id,src_name,src_address,src_email, src_phone = new TextField();
@@ -145,12 +149,25 @@ public class SpecialistRepairController implements Initializable{
         SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcID);
         if(updateConfirmation("Are you sure you want to update this SPC?"))
         {
-            specialistRepairCenter.setEmail(src_email.getText());
-            specialistRepairCenter.setName(src_name.getText());
-            specialistRepairCenter.setAddress(src_address.getText());
-            specialistRepairCenter.setPhone(src_phone.getText());
+            if(!specialistRepairCenter.setEmail(src_email.getText()))
+            {
+                showAlert("Please enter a correct email address.");
+            }
+            if(!specialistRepairCenter.setName(src_name.getText()))
+            {
+                showAlert("Please enter an appropriate name.");
+            }
+            if(!specialistRepairCenter.setAddress(src_address.getText()))
+            {
+                showAlert("Please enter an appropriate address.");
+            }
+            if(!specialistRepairCenter.setPhone(src_phone.getText().trim()))
+            {
+                showAlert("Please enter a correct 11 digit, numerical phone number.");
+            }
             specRepairSystem.updateRepairCentre(specialistRepairCenter);
         }
+        findSRC();
     }
 
     private boolean addConfirmation()
@@ -288,6 +305,184 @@ public class SpecialistRepairController implements Initializable{
         custy_label.setVisible(false);
         custyInfo.setVisible(false);
         btn_hideDetails.setVisible(false);
+    }
+
+    @FXML
+    private TableView<SpecRepBooking> specRepBooking;
+
+    @FXML
+    private TableColumn<SpecRepBooking, Integer> spc_rep_column;
+
+    @FXML
+    private TableColumn<SpecRepBooking, Integer> spc_bookingID_column;
+
+    @FXML
+    private TableColumn<SpecRepBooking, String> spc_item_column;
+
+    @FXML
+    private TableColumn<SpecRepBooking, Date> spc_del_column;
+
+    @FXML
+    private TableColumn<SpecRepBooking, Date> spc_ret_column;
+
+    @FXML
+    private TextField criteriaToSearchBy;
+
+    @FXML
+    private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
+
+    @FXML
+    private Button searchByCriteria;
+
+    public void findBookings()
+    {
+        try {
+            if(criteriaToSearchBy.getText().equals(""))
+            {
+                List<SpecRepBooking> specRepBookings = new ArrayList<>();
+                List<PartRepair> partRepairs = specRepairSystem.returnAllPartRepairs();
+                List<VehicleRepair> vehicleRepairs = specRepairSystem.returnAllVehicleRepairs();
+                specRepBookings.addAll(partRepairs);
+                specRepBookings.addAll(vehicleRepairs);
+                showToTable(specRepBookings);
+            }
+            List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs(Integer.parseInt(criteriaToSearchBy.getText()));
+            if(partRepairs.size()==0)
+            {
+             //   showAlert("No repairs found with given criteria");
+            }
+            showToTable(partRepairs);
+
+        }
+        catch (NumberFormatException | NullPointerException e) {
+            if (e instanceof NumberFormatException) {
+                try {
+                    String criteria = criteriaToSearchBy.getText();
+                    List<Vehicle> vehicles = new ArrayList<>();
+                    List<VehicleRepair> vehicleRepairList = specRepairSystem.getVehicleBookings(criteria);
+                    if (vehicleRepairList.size() > 0) {
+                        showToTable(vehicleRepairList);
+                    } //else {
+
+
+                        // }
+                   // }
+                } catch (NullPointerException ex) {
+                    if (ex instanceof NullPointerException) {
+                      //  showAlert("No repairs found with given criteria");
+                        String criteria = criteriaToSearchBy.getText();
+                        List<Vehicle> vehicles = new ArrayList<>();
+                        List<VehicleRepair> vehicleRepairList = new ArrayList<>();
+                        List<Customer> customersByFirstName = CustomerSystem.getInstance().searchCustomerByFirstname(criteria);
+                        //showAlert(customersByFirstName.get(0).getCustomerFirstname());
+                        if (customersByFirstName.size() == 0) {
+                            List<Customer> customersBySurname = CustomerSystem.getInstance().searchCustomerBySurname(criteria);
+                            if (customersBySurname.size() > 0) {
+
+                                for (Customer customer : customersBySurname) {
+                                    vehicles.addAll(customer.getVehicles());
+                                }
+                                if (vehicles.size() > 0) {
+                                    for (Vehicle vehicle : vehicles) {
+                                        vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(vehicle.getRegNumber()));
+                                    }
+                                    if (vehicleRepairList != null) {
+                                        showToTable(vehicleRepairList);
+                                    }
+                                }
+                            } else {
+                                throw new NullPointerException();
+                            }
+
+                            showAlert("");
+                        }
+                        //if (customersByFirstName.size() > 0) {
+
+                        for (Customer customer : customersByFirstName) {
+
+                            vehicles.addAll(customer.getVehicles());
+                        }
+                        if (vehicles.size() > 0) {
+                            for (Vehicle v : vehicles)
+                                vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getRegNumber()));
+                            if (vehicleRepairList != null) {
+                                showToTable(vehicleRepairList);
+                            }
+                        } else {
+                            throw new NullPointerException();
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private <E> void showToTable(List<E> specRepBookings)
+    {
+        specRepBooking.getItems().clear();
+        if(specRepBookings.get(0) instanceof SpecRepBooking) {
+            for(E s: specRepBookings)
+            {
+                SpecRepBooking specRepBooking = (SpecRepBooking) s;
+                specRepBookingObservableList.add(specRepBooking);
+            }
+            spc_rep_column.setCellValueFactory(p -> {
+                if (p.getValue() instanceof VehicleRepair) {
+                    VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(vehicleRepair.getSpcRepID());
+                } else {
+                    PartRepair partRepair = (PartRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(partRepair.getSpcRepID());
+                }
+
+            });
+            spc_rep_column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+            spc_bookingID_column.setCellValueFactory(p -> {
+                if (p.getValue() instanceof VehicleRepair) {
+                    VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(vehicleRepair.getSpcID());
+                } else {
+                    PartRepair partRepair = (PartRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(partRepair.getspcID());
+                }
+
+            });
+            spc_bookingID_column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+            spc_del_column.setCellValueFactory(p -> {
+                if (p.getValue() instanceof VehicleRepair) {
+                    VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(vehicleRepair.getDeliveryDate());
+                } else {
+                    PartRepair partRepair = (PartRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(partRepair.getDeliveryDate());
+                }
+
+            });
+            spc_del_column.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
+            spc_ret_column.setCellValueFactory(p -> {
+                if (p.getValue() instanceof VehicleRepair) {
+                    VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(vehicleRepair.getReturnDate());
+                } else {
+                    PartRepair partRepair = (PartRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(partRepair.getReturnDate());
+                }
+            });
+            spc_ret_column.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
+            spc_item_column.setCellValueFactory(p -> {
+                if (p.getValue() instanceof VehicleRepair) {
+                    VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(vehicleRepair.getVehicleRegNumber());
+                } else {
+                    PartRepair partRepair = (PartRepair) p.getValue();
+                    return new ReadOnlyObjectWrapper<>(Integer.toString(partRepair.getPartOccurrenceID()));
+                }
+            });
+            specRepBooking.setItems(specRepBookingObservableList);
+        }
+
     }
 
 }
