@@ -360,7 +360,7 @@ public class SpecialistRepairController implements Initializable{
         }
         catch (NullPointerException e)
         {
-
+            showAlert("Oops it seems like there is no owner of this vehicle! Please contact system administrator");
         }
 
     }
