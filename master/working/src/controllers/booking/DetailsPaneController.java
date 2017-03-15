@@ -102,6 +102,9 @@ public class DetailsPaneController {
 
     // todo make check for broken shit
     @FXML private void addBooking() {
+        System.out.println(getDiagnosisStartTime() + " " + getDiagnosisEndTime());
+        System.out.println(getRepairStartTime() + " " + getRepairEndTime());
+
         DiagRepBooking booking =(new DiagRepBooking(
                 getVehicleRegFromComboBox(),
                 getDescriptionFromTextArea(),

@@ -82,13 +82,10 @@ public class CalendarPaneController {
     }
 
     void addBookingAppointment(DiagRepBooking booking) {
-        this.bookingAgenda.appointments().add(new Agenda.AppointmentImplLocal()
-                .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisStart().toInstant(),
-                        booking.getDiagnosisStart().getZone()))
-                .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisEnd().toInstant(),
-                        booking.getDiagnosisEnd().getZone()))
-                .withDescription(booking.getDescription())
-        );
+        this.bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
+
+        if (booking.getRepairStart() != null)
+            bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
     }
 
     private void populateCalendarMechanicComboBox(List<Mechanic> mechanics) {

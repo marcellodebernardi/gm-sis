@@ -187,7 +187,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      */
     @Column(name = "repairStart")
     public ZonedDateTime getRepairStart() {
-        return diagnosisStart;
+        return repairStart;
     }
 
     /**
@@ -197,7 +197,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      */
     @Column(name = "repairEnd")
     public ZonedDateTime getRepairEnd() {
-        return diagnosisEnd;
+        return repairEnd;
     }
 
     /**
