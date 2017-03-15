@@ -51,7 +51,7 @@ public class VehicleSys {
     {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
                 "regNumber", EqualTo, regNumber));
-        return results !=null ? results.get(0) : null;
+        return results !=null && results.size() != 0 ? results.get(0) : null;
     }
 
     public boolean addEditVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
