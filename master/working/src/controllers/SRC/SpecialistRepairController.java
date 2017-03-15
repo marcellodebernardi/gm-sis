@@ -122,6 +122,7 @@ public class SpecialistRepairController implements Initializable{
         src_phone.clear();
         src_address.clear();
         src_email.clear();
+        clearLabels();
     }
 
     public void addNewSRC()

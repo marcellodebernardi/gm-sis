@@ -80,6 +80,11 @@ public class SpecialistController implements Initializable{
                 this.setStyle(" -fx-background-color: #ff6666; ");
                 this.setDisable ( true );
             }
+            if(item.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+            {
+                this.setDisable(true);
+                this.setStyle("-fx-background-color: #ff6666");
+            }
         }
     };
     @FXML
@@ -222,6 +227,7 @@ public class SpecialistController implements Initializable{
                     vehicleRepair.setDeliveryDate(returnDate);
                     vehicleRepair.setBookingID(Integer.parseInt(bookingID.getText()));
                     specRepairSystem.updateBookings(vehicleRepair);
+                    findSRCBookings();
                 }
 
             }
@@ -239,6 +245,7 @@ public class SpecialistController implements Initializable{
                     partRepair.setDeliveryDate(returnDate);
                     partRepair.setBookingID(Integer.parseInt(bookingID.getText()));
                     specRepairSystem.updateBookings(partRepair);
+                    findSRCBookings();
                 }
             }
             else if(bookingType.getSelectionModel().getSelectedItem().equals(""))
@@ -511,6 +518,42 @@ public class SpecialistController implements Initializable{
     public void addBooking()
     {
         try {
+            if(bookingID.getText().equals(""))
+            {
+                lbl_booking_notFound.setVisible(true);
+            }
+            else
+            {
+                lbl_booking_notFound.setVisible(false);
+            }
+            if(bookingItemID.getText().equals(""))
+            {
+                item_found_lbl.setText("Item ID not entered");
+                item_found_lbl.setTextFill(Color.RED);
+                item_found_lbl.setVisible(true);
+            }
+            else
+            {
+                item_found_lbl.setVisible(false);
+            }
+            if(bookingSPCID.getText().equals(""))
+            {
+                spc_found_lbl.setText("No SPC found");
+                spc_found_lbl.setTextFill(Color.RED);
+                spc_found_lbl.setVisible(true);
+            }
+            else
+            {
+                spc_found_lbl.setVisible(false);
+            }
+            if(bookingDeliveryDate.getValue().equals(null))
+            {
+                showAlert("No delivery date selected");
+            }
+            if(bookingReturnDate.getValue().equals(null))
+            {
+                showAlert("No return date selected");
+            }
             List<DiagRepBooking> diagRepBookings = bookingSystem.searchBookings(bookingID.getText());//check if booking exist
             if(diagRepBookings.get(0)!=null) {
               // DiagRepBooking diagRepBooking = diagRepBookings.get(0);
@@ -567,7 +610,7 @@ public class SpecialistController implements Initializable{
             }
             clearBookingFields();
         }
-        catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException e) {
+        catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException | NullPointerException e) {
             if (e instanceof InvalidDateException) {
                 showAlert(e.getMessage());
             }
@@ -578,6 +621,10 @@ public class SpecialistController implements Initializable{
             if(e instanceof IndexOutOfBoundsException)
             {
                 showAlert(e.getMessage());
+            }
+            if(e instanceof NullPointerException)
+            {
+                showAlert("Booking fields empty.");
             }
 
         }
@@ -639,6 +686,7 @@ public class SpecialistController implements Initializable{
             Installation installation = specRepairSystem.getByInstallationID(installationID);
             if (deleteConfirmation("Are you sure you want to delete this installation?")) {
                 specRepairSystem.deleteInstallation(installation.getInstallationID());
+                findSRCBookings();
             }
         }
         catch (NullPointerException e)
