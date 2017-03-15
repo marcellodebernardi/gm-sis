@@ -40,7 +40,7 @@ public class CalendarPaneController {
         populateAgenda(bookingSystem.getAllBookings());
 
         bookingAgenda.setActionCallback((appointment) -> {
-            DiagRepBooking booking = bookingSystem.getBookingByID(Integer.parseInt(appointment.getDescription()));
+            DiagRepBooking booking = bookingSystem.getBookingByID(((BookingAppointment) appointment).getBookingID());
             ((DetailsPaneController) master.getController(DetailsPaneController.class)).populateDetailFields(booking);
             return null;
         });
@@ -102,22 +102,10 @@ public class CalendarPaneController {
 
     private void populateAgenda(List<DiagRepBooking> bookings) {
         for (DiagRepBooking booking : bookings) {
-            if (booking.getDiagnosisStart() != null && booking.getDiagnosisEnd() != null)
-                bookingAgenda.appointments().add(new Agenda.AppointmentImplLocal()
-                        .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisStart().toInstant(),
-                                booking.getDiagnosisStart().getZone()))
-                        .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getDiagnosisEnd().toInstant(),
-                                booking.getDiagnosisEnd().getZone()))
-                        .withDescription(booking.getBookingID() + "")
-                );
-            else if (booking.getRepairStart() != null && booking.getRepairEnd() != null)
-                bookingAgenda.appointments().add(new Agenda.AppointmentImplLocal()
-                        .withStartLocalDateTime(LocalDateTime.ofInstant(booking.getRepairStart().toInstant(),
-                                booking.getRepairStart().getZone()))
-                        .withEndLocalDateTime(LocalDateTime.ofInstant(booking.getRepairEnd().toInstant(),
-                                booking.getRepairEnd().getZone()))
-                        .withDescription(booking.getBookingID() + "")
-                );
+            bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
+
+            if (booking.getRepairStart() != null)
+                bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
         }
         bookingAgenda.setAllowDragging(true);
         bookingAgenda.setAllowResize(true);
