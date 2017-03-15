@@ -63,11 +63,9 @@ public class MenuController {
     public void openSRCTab() {
         BorderPane specialistBasePane = new BorderPane();
         try {
-           // BorderPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/rightSideSRC.fxml"));
-            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newLeftPane.fxml"));
+            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/SRC/SPBookingManagement.fxml"));
             specialistBasePane.setVisible(true);
             specialistBasePane.setCenter(leftPane);
-          //  specialistBasePane.setCenter(centerPane);
             Main.getInstance().replaceTabContent(specialistBasePane);
 
 
@@ -79,10 +77,8 @@ public class MenuController {
     public void openSRCManagementTab() {
         BorderPane specialistBasePane = new BorderPane();
         try {
-            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newCenterSRC.fxml"));
-           // BorderPane leftPane = FXMLLoader.load(getClass().getResource("/resources/SRC/newLeftPane.fxml"));
+            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/SRC/SPCManagement.fxml"));
             specialistBasePane.setVisible(true);
-            //specialistBasePane.setLeft(leftPane);
             specialistBasePane.setCenter(centerPane);
             Main.getInstance().replaceTabContent(specialistBasePane);
 

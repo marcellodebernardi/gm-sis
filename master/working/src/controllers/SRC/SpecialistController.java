@@ -1,7 +1,6 @@
 package controllers.SRC;
 
-// import com.sun.tools.corba.se.idl.InterfaceGen;
-// import com.sun.tools.internal.xjc.reader.dtd.bindinfo.BIAttribute;
+
 import domain.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -12,8 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-        import javafx.util.Callback;
-import javafx.util.StringConverter;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -21,7 +21,6 @@ import logic.*;
 import persistence.DatabaseRepository;
 import domain.PartRepair;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,11 +82,10 @@ public class SpecialistController implements Initializable{
             }
         }
     };
-    //required fields for searching a booking
     @FXML
     private TextField idOfBookingItem;
     @FXML
-    private Button searchForBookings,viewVehicleInstallations,addSRBooking, cancelEdit,updateSRBooking;
+    private Button addSRBooking, cancelEdit,updateSRBooking;
     @FXML
     private TableView<SpecRepBooking> specialistBookings;
     @FXML
@@ -102,14 +100,8 @@ public class SpecialistController implements Initializable{
     private TableColumn <SpecRepBooking, Integer>spcIDOfBooking;
     @FXML
     private TableColumn <SpecRepBooking, Integer>bookingIDOfBooking;
-
-    //for displaying details onto text box
     @FXML
     private TextField bookingID,bookingItemID,bookingSPCID,bookingSPCName,bookingCost;
-
-
-
-    private int spcID;
 
     @FXML
     public void showDetails()
@@ -215,13 +207,8 @@ public class SpecialistController implements Initializable{
     public void updateBooking()
     {
         try {
-            //java.time.LocalDate delDate = bookingDeliveryDate.getValue();
-            //java.time.LocalDate retDate = bookingReturnDate.getValue();
-            //ZoneId defaultZoneId = ZoneId.systemDefault();
-           // Date deliveryDate = Date.from(delDate.atStartOfDay(defaultZoneId).toInstant());
             Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
             Date returnDate = fromLocalDate(bookingReturnDate.getValue());
-           // Date returnDate = Date.from(retDate.atStartOfDay(defaultZoneId).toInstant());
             if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
                 VehicleRepair vehicleRepair = specRepairSystem.findVehicleRepairBooking(spcRepID);
                 if (vehicleRepair != null) {
@@ -298,28 +285,7 @@ public class SpecialistController implements Initializable{
         return deleteAlert.getResult() == ButtonType.OK;
 
     }
-/*
-    //todo fix up the date issue
-    //think it works now lol
-    private void displayAllBookings (List<VehicleRepair> vehicleRepairs)
-    {
-        specialistBookings.getItems().clear();
-        vehicleRepairsObservableList.addAll(vehicleRepairs);
-        itemID.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
-        itemID.setCellFactory(TextFieldTableCell.forTableColumn());
-        deliveryDateOfBooking.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
-        deliveryDateOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
-       // returnDateOfBooking.setCellValueFactory(new PropertyValueFactory<VehicleRepair, Date>("returnDate"));
-        returnDateOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
-        costOfBooking.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        costOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        spcIDOfBooking.setCellValueFactory(new PropertyValueFactory<>("spcID"));
-        spcIDOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        bookingIDOfBooking.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
-        bookingIDOfBooking.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-      //  specialistBookings.setItems(vehicleRepairsObservableList);
-    }
-*/
+
     @FXML
     private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
 
@@ -403,7 +369,6 @@ public class SpecialistController implements Initializable{
         }
     }
 
-    //required for parts
     @FXML
     private TableView<Installation> Installations;
     @FXML
@@ -469,9 +434,7 @@ public class SpecialistController implements Initializable{
     {
         List<SpecRepBooking> specRepBookingList = new ArrayList<>();
         List<PartRepair> partRepairs = specRepairSystem.getOutstandingP();
-        //System.out.println(partRepairs.size());
         List<VehicleRepair>vehicleRepairs = specRepairSystem.getOutstandingV();
-        //System.out.println(vehicleRepairs.size());
         specRepBookingList.addAll(partRepairs);
         specRepBookingList.addAll(vehicleRepairs);
         displaySpecRepBookings(specRepBookingList);
@@ -507,15 +470,7 @@ public class SpecialistController implements Initializable{
             instaVReg.setText(installation.getVehicleRegNumber());
             instaAbsID.setText(Integer.toString(installation.getPartAbstractionID()));
             installationID = installation.getInstallationID();
-            //showAlert(Integer.toString(installationID));
             instaOccID.setText(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
-            //methods required to sort out date
-            //Instant instant = installation.getInstallationDate().toInstant();
-            //ZoneId defaultZoneId = ZoneId.systemDefault();
-           // java.time.LocalDate installationDate = instant.atZone(defaultZoneId).toLocalDate();
-            // Instant returnInstant = installation.getEndWarrantyDate().toInstant();
-            //PartOccurrence partOccurrence = installation.getPartOccurrence();
-            //showAlert(Integer.toString(partOccurrence.getPartOccurrenceID()));
             java.time.LocalDate installationDate = toLocalDate(installation.getInstallationDate());
             java.time.LocalDate returnDate = toLocalDate(installation.getEndWarrantyDate());
             instaDate.setValue(installationDate);
@@ -524,7 +479,6 @@ public class SpecialistController implements Initializable{
         catch (NullPointerException e)
         {
             showAlert("No available installations.");
-            //showAlert("An error has occurred...please stand by");
         }
     }
 
@@ -553,16 +507,14 @@ public class SpecialistController implements Initializable{
         clearPartsFields.setVisible(false);
     }
 
-    //add an SRC Booking
-    //todo fix up the date problem
-    //think i fixed it lol
+
     public void addBooking()
     {
         try {
             List<DiagRepBooking> diagRepBookings = bookingSystem.searchBookings(bookingID.getText());//check if booking exist
             if(diagRepBookings.get(0)!=null) {
-               DiagRepBooking diagRepBooking = diagRepBookings.get(0);
-                bookingSystem.addBooking(diagRepBooking);
+              // DiagRepBooking diagRepBooking = diagRepBookings.get(0);
+               // bookingSystem.addBooking(diagRepBooking);
 
                 if(!isBefore(bookingDeliveryDate.getValue()))
                 {
@@ -585,10 +537,11 @@ public class SpecialistController implements Initializable{
                             {
                                 bookingCost.setText("0");
                             }
-                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
-                            diagRepBooking.setBill(bill);
+                          //  Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
+                            //diagRepBooking.setBill(bill);
                             VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
                             specRepairSystem.addSpecialistBooking(vehicleRepair);
+                            clearBookingFields();
                             showAlert("Successfully added vehicle booking");
                         }
                     } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
@@ -598,10 +551,11 @@ public class SpecialistController implements Initializable{
                             {
                                 bookingCost.setText("0");
                             }
-                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
-                            diagRepBooking.setBill(bill);
+                          //  Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
+                           // diagRepBooking.setBill(bill);
                             PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
                             specRepairSystem.addSpecialistBooking(partRepair);
+                            clearBookingFields();
                             showAlert("Successfully added part booking ");
                         }
                     }
@@ -611,6 +565,7 @@ public class SpecialistController implements Initializable{
             else{
                 showAlert("Please enter a valid booking ID!");
             }
+            clearBookingFields();
         }
         catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException e) {
             if (e instanceof InvalidDateException) {
@@ -660,6 +615,8 @@ public class SpecialistController implements Initializable{
         allowUpdate.setVisible(true);
 
     }
+
+
     //cannot update any date related issue
     public void updateInstallation() {
         Installation installation = specRepairSystem.getByInstallationID(installationID);
@@ -698,7 +655,107 @@ public class SpecialistController implements Initializable{
         alert.showAndWait();
     }
 
-    //code for the right side of the fxml
+    @FXML
+    private Label lbl_booking_found, lbl_booking_notFound,item_found_lbl,spc_found_lbl = new Label();
 
+    @FXML
+    public void findBooking()
+    {
+    try
+    {
+        int criteria  = Integer.parseInt(bookingID.getText());
+        List<DiagRepBooking> diagRepBookings = BookingSystem.getInstance().searchBookings(Integer.toString(criteria));
+        if (diagRepBookings.size() > 0) {
+            lbl_booking_notFound.setVisible(false);
+            lbl_booking_found.setVisible(true);
+        }
+        if (diagRepBookings.size() < 0) {
+            lbl_booking_found.setVisible(false);
+            lbl_booking_notFound.setVisible(true);
+        }
+    }
+    catch(NumberFormatException e)
+    {
+        lbl_booking_found.setVisible(false);
+        lbl_booking_notFound.setVisible(true);
+    }
+    }
 
+    @FXML
+    public void findItem()
+    {
+        try{
+            try {
+            PartOccurrence partOccurrence = specRepairSystem.findAPart(Integer.parseInt(bookingItemID.getText()));
+
+                if (partOccurrence != null) {
+                    item_found_lbl.setTextFill(Color.valueOf("#4aff02"));
+                    item_found_lbl.setText("Part found");
+                    item_found_lbl.setVisible(true);
+                }
+            }
+            catch (IndexOutOfBoundsException exx)
+            {
+                item_found_lbl.setTextFill(Color.RED);
+                item_found_lbl.setText("No part found");
+                item_found_lbl.setVisible(true);
+            }
+
+        }
+        catch (NumberFormatException e)
+        {
+            try {
+                Vehicle vehicle = specRepairSystem.findVehicle(bookingItemID.getText());
+                if (vehicle != null) {
+                    item_found_lbl.setTextFill(Color.valueOf("#4aff02"));
+                    item_found_lbl.setText("Vehicle found");
+                    item_found_lbl.setVisible(true);
+                }
+            }
+            catch (IndexOutOfBoundsException ex)
+            {
+                item_found_lbl.setTextFill(Color.RED);
+                item_found_lbl.setText("Please enter exact vehicle reg");
+                item_found_lbl.setVisible(true);
+            }
+        }
+    }
+
+    public void clearBookingFields()
+    {
+        item_found_lbl.setVisible(false);
+        lbl_booking_found.setVisible(false);
+        lbl_booking_notFound.setVisible(false);
+        item_found_lbl.setVisible(false);
+        bookingID.clear();
+        bookingID.setEditable(true);
+        bookingReturnDate.setValue(null);
+        bookingDeliveryDate.setValue(null);
+        bookingItemID.clear();
+        bookingItemID.setEditable(true);
+        bookingCost.clear();
+        bookingCost.setEditable(true);
+        bookingSPCName.clear();
+        bookingSPCID.clear();
+        bookingSPCID.setEditable(true);
+        spc_found_lbl.setVisible(false);
+    }
+
+    public void findSRC()
+    {
+        try
+        {
+        SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(Integer.parseInt(bookingSPCID.getText()));
+        bookingSPCName.setText(specialistRepairCenter.getName());
+        spc_found_lbl.setText("SPC Found");
+        spc_found_lbl.setTextFill(Color.valueOf("#04eb04"));
+        spc_found_lbl.setVisible(true);
+        }
+        catch (NumberFormatException | NullPointerException | IndexOutOfBoundsException e)
+         {
+             spc_found_lbl.setTextFill(Color.RED);
+             spc_found_lbl.setText("No SPC Found");
+             spc_found_lbl.setVisible(true);
+         }
+    }
 }

@@ -333,5 +333,15 @@ public class SpecRepairSystem {
 
     }
 
+    public Vehicle findVehicle(String reg)
+    {
+        return persistence.getByCriteria(new Criterion<>(Vehicle.class,"regNumber",EqualTo,reg)).get(0);
+    }
+
+    public PartOccurrence findAPart(int partID)
+    {
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partID)).get(0);
+    }
+
 
 }

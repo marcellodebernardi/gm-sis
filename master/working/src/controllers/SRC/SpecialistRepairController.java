@@ -36,6 +36,8 @@ public class SpecialistRepairController implements Initializable{
     private String reg;
     @FXML
     private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
+    @FXML
+    private Label id_lbl,name_lbl,address_lbl,number_lbl,email_lbl = new Label();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -124,11 +126,72 @@ public class SpecialistRepairController implements Initializable{
 
     public void addNewSRC()
     {
-        if(src_phone.getText().length() == 11 && !src_name.getText().equals("") && !src_address.equals("") && !src_email.equals("")) {
-            if(addConfirmation()) {
-                specRepairSystem.addRepairCenter(src_name.getText(), src_address.getText(), src_phone.getText(), src_email.getText());
+        try {
+            if (src_phone.getText().length() != 11) {
+                number_lbl.setVisible(true);
+            }
+            else
+            {
+                number_lbl.setVisible(false);
             }
         }
+        catch (NumberFormatException e)
+        {
+            number_lbl.setVisible(true);
+        }
+            if(!src_id.getText().equals(""))
+            {
+                id_lbl.setVisible(true);
+            }
+            else
+            {
+                id_lbl.setVisible(false);
+            }
+            if(src_address.getText().equals(""))
+            {
+                address_lbl.setVisible(true);
+            }
+            else
+            {
+                address_lbl.setVisible(false);
+            }
+            if(src_email.getText().equals("") || !src_email.getText().contains("@"))
+            {
+                email_lbl.setVisible(true);
+            }
+            else
+            {
+                email_lbl.setVisible(false);
+            }
+            if(src_name.getText().equals(""))
+            {
+                name_lbl.setVisible(true);
+            }
+            else
+            {
+                name_lbl.setVisible(false);
+            }
+            if(src_phone.getText().length()==11 && !src_name.getText().equals("") && !src_address.equals("") && !src_email.equals("") &&src_email.getText().contains("@")){
+                if(addConfirmation()) {
+                    specRepairSystem.addRepairCenter(src_name.getText(), src_address.getText(), src_phone.getText(), src_email.getText());
+                    clearLabels();
+                    clearSRCFields();
+                }
+                findSRC();
+
+
+        }
+
+        findSRC();
+    }
+
+    private void clearLabels()
+    {
+        id_lbl.setVisible(false);
+        name_lbl.setVisible(false);
+        number_lbl.setVisible(false);
+        address_lbl.setVisible(false);
+        email_lbl.setVisible(false);
     }
 
     public void deleteSRC()
@@ -136,12 +199,14 @@ public class SpecialistRepairController implements Initializable{
         try {
             if(deleteConfirmation("Are you sure you want to delete this Specialist repair center?"))
                 specRepairSystem.deleteAllSubsequentBookings(spcID);
-            specRepairSystem.deleteRepairCenter(spcID);
+                specRepairSystem.deleteRepairCenter(spcID);
+                clearSRCFields();
         }
         catch (NullPointerException e)
         {
             showAlert("No SPC Selected.");
         }
+        findSRC();
     }
 
     public void updateSRC()
@@ -167,6 +232,7 @@ public class SpecialistRepairController implements Initializable{
             }
             specRepairSystem.updateRepairCentre(specialistRepairCenter);
         }
+        clearSRCFields();
         findSRC();
     }
 
@@ -284,13 +350,13 @@ public class SpecialistRepairController implements Initializable{
             Vehicle vehicle = vehicleDetails.getSelectionModel().getSelectedItem();
             Customer customer = specRepairSystem.getByCustomerID(vehicle.getCustomerID());
             custyInfo.clear();
-            custyInfo.appendText("Customer ID : " + customer.getCustomerAddress() + "\n");
-            custyInfo.appendText("Customer first name : " + customer.getCustomerFirstname() + "\n");
-            custyInfo.appendText("Customer surname : " + customer.getCustomerSurname() + "\n");
-            custyInfo.appendText("Customer phone number : " + customer.getCustomerPhone() + "\n");
-            custyInfo.appendText("Customer address : " + customer.getCustomerAddress() + "\n");
-            custyInfo.appendText("Customer postcode : " + customer.getCustomerPostcode() + "\n");
-            custyInfo.appendText("Customer type : " + customer.getCustomerType().toString() + "\n");
+            custyInfo.appendText("ID : " + customer.getCustomerAddress() + "\n");
+            custyInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
+            custyInfo.appendText("Surname : " + customer.getCustomerSurname() + "\n");
+            custyInfo.appendText("Phone number : " + customer.getCustomerPhone() + "\n");
+            custyInfo.appendText("Address : " + customer.getCustomerAddress() + "\n");
+            custyInfo.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
+            custyInfo.appendText("Type : " + customer.getCustomerType().toString() + "\n");
         }
         catch (NullPointerException e)
         {
