@@ -10,6 +10,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -254,42 +255,27 @@
                   </GridPane>
                     </items>
                 </SplitPane>
-            <SplitPane dividerPositions="0.34523809523809523" orientation="VERTICAL" prefHeight="254.0" prefWidth="808.0">
+            <SplitPane dividerPositions="0.3888888888888889" orientation="VERTICAL" prefHeight="254.0" prefWidth="808.0">
                <items>
-                  <SplitPane dividerPositions="0.3132530120481928" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                      <items>
+                        <Label text="Customer Details" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Customer Table">
-                                 <font>
-                                    <Font size="17.0" />
-                                 </font>
-                              </Label>
+                              <TextArea fx:id="custInfo" prefHeight="200.0" prefWidth="200.0" GridPane.halignment="CENTER" />
+                              <TextArea fx:id="custInfo2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                            </children>
                         </GridPane>
-                        <TableView fx:id="CustomerTable" prefHeight="52.0" prefWidth="699.0">
-                           <columns>
-                              <TableColumn fx:id="ctID" prefWidth="40.48651123046875" text="ID" visible="false" />
-                              <TableColumn fx:id="ctFN" prefWidth="115.0" text="FName" />
-                              <TableColumn fx:id="ctSN" prefWidth="115.0" text="SName" />
-                              <TableColumn fx:id="ctA" prefWidth="115.0" text="Address" />
-                              <TableColumn fx:id="ctP" prefWidth="115.0" text="Postcode" />
-                              <TableColumn fx:id="ctPN" prefWidth="115.0" text="Phone" />
-                              <TableColumn fx:id="ctE" prefWidth="115.0" text="Email" />
-                              <TableColumn fx:id="ctT" prefWidth="115.0" text="Type" />
-                           </columns>
-                        </TableView>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.1658291457286432" orientation="VERTICAL" prefHeight="135.0" prefWidth="594.0">
+                  <SplitPane dividerPositions="0.21333333333333335" orientation="VERTICAL" prefHeight="135.0" prefWidth="594.0">
                      <items>
                         <GridPane>
                            <columnConstraints>

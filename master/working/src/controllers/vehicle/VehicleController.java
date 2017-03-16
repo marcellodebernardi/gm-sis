@@ -88,12 +88,6 @@ public class VehicleController implements Initializable
     @FXML
     private TableColumn<Customer, String> ctFN, ctSN, ctA, ctP, ctPN, ctE;
     @FXML
-    private TableColumn<Customer, CustomerType> ctT;
-    final ObservableList tableEntries = FXCollections.observableArrayList();
-    final ObservableList tableEntriesB = FXCollections.observableArrayList();
-    final ObservableList tableEntriesC = FXCollections.observableArrayList();
-    final ObservableList comboEntriesC = FXCollections.observableArrayList();
-    @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
     private Label AddEditL,SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected, PartLabel;
@@ -102,6 +96,10 @@ public class VehicleController implements Initializable
     @FXML
     private ListView ListParts;
 
+    @FXML
+    private TextArea custInfo, custInfo2;
+
+    private ObservableList tableEntries = FXCollections.observableArrayList(), tableEntriesB = FXCollections.observableArrayList(), comboEntriesC= FXCollections.observableArrayList();
 
 
 
@@ -842,14 +840,7 @@ public class VehicleController implements Initializable
         {
             ctE.setVisible(false);
         }
-        if (cCT.isSelected())
-        {
-            ctT.setVisible(true);
-        }
-        else
-        {
-            ctT.setVisible(false);
-        }
+
 
     }
 
@@ -1152,49 +1143,16 @@ public class VehicleController implements Initializable
             setNextBookingDate();
             ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
-            CustomerTable.setDisable(false);
-            tableEntriesC.removeAll(tableEntriesC);
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
-
-                tableEntriesC.add(customer);
-
-
-            ctID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerID"));
-            ctID.setCellFactory(TextFieldTableCell.<Customer, Integer>forTableColumn(new IntegerStringConverter()));
-
-            ctFN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerFirstname"));
-            ctFN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctSN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerSurname"));
-            ctSN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctA.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerAddress"));
-            ctA.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctP.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerPostcode"));
-            ctP.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctPN.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerPhone"));
-            ctPN.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctE.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerEmail"));
-            ctE.setCellFactory(TextFieldTableCell.<Customer>forTableColumn());
-
-            ctT.setCellValueFactory(new PropertyValueFactory<Customer, CustomerType>("customerType"));
-            ctT.setCellFactory(TextFieldTableCell.<Customer, CustomerType>forTableColumn(new StringConverter<CustomerType>() {
-                @Override
-                public String toString(CustomerType object) {
-                    return object.toString();
-                }
-
-                @Override
-                public CustomerType fromString(String string) {
-                    return null;
-                }
-            }));
-
-            CustomerTable.setItems(tableEntriesC);
-
+            custInfo.clear();
+            custInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
+            custInfo.appendText("Surname : " + customer.getCustomerSurname() +  "\n");
+            custInfo.appendText("Phone number : " + customer.getCustomerPhone() );
+            custInfo2.appendText("Address : " + customer.getCustomerAddress() + "\n");
+            custInfo2.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
+            custInfo2.appendText("Type : " + customer.getCustomerType().toString());
+            custInfo.setEditable(false);
+            custInfo2.setEditable(false);
 
         }
         catch (Exception e)
@@ -1222,7 +1180,7 @@ public class VehicleController implements Initializable
         ctP.setVisible(true);
         ctPN.setVisible(true);
         ctE.setVisible(true);
-        ctT.setVisible(true);
+        //ctT.setVisible(true);
     }
 
     public void newVehicle()
@@ -1370,7 +1328,7 @@ public class VehicleController implements Initializable
         rDateMot.setDayCellFactory(motDayFactory);
         dLastServiced.setDayCellFactory(dlsDayFactory);
         wExpirationDate.setDayCellFactory(weDayFactory);
-
+        custInfo.setEditable(false);
     }
 
     private Callback<DatePicker, DateCell> motDayFactory = dp1 -> new DateCell()
