@@ -20,15 +20,11 @@ import static logic.criterion.CriterionOperator.*;
 public class BookingSystem {
     private static BookingSystem instance;
     private CriterionRepository persistence;
-    private ZonedDateTime OPENING_HOUR = ZonedDateTime.now();
-    private ZonedDateTime CLOSING_HOUR = ZonedDateTime.now();
-    private ArrayList<ZonedDateTime> HOLIDAYS;
 
 
     private BookingSystem() {
         this.persistence = DatabaseRepository.getInstance();
     }
-
 
     /**
      * Returns the singleton instance of the BookingSystem.
@@ -39,6 +35,7 @@ public class BookingSystem {
         if (instance == null) instance = new BookingSystem();
         return instance;
     }
+
 
     /**
      * Returns a list containing all bookings for diagnosis and repair.
@@ -58,43 +55,58 @@ public class BookingSystem {
         return persistence.getByCriteria(new Criterion<>(Mechanic.class));
     }
 
-    public List<DiagRepBooking> getWeekBookings() {
-        return null;
-    }
-
+    /**
+     * Returns a list of all bookings matching the query in one of several ways:
+     *
+     * 1. the query is the bookingID of a booking
+     * 2. the query can be pattern-matched to the vehicle registration number
+     * 3. the query can be pattern-matched to the customer name todo
+     * 4. the query can be pattern-matched to the mechanic name todo
+     *
+     * @param query query
+     * @return list of bookings, may be empty
+     */
     public List<DiagRepBooking> searchBookings(String query) {
-        try {
-            int queryAsInt = Integer.parseInt(query);
-            return persistence
-                    .getByCriteria(
-                            new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, queryAsInt)
-                                    .or("vehicleRegNumber", Regex, query));
-        }
-        catch(NumberFormatException e) {
-            return persistence.getByCriteria(
-                    new Criterion<>(
-                            DiagRepBooking.class, "vehicleRegNumber", Regex, query));
-        }
+        if (query == null) throw new NullPointerException();
+
+        return persistence.getByCriteria(
+                new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Regex, query)
+        );
     }
 
+    /**
+     * Returns a booking as identified by its booking ID.
+     * @param bookingID ID of booking
+     * @return booking, may be null
+     */
     public DiagRepBooking getBookingByID(int bookingID) {
-        List<DiagRepBooking> result = persistence.getByCriteria(new Criterion<>(
-                DiagRepBooking.class,
-                "bookingID",
-                EqualTo,
-                bookingID));
+        List<DiagRepBooking> result = persistence.getByCriteria(
+                new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID)
+        );
 
         return result != null && result.size() != 0 ? result.get(0) : null;
     }
 
+    /**
+     * Returns a mechanic as identified by their ID.
+     * @param mechanicID ID of mechanic
+     * @return mechanic, may be null
+     */
     public Mechanic getMechanicByID(int mechanicID) {
-        List<Mechanic> result =  persistence.getByCriteria(new Criterion<>(Mechanic.class, "mechanicID", EqualTo, mechanicID));
+        List<Mechanic> result = persistence.getByCriteria(
+                new Criterion<>(Mechanic.class, "mechanicID", EqualTo, mechanicID));
         return result != null ? result.get(0) : null;
     }
 
-    public List<DiagRepBooking> getVBooking(String regNumber) {
-        List<DiagRepBooking> Results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber",EqualTo, regNumber));
-        return Results !=null ? Results : null;
+    /**
+     * Returns all bookings, including past and future, of a particular vehicle.
+     *
+     * @param regNumber the registration number of the vehicle
+     * @return list of bookings for vehicle
+     */
+    public List<DiagRepBooking> getVehicleBookings(String regNumber) {
+        return persistence.getByCriteria(
+                new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", EqualTo, regNumber));
     }
 
     /**
@@ -105,25 +117,9 @@ public class BookingSystem {
      *
      * @return true if addition successful, false otherwise
      */
-    public boolean addBooking(DiagRepBooking booking) {
-        return isWithinOpenHours(booking)
-                && isNotOnHoliday(booking)
-                && persistence.commitItem(booking);
-    }
-
-    /**
-     * <p>
-     * Edits an existing booking in the persistence layer. The booking is identified
-     * using the unique bookingID, so that must be present in the database.
-     * </p>
-     *
-     * @param booking the booking to edit
-     * @return true if successful, false otherwise
-     */
-    public boolean editBooking(DiagRepBooking booking) {
-        // todo same as above
-        return isWithinOpenHours(booking)
-                && isNotOnHoliday(booking)
+    public boolean commitBooking(DiagRepBooking booking) {
+        return isClosed(booking)
+                && isHoliday(booking)
                 && persistence.commitItem(booking);
     }
 
@@ -132,14 +128,14 @@ public class BookingSystem {
      *
      * @return true if removal successful, false otherwise
      */
-    public boolean deleteBooking(int bookingID) {
-        // todo same as above
-        return persistence.deleteItem(new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID));
+    public boolean deleteBookingByID(int bookingID) {
+        return persistence.deleteItem(
+                new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID));
     }
 
 
     /* Checks time validity in terms of opening and closing hours as well as weekdays. */
-    private boolean isWithinOpenHours(DiagRepBooking booking) {
+    private boolean isClosed(DiagRepBooking booking) {
         /* return (!(booking.getDiagnosisInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
                 || booking.getDiagnosisInterval().getEnd().toLocalTime().compareTo(CLOSING_HOUR) > 0
                 || booking.getRepairInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
@@ -152,9 +148,31 @@ public class BookingSystem {
     }
 
     /* Checks the booking is not for a bank or public holiday */
-    private boolean isNotOnHoliday(DiagRepBooking booking) {
+    private boolean isHoliday(DiagRepBooking booking) {
         /*return (!(HOLIDAYS.contains(booking.getDiagnosisInterval().getStart().toLocalDate())
                 || HOLIDAYS.contains(booking.getRepairInterval().getStart().toLocalDate())));*/
         return true;
+    }
+
+    /* Checks that the booking does not clash temporally with other bookings */
+    private boolean clashes(DiagRepBooking booking) {
+        List<ZonedDateTime> times = new ArrayList<>();
+        times.add(booking.getDiagnosisStart());
+        times.add(booking.getDiagnosisEnd());
+        times.add(booking.getRepairStart());
+        times.add(booking.getRepairEnd());
+
+        for (ZonedDateTime time : times) {
+            Criterion<DiagRepBooking> expression1
+                    = new Criterion<>(DiagRepBooking.class, "mechanicID", EqualTo, booking.getMechanicID())
+                    .and("diagnosisStart", LessThan, time)
+                    .and("diagnosisEnd", MoreThan, time)
+                    .or("mechanicID", EqualTo, booking.getMechanicID())
+                    .and("repairEnd", MoreThan, time)
+                    .and("repairStart", LessThan, time);
+
+            if (persistence.getByCriteria(expression1).size() != 0) return true;
+        }
+        return false;
     }
 }

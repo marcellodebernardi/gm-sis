@@ -100,7 +100,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
 
     /**
      * Associate the booking to a different vehicle, by giving the registration number
-     * of the new vehicle. Note that the list of bookings in the corresponding vehicles must also
+     * of the new vehicle. Note that the list of bookings in the corresponding vehicle must also
      * be updated.
      *
      * @param vehicleRegNumber unique registration number of new vehicle to associate

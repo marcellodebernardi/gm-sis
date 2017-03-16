@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * <i>new Criterion(MyClass.class, "attributeName", operator, value)</i>
  * </p>
  * <p>
- * where MyClass is the class of relevant objects (bookings, vehicles, etc), "attributeName" is
+ * where MyClass is the class of relevant objects (bookings, vehicle, etc), "attributeName" is
  * a string matching exactly the name of a field in said class, value is an object of valid type
  * for said field, and operator is one of the four operators defined in the CriterionOperator enum.
  * </p>

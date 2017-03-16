@@ -52,7 +52,7 @@ public class SpecRepairSystem {
     public boolean addRepairCenter(String name, String address, String phone, String email)
     {
         //todo Take relevant information from user required to create a spc and make an object to pass to persistence
-         SpecialistRepairCenter add  = new SpecialistRepairCenter(name, address, phone, email, null);
+        SpecialistRepairCenter add  = new SpecialistRepairCenter(name, address, phone, email, null);
         return persistence.commitItem(add);
     }
 
@@ -63,7 +63,7 @@ public class SpecRepairSystem {
      */
     public boolean deleteRepairCenter(int delete)
     {
-     return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete));
+        return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete));
     }
 
     /**
@@ -156,10 +156,10 @@ public class SpecRepairSystem {
                 return specialistRepairCenters.get(0);
             }
         }
-         catch (IndexOutOfBoundsException e)
-         {
-             e.printStackTrace();
-         }
+        catch (IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -182,7 +182,7 @@ public class SpecRepairSystem {
      */
     public boolean deleteVehicleRepair(String reg, int spcID, Date date)
     {
-      return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo,reg).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
+        return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo,reg).and("spcID",EqualTo,spcID).and("deliveryDate",EqualTo,date));
     }
 
     /**
@@ -210,11 +210,11 @@ public class SpecRepairSystem {
 
     public VehicleRepair findVehicleRepairBooking(int bookingID)
     {
-         List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class,"spcRepID",EqualTo,bookingID));
-         if(vehicleRepairs!=null) {
-             return vehicleRepairs.get(0);
-         }
-         else return null;
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class,"spcRepID",EqualTo,bookingID));
+        if(vehicleRepairs!=null) {
+            return vehicleRepairs.get(0);
+        }
+        else return null;
     }
 
     public PartRepair findPartRepairBooking(int bookingID)
@@ -313,7 +313,7 @@ public class SpecRepairSystem {
 
     public Installation checkIfInstalled(int partOccurrence) throws IndexOutOfBoundsException {
         PartOccurrence part = persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partOccurrence)).get(0);
-            List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, part.getPartOccurrenceID()));
+        List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, part.getPartOccurrenceID()));
         if(installations.get(0)!=null)
         {
             return installations.get(0);
@@ -346,7 +346,7 @@ public class SpecRepairSystem {
 
     public List<Customer> getByName(String query)
     {
-         return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",Regex,query).or("customerSurname",Regex,query));
+        return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",Regex,query).or("customerSurname",Regex,query));
 
     }
 

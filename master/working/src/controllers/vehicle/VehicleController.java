@@ -1040,7 +1040,7 @@ public class VehicleController implements Initializable
         try {
             BookingsTable.setDisable(false);
             tableEntriesB.removeAll(tableEntriesB);
-            List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
             if (arrayList.size()==0)
             {
                 //showAlert("No Bookings");
@@ -1192,7 +1192,7 @@ public class VehicleController implements Initializable
         try {
             VehicleParts();
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-            List<DiagRepBooking> arrayList = bSys.getVBooking(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
             if (arrayList.size() == 0)
             {
                 return;
