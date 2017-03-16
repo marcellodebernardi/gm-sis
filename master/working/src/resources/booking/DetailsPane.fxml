@@ -39,8 +39,8 @@
                       fx:id="vehicleComboBox"></ComboBox>
 
             <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Description</Label>
-            <TextArea GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="descriptionTextArea" id="descriptionTextArea"></TextArea>
+            <TextField GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                      fx:id="descriptionTextField" id="descriptionTextField"></TextField>
 
             <!-- Diagnosis date and time -->
             <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Date</Label>
