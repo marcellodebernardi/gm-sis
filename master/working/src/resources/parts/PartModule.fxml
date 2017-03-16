@@ -156,7 +156,7 @@
                                  </font>
                               </Button>
                               <ComboBox layoutX="14.0" layoutY="15.0" prefHeight="27.0" prefWidth="203.0" promptText="Select name/registration" />
-                                          <Button layoutX="541.0" layoutY="468.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="136.0" text="Add Installation" />
+                                          <Button layoutX="541.0" layoutY="468.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="27.0" prefWidth="136.0" text="Add Installation" />
                                           <Label layoutX="22.0" layoutY="342.0" text="Installation ID" />
                                           <TextField editable="false" layoutX="133.0" layoutY="339.0" prefHeight="27.0" prefWidth="139.0" text="Auto Assigned" />
                                           <Label layoutX="565.0" layoutY="379.0" text="Registration" />
@@ -170,10 +170,10 @@
                               <ComboBox layoutX="134.0" layoutY="413.0" prefHeight="27.0" prefWidth="139.0" promptText="Select Booking" />
                               <Label layoutX="287.0" layoutY="419.0" text="Customer ID" />
                               <ComboBox layoutX="398.0" layoutY="413.0" prefHeight="27.0" prefWidth="151.0" promptText="Select Customer" />
-                              <DatePicker layoutX="398.0" layoutY="339.0" prefHeight="27.0" prefWidth="151.0" />
-                              <DatePicker layoutX="689.0" layoutY="339.0" prefHeight="27.0" prefWidth="139.0" />
+                              <DatePicker fx:id="instDate" layoutX="398.0" layoutY="339.0" prefHeight="27.0" prefWidth="151.0" />
+                              <DatePicker fx:id="warDate" layoutX="689.0" layoutY="339.0" prefHeight="27.0" prefWidth="139.0" />
                               <TextField editable="false" layoutX="398.0" layoutY="375.0" prefHeight="27.0" prefWidth="151.0" text="Auto Assigned" />
-                              <ComboBox layoutX="689.0" layoutY="375.0" prefHeight="27.0" prefWidth="139.0" />
+                              <TextField fx:id="regNumberInstallation" layoutX="689.0" layoutY="376.0" />
                            </children>
                         </AnchorPane>
                   </content>

@@ -22,6 +22,10 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +95,13 @@ public class PartsController implements Initializable {
     private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn, deleteInstBtn;
     @FXML
     private Button increaseStock, decreaseStock;
+
+    @FXML
+    private TextField regNumberInstallation;
+    @FXML
+    private DatePicker instDate;
+    @FXML
+    private DatePicker warDate;
 
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
@@ -400,11 +411,7 @@ public class PartsController implements Initializable {
 
         boolean s = instance.commitItem(newPart);
 
-        partNameField.clear();
-        partDescriptionField.clear();
-        partPriceField.clear();
-        partStockLevelField.clear();
-
+        clearAddForm();
         updateTable();
 
     }
@@ -449,6 +456,10 @@ public class PartsController implements Initializable {
         alert.showAndWait();
 
     }
+
+    /**
+     * deletes stock item
+     */
 
     public void deletePart(){
 
@@ -556,17 +567,16 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * This method deletes a stock item by selecting a part from the table and pressing delete
+     *
      */
-    public void deleteInstallation(){
+    public void deleteInstallation() {
 
 
-        try{
+        try {
 
             Installation deleteInst = PartsBookings.getSelectionModel().getSelectedItem();
 
-            if (deleteInst == null)
-            {
+            if (deleteInst == null) {
                 throw new Exception();
             }
             if ((!showConfirmation("Sure you want to delete this installation?"))) {
@@ -574,11 +584,33 @@ public class PartsController implements Initializable {
             }
 
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             showError("Please select an installation first to delete");
 
         }
+
+    }
+
+    public void addInstallation() {
+
+        java.sql.Date date_Installation= java.sql.Date.valueOf(instDate.getValue());
+        java.sql.Date date_Warranty = java.sql.Date.valueOf(warDate.getValue());
+
+
+        System.out.print(date_Installation + " , " + date_Warranty);
+
+
+
+        Installation newInst = new Installation(date_Installation, date_Warranty, regNumberInstallation.getText(),
+         addPartID.getVisibleRowCount(), null);
+
+        System.out.println(newInst);
+
+
+        boolean b = instance.commitItem(newInst);
+        viewAllBookingsClick();
+
 
     }
 
