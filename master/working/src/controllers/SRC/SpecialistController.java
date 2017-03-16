@@ -177,7 +177,31 @@ public class SpecialistController implements Initializable{
             }
             catch (NullPointerException ex)
             {
-                System.out.println("no vehicle returned from database.");
+                try {
+                    List<Customer> customers = specRepairSystem.getByName(idOfBookingItem.getText());
+                    for(Customer customer: customers)
+                    {
+                        System.out.println(customer.getCustomerFirstname());
+                        System.out.println(customer.getCustomerSurname());
+                    }
+                    List<VehicleRepair> vehicleRepairs = new ArrayList<>();
+                    for (Customer customer : customers) {
+                        List<Vehicle> vehicles = new ArrayList<>();
+
+                           for(int i=0;i<customer.getVehicles().size();i++)
+                           {
+                               System.out.println(customer.getVehicles().get(i).getRegNumber());
+                               vehicleRepairs.addAll(specRepairSystem.getVehicleBookings(customer.getVehicles().get(i).getRegNumber()));
+                               System.out.println(vehicleRepairs.get(i).getVehicleRegNumber());
+                           }
+
+                    }
+
+                    displaySpecRepBookings(vehicleRepairs);
+                }
+                catch (NullPointerException exx) {
+                    System.out.println("no vehicle returned from database.");
+                }
             }
         }
     }

@@ -343,5 +343,10 @@ public class SpecRepairSystem {
         return persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partID)).get(0);
     }
 
+    public List<Customer> getByName(String query)
+    {
+         return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",Regex,query).or("customerSurname",Regex,query));
+
+    }
 
 }
