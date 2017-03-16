@@ -1,4 +1,4 @@
-package logic;
+package logic.criterion;
 
 import domain.Searchable;
 
@@ -34,7 +34,7 @@ public interface CriterionRepository {
      * </p>
      *
      * @param criteria object defining set of criteria connected by AND logical connective
-     * @return List of objects of same actual type as the passed working.logic.Criterion objects
+     * @return List of objects of same actual type as the passed working.logic.criterion.Criterion objects
      */
     <E extends Searchable> List<E> getByCriteria(Criterion<E> criteria);
 

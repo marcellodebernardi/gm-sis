@@ -1,13 +1,15 @@
-package logic;
+package logic.authentication;
 
 import domain.User;
 import domain.UserType;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.CriterionOperator.EqualTo;
-import static logic.CriterionOperator.Regex;
+import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.Regex;
 
 /**
  * @author Marcello De Bernardi, Dillon Vaghela, Muhammad Shakib Hoque

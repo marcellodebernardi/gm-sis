@@ -3,8 +3,10 @@ package logic;
 import domain.DiagRepBooking;
 import domain.User;
 
-import static logic.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.EqualTo;
 
+import logic.criterion.Criterion;
+import logic.criterion.CriterionException;
 import org.junit.Test;
 
 import java.time.ZonedDateTime;

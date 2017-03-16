@@ -1,9 +1,10 @@
-package logic;
+package logic.parts;
 
 import domain.PartAbstraction;
-import domain.PartOccurrence;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 import java.util.List;
 import java.util.ArrayList;

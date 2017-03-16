@@ -1,23 +1,11 @@
 package controllers.today;
 
 import domain.DiagRepBooking;
-import domain.Mechanic;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
-import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.AgendaSkinSwitcher;
-import logic.BookingSystem;
+import logic.booking.BookingSystem;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

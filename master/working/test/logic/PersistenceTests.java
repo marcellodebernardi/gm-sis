@@ -1,6 +1,8 @@
 package logic;
 
 import domain.*;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -8,7 +10,7 @@ import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 
 /**

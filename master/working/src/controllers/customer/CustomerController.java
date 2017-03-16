@@ -2,45 +2,26 @@ package controllers.customer;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
-import javafx.util.*;
-import javafx.fxml.*;
-import javafx.fxml.Initializable;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.BooleanStringConverter;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.stage.Stage;
 import javafx.fxml.FXML;
-import java.util.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.lang.*;
-import java.text.ParseException;
-import java.net.URL;
-import logic.*;
-import logic.Criterion;
-import logic.CriterionOperator;
-//import logic.CustomerSystem;
-import logic.Criterion;
+
+//import logic.customer.CustomerSystem;
 import domain.*;
-import persistence.DatabaseRepository;
+import logic.customer.CustomerSystem;
+
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 

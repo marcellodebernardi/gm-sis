@@ -1,4 +1,4 @@
-package logic;
+package logic.criterion;
 
 /**
  * Defines the operators available to Criterions.

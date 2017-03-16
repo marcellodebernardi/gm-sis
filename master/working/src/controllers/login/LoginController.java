@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import logic.AuthenticationSystem;
+import logic.authentication.AuthenticationSystem;
 import main.Main;
 
 /**

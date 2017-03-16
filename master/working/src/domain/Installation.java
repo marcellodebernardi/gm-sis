@@ -1,8 +1,8 @@
 package domain;
 
 
-import logic.Criterion;
-import logic.CriterionOperator;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 
 import java.util.Date;

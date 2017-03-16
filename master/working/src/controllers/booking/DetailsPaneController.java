@@ -7,9 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import logic.BookingSystem;
-import logic.CustomerSystem;
-import logic.VehicleSys;
+import logic.booking.BookingSystem;
+import logic.customer.CustomerSystem;
+import logic.vehicle.VehicleSys;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.time.LocalDate;

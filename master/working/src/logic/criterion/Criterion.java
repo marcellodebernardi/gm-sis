@@ -1,4 +1,4 @@
-package logic;
+package logic.criterion;
 
 import domain.Column;
 import domain.Reflective;

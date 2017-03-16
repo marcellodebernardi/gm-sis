@@ -1,15 +1,16 @@
-package logic;
+package logic.spc;
 
 
-import com.sun.org.apache.regexp.internal.RE;
 import domain.*;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 /**
  * @author muradahmed

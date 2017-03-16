@@ -1,4 +1,4 @@
-package logic;
+package logic.criterion;
 
 /**
  * @author Marcello De Bernardi

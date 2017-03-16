@@ -1,4 +1,4 @@
-package logic;
+package controllers.spc;
 
 /**
  * @author: Muhammad Murad Ahmed 27/02/2017.

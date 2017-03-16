@@ -1,7 +1,7 @@
 package domain;
 
 
-import logic.BookingSystem;
+import logic.booking.BookingSystem;
 
 import java.util.ArrayList;
 import java.util.List;

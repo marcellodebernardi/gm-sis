@@ -1,9 +1,9 @@
 package persistence;
 
 import domain.*;
-import logic.Criterion;
-import logic.CriterionOperator;
-import logic.CriterionRepository;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
+import logic.criterion.CriterionRepository;
 
 import org.junit.Test;
 

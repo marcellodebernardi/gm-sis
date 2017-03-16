@@ -3,12 +3,11 @@ package persistence;
 import domain.Searchable;
 import domain.User;
 import domain.Vehicle;
-import logic.Criterion;
+import logic.criterion.Criterion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static logic.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi

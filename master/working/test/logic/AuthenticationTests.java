@@ -1,5 +1,6 @@
 package logic;
 
+import logic.authentication.AuthenticationSystem;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

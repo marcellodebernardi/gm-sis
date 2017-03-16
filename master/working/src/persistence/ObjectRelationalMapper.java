@@ -1,7 +1,7 @@
 package persistence;
 
 import domain.*;
-import logic.Criterion;
+import logic.criterion.Criterion;
 import persistence.cellgetter.CellGetterDispatcher;
 
 import java.lang.annotation.Annotation;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static logic.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi

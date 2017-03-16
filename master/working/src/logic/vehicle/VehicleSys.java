@@ -1,12 +1,14 @@
-package logic;
+package logic.vehicle;
 
 import domain.FuelType;
 import domain.Vehicle;
 import domain.VehicleType;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 import java.util.*;
 
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 /**
  * Created by DillonVaghela on 2/9/17.

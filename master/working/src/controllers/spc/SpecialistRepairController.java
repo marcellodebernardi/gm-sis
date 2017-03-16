@@ -12,7 +12,10 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import logic.*;
+import logic.authentication.AuthenticationSystem;
+import logic.customer.CustomerSystem;
+import logic.spc.SpecRepairSystem;
+import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 
 import java.net.URL;

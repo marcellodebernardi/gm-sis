@@ -1,12 +1,13 @@
-package logic;
+package logic.customer;
 
-import domain.*;
 import domain.Customer;
 import domain.CustomerType;
 import domain.Vehicle;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 import java.util.*;
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 /**
  * Created by EBUBECHUKWU on 14/02/2017.

@@ -11,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import logic.BookingSystem;
+import logic.booking.BookingSystem;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;

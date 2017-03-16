@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import logic.AuthenticationSystem;
+import logic.authentication.AuthenticationSystem;
 import main.Main;
 
 import java.io.IOException;

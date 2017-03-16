@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
-import logic.AuthenticationSystem;
+import logic.authentication.AuthenticationSystem;
 
 import java.util.List;
 

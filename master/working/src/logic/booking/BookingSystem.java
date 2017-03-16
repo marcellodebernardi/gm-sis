@@ -1,14 +1,16 @@
-package logic;
+package logic.booking;
 
 import domain.DiagRepBooking;
 import domain.Mechanic;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static logic.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.*;
 
 /**
  * @author Marcello De Bernardi

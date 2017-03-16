@@ -4,7 +4,7 @@ import domain.UserType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import logic.AuthenticationSystem;
+import logic.authentication.AuthenticationSystem;
 
 import java.io.IOException;
 

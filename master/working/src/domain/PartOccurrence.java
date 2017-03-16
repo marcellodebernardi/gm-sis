@@ -1,8 +1,7 @@
 package domain;
 
-import javafx.scene.control.TableColumn;
-import logic.Criterion;
-import logic.CriterionOperator;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
 
