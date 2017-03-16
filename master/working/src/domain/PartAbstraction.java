@@ -42,7 +42,7 @@ public class PartAbstraction implements Searchable {
                            @Column(name = "partDescription") String partDescription,
                            @Column(name = "partPrice") double partPrice,
                            @Column(name = "partStockLevel") int partStockLevel,
-                           @TableReference(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
+                           @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "partAbstractionID")
                                    List<PartOccurrence> occurrenceList){
         this.partAbstractionID = partAbstractionID;
         this.partName = partName;
@@ -97,7 +97,7 @@ public class PartAbstraction implements Searchable {
         this.partStockLevel = partStockLevel;
     }
 
-    @TableReference(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "partAbstractionID")
+    @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "partAbstractionID")
     public List<PartOccurrence> getOccurrenceList() {
         return occurrenceList;
     }

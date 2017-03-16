@@ -45,7 +45,7 @@ public class Customer implements Searchable
                     @Column(name = "customerPhone") String customerPhone,
                     @Column(name = "customerEmail") String customerEmail,
                     @Column(name = "customerType") CustomerType customerType,
-                    @TableReference(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+                    @TableReference(baseType = Vehicle.class, subTypes = Vehicle.class, key = "customerID")
                                 List<Vehicle> vehicles) {
         this.customerID = customerID;
         this.customerSurname = customerSurname;
@@ -148,7 +148,7 @@ public class Customer implements Searchable
         this.customerType = customerType;
     }
 
-    @TableReference(baseType = Vehicle.class, specTypes = Vehicle.class, key = "customerID")
+    @TableReference(baseType = Vehicle.class, subTypes = Vehicle.class, key = "customerID")
     public List<Vehicle> getVehicles() {
         return vehicles;
     }

@@ -1,6 +1,5 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class SpecialistRepairCenter implements Searchable {
                                   @Column(name = "phone") String phone,
                                   @Column(name = "email") String email,
                                   @TableReference(baseType = SpecRepBooking.class,
-                                          specTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
+                                          subTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
                                           List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;

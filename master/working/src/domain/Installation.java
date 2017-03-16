@@ -51,7 +51,7 @@ public class Installation implements Searchable {
                          @Column(name = "endWarrantyDate") Date endWarrantyDate,
                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
                          @Column(name = "partAbstractionID") int partAbstractionID,
-                         @TableReference(baseType = PartOccurrence.class, specTypes = PartOccurrence.class, key = "installationID")
+                         @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence) {
         this.installationID = installationID;
         this.installationDate = installationDate;
@@ -107,7 +107,7 @@ public class Installation implements Searchable {
         this.partAbstractionID = partAbstractionID;
     }
 
-    @TableReference(baseType = Installation.class, specTypes = PartOccurrence.class, key = "installationID")
+    @TableReference(baseType = Installation.class, subTypes = PartOccurrence.class, key = "installationID")
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
     }

@@ -42,7 +42,7 @@ public class Vehicle implements Searchable {
                    @Column(name = "warrantyName") String warrantyName,
                    @Column(name = "warrantyCompAddress") String warrantyCompAddress,
                    @Column(name = "warrantyExpirationDate") Date warrantyExpirationDate,
-                   @TableReference(baseType = Installation.class, specTypes = Installation.class, key = "vehicleRegNumber")
+                   @TableReference(baseType = Installation.class, subTypes = Installation.class, key = "vehicleRegNumber")
                            List<Installation> installationList) {
         this.regNumber = regNumber;
         this.customerID = customerID;
@@ -189,7 +189,7 @@ public class Vehicle implements Searchable {
         this.warrantyExpirationDate = warrantyExpirationDate;
     }
 
-    @TableReference(baseType = Installation.class, specTypes = Installation.class, key = "vehicleID")
+    @TableReference(baseType = Installation.class, subTypes = Installation.class, key = "vehicleID")
     public List<Installation> getInstallationList() {
         return installationList;
     }

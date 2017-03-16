@@ -120,17 +120,17 @@ public class RepositoryTests {
     @Test
     public void testDatabaseDeletion() {
         DatabaseRepository.getInstance().deleteItem(new Criterion<>(
-                User.class,
-                "userID",
+                SpecialistRepairCenter.class,
+                "spcID",
                 CriterionOperator.EqualTo,
-                "55555"));
-        List<User> result = DatabaseRepository
+                8));
+        List<SpecialistRepairCenter> result = DatabaseRepository
                 .getInstance()
                 .getByCriteria(new Criterion<>(
-                        User.class,
-                        "userID",
+                        SpecialistRepairCenter.class,
+                        "spcID",
                         CriterionOperator.EqualTo,
-                        "55555"
+                        8
                 ));
         assertTrue(result.size() == 0);
     }

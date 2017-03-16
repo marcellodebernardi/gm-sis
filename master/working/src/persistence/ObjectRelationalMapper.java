@@ -38,13 +38,15 @@ class ObjectRelationalMapper {
     // reflection data
     private List<Class<? extends Searchable>> searchableList;
     private HashMap<Class<? extends Searchable>, Constructor<?>> constructorMap;
-    private HashMap<Class<? extends Searchable>, List<Method>> getterListMap;
-    private HashMap<Class<? extends Searchable>, Method> primaryGetters;
-    private List<Class<?>> numericTypes;
+    private HashMap<Constructor<?>, Annotation[][]> parameterAnnotationMap;
+    private HashMap<Constructor<?>, Class<?>[]> parameterTypeMap;
+    private HashMap<Class<? extends Searchable>, List<Method>> reflectiveGetterListMap;
+    private HashMap<Class<? extends Searchable>, Method> primaryGetterMap;
+    private HashMap<Class<? extends Searchable>, List<Method>> reflectiveColumnGetters;
+    private HashMap<Class<? extends Searchable>, List<Method>> reflectiveTableGetters;
+    private HashMap<Class<?>, Method> dateTimestampMap;
+    private List<Class<?>> noQuotesTypes;
     private List<Class<?>> dateTypes;
-
-    // database structure
-    private HashMap<Class<? extends Searchable>, Class<? extends Searchable>> dependencyMap;
 
 
     /**
@@ -54,58 +56,12 @@ class ObjectRelationalMapper {
         resolver = ForeignKeyResolver.getInstance();
         cellGetter = new CellGetterDispatcher();
 
-        // reflection information
-        searchableList = new ArrayList<>();
-        searchableList.add(Customer.class);
-        searchableList.add(DiagRepBooking.class);
-        searchableList.add(Installation.class);
-        searchableList.add(Mechanic.class);
-        searchableList.add(PartAbstraction.class);
-        searchableList.add(PartOccurrence.class);
-        searchableList.add(PartRepair.class);
-        searchableList.add(SpecialistRepairCenter.class);
-        searchableList.add(User.class);
-        searchableList.add(Vehicle.class);
-        searchableList.add(VehicleRepair.class);
-
-        constructorMap = new HashMap<>();
-        getterListMap = new HashMap<>();
-        primaryGetters = new HashMap<>();
-        for (Class<? extends Searchable> eClass : searchableList) {
-            for (Constructor<?> c : eClass.getDeclaredConstructors()) {
-                if (c.getDeclaredAnnotations().length != 0 && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
-                    constructorMap.put(eClass, c);
-                    break;
-                }
-            }
-            getterListMap.put(eClass, getColumnGetters(eClass));
-            getterListMap.put(eClass, getTableGetters(eClass));
-            primaryGetters.put(eClass, getPrimaryKeyGetter(eClass));
-            getterListMap.remove(primaryGetters.get(eClass));
-        }
-
-        numericTypes = new ArrayList<>();
-        numericTypes.add(Integer.class);
-        numericTypes.add(int.class);
-        numericTypes.add(Double.class);
-        numericTypes.add(double.class);
-        numericTypes.add(Float.class);
-        numericTypes.add(float.class);
-        numericTypes.add(Short.class);
-        numericTypes.add(short.class);
-        numericTypes.add(Long.class);
-        numericTypes.add(long.class);
-        numericTypes.add(Byte.class);
-        numericTypes.add(byte.class);
-
-        dateTypes = new ArrayList<>();
-        dateTypes.add(Date.class);
-        dateTypes.add(LocalDateTime.class);
-        dateTypes.add(LocalDate.class);
-        dateTypes.add(LocalTime.class);
-        dateTypes.add(ZonedDateTime.class);
-
-        numericTypes.addAll(dateTypes);
+        populateSearchableList();
+        populateReflectiveMethodMaps();
+        populateDateTypeMap();
+        populateNoQuotesList();
+        populateParameterAnnotationMap();
+        populateParameterTypeMap();
     }
 
     /**
@@ -123,183 +79,94 @@ class ObjectRelationalMapper {
         resolver.initialize(persistence);
     }
 
-
-    /**
-     * Converts criterion to SQL SELECT query
-     */
-    <E extends Searchable> String toSELECTQuery(Criterion<E> criteria) {
-        return "SELECT * FROM " + criteria.getCriterionClass().getSimpleName()
-                + (criteria.toString().equals("") ? "" : " WHERE ")
-                + criteria.toString() + ";";
+    /* HELPER: populates the list of types implementing Searchable */
+    private void populateSearchableList() {
+        // reflection information
+        searchableList = new ArrayList<>();
+        searchableList.add(Customer.class);
+        searchableList.add(DiagRepBooking.class);
+        searchableList.add(Installation.class);
+        searchableList.add(Mechanic.class);
+        searchableList.add(PartAbstraction.class);
+        searchableList.add(PartOccurrence.class);
+        searchableList.add(PartRepair.class);
+        searchableList.add(SpecialistRepairCenter.class);
+        searchableList.add(User.class);
+        searchableList.add(Vehicle.class);
+        searchableList.add(VehicleRepair.class);
     }
 
-    /**
-     * Converts an entity into an insertion transaction
-     */
-    <E extends Searchable> List<String> toINSERTTransaction(E item) {
-        return resolver.resolveForeignKeys(generateStatementGraph(item, null));
-    }
+    /* HELPER: populates the various maps of reflective methods */
+    private void populateReflectiveMethodMaps() {
+        constructorMap = new HashMap<>();
+        reflectiveColumnGetters = new HashMap<>();
+        reflectiveTableGetters = new HashMap<>();
+        primaryGetterMap = new HashMap<>();
 
-    /**
-     * Converts a criterion into a deletion transaction
-     */
-    <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria, DatabaseRepository persistence) {
-        final String DELETESTRING = "DELETE FROM ";
+        reflectiveGetterListMap = new HashMap<>(); // todo remove?
 
-        List<String> queries = new ArrayList<>();
-        List<Method> complexGetters = getTableGetters(criteria.getCriterionClass());
-        List<E> targets = persistence.getByCriteria(criteria);
-
-        if (targets.size() == 0) return queries;
-
-        // form delete transaction for specified item
-        queries.add(DELETESTRING + criteria.getCriterionClass().getSimpleName()
-                + (criteria.toString().equals("") ? "" : " WHERE ")
-                + criteria.toString() + ";");
-
-        for (E target : targets) {
-            // issue delete transaction for complex children
-            for (Method method : complexGetters) {
-                TableReference annotation = (TableReference) method.getDeclaredAnnotations()[0];
-                try {
-                    Object attribute = method.invoke(target);
-                    if (attribute == null) break;
-
-                    // is list
-                    if (attribute instanceof List<?>) {
-                        List list = ArrayList.class.cast(attribute);
-                        // for each list element, issue delete transaction
-                        for (int i = 0; i < list.size(); i++) {
-                            for (Class<? extends Searchable> type : annotation.specTypes()) {
-                                queries.addAll(toDELETETransaction(
-                                        new Criterion<>(type,
-                                                ((Column) getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
-                                                EqualTo,
-                                                getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i))), persistence));
-                            }
-                        }
-                    }
-                    // is not list
-                    else {
-                        for (Class<? extends Searchable> type : annotation.specTypes()) {
-                            queries.addAll(toDELETETransaction(
-                                    new Criterion<>(type,
-                                            ((Column) getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
-                                            EqualTo,
-                                            getPrimaryKeyGetter(attribute.getClass()).invoke(attribute)), persistence));
-                        }
-                    }
-                }
-                catch (IllegalAccessException | InvocationTargetException e) {
-                    System.err.print(e.getMessage() + "DELETE: invoke @TableReference getter.");
-                    return null;
+        for (Class<? extends Searchable> eClass : searchableList) {
+            for (Constructor<?> c : eClass.getDeclaredConstructors()) {
+                if (c.getDeclaredAnnotations().length != 0 && c.getDeclaredAnnotations()[0].annotationType().equals(Reflective.class)) {
+                    constructorMap.put(eClass, c);
+                    c.setAccessible(true);
+                    break;
                 }
             }
-        }
-        return queries;
-    }
+            reflectiveColumnGetters.put(eClass, getColumnGetterList(eClass));
+            reflectiveTableGetters.put(eClass, getTableGetters(eClass));
+            primaryGetterMap.put(eClass, getPrimaryKeyGetter(eClass));
 
-    /**
-     * Converts a ResultSet into a List<E> of objects
-     */
-    <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results, DatabaseRepository persistence) {
-        List<E> objects = new ArrayList<>();
-
-        // reflection class data
-        Constructor<?> constructor = constructorMap.get(eClass);
-        Annotation[][] constructorAnnotations = constructor.getParameterAnnotations();
-        Class<?>[] constructorArgumentTypes = constructor.getParameterTypes();
-        constructor.setAccessible(true);
-
-        // results metadata
-        List<String> columnNames;
-        try {
-            columnNames = new ArrayList<>();
-            for (int i = 1; i <= results.getMetaData().getColumnCount(); i++)
-                columnNames.add(results.getMetaData().getColumnName(i));
-        }
-        catch (SQLException e) {
-            System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
-            return null;
-        }
-
-        // map results to objects and add
-        try {
-            // rows of ResultSet
-            while (results.next()) {
-                Object[] initArgs = new Object[constructorAnnotations.length];
-
-                // columns of ResultSet (constructor arguments)
-                for (int i = 0; i < constructorAnnotations.length; i++) {
-                    Annotation annotation = constructorAnnotations[i][0];
-
-                    // simple attribute
-                    if (annotation.annotationType().equals(Column.class)) {
-                        String columnName = ((Column) annotation).name();
-                        int columnIndex = columnNames.indexOf(columnName) + 1;
-
-                        initArgs[i] = cellGetter.getObject(constructorArgumentTypes[i], results, columnIndex);
-                    }
-                    // complex attribute
-                    else if (annotation.annotationType().equals(TableReference.class)) {
-                        TableReference metadata = (TableReference) annotation;
-
-                        // the complex attribute is a list of some form
-                        if (constructorArgumentTypes[i].isAssignableFrom(List.class)) {
-
-                            List<Object> finalResult = new ArrayList<>();
-
-                            // fetch complex attribute data
-                            for (Class<? extends Searchable> type : metadata.specTypes()) {
-                                List<? extends Searchable> result = persistence.getByCriteria(new Criterion<>(type, metadata.key(),
-                                        EqualTo, results.getObject(1).getClass().cast(results.getObject(1))));
-
-                                if (result.size() > 0) {
-                                    finalResult.addAll(result);
-                                }
-                            }
-                            initArgs[i] = finalResult;
-                        }
-                        // the complex attribute is not a list
-                        else {
-                            for (Class<? extends Searchable> type : metadata.specTypes()) {
-                                List<? extends Searchable> result = persistence.getByCriteria(new Criterion<>(type, metadata.key(),
-                                        EqualTo, results.getObject(1).getClass().cast(results.getObject(1))));
-
-                                // stop searching when single attribute is found
-                                if (result.size() == 0) initArgs[i] = null;
-                                else {
-                                    initArgs[i] = result.get(0);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        System.out.println("Annotation type not detected");
-                    }
-                }
-                objects.add(eClass.cast(constructor.newInstance(initArgs)));
-            }
-            constructor.setAccessible(false);
-            return objects;
-        }
-        catch (SQLException e) {
-            System.err.print(e.getMessage() + " - Failed to map results to object.");
-            constructor.setAccessible(false);
-            return null;
-        }
-        catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            System.err.print(e.getMessage() + " - Failed to create object instance.");
-            constructor.setAccessible(false);
-            return null;
+            reflectiveGetterListMap.remove(primaryGetterMap.get(eClass)); // todo remove?
         }
     }
 
-    /**
-     * Returns all reflective @Column getter methods for the class
-     */
-    private List<Method> getColumnGetters(Class<?> eClass) {
+    /* HELPER: populates the list of types to be handled as dates */
+    private void populateDateTypeMap() {
+        dateTypes = new ArrayList<>();
+        dateTypes.add(Date.class);
+        dateTypes.add(LocalDateTime.class);
+        dateTypes.add(LocalDate.class);
+        dateTypes.add(LocalTime.class);
+        dateTypes.add(ZonedDateTime.class);
+    }
+
+    /* HELPER: populates the list of numeric types recognized by the mapper */
+    private void populateNoQuotesList() {
+        noQuotesTypes = new ArrayList<>();
+        noQuotesTypes.add(Integer.class);
+        noQuotesTypes.add(int.class);
+        noQuotesTypes.add(Double.class);
+        noQuotesTypes.add(double.class);
+        noQuotesTypes.add(Float.class);
+        noQuotesTypes.add(float.class);
+        noQuotesTypes.add(Short.class);
+        noQuotesTypes.add(short.class);
+        noQuotesTypes.add(Long.class);
+        noQuotesTypes.add(long.class);
+        noQuotesTypes.add(Byte.class);
+        noQuotesTypes.add(byte.class);
+        noQuotesTypes.addAll(dateTypes);
+    }
+
+    /* HELPER: populates the map containing arrays of parameter annotations */
+    private void populateParameterAnnotationMap() {
+        parameterAnnotationMap = new HashMap<>();
+        for (Constructor<?> constructor : constructorMap.values()) {
+            parameterAnnotationMap.put(constructor, constructor.getParameterAnnotations());
+        }
+    }
+
+    /* HELPER: populates the map containing arrays of parameter types */
+    private void populateParameterTypeMap() {
+        parameterTypeMap = new HashMap<>();
+        for (Constructor<?> constructor : constructorMap.values()) {
+            parameterTypeMap.put(constructor, constructor.getParameterTypes());
+        }
+    }
+
+    /* HELPER: Returns all reflective @Column getter methods for the class */
+    private List<Method> getColumnGetterList(Class<?> eClass) {
         List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
 
         // discard non-public, non-reflective methods and return reflective getters
@@ -315,9 +182,7 @@ class ObjectRelationalMapper {
         return methods;
     }
 
-    /**
-     * Returns all reflective @TableReference getter methods for the class
-     */
+    /* HELPER: Returns all reflective @TableReference getter methods for the class */
     private List<Method> getTableGetters(Class<?> eClass) {
         List<Method> methods = new ArrayList<>(Arrays.asList(eClass.getDeclaredMethods()));
 
@@ -334,9 +199,7 @@ class ObjectRelationalMapper {
         return methods;
     }
 
-    /**
-     * Returns getter for primary key
-     */
+    /* HELPER: Returns all reflective @Column(primary = true) getter methods for a class */
     private Method getPrimaryKeyGetter(Class<?> eClass) {
         List<Method> methods = Arrays.asList(eClass.getDeclaredMethods());
 
@@ -353,10 +216,137 @@ class ObjectRelationalMapper {
     }
 
 
+    /**
+     * Converts criterion to SQL SELECT query
+     */
+    <E extends Searchable> StringBuilder toSELECTQuery(Criterion<E> criteria) {
+        return new StringBuilder(150)
+                .append("SELECT * FROM ")
+                .append(criteria.getCriterionClass().getSimpleName())
+                .append(criteria.toString().equals("") ? "" : " WHERE ")
+                .append(criteria.toString())
+                .append(";");
+    }
+
+    /**
+     * Converts an entity into an insertion transaction
+     */
+    <E extends Searchable> List<String> toINSERTTransaction(E item) {
+        return resolver.resolveForeignKeys(generateStatementGraph(item, null));
+    }
+
+    /**
+     * Converts a criterion into a deletion transaction
+     */
+    <E extends Searchable> List<String> toDELETETransaction(Criterion<E> criteria, DatabaseRepository persistence) {
+        List<String> queries = new ArrayList<>();
+        List<Method> complexGetters = getTableGetters(criteria.getCriterionClass());
+        List<E> targets = persistence.getByCriteria(criteria);
+
+        if (targets.size() == 0) return queries;
+
+        // delete query for parent
+        queries.add("DELETE FROM " + criteria.getCriterionClass().getSimpleName()
+                + (criteria.toString().equals("") ? "" : " WHERE ")
+                + criteria.toString() + ";");
+
+        // delete queries for children
+        for (E target : targets) {
+            // issue delete transaction for complex children
+            for (Method method : complexGetters) {
+                TableReference annotation = (TableReference) method.getDeclaredAnnotations()[0];
+                try {
+                    Object attribute = method.invoke(target);
+                    if (attribute == null)
+                        break;
+                    else if (attribute instanceof List<?>)
+                        queries.addAll(generateListDeletionQueries(ArrayList.class.cast(attribute), annotation));
+                    else {
+                        for (Class<? extends Searchable> type : annotation.subTypes()) {
+                            queries.addAll(toDELETETransaction(
+                                    new Criterion<>(
+                                            type,
+                                            ((Column) getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
+                                            EqualTo,
+                                            getPrimaryKeyGetter(attribute.getClass()).invoke(attribute)), persistence));
+                        }
+                    }
+                }
+                catch (IllegalAccessException | InvocationTargetException e) {
+                    System.err.print(e.getMessage() + "DELETE: invoke @TableReference getter.");
+                    return null;
+                }
+            }
+        }
+        return queries;
+    }
+
+    /* HELPER: for every item in the list, generates a DELETE query */
+    private List<String> generateListDeletionQueries(List list, TableReference annotation)
+            throws IllegalAccessException, InvocationTargetException {
+        List<String> queries = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            for (Class<? extends Searchable> type : annotation.subTypes()) {
+                queries.addAll(toDELETETransaction(
+                        new Criterion<>(type,
+                                ((Column) getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
+                                EqualTo,
+                                getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i))), persistence));
+            }
+        }
+
+        return queries;
+    }
+
+    /**
+     * Converts a ResultSet into a List<E> of objects
+     */
+    <E extends Searchable> List<E> toObjects(Class<E> eClass, ResultSet results) {
+        Constructor<?> constructor = constructorMap.get(eClass);        // get reflection information
+        Annotation[][] constructorAnnotations = parameterAnnotationMap.get(constructor);
+        Class<?>[] constructorArgumentTypes = parameterTypeMap.get(constructor);
+        List<String> columnNames = getColumnNames(results);             // results metadata
+        List<E> objects = new ArrayList<>();
+
+        try {
+            // rows of ResultSet
+            while (results.next()) {
+                Object[] initArgs = new Object[constructorAnnotations.length];
+
+                // columns of ResultSet / constructor arguments
+                for (int i = 0; i < constructorAnnotations.length; i++) {
+                    Annotation annotation = constructorAnnotations[i][0];
+                    Class<? extends Annotation> type = annotation.annotationType();
+
+                    if (type.equals(Column.class))
+                        initArgs[i] = getSimpleAttribute(constructorArgumentTypes[i], annotation, columnNames, results);
+                    else if (type.equals(TableReference.class) && constructorArgumentTypes[i].isAssignableFrom(List.class))
+                        initArgs[i] = getComplexList(annotation, results);
+                    else if (type.equals(TableReference.class))
+                        initArgs[i] = getComplexAttribute(annotation, results);
+                    else
+                        System.out.println("Annotation type not detected");
+                }
+
+                objects.add(eClass.cast(constructor.newInstance(initArgs)));
+            }
+            return objects;
+        }
+        catch (SQLException e) {
+            System.err.print(e.getMessage() + " - Failed to map results to object.");
+            return null;
+        }
+        catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            System.err.print(e.getMessage() + " - Failed to create object instance.");
+            return null;
+        }
+    }
+
     private <E extends Searchable> List<StatementNode> generateStatementGraph(E item, StatementNode parent) {
         Class<? extends Searchable> eClass = item.getClass();
         List<StatementNode> statementGraph = new ArrayList<>();
-        List<Method> columnGetters = getColumnGetters(eClass);
+        List<Method> columnGetters = getColumnGetterList(eClass);
         List<Method> tableRefGetters = getTableGetters(eClass);
 
         HashMap<String, Object> columnValues = new HashMap<>();
@@ -368,7 +358,7 @@ class ObjectRelationalMapper {
             try {
                 if (!annotation.primary() && !annotation.foreign()) {
                     Object attribute = column.invoke(item);
-                    if (!(attribute == null || (numericTypes.contains(attribute.getClass()) && attribute.equals(-1))))
+                    if (!(attribute == null || (noQuotesTypes.contains(attribute.getClass()) && attribute.equals(-1))))
                         columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
                 }
                 else if (annotation.primary()) {
@@ -381,8 +371,8 @@ class ObjectRelationalMapper {
         }
 
         // add this StatementNode to graph
-        StatementNode sN = new StatementNode(eClass, item, primaryGetters.get(eClass), columnValues,
-                primaryKey, persistence, numericTypes, dateTypes);
+        StatementNode sN = new StatementNode(eClass, item, primaryGetterMap.get(eClass), columnValues,
+                primaryKey, persistence, noQuotesTypes, dateTypes);
         if (parent != null) {
             sN.addDependency(parent);
             parent.addDependent(sN);
@@ -416,5 +406,66 @@ class ObjectRelationalMapper {
             }
         }
         return statementGraph;
+    }
+
+
+    /* HELPER: returns the names of the columns in a ResultSet */
+    private List<String> getColumnNames(ResultSet results) {
+        try {
+            List<String> names = new ArrayList<>();
+            for (int i = 1; i <= results.getMetaData().getColumnCount(); i++)
+                names.add(results.getMetaData().getColumnName(i));
+            return names;
+        }
+        catch (SQLException e) {
+            System.err.print(e.getMessage() + " - Failed to obtain results metadata.");
+            return null;
+        }
+    }
+
+    /* HELPER: returns an Object for the given simple attribute */
+    private Object getSimpleAttribute(Class<?> argumentType, Annotation annotation, List<String> columnNames,
+                                      ResultSet results) throws SQLException {
+        int columnIndex = columnNames.indexOf(((Column) annotation).name()) + 1;
+        return cellGetter.getObject(argumentType, results, columnIndex);
+    }
+
+    /* HELPER: returns a list of Objects for the given complex attribute */
+    private Object getComplexList(Annotation annotation, ResultSet results) throws SQLException {
+        TableReference metadata = (TableReference) annotation;
+        Class<? extends Searchable>[] subTypes = metadata.subTypes();
+        Object primaryKey = results.getObject(1);
+        String foreignKey = metadata.key();
+        List<Object> finalResult = new ArrayList<>();
+
+        // for every potential subtype, add to list
+        for (Class<? extends Searchable> type : subTypes) {
+            List<? extends Searchable> result
+                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, EqualTo,
+                    primaryKey.getClass().cast(primaryKey))
+            );
+
+            if (result.size() > 0) finalResult.addAll(result);
+        }
+        return finalResult;
+    }
+
+    /* HELPER: returns the Object for the given complex attribute */
+    private Object getComplexAttribute(Annotation annotation, ResultSet results) throws SQLException {
+        TableReference metadata = (TableReference) annotation;
+        Class<? extends Searchable>[] subTypes = metadata.subTypes();
+        String foreignKey = metadata.key();
+        Object primaryKey = results.getObject(1);
+
+        // find object from one of potential subtypes
+        for (Class<? extends Searchable> type : subTypes) {
+            List<? extends Searchable> result
+                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, EqualTo,
+                    primaryKey.getClass().cast(primaryKey))
+            );
+
+            if (result.size() != 0) return result.get(0);
+        }
+        return null;
     }
 }

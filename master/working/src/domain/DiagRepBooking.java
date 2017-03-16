@@ -67,7 +67,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                            @Column(name = "diagnosisEnd") ZonedDateTime diagnosisEnd,
                            @Column(name = "repairStart") ZonedDateTime repairStart,
                            @Column(name = "repairEnd") ZonedDateTime repairEnd,
-                           @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+                           @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                    SpecRepBooking specRepBooking) {
         super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
         this.diagnosisStart = diagnosisStart;
@@ -205,7 +205,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      *
      * @return a specialist repair booking
      */
-    @TableReference(baseType = SpecRepBooking.class, specTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
+    @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }
