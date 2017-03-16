@@ -33,6 +33,7 @@ public class BookingAppointment implements Agenda.Appointment {
         bookingID = booking.getBookingID();
         startTime = booking.getDiagnosisStart();
         endTime = booking.getDiagnosisEnd();
+        isRepair = false;
         return this;
     }
 
@@ -40,6 +41,7 @@ public class BookingAppointment implements Agenda.Appointment {
         bookingID = booking.getBookingID();
         startTime = booking.getRepairStart();
         endTime = booking.getRepairEnd();
+        isRepair = true;
         return this;
     }
 

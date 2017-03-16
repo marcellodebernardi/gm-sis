@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -28,6 +29,7 @@ public class ListPaneController {
     private DateTimeFormatter dateFormatter;
 
     @FXML private TextField listSearchBar;
+    @FXML private ComboBox filterComboBox; // todo
     @FXML private TableView<DiagRepBooking> bookingTableView;
     @FXML private TableColumn<DiagRepBooking, Integer> bookingIDColumn;
     @FXML private TableColumn<DiagRepBooking, String> customerColumn;
@@ -48,6 +50,7 @@ public class ListPaneController {
     }
 
     @FXML private void initialize() {
+        populateFilterComboBox();
         setBookingTableCellValueFactories();
         populateBookingListView(bookingSystem.getAllBookings());
         setColumnWidths();
@@ -132,6 +135,8 @@ public class ListPaneController {
                 billAmountColumn, billSettledColumn);
     }
 
+    private void populateFilterComboBox() {    }
+
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////////
     private void setColumnWidths() {
@@ -156,5 +161,9 @@ public class ListPaneController {
                         ((DetailsPaneController) master.getController(DetailsPaneController.class))
                                 .populateDetailFields(newSelection)
                 );
+    }
+
+    enum FilterType {
+        ALL, PAST, FUTURE, MONTH, WEEK, DAY;
     }
 }

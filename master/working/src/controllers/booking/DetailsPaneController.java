@@ -38,7 +38,7 @@ public class DetailsPaneController {
     @FXML private TextField customerSearchBar;
     @FXML private ComboBox<String> vehicleComboBox;
     // description
-    @FXML private TextArea descriptionTextArea;
+    @FXML private TextField descriptionTextField;
     // mechanic and parts
     @FXML private ComboBox<String> mechanicComboBox;
     @FXML private TableView<PartOccurrence> partsTable;
@@ -74,8 +74,6 @@ public class DetailsPaneController {
         diagnosisDatePicker.setPrefWidth(Double.MAX_VALUE);
         repairDatePicker.setPrefWidth(Double.MAX_VALUE);
 
-        descriptionTextArea.setWrapText(true);
-
         // todo change to method reference?
         dayCellFactory = datePicker -> new DateCell() {
                 @Override
@@ -107,7 +105,7 @@ public class DetailsPaneController {
 
         DiagRepBooking booking =(new DiagRepBooking(
                 getVehicleRegFromComboBox(),
-                getDescriptionFromTextArea(),
+                getDescriptionFromTextField(),
                 0,
                 false,
                 getMechanicIDFromComboBox(),
@@ -119,7 +117,7 @@ public class DetailsPaneController {
                 getPartsListFromList()
         ));
 
-        if (bookingSystem.addBooking(booking)) {
+        if (bookingSystem.commitBooking(booking)) {
             ((ListPaneController)master.getController(ListPaneController.class))
                     .refreshBookingTable();
             ((CalendarPaneController)master.getController(CalendarPaneController.class))
@@ -128,8 +126,8 @@ public class DetailsPaneController {
     }
 
     @FXML private void deleteBooking() {
-        if (bookingIDTextField.getText().equals("")) return;
-        else if (bookingSystem.deleteBooking(Integer.parseInt(bookingIDTextField.getText()))) {
+        if (!bookingIDTextField.getText().equals("") && confirmDelete()) {
+            bookingSystem.deleteBookingByID(Integer.parseInt(bookingIDTextField.getText()));
             ((ListPaneController)master.getController(ListPaneController.class)).refreshBookingTable();
             ((CalendarPaneController)master.getController(CalendarPaneController.class)).refreshAGenda();
             clearDetails();
@@ -141,7 +139,7 @@ public class DetailsPaneController {
         customerSearchBar.clear();
         populateVehicleComboBox(Collections.emptyList());
         vehicleComboBox.getSelectionModel().select("");
-        descriptionTextArea.clear();
+        descriptionTextField.clear();
         diagnosisDatePicker.setValue(null);
         diagnosisStartTimeTextField.clear();
         diagnosisEndTimeTextField.clear();
@@ -165,7 +163,7 @@ public class DetailsPaneController {
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
         vehicleComboBox.getSelectionModel().select(vehicle.getRegNumber() + ": " + vehicle.getModel());
-        descriptionTextArea.setText(booking.getDescription());
+        descriptionTextField.setText(booking.getDescription());
 
         diagnosisDatePicker.setValue(diagnosisStart.toLocalDate());
         diagnosisStartTimeTextField.setText(diagnosisStart.format(timeFormatter));
@@ -232,6 +230,15 @@ public class DetailsPaneController {
 
 
     //////////////////////// HELPERS ///////////////////////////
+    private boolean confirmDelete() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Deletion Confirmation");
+        alert.setHeaderText("Are you certain you want to delete this booking?");
+        return alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .isPresent();
+    }
+
     // Returns the customer selected in the customer search bar
     private Customer getCustomerFromSearchBar() {
         return customerSystem.getACustomers(Integer.parseInt(customerSearchBar
@@ -248,8 +255,8 @@ public class DetailsPaneController {
     }
 
     // gets the description of the booking
-    private String getDescriptionFromTextArea() {
-        return descriptionTextArea.getText();
+    private String getDescriptionFromTextField() {
+        return descriptionTextField.getText();
     }
 
     // returns the mechanic selected in the mechanic ComboBox
