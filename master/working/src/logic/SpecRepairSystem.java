@@ -50,15 +50,15 @@ public class SpecRepairSystem {
      */
     public boolean addRepairCenter(String name, String address, String phone, String email)
     {
-        //todo Take relevant information from user required to create a SRC and make an object to pass to persistence
+        //todo Take relevant information from user required to create a spc and make an object to pass to persistence
          SpecialistRepairCenter add  = new SpecialistRepairCenter(name, address, phone, email, null);
         return persistence.commitItem(add);
     }
 
     /**
-     * @param delete SRC that is being requested to be deleted
+     * @param delete spc that is being requested to be deleted
      *
-     * @return true if deleting of SRC is successful.
+     * @return true if deleting of spc is successful.
      */
     public boolean deleteRepairCenter(int delete)
     {
@@ -66,9 +66,9 @@ public class SpecRepairSystem {
     }
 
     /**
-     * @param edit SRC that is being updated
+     * @param edit spc that is being updated
      *
-     * @return true if modifying an SRC is successful.
+     * @return true if modifying an spc is successful.
      */
     public boolean updateRepairCentre(SpecialistRepairCenter edit)
     {
@@ -91,7 +91,7 @@ public class SpecRepairSystem {
     }
 
     /**
-     * @param spcID used to get all the bookings of an SRC
+     * @param spcID used to get all the bookings of an spc
      *
      * @return true if bookings are found
      */
@@ -143,9 +143,9 @@ public class SpecRepairSystem {
     }
 
     /**
-     * @param spcID used to identify an SRC with a matching ID
+     * @param spcID used to identify an spc with a matching ID
      *
-     * @return true if an SRC is found
+     * @return true if an spc is found
      */
     public SpecialistRepairCenter getByID(int spcID)
     {
@@ -197,9 +197,9 @@ public class SpecRepairSystem {
     }
 
     /**
-     * This method is designed to delete ALL BOOKINGS RELATED TO A PARTICULAR SRC ONCE IT HAS BEEN DELETED
-     * @param spcID The ID of the deleted SRC
-     * PLEASE NOTE THAT THIS METHOD **MUST** BE CALLED **BEFORE** EXECUTING DELETION METHOD OF THE SRC OR SQL WILL NOT FIND ANY BOOKINGS OF THE DELETED SRC (EVEN IF THEY EXIST)
+     * This method is designed to delete ALL BOOKINGS RELATED TO A PARTICULAR spc ONCE IT HAS BEEN DELETED
+     * @param spcID The ID of the deleted spc
+     * PLEASE NOTE THAT THIS METHOD **MUST** BE CALLED **BEFORE** EXECUTING DELETION METHOD OF THE spc OR SQL WILL NOT FIND ANY BOOKINGS OF THE DELETED spc (EVEN IF THEY EXIST)
      */
     public void deleteAllSubsequentBookings(int spcID)
     {
@@ -226,9 +226,9 @@ public class SpecRepairSystem {
     }
 
     /**
-     * Updates an existing SRC
+     * Updates an existing spc
      *
-     * @param update is the updated SRC
+     * @param update is the updated spc
      */
     public void updateBookings(SpecRepBooking update)
     {

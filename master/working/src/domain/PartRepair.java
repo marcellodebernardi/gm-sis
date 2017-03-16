@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author: Muhammad Murad Ahmed 10/02/2017.
  * project: SE31
- * This is the class for sending a particular Vehicle off to a SRC.
+ * This is the class for sending a particular Vehicle off to a spc.
  */
 public class PartRepair extends SpecRepBooking
 {

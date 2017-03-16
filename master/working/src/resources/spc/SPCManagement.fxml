@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SRC.SpecialistRepairController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.spc.SpecialistRepairController">
    <top>
       <Pane prefHeight="125.0" prefWidth="1175.0" BorderPane.alignment="CENTER">
          <children>
@@ -28,9 +28,9 @@
    <left>
       <Pane prefHeight="396.0" prefWidth="340.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btn_updateSRC" layoutX="224.0" layoutY="288.0" mnemonicParsing="false" onAction="#updateSRC" prefHeight="27.0" prefWidth="99.0" text="Update SRC" />
-            <Button fx:id="btn_deleteSRC" layoutX="119.0" layoutY="288.0" mnemonicParsing="false" onAction="#deleteSRC" prefHeight="27.0" prefWidth="99.0" text="Delete SRC" />
-            <Button fx:id="btn_addSRC" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#addNewSRC" prefHeight="27.0" prefWidth="99.0" text="Add SRC" />
+            <Button fx:id="btn_updateSRC" layoutX="224.0" layoutY="288.0" mnemonicParsing="false" onAction="#updateSRC" prefHeight="27.0" prefWidth="99.0" text="Update spc" />
+            <Button fx:id="btn_deleteSRC" layoutX="119.0" layoutY="288.0" mnemonicParsing="false" onAction="#deleteSRC" prefHeight="27.0" prefWidth="99.0" text="Delete spc" />
+            <Button fx:id="btn_addSRC" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#addNewSRC" prefHeight="27.0" prefWidth="99.0" text="Add spc" />
             <Group layoutX="16.0" layoutY="53.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="112.0" text="Specialist ID:" />

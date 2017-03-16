@@ -1,4 +1,4 @@
-package controllers.SRC;
+package controllers.spc;
 
 
 import domain.*;
@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;

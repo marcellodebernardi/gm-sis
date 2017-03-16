@@ -82,7 +82,7 @@ public class MenuController implements Initializable {
     public void openSRCTab() {
         BorderPane specialistBasePane = new BorderPane();
         try {
-            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/SRC/SPBookingManagement.fxml"));
+            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/spc/SPBookingManagement.fxml"));
             specialistBasePane.setVisible(true);
             specialistBasePane.setCenter(leftPane);
             Main.getInstance().replaceTabContent(specialistBasePane);
@@ -96,7 +96,7 @@ public class MenuController implements Initializable {
     public void openSRCManagementTab() {
         BorderPane specialistBasePane = new BorderPane();
         try {
-            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/SRC/SPCManagement.fxml"));
+            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/spc/SPCManagement.fxml"));
             specialistBasePane.setVisible(true);
             specialistBasePane.setCenter(centerPane);
             Main.getInstance().replaceTabContent(specialistBasePane);

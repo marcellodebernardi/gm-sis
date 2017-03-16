@@ -73,7 +73,7 @@ public abstract class SpecRepBooking implements Searchable {
 
     /**
      *
-     * @return int representing the ID of the SRC responsible for this booking
+     * @return int representing the ID of the spc responsible for this booking
      */
     public int getSpcID()
     {
@@ -100,7 +100,7 @@ public abstract class SpecRepBooking implements Searchable {
 
     /**
      *
-     * @return the cost of the SRC booking
+     * @return the cost of the spc booking
      */
     public double getCost()
     {

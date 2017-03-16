@@ -26,13 +26,13 @@
                   <Button fx:id="btn_editSpecialistBooking" layoutX="314.0" layoutY="14.0" mnemonicParsing="false" onAction="#editSRCBooking" prefHeight="27.0" prefWidth="132.0" text="Modify Booking" />
                   <TableView layoutX="5.0" layoutY="94.0" prefHeight="342.0" prefWidth="691.0">
                     <columns>
-                      <TableColumn prefWidth="90.0" text="SRC ID:" />
-                      <TableColumn prefWidth="81.0" text="SRC Name:" />
-                        <TableColumn prefWidth="123.0" text="SRC Address:" />
-                        <TableColumn prefWidth="108.0" text="SRC Postcode:" />
-                        <TableColumn prefWidth="138.0" text="SRC Phone:" />
-                        <TableColumn prefWidth="151.0" text="SRC Email:" />
-                        <TableColumn prefWidth="296.0" text="SRC Phone:" />
+                      <TableColumn prefWidth="90.0" text="spc ID:" />
+                      <TableColumn prefWidth="81.0" text="spc Name:" />
+                        <TableColumn prefWidth="123.0" text="spc Address:" />
+                        <TableColumn prefWidth="108.0" text="spc Postcode:" />
+                        <TableColumn prefWidth="138.0" text="spc Phone:" />
+                        <TableColumn prefWidth="151.0" text="spc Email:" />
+                        <TableColumn prefWidth="296.0" text="spc Phone:" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
