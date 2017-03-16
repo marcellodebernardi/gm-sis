@@ -3,6 +3,7 @@ package logic.customer;
 import domain.Customer;
 import domain.CustomerType;
 import domain.Vehicle;
+import domain.DiagRepBooking;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;

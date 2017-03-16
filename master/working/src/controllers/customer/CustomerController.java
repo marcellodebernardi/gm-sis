@@ -46,11 +46,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import logic.*;
-import logic.Criterion;
-import logic.CriterionOperator;
-//import logic.CustomerSystem;
-import logic.Criterion;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
+import logic.customer.CustomerSystem;
+import logic.vehicle.*;
+import logic.booking.*;
+import logic.criterion.Criterion;
 import domain.*;
+import domain.DiagRepBooking;
 import persistence.DatabaseRepository;
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
