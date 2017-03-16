@@ -1,39 +1,69 @@
 package controllers.customer;
 
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
+import javafx.stage.WindowEvent;
+import javafx.util.*;
+import javafx.fxml.*;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.BooleanStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.stage.Stage;
 import javafx.fxml.FXML;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.lang.*;
-
-//import logic.customer.CustomerSystem;
+import java.text.ParseException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import logic.*;
+import logic.Criterion;
+import logic.CriterionOperator;
+//import logic.CustomerSystem;
+import logic.Criterion;
 import domain.*;
-import logic.customer.CustomerSystem;
-
+import persistence.DatabaseRepository;
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 
 /**
  * Created by EBUBECHUKWU on 19/02/2017.
  */
-public class CustomerController
+public class CustomerController implements Initializable
 {
 
     //DatabaseRepository db = DatabaseRepository.getInstance();
     @FXML
-    private CustomerSystem cSystem = CustomerSystem.getInstance();
+    public CustomerSystem cSystem = CustomerSystem.getInstance();
 
     final ObservableList tableEntries = FXCollections.observableArrayList();
     final ObservableList comboEntries = FXCollections.observableArrayList();
@@ -77,6 +107,27 @@ public class CustomerController
     private Button deleteCustomerConfirmationNo = new Button();
 
 
+    ////for 'AddCustomerVehiclePopupView.fxml' instance variables
+    Stage addVehicleStage;
+
+    private VehicleSys vSystem = VehicleSys.getInstance();
+    private BookingSystem bSystem = BookingSystem.getInstance();
+
+    @FXML
+    private Label AddEditL = new Label();
+    @FXML
+    //private TextField cvRegistrationNumber, cvManufacturer, cvModel, cvEngineSize, cvColour, cvMileage, cvCompanyName, cvCompanyAddress = new TextField();
+    private TextField cID, reg, mod, manuf, eSize, col, mil, wName, wCompAddress, regS, manufS = new TextField();
+    @FXML
+    //private ComboBox cvSelectVehicle, cvCustomerID, cvVehicleType, cvFuelType, cvWarranty = new ComboBox();
+    private ComboBox vType, fType, cByWarranty, VehicleS, typeS, VehicleTS = new ComboBox();
+    @FXML
+    //private DatePicker cvMOTRenewalDate, cvDateLastServiced, CVExpiationDate = new DatePicker();
+    private DatePicker rDateMot, dLastServiced, wExpirationDate = new DatePicker();
+    @FXML
+    private Button addV, clearV = new Button();
+
+
 
     //method for adding customer to database
     public void addCustomerToDB() throws Exception
@@ -84,10 +135,6 @@ public class CustomerController
         try
         {
             //initialising variables
-            //String cID = customerID.getText();
-
-
-
             String cFirstname = customerFirstname.getText();
             String cSurname = customerSurname.getText();
             String cAddress = customerAddress.getText();
@@ -117,7 +164,54 @@ public class CustomerController
                 boolean addedCustomer = cSystem.addCustomer(cFirstname, cSurname, cAddress, cPostcode, cPhone, cEmail, cType);
                 if(addedCustomer)
                 {
-                    errorAlert("SUCCESSFULLY ADDED!!!");
+                    //errorAlert("SUCCESSFULLY ADDED!!!");
+
+                    tableViewOfCustomersFromDB(cSystem.getAllCustomers());
+
+
+                    if(addVehicleStage != null)
+                    {
+                        if(addVehicleStage.isShowing())
+                        {
+                            errorAlert("Vehicle window is already open");
+                            addVehicleStage.setAlwaysOnTop(true);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        addVehicleStage = new Stage();
+                        addVehicleStage.setTitle("Add Vehicle");
+                        addVehicleStage.setScene(new Scene(menu));
+                        addVehicleStage.show();
+                        //addVehicleStage.showAndWait();
+                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        //    @Override
+                        //    public void handle(WindowEvent event) {
+                        //        System.out.println("Add Vehicle stage is closing");
+                        //    }
+                        //});
+                        //addVehicleStage.close();
+
+                        List<Customer> allCustomers = cSystem.getAllCustomers();
+                        int cvCustomerID = 0;
+                        for(int i=allCustomers.size()-1; i>0; i--)
+                        {
+                            cvCustomerID = allCustomers.get(i).getCustomerID();
+                            System.out.println("Count customers: " + cvCustomerID);
+                            break;
+                        }
+
+                        Customer customer = cSystem.getACustomers(cvCustomerID);
+                        System.out.println("Customer ID: " + cvCustomerID);
+                        reg.setText(Integer.toString(cvCustomerID));
+
+                        //cID.setText(Integer.toString(cvCustomerID));
+                        System.out.println("Hello World 3");
+                    }
+
                 }
                 else
                 {
@@ -133,6 +227,7 @@ public class CustomerController
         catch(Exception e)
         {
             System.out.println("Add Customer Error");
+            e.printStackTrace();
         }
     }
 
@@ -160,6 +255,10 @@ public class CustomerController
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     errorAlert("Customer has been deleted");
+
+                    tableViewOfCustomersFromDB(cSystem.getAllCustomers());
+                    newCustomerForm();
+
                 } else {
                     errorAlert("Can't find Customer record to delete");
                 }
@@ -197,6 +296,9 @@ public class CustomerController
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     errorAlert("Customer has been deleted");
+
+                    tableViewOfCustomersFromDB(cSystem.getAllCustomers());
+
                 } else {
                     errorAlert("Can't find Customer record to delete");
                 }
@@ -249,7 +351,13 @@ public class CustomerController
             customerTable.setDisable(false);
             tableEntries.removeAll(tableEntries);
 
-            for(int i=0; i < searchList.size(); i++)
+            //for(int i=0; i < searchList.size(); i++)
+            //{
+            //    tableEntries.add(searchList.get(i));
+            //}
+
+            //arranging default list from newest to oldest customer
+            for(int i=searchList.size()-1; i>=0; i--)
             {
                 tableEntries.add(searchList.get(i));
             }
@@ -296,6 +404,7 @@ public class CustomerController
             }));
 
             customerTable.setItems(tableEntries);
+            //searchCustomerVehicleInDB();//testing to find customer's vehicles
         }
         catch(Exception e)
         {
@@ -328,6 +437,8 @@ public class CustomerController
             saveCustomerButton.setVisible(true);
             clearCustomerButton.setVisible(false);
             deleteCustomerButton.setVisible(true);
+
+            searchCustomerVehicleInDB();//testing to find customer's vehicles
 
         }
         catch(Exception e)
@@ -451,6 +562,257 @@ public class CustomerController
             return false;
         }
     }
+
+
+    //ALL THE LOGIC FOR ADD VEHICLE TO NEW CUSTOMER RECORD
+
+
+    public void addVehicle() throws Exception
+    {
+
+
+        if(!checkVehicleFormat())
+        {
+            return;
+        }
+
+        try
+        {
+            boolean check = checkVehicleFields();
+            if(check)
+            {
+
+            }
+
+
+
+
+            ////
+            clearCustomerFields();
+            addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.out.println("Add Vehicle stage is closing");
+                }
+            });
+            addVehicleStage.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Add Customer's Vehicle Error");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void searchCustomerVehicleInDB()
+    {
+        try
+        {
+            List<Vehicle> searchVehicleList = new ArrayList<Vehicle>(0);
+            System.out.println("testing1: "+ searchVehicleList.size());//testing1
+            Customer customer = customerTable.getSelectionModel().getSelectedItem();
+            if(customer == null)
+            {
+                throw new Exception();
+            }
+            searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
+            System.out.println("testing2: " + searchVehicleList.size());//testing2
+
+            searchCustomerBookingInDB();//testing to find customer's bookings for their vehicles
+        }
+        catch(Exception e)
+        {
+            System.out.println("Search Customer Vehicle Error");
+            e.printStackTrace();
+        }
+    }
+
+    public void searchCustomerBookingInDB()
+    {
+        try
+        {
+            List<DiagRepBooking> searchBookingList = new ArrayList<DiagRepBooking>(0);
+            System.out.println("testing3: " + searchBookingList.size());//testing3
+            List<Vehicle> searchVehicleList = new ArrayList<Vehicle>(0);
+            System.out.println("testing4: " + searchVehicleList.size());//testing4
+            Customer customer = customerTable.getSelectionModel().getSelectedItem();
+            searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
+            System.out.println("testing5: " + searchVehicleList.size());//testing5
+            for(int i = 0; i < searchVehicleList.size(); i++)
+            {
+                searchBookingList = cSystem.searchCustomerBookings(searchVehicleList.get(i).getRegNumber());
+            }
+            System.out.println("testing6: " + searchBookingList.size());//testing6
+        }
+        catch(Exception e)
+        {
+            System.out.println("Search Customer Booking Error");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void clearVehicleFields()
+    {
+        reg.clear();
+        //cID.setValue(null);
+        mod.clear();
+        manuf.clear();
+        eSize.clear();
+        col.clear();
+        mil.clear();
+        rDateMot.setValue(null);
+        dLastServiced.setValue(null);
+        wName.clear();
+        wCompAddress.clear();
+        wExpirationDate.setValue(null);
+        vType.setValue(null);
+        fType.setValue(null);
+        cByWarranty.setValue(null);
+        //hiddenWarranty();
+    }
+
+    public boolean checkVehicleFields()
+    {
+        boolean check = false;
+        if ((!reg.getText().equals("")) && (!cID.getText().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals("")))
+        {
+            check = true;
+            if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True"))
+            {
+                if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getValue().equals(""))
+                {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean checkVehicleFormat()
+    {
+        try {
+            Date date = java.sql.Date.valueOf(dLastServiced.getValue());
+            date = java.sql.Date.valueOf(rDateMot.getValue());
+            if (cByWarranty != null)
+            {
+                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null))
+                {
+                    date = java.sql.Date.valueOf(wExpirationDate.getValue());
+                }}
+
+            Double engineSize = Double.parseDouble(eSize.getText());
+            int mileage = Integer.parseInt(mil.getText());
+            if (col.getText().matches(".*\\d+.*"))
+            {
+                errorAlert("Colour must be a string");
+                return false;
+            }
+
+            if (vType == null || fType == null)
+            {
+                errorAlert("Pick fuel type and vehicle Type");
+                return false;
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            errorAlert(e.getMessage() + " and make sure all fields required are not blank");
+            return false;
+        }
+    }
+
+
+    public void selectVehicle()
+    {
+        if (VehicleS.getSelectionModel().isSelected(0))
+        {
+            setVehicle("Civic", "Honda", "1.6", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(1))
+        {
+            setVehicle("Focus", "Ford", "1.2", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(2))
+        {
+            setVehicle("5 Series", "BMw", "2.2", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(3))
+        {
+            setVehicle("3 Series", "BMw", "2.9", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(4))
+        {
+            setVehicle("A Class", "Mercedes", "3.0", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(5))
+        {
+            setVehicle("Transit", "Ford", "2.2", "Van", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(6))
+        {
+            setVehicle("Roadster", "Nissan", "1.2", "Truck", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(7))
+        {
+            setVehicle("Y-8 Van", "Audi", "3.6", "Van", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(8))
+        {
+            setVehicle("Enzo", "Ferrari", "4.4", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(9))
+        {
+            setVehicle("Truckster", "Ford", "2.8", "Truck", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(10))
+        {
+            setVehicle("Hybrid Van", "Renault", "2.3", "Can", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(11))
+        {
+            setVehicle("Sport", "MG", "2.0", "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(12))
+        {
+            setVehicle("Model S", "Acura", "2.2", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(13))
+        {
+            setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
+        }
+        else
+        {
+            setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
+        }
+    }
+
+    public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType)
+    {
+        mod.setText(model);
+        manuf.setText(manufacturer);
+        eSize.setText(engineSize);
+        vType.setValue(vehicleType);
+        fType.setValue(fuelType);
+    }
+
+
+    /////
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+
+        //setCustomerCombo();
+        //searchVehicleA();
+        //rDateMot.setDayCellFactory(motDayFactory);
+        //dLastServiced.setDayCellFactory(dlsDayFactory);
+        //wExpirationDate.setDayCellFactory(weDayFactory);
+
+    }
+
 
 }
 

@@ -76,6 +76,18 @@ public class CustomerSystem {
         return results;
     }
 
+    public List<Vehicle> searchCustomerVehicles(int customerID)
+    {
+        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class, "customerID", EqualTo, customerID));
+        return results;
+    }
+
+    public List<DiagRepBooking> searchCustomerBookings(String vehicleRegNumber)
+    {
+        List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        return results;
+    }
+
     public Customer getACustomers(int customerID) {
         List<Customer> results =  persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
         return results !=null ? results.get(0) : null;

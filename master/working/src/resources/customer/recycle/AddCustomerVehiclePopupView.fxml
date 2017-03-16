@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="562.0" prefWidth="402.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <HBox>
+            <Label BorderPane.alignment="CENTER">Add Vehicle</Label>
+        </HBox>
+    </top>
+    <center>
+        <GridPane id="CustomerVehicleGridPane">
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Select Vehicle</Label>
+            <TextField fx:id="cvSelectVehicle" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Pick a Vehicle"></TextField>
+
+            <Label GridPane.rowIndex="1" GridPane.columnIndex="0">Vehicle Registration</Label>
+            <TextField fx:id="cvVehicleRegistration" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Registration number"></TextField>
+
+            <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Customer ID</Label>
+            <TextField fx:id="cvCustomerID" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Choose Customer"></TextField>
+
+            <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Vehicle Type</Label>
+            <TextField fx:id="cvVehicleType" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Pick Vehicle type"></TextField>
+
+            <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Manufacturer</Label>
+            <TextField fx:id="cvManufacturer" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Manufacturer"></TextField>
+
+            <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Model</Label>
+            <TextField fx:id="cvModel" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Model"></TextField>
+
+            <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Engine Size</Label>
+            <TextField fx:id="cvEngineSize" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Engine Size"></TextField>
+
+            <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Fuel Type</Label>
+            <TextField fx:id="cvFuelType" GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Fuel Type"></TextField>
+
+            <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Colour</Label>
+            <TextField fx:id="cvColour" GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Colour"></TextField>
+
+            <Label GridPane.rowIndex="9" GridPane.columnIndex="0">Mileage</Label>
+            <TextField fx:id="cvMileage" GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Mileage"></TextField>
+
+            <Label GridPane.rowIndex="10" GridPane.columnIndex="0">MOT Renewal Date</Label>
+            <TextField fx:id="cvMotRenewalDate" GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Select MOT renewal date"></TextField>
+
+            <Label GridPane.rowIndex="11" GridPane.columnIndex="0">Date Last Serviced</Label>
+            <TextField fx:id="cvDateLastServiced" GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Select Service Date"></TextField>
+
+            <Label GridPane.rowIndex="12" GridPane.columnIndex="0">Warranty?</Label>
+            <TextField fx:id="cvWarranty" GridPane.rowIndex="12" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Pick True/False"></TextField>
+
+            <Label GridPane.rowIndex="13" GridPane.columnIndex="0">Company Name</Label>
+            <TextField fx:id="cvCompanyName" GridPane.rowIndex="13" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Company Name"></TextField>
+
+            <Label GridPane.rowIndex="14" GridPane.columnIndex="0">Company Address</Label>
+            <TextField fx:id="cvCompanyAddress" GridPane.rowIndex="14" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Enter Company Address"></TextField>
+
+            <Label GridPane.rowIndex="15" GridPane.columnIndex="0">Expiration Date</Label>
+            <TextField fx:id="cvExpirationDate" GridPane.rowIndex="15" GridPane.columnIndex="1" GridPane.columnSpan="2" promptText="Select Expiration Date"></TextField>
+        </GridPane>
+    </center>
+    <bottom>
+
+    </bottom>
+</BorderPane>
