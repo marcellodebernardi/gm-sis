@@ -104,6 +104,7 @@ public class Main extends Application {
 
         // set scene and stage
         mainScene = new Scene(applicationPane);
+
         primaryStage.setScene(mainScene);
         primaryStage.setMaximized(true);
         primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");

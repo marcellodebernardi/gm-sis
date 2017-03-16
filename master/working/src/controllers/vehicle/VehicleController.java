@@ -159,7 +159,7 @@ public class VehicleController implements Initializable
                 Date rdm = java.sql.Date.valueOf(rDateMot.getValue());
                 Date dls = java.sql.Date.valueOf(dLastServiced.getValue());
                 Date wed = new Date();
-                if ((!wExpirationDate.getValue().equals(""))) {
+                if ((!(wExpirationDate.getValue() ==  null))) {
                     wed = java.sql.Date.valueOf(wExpirationDate.getValue());
                 }
                 VehicleType vT;
@@ -247,7 +247,7 @@ public class VehicleController implements Initializable
     @FXML
     public void VehicleEditS()  {
         try {
-
+            reg.setEditable(false);
             Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             if (vehicle == null)
             {

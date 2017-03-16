@@ -1,18 +1,37 @@
 package controllers.common;
 
 import controllers.booking.BookingController;
+import domain.UserType;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import logic.AuthenticationSystem;
 import main.Main;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * @author Dillon Vaghela
  *         <p>
  *         todo clean up and add comments
  */
-public class MenuController {
+public class MenuController implements Initializable {
+
+    @FXML
+    private Button UsersButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
+            UsersButton.setDisable(false);
+        } else {
+            UsersButton.setDisable(true);
+        }
+    }
     public void openTodayTab() {
         try {
             BorderPane todayPane = FXMLLoader.load(getClass().getResource("/resources/today/TodayPane.fxml"));
