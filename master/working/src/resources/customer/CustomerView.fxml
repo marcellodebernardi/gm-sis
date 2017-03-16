@@ -15,23 +15,23 @@
    <left>
       <Pane prefHeight="604.0" prefWidth="309.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="formName" layoutX="115.0" layoutY="14.0" text="Add Customer" />
-            <Label layoutX="10.0" layoutY="61.0" text="Customer ID" />
-            <Label layoutX="10.0" layoutY="97.0" text="Customer First name" />
-            <Label layoutX="10.0" layoutY="135.0" text="Customer Surname" />
-            <Label layoutX="10.0" layoutY="174.0" text="Customer Address" />
-            <Label layoutX="10.0" layoutY="214.0" text="Customer Postcode" />
-            <Label layoutX="10.0" layoutY="251.0" text="Customer  Phone" />
-            <Label layoutX="10.0" layoutY="289.0" text="Customer Email" />
-            <Label layoutX="10.0" layoutY="327.0" text="Customer Type" />
-            <TextField fx:id="customerID" disable="true" layoutX="150.0" layoutY="57.0" />
-            <TextField fx:id="customerFirstname" layoutX="150.0" layoutY="93.0" prefWidth="148.0" promptText="Enter FIrst name" />
-            <TextField fx:id="customerSurname" layoutX="150.0" layoutY="131.0" promptText="Enter Surname" />
-            <TextField fx:id="customerAddress" layoutX="150.0" layoutY="170.0" promptText="Enter Address" />
-            <TextField fx:id="customerPostcode" layoutX="150.0" layoutY="210.0" promptText="Enter Postcode" />
-            <TextField fx:id="customerPhone" layoutX="150.0" layoutY="247.0" promptText="Enter Phone number" />
-            <TextField fx:id="customerEmail" layoutX="150.0" layoutY="285.0" promptText="Enter Email address" />
-            <ComboBox fx:id="customerType" layoutX="149.0" layoutY="323.0" prefWidth="150.0" promptText="Select Type">
+            <Label fx:id="formName" layoutX="115.0" text="Add Customer" />
+            <Label layoutX="10.0" layoutY="47.0" text="Customer ID" />
+            <Label layoutX="10.0" layoutY="83.0" text="Customer First name" />
+            <Label layoutX="10.0" layoutY="121.0" text="Customer Surname" />
+            <Label layoutX="10.0" layoutY="160.0" text="Customer Address" />
+            <Label layoutX="10.0" layoutY="200.0" text="Customer Postcode" />
+            <Label layoutX="10.0" layoutY="237.0" text="Customer  Phone" />
+            <Label layoutX="10.0" layoutY="275.0" text="Customer Email" />
+            <Label layoutX="10.0" layoutY="313.0" text="Customer Type" />
+            <TextField fx:id="customerID" disable="true" layoutX="150.0" layoutY="43.0" />
+            <TextField fx:id="customerFirstname" layoutX="150.0" layoutY="79.0" prefHeight="25.0" prefWidth="143.0" promptText="Enter FIrst name" />
+            <TextField fx:id="customerSurname" layoutX="150.0" layoutY="117.0" promptText="Enter Surname" />
+            <TextField fx:id="customerAddress" layoutX="150.0" layoutY="156.0" promptText="Enter Address" />
+            <TextField fx:id="customerPostcode" layoutX="150.0" layoutY="196.0" promptText="Enter Postcode" />
+            <TextField fx:id="customerPhone" layoutX="150.0" layoutY="233.0" promptText="Enter Phone number" />
+            <TextField fx:id="customerEmail" layoutX="150.0" layoutY="271.0" promptText="Enter Email address" />
+            <ComboBox fx:id="customerType" layoutX="149.0" layoutY="309.0" prefHeight="25.0" prefWidth="143.0" promptText="Select Type">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Private" />
@@ -39,33 +39,71 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="396.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
-            <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="396.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" visible="false" />
-            <Button fx:id="clearCustomerButton" layoutX="198.0" layoutY="396.0" mnemonicParsing="false" onAction="#clearCustomerFields" text="Clear" />
-            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="396.0" mnemonicParsing="false" onAction="#updateCustomerInDB" text="Save" visible="false" />
+            <Button fx:id="saveCustomerAndAddVehicleButton" layoutX="10.0" layoutY="379.0" mnemonicParsing="false" onAction="#addCustomerToDB" prefHeight="25.0" prefWidth="133.0" text="Save and Add Vehicle" />
+            <Button fx:id="deleteCustomerButton" layoutX="248.0" layoutY="383.0" mnemonicParsing="false" onAction="#deleteCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" visible="false" />
+            <Button fx:id="clearCustomerButton" layoutX="198.0" layoutY="379.0" mnemonicParsing="false" onAction="#clearCustomerFields" text="Clear" />
+            <Button fx:id="saveCustomerButton" layoutX="150.0" layoutY="383.0" mnemonicParsing="false" onAction="#updateCustomerInDB" text="Save" visible="false" />
          </children>
       </Pane>
    </left>
    <center>
       <Pane prefHeight="604.0" prefWidth="961.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="customerSearch" disable="false" layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="911.0" promptText="by Customer's First name, Surname or Vehicle Registration number" />
-            <Button fx:id="customerSearchButton" layoutX="931.0" layoutY="62.0" mnemonicParsing="false" onAction="#searchCustomerInDB" text="Search" />
-            <TableView fx:id="customerTable" layoutX="11.0" layoutY="102.0" prefHeight="200.0" prefWidth="909.0">
+            <TextField fx:id="customerSearch" disable="false" layoutX="58.0" prefHeight="25.0" prefWidth="565.0" promptText="by Customer's First name, Surname or Vehicle Registration number" />
+            <Button fx:id="customerSearchButton" layoutX="739.0" mnemonicParsing="false" onAction="#searchCustomerInDB" prefHeight="25.0" prefWidth="93.0" text="Search" />
+            <TableView fx:id="customerTable" layoutX="14.0" layoutY="40.0" prefHeight="180.0" prefWidth="817.0">
               <columns>
-                <TableColumn fx:id="customerTableColumnID" prefWidth="66.0" text="ID" />
-                <TableColumn fx:id="customerTableColumnFirstname" prefWidth="106.0" text="First name" />
-                  <TableColumn fx:id="customerTableColumnSurname" prefWidth="105.0" text="Surname" />
-                  <TableColumn fx:id="customerTableColumnAddress" prefWidth="187.0" text="Address" />
-                  <TableColumn fx:id="customerTableColumnPostcode" minWidth="0.0" prefWidth="91.0" text="Postcode" />
-                  <TableColumn fx:id="customerTableColumnPhone" prefWidth="108.0" text="Phone" />
-                  <TableColumn fx:id="customerTableColumnEmail" prefWidth="169.0" text="Email Address" />
-                  <TableColumn fx:id="customerTableColumnType" prefWidth="76.0" text="Type" />
+                <TableColumn fx:id="customerTableColumnID" prefWidth="44.0" text="ID" />
+                <TableColumn fx:id="customerTableColumnFirstname" prefWidth="94.0" text="First name" />
+                  <TableColumn fx:id="customerTableColumnSurname" prefWidth="103.0" text="Surname" />
+                  <TableColumn fx:id="customerTableColumnAddress" prefWidth="150.0" text="Address" />
+                  <TableColumn fx:id="customerTableColumnPostcode" minWidth="0.0" prefWidth="95.0" text="Postcode" />
+                  <TableColumn fx:id="customerTableColumnPhone" prefWidth="113.0" text="Phone" />
+                  <TableColumn fx:id="customerTableColumnEmail" prefWidth="127.0" text="Email Address" />
+                  <TableColumn fx:id="customerTableColumnType" prefWidth="90.0" text="Type" />
               </columns>
             </TableView>
-            <Button fx:id="editSelectedCustomerButton" layoutX="931.0" layoutY="143.0" mnemonicParsing="false" onAction="#editTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Edit" />
-            <Button fx:id="deleteSelectedCustomerButton" layoutX="931.0" layoutY="183.0" mnemonicParsing="false" onAction="#deleteTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="51.0" text="Delete" />
-            <Button fx:id="newCustomerFormButton" layoutX="931.0" layoutY="102.0" mnemonicParsing="false" onAction="#newCustomerForm" prefHeight="25.0" prefWidth="51.0" text="New" />
+            <Button fx:id="editSelectedCustomerButton" layoutX="842.0" layoutY="81.0" mnemonicParsing="false" onAction="#editTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="94.0" text="Edit" />
+            <Button fx:id="deleteSelectedCustomerButton" layoutX="842.0" layoutY="166.0" mnemonicParsing="false" onAction="#deleteTableSelectedCustomerFromDB" prefHeight="25.0" prefWidth="94.0" text="Delete" />
+            <Button fx:id="newCustomerFormButton" layoutX="842.0" layoutY="40.0" mnemonicParsing="false" onAction="#newCustomerForm" prefHeight="25.0" prefWidth="94.0" text="New" />
+            <ComboBox fx:id="customerTypeSearch" layoutX="634.0" onAction="#searchCustomerTypeInDB" prefHeight="25.0" prefWidth="93.0" promptText="Type">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Private" />
+                        <String fx:value="Business" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Button fx:id="makeBookingButton" layoutX="842.0" layoutY="122.0" mnemonicParsing="false" onAction="#initiateNewBooking" prefHeight="25.0" prefWidth="95.0" text="Make Booking" />
+            <Label layoutX="15.0" layoutY="4.0" prefHeight="17.0" prefWidth="39.0" text="Search" />
+            <TableView fx:id="customerVehicleTable" layoutX="15.0" layoutY="254.0" prefHeight="126.0" prefWidth="419.0">
+              <columns>
+                <TableColumn prefWidth="104.0" text="Registration No." />
+                <TableColumn prefWidth="56.0" text="Type" />
+                  <TableColumn prefWidth="77.0" text="Model" />
+                  <TableColumn prefWidth="110.0" text="Manufacturer" />
+                  <TableColumn prefWidth="71.0" text="Warranty" />
+              </columns>
+            </TableView>
+            <TableView layoutX="461.0" layoutY="254.0" prefHeight="126.0" prefWidth="369.0">
+              <columns>
+                <TableColumn prefWidth="108.0" text="Name" />
+                <TableColumn prefWidth="260.0" text="Description" />
+              </columns>
+            </TableView>
+            <Label layoutX="15.0" layoutY="230.0" text="VEHICLE(S)" />
+            <Label layoutX="461.0" layoutY="230.0" text="PART(S)" />
+            <TableView layoutX="15.0" layoutY="413.0" prefHeight="149.0" prefWidth="816.0">
+              <columns>
+                <TableColumn prefWidth="94.0" text="Booking ID" />
+                  <TableColumn prefWidth="164.0" text="Repair Date" />
+                  <TableColumn prefWidth="189.0" text="Repair Time" />
+                  <TableColumn prefWidth="179.0" text="Bill (£)" />
+                  <TableColumn prefWidth="189.0" text="Settlement Status" />
+              </columns>
+            </TableView>
+            <Label layoutX="16.0" layoutY="390.0" text="BOOKING(S)" />
+            <Button fx:id="logoutButton" layoutX="842.0" layoutY="537.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="95.0" text="Logout" />
          </children>
       </Pane>
    </center>

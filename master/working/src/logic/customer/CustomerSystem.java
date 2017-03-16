@@ -77,6 +77,12 @@ public class CustomerSystem {
         return results;
     }
 
+    public List<Customer> searchCustomerByType(CustomerType customerType)
+    {
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerType", EqualTo, customerType));
+        return results;
+    }
+
     public List<Vehicle> searchCustomerVehicles(int customerID)
     {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class, "customerID", EqualTo, customerID));

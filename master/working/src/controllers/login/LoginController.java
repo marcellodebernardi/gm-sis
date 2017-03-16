@@ -3,6 +3,7 @@ package controllers.login;
 import controllers.common.MenuController;
 import controllers.common.MenuHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -11,18 +12,24 @@ import javafx.scene.layout.BorderPane;
 import logic.authentication.AuthenticationSystem;
 import main.Main;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * @author Dillon Vaghela, Muhammad Shakib Hoque, Marcello De Bernardi
  * @version 0.1
  * @since 0.1
  */
 
-public class LoginController {
+public class LoginController
+{
     public Button loginButton;
     public Button exitButton;
     public TextField username;
     public PasswordField password;
     private AuthenticationSystem authentication = AuthenticationSystem.getInstance();
+    private static LoginController instance;//////////
+
 
     @FXML
     public void loginHandler() throws Exception {
@@ -48,5 +55,13 @@ public class LoginController {
         alert.setTitle("Error");
         alert.setHeaderText("The username and/or password is incorrect");
         alert.showAndWait();
+    }
+
+    //////////
+    public static LoginController getInstance() {
+        if (instance == null) {
+            instance = new LoginController();
+        }
+        return instance;
     }
 }

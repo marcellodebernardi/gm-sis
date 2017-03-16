@@ -1,5 +1,8 @@
 package controllers.customer;
 
+import controllers.booking.BookingController;
+import controllers.login.LoginController;
+import controllers.user.UserController;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,7 +48,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import logic.*;
+//import logic.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionOperator;
 import logic.customer.CustomerSystem;
@@ -89,7 +92,9 @@ public class CustomerController implements Initializable
     @FXML
     private TextField customerSearch = new TextField();
     @FXML
-    private Button customerSearchButton, newCustomerFormButton, editSelectedCustomerButton, deleteSelectedCustomerButton = new Button();
+    private ComboBox customerTypeSearch = new ComboBox();
+    @FXML
+    private Button customerSearchButton, newCustomerFormButton, editSelectedCustomerButton, makeBookingButton, deleteSelectedCustomerButton, logoutButton = new Button();
 
 
     ////right pane (customer table view)
@@ -249,7 +254,7 @@ public class CustomerController implements Initializable
                 errorAlert("Customer has not yet been selected for deletion. Check Customer ID");
                 return;
             }
-            if(deleteConfirmation("Are you sure you want to delete Customer?") == false)
+            if(confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false)
             {
                 return;
             }
@@ -257,7 +262,7 @@ public class CustomerController implements Initializable
             if(check) {
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
-                    errorAlert("Customer has been deleted");
+                    //errorAlert("Customer has been deleted");
 
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
                     newCustomerForm();
@@ -290,7 +295,7 @@ public class CustomerController implements Initializable
                 errorAlert("Customer has not yet been selected for deletion. Check Customer ID");
                 return;
             }
-            if(deleteConfirmation("Are you sure you want to delete Customer?") == false)
+            if(confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false)
             {
                 return;
             }
@@ -314,6 +319,48 @@ public class CustomerController implements Initializable
         }
     }
 
+
+    public void searchAllCustomersInDB()
+    {
+        try
+        {
+            List<Customer> allCustomers = cSystem.getAllCustomers();
+            tableViewOfCustomersFromDB(allCustomers);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Search All Customers Error");
+            e.printStackTrace();
+        }
+    }
+
+    public void searchCustomerTypeInDB()
+    {
+        try
+        {
+            CustomerType cType = null;
+            List<Customer> customers = new ArrayList<Customer>(0);
+            if(customerTypeSearch.getSelectionModel().getSelectedItem() != null)
+            {
+                if(customerTypeSearch.getSelectionModel().getSelectedItem().toString().equals("Private"))
+                {
+                    cType = CustomerType.Private;
+                }
+                else
+                {
+                    cType = CustomerType.Business;
+                }
+            }
+            customers = cSystem.searchCustomerByType(cType);
+            tableViewOfCustomersFromDB(customers);
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("Search by Customer Type Error");
+            e.printStackTrace();
+        }
+    }
 
     //method for searching for customer in database
     public void searchCustomerInDB()
@@ -497,7 +544,9 @@ public class CustomerController implements Initializable
 
                 if(editedCustomer)
                 {
-                    errorAlert("SUCCESSFULLY UPDATED CUSTOMER'S DETAIL!!!");
+                    //errorAlert("SUCCESSFULLY UPDATED CUSTOMER'S DETAIL!!!");
+                    newCustomerForm();
+                    searchAllCustomersInDB();
                 }
                 else
                 {
@@ -550,10 +599,10 @@ public class CustomerController implements Initializable
     }
 
 
-    public boolean deleteConfirmation(String message)
+    public boolean confirmationAlert(String title, String message)
     {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        deleteAlert.setTitle("Delete Customer Confirmation");
+        deleteAlert.setTitle(title);
         deleteAlert.setHeaderText(message);
         deleteAlert.showAndWait();
         if(deleteAlert.getResult() == ButtonType.OK)
@@ -655,6 +704,46 @@ public class CustomerController implements Initializable
         }
     }
 
+    public void searchCustomerVehiclePartsInstalledInDB()
+    {
+        try
+        {
+
+        }
+        catch(Exception e)
+        {
+
+        }
+    }
+
+    public void initiateNewBooking()
+    {
+        try
+        {
+            BookingController.getInstance().show();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Initiate new booking Error");
+            e.printStackTrace();
+        }
+    }
+
+    public void logout()
+    {
+        try
+        {
+            if(confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true)
+            {
+                LoginController.getInstance().exitHandler();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Logout from CustomerController Error");
+            e.printStackTrace();
+        }
+    }
 
     public void clearVehicleFields()
     {
@@ -807,7 +896,7 @@ public class CustomerController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-
+        searchAllCustomersInDB();
         //setCustomerCombo();
         //searchVehicleA();
         //rDateMot.setDayCellFactory(motDayFactory);
