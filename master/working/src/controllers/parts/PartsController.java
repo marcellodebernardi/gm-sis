@@ -3,6 +3,7 @@ package controllers.parts;
 import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
+import domain.PartOccurrence;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
@@ -408,8 +409,20 @@ public class PartsController implements Initializable {
         PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
                 Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
                 null);
-
         boolean s = instance.commitItem(newPart);
+        List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
+        for(int i=0;i<partAbstractionList.size();i++)
+        {
+            if(i == partAbstractionList.size()-1)
+            {
+                for(int j=0;j<Integer.parseInt(partStockLevelField.getText());j++)
+                {
+                    PartAbstraction partAbstraction = partAbstractionList.get(i);
+                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(),-1,-1);
+                    pSys.addPartOccurrence(partOccurrence);
+                }
+            }
+        }
 
         clearAddForm();
         updateTable();

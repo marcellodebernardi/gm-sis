@@ -36,6 +36,7 @@ public class SpecialistRepairController implements Initializable{
     private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
     @FXML
     private Label id_lbl,name_lbl,address_lbl,number_lbl,email_lbl = new Label();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -484,6 +485,7 @@ public class SpecialistRepairController implements Initializable{
 
     }
 
+    @SuppressWarnings("Duplicates")
     private <E> void showToTable(List<E> specRepBookings)
     {
         specRepBooking.getItems().clear();

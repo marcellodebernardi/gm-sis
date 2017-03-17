@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.time.*;
 
+
 /**
  * @author: Muhammad Murad Ahmed 11/03/2017.
  * project: SE31
@@ -38,7 +39,6 @@ public class SpecialistController implements Initializable{
     private SpecRepairSystem specRepairSystem =  SpecRepairSystem.getInstance(databaseRepository);
     private BookingSystem bookingSystem = BookingSystem.getInstance();
     private int spcRepID, installationID;
-
     @FXML
     private DatePicker bookingDeliveryDate = new DatePicker();
     @FXML
@@ -51,7 +51,6 @@ public class SpecialistController implements Initializable{
         bookingReturnDate.setDayCellFactory(dateChecker);
         instaDate.setDayCellFactory(dateChecker);
         wEndDate.setDayCellFactory(dateChecker);
-
         try {
            setValues();
 
@@ -162,46 +161,38 @@ public class SpecialistController implements Initializable{
     }
 
     @FXML
-    public void findSRCBookings()
-    {
-        try {
-            specialistBookings.getItems().clear();
-            List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs(Integer.parseInt(idOfBookingItem.getText()));
-            displaySpecRepBookings(partRepairs);
+    public void findSRCBookings() {
+            if(specRepairSystem.getByName(idOfBookingItem.getText())!=null) {
+                List<Customer> customers = specRepairSystem.getByName(idOfBookingItem.getText());
+                List<Vehicle> vehicles = new ArrayList<>();
+                List<VehicleRepair> vehicleRepairs = new ArrayList<>();
+                for (Customer customer : customers) {
+                    vehicles.addAll(customer.getVehicles());
+                    for (Vehicle vehicle : vehicles) {
+                        if (specRepairSystem.getVehicleBookings(vehicle.getRegNumber()) != null) {
+                            vehicleRepairs.addAll(specRepairSystem.getVehicleBookings(vehicle.getRegNumber()));
+                            displaySpecRepBookings(vehicleRepairs);
+                        }
+                    }
+                }
         }
-        catch (NumberFormatException e)
-        {
+        else {
             try {
                 specialistBookings.getItems().clear();
-                List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
-                displaySpecRepBookings(vehicleRepairs);
+                List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs(Integer.parseInt(idOfBookingItem.getText()));
+                displaySpecRepBookings(partRepairs);
             }
-            catch (NullPointerException ex)
-            {
+            catch (NumberFormatException e) {
                 try {
-                    List<Customer> customers = specRepairSystem.getByName(idOfBookingItem.getText());
-                    for(Customer customer: customers)
-                    {
-                        System.out.println(customer.getCustomerFirstname());
-                        System.out.println(customer.getCustomerSurname());
-                    }
-                    List<VehicleRepair> vehicleRepairs = new ArrayList<>();
-                    for (Customer customer : customers) {
-                        List<Vehicle> vehicles = new ArrayList<>();
-
-                           for(int i=0;i<customer.getVehicles().size();i++)
-                           {
-                               System.out.println(customer.getVehicles().get(i).getRegNumber());
-                               vehicleRepairs.addAll(specRepairSystem.getVehicleBookings(customer.getVehicles().get(i).getRegNumber()));
-                               System.out.println(vehicleRepairs.get(i).getVehicleRegNumber());
-                           }
-
-                    }
-
+                    specialistBookings.getItems().clear();
+                    List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
                     displaySpecRepBookings(vehicleRepairs);
-                }
-                catch (NullPointerException exx) {
-                    System.out.println("no vehicle returned from database.");
+                } catch (NullPointerException ex) {
+                    try {
+
+                    } catch (NullPointerException exx) {
+                        System.out.println("no vehicle returned from database.");
+                    }
                 }
             }
         }
@@ -308,6 +299,7 @@ public class SpecialistController implements Initializable{
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     private boolean deleteConfirmation(String message)
     {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -321,6 +313,7 @@ public class SpecialistController implements Initializable{
     @FXML
     private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
 
+    @SuppressWarnings("Duplicates")
     private  <E> void displaySpecRepBookings (List<E> specRepBookings) {
         specialistBookings.getItems().clear();
         if (specRepBookings.get(0) instanceof SpecRepBooking) {
@@ -579,8 +572,8 @@ public class SpecialistController implements Initializable{
             {
                 showAlert("No return date selected");
             }
-            List<DiagRepBooking> diagRepBookings = bookingSystem.searchBookings(bookingID.getText());//check if booking exist
-            if(diagRepBookings.get(0)!=null) {
+            DiagRepBooking diagRepBookings = specRepairSystem.findBooking(Integer.parseInt(bookingID.getText()));
+            if(diagRepBookings!=null) {
               // DiagRepBooking diagRepBooking = diagRepBookings.get(0);
                // bookingSystem.addBooking(diagRepBooking);
 
@@ -645,7 +638,8 @@ public class SpecialistController implements Initializable{
             }
             if(e instanceof IndexOutOfBoundsException)
             {
-                showAlert(e.getMessage());
+                e.printStackTrace();
+                showAlert("No Booking found");
             }
             if(e instanceof NullPointerException)
             {
@@ -737,17 +731,18 @@ public class SpecialistController implements Initializable{
     try
     {
         int criteria  = Integer.parseInt(bookingID.getText());
-        List<DiagRepBooking> diagRepBookings = BookingSystem.getInstance().searchBookings(Integer.toString(criteria));
-        if (diagRepBookings.size() > 0) {
+       DiagRepBooking diagRepBookings = specRepairSystem.findBooking(criteria);
+        if (diagRepBookings !=null) {
             lbl_booking_notFound.setVisible(false);
+            lbl_booking_found.setText("Booking found");
             lbl_booking_found.setVisible(true);
         }
-        if (diagRepBookings.size() < 0) {
+        else{
             lbl_booking_found.setVisible(false);
             lbl_booking_notFound.setVisible(true);
         }
     }
-    catch(NumberFormatException e)
+    catch(NumberFormatException | IndexOutOfBoundsException e)
     {
         lbl_booking_found.setVisible(false);
         lbl_booking_notFound.setVisible(true);

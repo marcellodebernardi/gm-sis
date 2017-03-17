@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="918.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.spc.SpecialistController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="935.0" prefWidth="1096.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.spc.SpecialistController">
    <center>
       <TableView fx:id="specialistBookings" onMouseClicked="#showDetails" prefHeight="417.0" prefWidth="613.0" BorderPane.alignment="CENTER">
         <columns>
@@ -107,10 +107,18 @@
       </Pane>
    </right>
    <top>
-      <Pane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="86.0" prefWidth="1096.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="idOfBookingItem" layoutX="11.0" layoutY="19.0" onKeyReleased="#findSRCBookings" prefHeight="27.0" prefWidth="415.0" promptText="Enter a vehicle registration" />
-            <Button fx:id="searchForBookings" layoutX="466.0" layoutY="19.0" mnemonicParsing="false" onAction="#findSRCBookings" prefHeight="27.0" prefWidth="105.0" text="Search" />
+            <Group layoutX="11.0" layoutY="49.0">
+               <children>
+                  <TextField fx:id="idOfBookingItem" onKeyReleased="#findSRCBookings" prefHeight="27.0" prefWidth="765.0" promptText="Enter a vehicle registration, part ID or customer name" />
+                  <Button fx:id="searchForBookings" layoutX="775.0" mnemonicParsing="false" onAction="#findSRCBookings" prefHeight="27.0" prefWidth="105.0" text="Search" />
+               </children>
+            </Group>
+            <Label layoutX="323.0" layoutY="8.0" text="Specialist Bookings Management">
+               <font>
+               </font>
+            </Label>
          </children>
       </Pane>
    </top>
