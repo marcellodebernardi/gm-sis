@@ -22,6 +22,7 @@ public class Vehicle implements Searchable {
 
     // hierarchical links
     private List<Installation> installationList;
+    private List<DiagRepBooking> bookingList;
 
     // inverse hierarchical database links
     private int customerID;
@@ -43,7 +44,9 @@ public class Vehicle implements Searchable {
                    @Column(name = "warrantyCompAddress") String warrantyCompAddress,
                    @Column(name = "warrantyExpirationDate") Date warrantyExpirationDate,
                    @TableReference(baseType = Installation.class, subTypes = Installation.class, key = "vehicleRegNumber")
-                           List<Installation> installationList) {
+                               List<Installation> installationList,
+                   @TableReference(baseType = Booking.class, subTypes = DiagRepBooking.class, key = "vehicleRegNumber")
+                               List<DiagRepBooking> bookingList) {
         this.regNumber = regNumber;
         this.customerID = customerID;
         this.vehicleType = vehicleType;
@@ -60,6 +63,7 @@ public class Vehicle implements Searchable {
         this.warrantyCompAddress = warrantyCompAddress;
         this. warrantyExpirationDate = warrantyExpirationDate;
         this.installationList = installationList;
+        this.bookingList = bookingList;
     }
 
 
@@ -68,8 +72,9 @@ public class Vehicle implements Searchable {
         return regNumber;
     }
 
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
+    @Column(name = "customerID")
+    public int getCustomerID() {
+        return customerID;
     }
 
     @Column(name = "vehicleType")
@@ -77,17 +82,9 @@ public class Vehicle implements Searchable {
         return vehicleType;
     }
 
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
     @Column(name = "model")
     public String getModel() {
         return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     @Column(name = "manufacturer")
@@ -95,17 +92,9 @@ public class Vehicle implements Searchable {
         return manufacturer;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
     @Column(name = "engineSize")
     public double getEngineSize() {
         return engineSize;
-    }
-
-    public void setEngineSize(double engineSize) {
-        this.engineSize = engineSize;
     }
 
     @Column(name = "fuelType")
@@ -113,17 +102,9 @@ public class Vehicle implements Searchable {
         return fuelType;
     }
 
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
     @Column(name = "colour")
     public String getColour() {
         return colour;
-    }
-
-    public void setColour(String colour) {
-        this.colour = colour;
     }
 
     @Column(name = "mileage")
@@ -131,17 +112,9 @@ public class Vehicle implements Searchable {
         return mileage;
     }
 
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
-    }
-
     @Column(name = "renewalDateMot")
     public Date getRenewalDateMot() {
         return renewalDateMot;
-    }
-
-    public void setRenewalDateMot(Date renewalDateMot) {
-        this.renewalDateMot = renewalDateMot;
     }
 
     @Column(name = "dateLastServiced")
@@ -149,17 +122,9 @@ public class Vehicle implements Searchable {
         return dateLastServiced;
     }
 
-    public void setDateLastServiced(Date dateLastServiced) {
-        this.dateLastServiced = dateLastServiced;
-    }
-
     @Column(name = "coveredByWarranty")
     public boolean isCoveredByWarranty() {
         return coveredByWarranty;
-    }
-
-    public void setCoveredByWarranty(boolean coveredByWarranty) {
-        this.coveredByWarranty = coveredByWarranty;
     }
 
     @Column(name = "warrantyName")
@@ -167,17 +132,9 @@ public class Vehicle implements Searchable {
         return warrantyName;
     }
 
-    public void setWarrantyName(String warrantyName) {
-        this.warrantyName = warrantyName;
-    }
-
     @Column(name = "warrantyCompAddress")
     public String getWarrantyCompAddress() {
         return warrantyCompAddress;
-    }
-
-    public void setWarrantyCompAddress(String warrantyCompAddress) {
-        this.warrantyCompAddress = warrantyCompAddress;
     }
 
     @Column(name = "warrantyExpirationDate")
@@ -185,25 +142,81 @@ public class Vehicle implements Searchable {
         return warrantyExpirationDate;
     }
 
-    public void setWarrantyExpirationDate(Date warrantyExpirationDate) {
-        this.warrantyExpirationDate = warrantyExpirationDate;
-    }
-
-    @TableReference(baseType = Installation.class, subTypes = Installation.class, key = "vehicleID")
+    @TableReference(baseType = Installation.class, subTypes = Installation.class, key = "vehicleRegNumber")
     public List<Installation> getInstallationList() {
         return installationList;
+    }
+
+    @TableReference(baseType = Booking.class, subTypes = DiagRepBooking.class, key = "vehicleRegNumber")
+    public List<DiagRepBooking> getBookingList() {
+        return bookingList;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setEngineSize(double engineSize) {
+        this.engineSize = engineSize;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public void setMileage(int mileage) {
+        this.mileage = mileage;
+    }
+
+    public void setRenewalDateMot(Date renewalDateMot) {
+        this.renewalDateMot = renewalDateMot;
+    }
+
+    public void setDateLastServiced(Date dateLastServiced) {
+        this.dateLastServiced = dateLastServiced;
+    }
+
+    public void setCoveredByWarranty(boolean coveredByWarranty) {
+        this.coveredByWarranty = coveredByWarranty;
+    }
+
+    public void setWarrantyName(String warrantyName) {
+        this.warrantyName = warrantyName;
+    }
+
+    public void setWarrantyCompAddress(String warrantyCompAddress) {
+        this.warrantyCompAddress = warrantyCompAddress;
+    }
+
+    public void setWarrantyExpirationDate(Date warrantyExpirationDate) {
+        this.warrantyExpirationDate = warrantyExpirationDate;
     }
 
     public void setInstallationList(List<Installation> installationList) {
         this.installationList = installationList;
     }
 
-    @Column(name = "customerID")
-    public int getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setBookingList(List<DiagRepBooking> bookingList) {
+        this.bookingList = bookingList;
     }
 }
