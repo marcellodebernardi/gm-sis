@@ -36,7 +36,6 @@ public class SpecialistRepairCenter implements Searchable {
         this.bookings = bookings;
     }
 
-    // reflection only, do not use
     @Reflective
     private SpecialistRepairCenter(@Column(name = "spcID", primary = true) int spcID,
                                   @Column(name = "name") String name,
@@ -55,70 +54,38 @@ public class SpecialistRepairCenter implements Searchable {
     }
 
 
-    /**
-     * Returns a int representing Specialist Repair Center ID
-     *
-     * @return spcID
-     */
     @Column(name = "spcID", primary = true)
     public int getSpcID() {
         return this.spcID;
     }
 
-    /**
-     * Returns a String representing Specialist Repair Center Name
-     *
-     * @return spcName
-     */
     @Column(name = "name")
     public String getName() {
         return name;
     }
 
-    /**
-     * Returns a String representing Specialist Repair Center Address
-     *
-     * @return spcAddress
-     */
     @Column(name = "address")
     public String getAddress() {
         return this.address;
     }
 
-    /**
-     * Returns a String representing Specialist Repair Center Phone number
-     *
-     * @return spcPhone
-     */
     @Column(name = "phone")
     public String getPhone() {
         return this.phone;
     }
 
-    /**
-     * Returns a String representing Specialist Repair Center Email Address
-     *
-     * @return spcEmail
-     */
     @Column(name = "email")
     public String getEmail() {
         return this.email;
     }
 
-    public void setBookings(List SpecRepBookings)
-    {
-        this.bookings = SpecRepBookings;
-    }
-
-    public void addToBooking(SpecRepBooking specRepBooking)
-    {
-        this.bookings.add(specRepBooking);
-    }
-
+    @TableReference(baseType = SpecRepBooking.class,
+            subTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
     public List<SpecRepBooking> getBookings()
     {
         return this.bookings;
     }
+
     public boolean setName(String name) {
         if(!name.equals("")) {
             this.name = name;
@@ -149,6 +116,16 @@ public class SpecialistRepairCenter implements Searchable {
             return true;
         }
         return false;
+    }
+
+    public void setBookings(List SpecRepBookings)
+    {
+        this.bookings = SpecRepBookings;
+    }
+
+    public void addToBooking(SpecRepBooking specRepBooking)
+    {
+        this.bookings.add(specRepBooking);
     }
 
     private boolean containsChar(String number)

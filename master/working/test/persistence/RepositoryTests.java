@@ -91,7 +91,7 @@ public class RepositoryTests {
         DatabaseRepository.getInstance().commitItem(new Vehicle(
                 "TEST REG", 1, VehicleType.Car, "TestModel", "QMUL Car company",
                 69.5, FuelType.diesel, "red", 100, new Date(), new Date(),
-                false, null, null, null, null));
+                false, null, null, null, null, null));
 
         List<Vehicle> vehicle = DatabaseRepository
                 .getInstance()
@@ -120,15 +120,15 @@ public class RepositoryTests {
     @Test
     public void testDatabaseDeletion() {
         DatabaseRepository.getInstance().deleteItem(new Criterion<>(
-                Customer.class,
-                "customerID",
+                SpecialistRepairCenter.class,
+                "spcID",
                 CriterionOperator.EqualTo,
                 2));
-        List<Customer> result = DatabaseRepository
+        List<SpecialistRepairCenter> result = DatabaseRepository
                 .getInstance()
                 .getByCriteria(new Criterion<>(
-                        Customer.class,
-                        "customerID",
+                        SpecialistRepairCenter.class,
+                        "spcID",
                         CriterionOperator.EqualTo,
                         2
                 ));
