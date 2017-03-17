@@ -89,7 +89,6 @@ public class PartsSystem {
         persistence.deleteItem(new Criterion<>(PartOccurrence.class,"partOccurrenceID", EqualTo, partOccurrence.getPartOccurrenceID()).and("partAbstractionID",EqualTo,partAbstraction.getPartAbstractionID()));
     }
 
-
 }
 
 
