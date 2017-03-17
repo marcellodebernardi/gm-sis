@@ -332,7 +332,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="PartLabel" text="Label" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                              <Label fx:id="PartLabel" alignment="CENTER" text="Label" textAlignment="CENTER" visible="false" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="27.0" />
                                  </font>

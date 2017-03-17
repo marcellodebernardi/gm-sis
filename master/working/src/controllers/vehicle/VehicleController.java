@@ -1138,6 +1138,7 @@ public class VehicleController implements Initializable
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
             custInfo.clear();
+            custInfo2.clear();
             custInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
             custInfo.appendText("Surname : " + customer.getCustomerSurname() +  "\n");
             custInfo.appendText("Phone number : " + customer.getCustomerPhone() );
@@ -1260,6 +1261,7 @@ public class VehicleController implements Initializable
                 //showAlert("No parts installed for this Vehicle");
                 PartLabel.setText("No parts");
                 PartLabel.setVisible(true);
+                ListParts.setItems(null);
                 return;
             }
             ObservableList<String> items = FXCollections.observableArrayList();
