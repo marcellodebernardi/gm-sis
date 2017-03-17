@@ -429,6 +429,11 @@ public class PartsController implements Initializable {
 
     }
 
+    public void doNothing()
+    {
+
+    }
+
     /**
      * This method just resets the text fields on the add part form
      */
