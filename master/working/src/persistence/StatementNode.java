@@ -32,7 +32,7 @@ class StatementNode implements Comparable<StatementNode> {
     private Class<? extends Searchable> table;
     private Searchable object;
     private Method primaryGetter;
-    private List<Class<?>> numericTypes;
+    private List<Class<?>> noQuotesTypes;
     private List<Class<?>> dateTypes;
 
     // payload
@@ -44,9 +44,10 @@ class StatementNode implements Comparable<StatementNode> {
     // database instance
     private DatabaseRepository persistence;
 
+
     StatementNode(Class<? extends Searchable> table, Searchable object, Method primaryGetter,
                   HashMap<String, Object> solvedValues, String primaryKey, DatabaseRepository persistence,
-                  List<Class<?>> numericTypes, List<Class<?>> dateTypes) {
+                  List<Class<?>> noQuotesTypes, List<Class<?>> dateTypes) {
         dependents = new ArrayList<>();
         unresolvedDependencies = new ArrayList<>();
         resolvedDependencies = new ArrayList<>();
@@ -59,7 +60,7 @@ class StatementNode implements Comparable<StatementNode> {
         this.solvedValues = solvedValues;
         this.primaryKey = primaryKey;
         this.persistence = persistence;
-        this.numericTypes = numericTypes;
+        this.noQuotesTypes = noQuotesTypes;
         this.dateTypes = dateTypes;
     }
 
@@ -122,7 +123,7 @@ class StatementNode implements Comparable<StatementNode> {
                 if (value.getClass() == Date.class) values += ((Date)value).getTime();
                 else if (value.getClass() == LocalDateTime.class) values += ((LocalDateTime)value).toEpochSecond(ZoneOffset.UTC) * 1000;
                 else if (value.getClass() == ZonedDateTime.class) values += ((ZonedDateTime)value).toEpochSecond() * 1000;
-                else if (numericTypes.contains(value.getClass())) values += value;
+                else if (noQuotesTypes.contains(value.getClass())) values += value;
                 else values += "'" + value + "'";
 
                 delim = ", ";
@@ -141,12 +142,12 @@ class StatementNode implements Comparable<StatementNode> {
 
             for (String key : solvedValues.keySet()) {
                 Object value = solvedValues.get(key);
-                newInfo += numericTypes.contains(value.getClass()) ?
+                newInfo += noQuotesTypes.contains(value.getClass()) ?
                         delim + key + " = " + value : delim + key + " = '" + value + "'";
                 delim = ", ";
             }
 
-            return numericTypes.contains(primaryKeyValue.getClass()) ?
+            return noQuotesTypes.contains(primaryKeyValue.getClass()) ?
                     "UPDATE " + table.getSimpleName() + " SET " + newInfo + " WHERE "
                     + primaryKey + " = " + primaryKeyValue + ";"
                     :
@@ -178,7 +179,7 @@ class StatementNode implements Comparable<StatementNode> {
             primaryKeyValue = primaryGetter.invoke(object);
             // has no primary key: INSERT
             if (primaryKeyValue == null ||
-                    (numericTypes.contains(primaryKeyValue.getClass())
+                    (noQuotesTypes.contains(primaryKeyValue.getClass())
                             && primaryKeyValue.equals(-1))) {
                 statementType = StatementType.INSERT;
                 primaryKeyValue = persistence.getNextID(table.getSimpleName(), primaryKey);

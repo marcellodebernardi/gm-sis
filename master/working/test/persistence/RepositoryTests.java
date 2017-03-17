@@ -139,7 +139,7 @@ public class RepositoryTests {
     public void testINSERTTransaction() {
         while (true) {
             Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
-            List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
+            List<String> result = ObjectRelationalMapper.getInstance().toCOMMITTransaction(customer);
 
             System.out.println(result);
         }
