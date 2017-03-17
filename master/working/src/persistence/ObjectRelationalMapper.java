@@ -204,7 +204,7 @@ class ObjectRelationalMapper {
 
         // add this StatementNode to graph
         StatementNode sN = new StatementNode(eClass, item, primaryGetterMap.get(eClass), columnValues,
-                primaryKey, persistence, noQuotesTypes, dateTypes);
+                primaryKey, persistence, noQuotesTypes);
         if (parent != null) {
             sN.addDependency(parent);
             parent.addDependent(sN);

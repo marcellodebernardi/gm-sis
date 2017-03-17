@@ -25,6 +25,7 @@ public class DependencyConnection {
 
     private DependencyConnection(DependencyConnection pair) {
         this.pair = pair;
+
         if (pair.role == Directionality.TRANSMITTER) role = Directionality.RECEIVER;
         else if (pair.role == Directionality.RECEIVER) role = Directionality.TRANSMITTER;
         else role = Directionality.BIDIRECTIONAL;
