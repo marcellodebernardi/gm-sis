@@ -2,6 +2,7 @@ package logic.parts;
 
 import domain.PartAbstraction;
 import domain.PartOccurrence;
+import domain.Searchable;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -78,9 +79,14 @@ public class PartsSystem {
     {
         return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName",EqualTo, query));
     }
-    public List<PartOccurrence> getAllFreeOccurrences()
+    public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction)
     {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo,0));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo,0).and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
+    }
+
+    public void deleteOccurrence(PartOccurrence partOccurrence,PartAbstraction partAbstraction)
+    {
+        persistence.deleteItem(new Criterion<>(PartOccurrence.class,"partOccurrenceID", EqualTo, partOccurrence.getPartOccurrenceID()).and("partAbstractionID",EqualTo,partAbstraction.getPartAbstractionID()));
     }
 
 

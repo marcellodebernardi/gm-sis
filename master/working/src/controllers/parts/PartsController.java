@@ -1,5 +1,6 @@
 package controllers.parts;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
@@ -418,7 +419,7 @@ public class PartsController implements Initializable {
                 for(int j=0;j<Integer.parseInt(partStockLevelField.getText());j++)
                 {
                     PartAbstraction partAbstraction = partAbstractionList.get(i);
-                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(),-1,-1);
+                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(),0,-1);
                     pSys.addPartOccurrence(partOccurrence);
                 }
             }
@@ -566,16 +567,26 @@ public class PartsController implements Initializable {
 
             int c=partDecrease.getPartStockLevel()-1;
             System.out.println(c);
-
+            System.out.println(partDecrease.getPartAbstractionID());
+            List<PartOccurrence> partOccurrences = pSys.getAllFreeOccurrences(partDecrease);
+            System.out.println("size is " + partOccurrences.size());
+            PartOccurrence partOccurrence = partOccurrences.get(0);
+            pSys.deleteOccurrence(partOccurrence,partDecrease);
             partDecrease.setPartStockLevel(c);
 
             saveChanges();
             updateTable();
 
 
-        }catch(Exception e){
+        }catch(IndexOutOfBoundsException | NullPointerException e){
 
-            showError("Please select a part first to decrease stock");
+            if(e instanceof IndexOutOfBoundsException)
+            {
+               e.printStackTrace();
+            }
+            else if(e instanceof NullPointerException){
+                showError("Please select a part first to decrease stock");
+            }
 
         }
 
