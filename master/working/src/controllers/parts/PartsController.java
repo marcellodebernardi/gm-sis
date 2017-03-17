@@ -641,6 +641,17 @@ public class PartsController implements Initializable {
 
 
     }
+    private java.time.LocalDate toLocalDate(Date date)
+    {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Instant instant = date.toInstant();
+        return instant.atZone(zoneId).toLocalDate();
+    }
+
+    private Date fromLocalDate(java.time.LocalDate localDate)
+    {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
 
 
 }

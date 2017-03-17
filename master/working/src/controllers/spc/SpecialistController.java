@@ -574,8 +574,7 @@ public class SpecialistController implements Initializable{
             }
             DiagRepBooking diagRepBookings = specRepairSystem.findBooking(Integer.parseInt(bookingID.getText()));
             if(diagRepBookings!=null) {
-              // DiagRepBooking diagRepBooking = diagRepBookings.get(0);
-               // bookingSystem.addBooking(diagRepBooking);
+               bookingSystem.commitBooking(diagRepBookings);
 
                 if(!isBefore(bookingDeliveryDate.getValue()))
                 {
@@ -598,22 +597,23 @@ public class SpecialistController implements Initializable{
                             {
                                 bookingCost.setText("0");
                             }
-                          //  Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
-                            //diagRepBooking.setBill(bill);
-                            VehicleRepair vehicleRepair = new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
+                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
+                            diagRepBookings.setBill(bill);
+                            VehicleRepair vehicleRepair= new VehicleRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), bookingItemID.getText());
                             specRepairSystem.addSpecialistBooking(vehicleRepair);
                             clearBookingFields();
                             showAlert("Successfully added vehicle booking");
                         }
                     } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
-                      Installation installation = specRepairSystem.checkIfInstalled(Integer.parseInt(bookingItemID.getText()));
+                      PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText()));
+                      Installation installation = partOccurrence.getInstallation();
                         if(installation!=null) {
                             if(!installation.getEndWarrantyDate().before(new Date()))
                             {
                                 bookingCost.setText("0");
                             }
-                          //  Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
-                           // diagRepBooking.setBill(bill);
+                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()), false);
+                            diagRepBookings.setBill(bill);
                             PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
                             specRepairSystem.addSpecialistBooking(partRepair);
                             clearBookingFields();
