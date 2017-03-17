@@ -50,22 +50,16 @@ public class DependencyConnection {
                 connection.addDependency(node);
                 node.addDependent(connection);
             }
-            else {
-                pair.connection = node;
-            }
+            else pair.connection = node;
         }
         if (role == Directionality.RECEIVER || role == Directionality.BIDIRECTIONAL) {
             if (connection != null) {
                 node.addDependency(connection);
                 connection.addDependent(node);
             }
-            else {
-                pair.connection = node;
-            }
+            else pair.connection = node;
         }
     }
-
-
 
 
 
