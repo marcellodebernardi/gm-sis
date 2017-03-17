@@ -1104,7 +1104,7 @@ public class VehicleController implements Initializable
         try {
             DiagRepBooking DRB = BookingsTable.getSelectionModel().getSelectedItem();
             List<PartOccurrence> parts = DRB.getRequiredPartsList();
-            if (parts.size()==0)
+            if (parts.size()==0 || parts == null)
             {
                 showAlert("No parts for this Booking");
                 return;
@@ -1116,13 +1116,24 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString());
+            String date;
+            if (DRB.getDiagnosisStart() == null)
+            {
+                date  = null;
+            }
+            else
+            {
+                date  =  DRB.getDiagnosisStart().toString();
+            }
+            PartLabel.setText("Booking DiagStart: " + date);
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
         catch (Exception e)
         {
             showAlert("No Booking selected");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -1136,6 +1147,10 @@ public class VehicleController implements Initializable
             setNextBookingDate();
             ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            if (cSys.getACustomers(vehicle.getCustomerID()) == null)
+            {
+                return;
+            }
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
             custInfo.clear();
             custInfo2.clear();

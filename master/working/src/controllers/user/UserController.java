@@ -193,7 +193,7 @@ public class UserController implements Initializable {
 
     public void displayTable(List<User> arrayList) {
         if (arrayList.size() == 0) {
-            showAlert("Nothing to display");
+            //showAlert("Nothing to display");
             return;
         }
         try {

@@ -334,7 +334,7 @@
                               </Label>
                               <Label fx:id="PartLabel" alignment="CENTER" text="Label" textAlignment="CENTER" visible="false" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <font>
-                                    <Font size="27.0" />
+                                    <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
