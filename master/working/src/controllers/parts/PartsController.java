@@ -538,6 +538,8 @@ public class PartsController implements Initializable {
         try{
 
             PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
+            PartOccurrence partOccurrence = new PartOccurrence(partIncrease.getPartAbstractionID(), 0,0);
+            pSys.addPartOccurrence(partOccurrence);
             int c=partIncrease.getPartStockLevel()+1;
             System.out.println(c);
 

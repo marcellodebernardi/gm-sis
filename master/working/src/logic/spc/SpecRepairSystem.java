@@ -307,13 +307,10 @@ public class SpecRepairSystem {
     }
 
     public Installation checkIfInstalled(int partOccurrence)  {
-        List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber",EqualTo,""));
-        for(Installation installation: installations) {
-            int x = installation.getPartOccurrence().getPartOccurrenceID();
-            if(x == partOccurrence)
-                return installation;
-        }
-        return null;
+
+        return persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID",EqualTo,partOccurrence)).get(0);
+
+
     }
 
     public VehicleRepair getBySpcRepID(int spcRep)
