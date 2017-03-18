@@ -9,11 +9,11 @@ import java.lang.reflect.Constructor;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Pattern;
 
+import static logic.criterion.CriterionException.Cause.ARGUMENTS_INCOMPATIBLE;
+import static logic.criterion.CriterionException.Cause.NULL_INPUTS;
 import static logic.criterion.CriterionOperator.Regex;
 
 /**
@@ -89,11 +89,11 @@ public class Criterion<E extends Searchable> {
             throws CriterionException {
         this.eClass = eClass;
 
-        // check inputs
+        // check inputs for correctness
         if (eClass == null || attribute == null || operator == null || value == null)
-            throw new CriterionException("Null inputs.");
-        if (!operatorIsCompatible(operator, value) || !isClassCompatible(attribute, value))
-            throw new CriterionException("Operator, attribute or value incompatible.");
+            throw new CriterionException().because(NULL_INPUTS);
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
         criterionQuery = new StringBuilder(attribute).append(" ").append(operator).append(" ");
         appendValue(value, operator);
@@ -120,11 +120,9 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion<E> and(String attribute, CriterionOperator operator, Object value)
-            throws CriterionException {
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value) || !isClassCompatible(attribute, value))
-            throw new CriterionException("Operator, attribute or value incompatible.");
+    public Criterion<E> and(String attribute, CriterionOperator operator, Object value) throws CriterionException {
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
         criterionQuery.append(" AND ").append(attribute).append(" ").append(operator);
         appendValue(value, operator);
@@ -141,11 +139,9 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion<E> or(String attribute, CriterionOperator operator, Object value)
-            throws CriterionException {
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value) || !isClassCompatible(attribute, value))
-            throw new CriterionException("Operator, attribute or value incompatible.");
+    public Criterion<E> or(String attribute, CriterionOperator operator, Object value) throws CriterionException {
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
         criterionQuery.append(" OR ").append(attribute).append(" ").append(operator);
         appendValue(value, operator);
@@ -197,9 +193,9 @@ public class Criterion<E extends Searchable> {
             criterionQuery.append("'").append(value).append("'");
     }
 
-    // returns true if attribute and value are compatible with class of Criterion
+    // HELPER: returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {
-        if (!DEVELOPMENT_MODE) return true; // checks not performed in deployment
+        if (!DEVELOPMENT_MODE) return true; // checks not performed in deployment for performance
 
         // get argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
@@ -238,8 +234,8 @@ public class Criterion<E extends Searchable> {
         }
     }
 
-    // returns true if operator and value are compatible
-    private boolean operatorIsCompatible(CriterionOperator operator, Object value) {
+    // HELPER: returns true if operator and value are compatible
+    private boolean isRegexCompatible(CriterionOperator operator, Object value) {
         return !(operator.equals(Regex) &&
                 !(value.getClass().equals(String.class) || value.getClass().equals(Pattern.class)));
     }
