@@ -10,6 +10,7 @@ public class Mechanic implements Searchable {
     private String surname;
     private double hourlyRate;
 
+
     @Reflective
     private Mechanic(@Column(name = "mechanicID", primary = true) int mechanicID,
                     @Column(name = "firstName") String firstName,
@@ -21,13 +22,10 @@ public class Mechanic implements Searchable {
         this.hourlyRate = hourlyRate;
     }
 
+
     @Column(name = "mechanicID", primary = true)
     public int getMechanicID() {
         return mechanicID;
-    }
-
-    public void setMechanicID(int mechanicID) {
-        this.mechanicID = mechanicID;
     }
 
     @Column(name = "firstName")
@@ -35,22 +33,27 @@ public class Mechanic implements Searchable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     @Column(name = "surname")
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     @Column(name = "hourlyRate")
     public double getHourlyRate() {
         return hourlyRate;
+    }
+
+
+    public void setMechanicID(int mechanicID) {
+        this.mechanicID = mechanicID;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public void setHourlyRate(double hourlyRate) {

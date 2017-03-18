@@ -67,17 +67,9 @@ public class Installation implements Searchable {
         return installationID;
     }
 
-    public void setInstallationID(int installationID) {
-        this.installationID = installationID;
-    }
-
     @Column(name = "installationDate")
     public Date getInstallationDate() {
         return installationDate;
-    }
-
-    public void setInstallationDate(Date installationDate) {
-        this.installationDate = installationDate;
     }
 
     @Column(name = "endWarrantyDate")
@@ -85,17 +77,9 @@ public class Installation implements Searchable {
         return endWarrantyDate;
     }
 
-    public void setEndWarrantyDate(Date endWarrantyDate) {
-        this.endWarrantyDate = endWarrantyDate;
-    }
-
     @Column(name = "vehicleRegNumber")
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
-    }
-
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
     }
 
     @Column(name = "partAbstractionID")
@@ -103,13 +87,44 @@ public class Installation implements Searchable {
         return partAbstractionID;
     }
 
-    public void setPartAbstractionID(int partAbstractionID) {
-        this.partAbstractionID = partAbstractionID;
-    }
-
     @TableReference(baseType = Installation.class, subTypes = PartOccurrence.class, key = "installationID")
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
+    }
+
+    @Lazy
+    public Customer getCustomer() {
+        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "regNumber",
+                CriterionOperator.EqualTo, getVehicleRegNumber()));
+
+        if (vehicles.size() != 0) {
+            List<Customer> customers = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class, "customerID",
+                    CriterionOperator.EqualTo, vehicles.get(0).getCustomerID()));
+
+            if (customers.size() != 0) return customers.get(0);
+        }
+        return null;
+    }
+
+
+    public void setInstallationID(int installationID) {
+        this.installationID = installationID;
+    }
+
+    public void setInstallationDate(Date installationDate) {
+        this.installationDate = installationDate;
+    }
+
+    public void setEndWarrantyDate(Date endWarrantyDate) {
+        this.endWarrantyDate = endWarrantyDate;
+    }
+
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        this.vehicleRegNumber = vehicleRegNumber;
+    }
+
+    public void setPartAbstractionID(int partAbstractionID) {
+        this.partAbstractionID = partAbstractionID;
     }
 
     public void setPartOccurrence(PartOccurrence partOccurrence) {
@@ -118,20 +133,6 @@ public class Installation implements Searchable {
 
     public int getPartOccurrence(PartOccurrence partOccurrence) {
         return partOccurrence.getPartOccurrenceID();
-    }
-
-
-    public Customer getCustomer() {
-        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "regNumber",
-                CriterionOperator.EqualTo, getVehicleRegNumber()));
-
-        if (vehicles.size() != 0) {
-            List<Customer> customers = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class, "customerID",
-                            CriterionOperator.EqualTo, vehicles.get(0).getCustomerID()));
-
-            if (customers.size() != 0) return customers.get(0);
-        }
-        return null;
     }
 
 }

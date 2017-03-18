@@ -21,6 +21,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     private ZonedDateTime diagnosisEnd;
     private ZonedDateTime repairStart;
     private ZonedDateTime repairEnd;
+
     // direction inversion in database
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
@@ -55,8 +56,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         }
     }
 
-    // reflection only, do not use
-    @Reflective
+    @Reflective // reflection only, do not use
     private DiagRepBooking(@Column(name = "bookingID", primary = true) int bookingID,
                            @Column(name = "vehicleRegNumber") String vehicleRegNumber,
                            @Column(name = "description") String description,
@@ -78,138 +78,73 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     }
 
 
-    /**
-     * Get unique ID of this booking.
-     *
-     * @return booking ID
-     */
     @Column(name = "bookingID", primary = true) @Override
     public int getBookingID() {
         return super.getBookingID();
     }
 
-    /**
-     * Get unique registration number of associated vehicle
-     *
-     * @return vehicle registration number
-     */
     @Column(name = "vehicleRegNumber") @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
     }
 
-    /**
-     * Associate the booking to a different vehicle, by giving the registration number
-     * of the new vehicle. Note that the list of bookings in the corresponding vehicle must also
-     * be updated.
-     *
-     * @param vehicleRegNumber unique registration number of new vehicle to associate
-     */
-    @Override
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        super.setVehicleRegNumber(vehicleRegNumber);
-    }
-
-    /**
-     * Get description of booking as entered by some user.
-     *
-     * @return booking description
-     */
     @Column(name = "description") @Override
     public String getDescription() {
         return super.getDescription();
     }
 
-    /**
-     * Sets the description of the booking.
-     *
-     * @param description new description
-     */
-    @Override
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    /**
-     * Get the bill amount associated with this booking.
-     *
-     * @return booking bill
-     */
     @Column(name = "billAmount")
     public double getBillAmount() {
         return super.getBill().getBillAmount();
     }
 
-    /**
-     * Get the settling status of the bill associated with this booking
-     *
-     * @return
-     */
     @Column(name = "billSettled")
     public boolean getBillSettled() {
         return super.getBill().isBillSettled();
     }
 
-    /**
-     * Returns the ID of the mechanic associated with this booking
-     *
-     * @return ID of mechanic
-     */
     @Column(name = "mechanicID")
     public int getMechanicID() {
         return super.getMechanicID();
     }
 
-    /**
-     * Returns the start time of the diagnosis booking.
-     *
-     * @return start time of diagnosis
-     */
     @Column(name = "diagnosisStart")
     public ZonedDateTime getDiagnosisStart() {
         return diagnosisStart;
     }
 
-    /**
-     * Returns the end time of the diagnosis booking.
-     *
-     * @return end time of diagnosis
-     */
     @Column(name = "diagnosisEnd")
     public ZonedDateTime getDiagnosisEnd() {
         return diagnosisEnd;
     }
 
-    /**
-     * Returns the start time of the repair booking.
-     *
-     * @return start time of repair
-     */
     @Column(name = "repairStart")
     public ZonedDateTime getRepairStart() {
         return repairStart;
     }
 
-    /**
-     * Returns the end time of the repair booking.
-     *
-     * @return end time of repair
-     */
     @Column(name = "repairEnd")
     public ZonedDateTime getRepairEnd() {
         return repairEnd;
     }
 
-    /**
-     * Returns a SpecRepairBooking object representing a specialist repair subcontract.
-     *
-     * @return a specialist repair booking
-     */
     @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
     public SpecRepBooking getSpecRepBooking() {
         return specRepBooking;
     }
 
+    @DependencyHandler
+    public void addRequiredPart(PartOccurrence part) {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
+        DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
+        part.setBooking(transmitter.pair());
+    }
+
+    @DependencyHandler
+    public List<DependencyConnection> getDependencies() {
+        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
+        return dependencyConnections;
+    }
 
     @Lazy
     public List<PartOccurrence> getRequiredPartsList() {
@@ -219,13 +154,6 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                     .getByCriteria(new Criterion<>(
                             PartOccurrence.class, "bookingID", CriterionOperator.EqualTo, getBookingID()));
         return requiredPartsList;
-    }
-
-    @DependencyHandler
-    public void addRequiredPart(PartOccurrence part) {
-        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
-        DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
-        part.setBooking(transmitter.pair());
     }
 
     @Lazy
@@ -254,9 +182,14 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return null;
     }
 
-    @DependencyHandler
-    public List<DependencyConnection> getDependencies() {
-        if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
-        return dependencyConnections;
+
+    @Override
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        super.setVehicleRegNumber(vehicleRegNumber);
+    }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
     }
 }

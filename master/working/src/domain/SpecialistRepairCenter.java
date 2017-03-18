@@ -21,6 +21,7 @@ public class SpecialistRepairCenter implements Searchable {
 
     /**
      * Creates a new SPC
+     *
      * @param name
      * @param address
      * @param phone
@@ -38,13 +39,13 @@ public class SpecialistRepairCenter implements Searchable {
 
     @Reflective
     private SpecialistRepairCenter(@Column(name = "spcID", primary = true) int spcID,
-                                  @Column(name = "name") String name,
-                                  @Column(name = "address") String address,
-                                  @Column(name = "phone") String phone,
-                                  @Column(name = "email") String email,
-                                  @TableReference(baseType = SpecRepBooking.class,
-                                          subTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
-                                          List<SpecRepBooking> bookings) {
+                                   @Column(name = "name") String name,
+                                   @Column(name = "address") String address,
+                                   @Column(name = "phone") String phone,
+                                   @Column(name = "email") String email,
+                                   @TableReference(baseType = SpecRepBooking.class,
+                                           subTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
+                                           List<SpecRepBooking> bookings) {
         this.spcID = spcID;
         this.name = name;
         this.address = address;
@@ -81,13 +82,13 @@ public class SpecialistRepairCenter implements Searchable {
 
     @TableReference(baseType = SpecRepBooking.class,
             subTypes = {PartRepair.class, VehicleRepair.class}, key = "spcID")
-    public List<SpecRepBooking> getBookings()
-    {
+    public List<SpecRepBooking> getBookings() {
         return this.bookings;
     }
 
+
     public boolean setName(String name) {
-        if(!name.equals("")) {
+        if (!name.equals("")) {
             this.name = name;
             return true;
         }
@@ -95,7 +96,7 @@ public class SpecialistRepairCenter implements Searchable {
     }
 
     public boolean setAddress(String address) {
-        if(!address.equals("")) {
+        if (!address.equals("")) {
             this.address = address;
             return true;
         }
@@ -103,7 +104,7 @@ public class SpecialistRepairCenter implements Searchable {
     }
 
     public boolean setPhone(String phone) {
-        if(phone.length() == 11 && containsChar(phone)) {
+        if (phone.length() == 11 && containsChar(phone)) {
             this.phone = phone;
             return true;
         }
@@ -111,31 +112,27 @@ public class SpecialistRepairCenter implements Searchable {
     }
 
     public boolean setEmail(String email) {
-        if(!email.equals("")  && email.contains("@")) {
+        if (!email.equals("") && email.contains("@")) {
             this.email = email;
             return true;
         }
         return false;
     }
 
-    public void setBookings(List SpecRepBookings)
-    {
+    public void setBookings(List SpecRepBookings) {
         this.bookings = SpecRepBookings;
     }
 
-    public void addToBooking(SpecRepBooking specRepBooking)
-    {
+    public void addToBooking(SpecRepBooking specRepBooking) {
         this.bookings.add(specRepBooking);
     }
 
-    private boolean containsChar(String number)
-    {
-        try{
-           double d  = Double.parseDouble(number);
-           return true;
+    private boolean containsChar(String number) {
+        try {
+            double d = Double.parseDouble(number);
+            return true;
         }
-        catch (NumberFormatException e)
-        {
+        catch (NumberFormatException e) {
             return false;
         }
     }

@@ -152,6 +152,7 @@ public class Vehicle implements Searchable {
         return bookingList;
     }
 
+
     public void setRegNumber(String regNumber) {
         this.regNumber = regNumber;
     }

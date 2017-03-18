@@ -7,12 +7,13 @@ import java.util.Date;
  * project: SE31
  * This is the class for sending a particular Vehicle off to a spc.
  */
-public class PartRepair extends SpecRepBooking
-{
+public class PartRepair extends SpecRepBooking {
     private int partOccurrenceID;
+
 
     /**
      * Creates a new PartRepair
+     *
      * @param spcID
      * @param deliveryDate
      * @param returnDate
@@ -29,12 +30,12 @@ public class PartRepair extends SpecRepBooking
     // reflection only, do not use
     @Reflective
     private PartRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
-                      @Column(name = "spcID") int spcID,
-                      @Column(name = "deliveryDate") Date deliveryDate,
-                      @Column(name = "returnDate") Date returnDate,
-                      @Column(name = "cost") double cost,
-                      @Column(name = "bookingID") int bookingID,
-                      @Column(name = "partOccurrenceID") int partOccurrenceID) {
+                       @Column(name = "spcID") int spcID,
+                       @Column(name = "deliveryDate") Date deliveryDate,
+                       @Column(name = "returnDate") Date returnDate,
+                       @Column(name = "cost") double cost,
+                       @Column(name = "bookingID") int bookingID,
+                       @Column(name = "partOccurrenceID") int partOccurrenceID) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.partOccurrenceID = partOccurrenceID;
     }
@@ -45,17 +46,9 @@ public class PartRepair extends SpecRepBooking
         return super.getSpcRepID();
     }
 
-    public void setSpcRepID() {
-        // todo implement
-    }
-
     @Column(name = "spcID")
     public int getspcID() {
         return super.getSpcID();
-    }
-
-    public void setSpcID(int spcID) {
-        // todo implement
     }
 
     @Column(name = "deliveryDate")
@@ -63,17 +56,9 @@ public class PartRepair extends SpecRepBooking
         return super.getDeliveryDate();
     }
 
-    public void setDeliveryDate() {
-        // todo implement
-    }
-
     @Column(name = "returnDate")
     public Date getReturnDate() {
         return super.getReturnDate();
-    }
-
-    public void setReturnDate() {
-        // todo implement
     }
 
     @Column(name = "cost")
@@ -81,22 +66,39 @@ public class PartRepair extends SpecRepBooking
         return super.getCost();
     }
 
-    public void setCost() {
-        // todo implement
-    }
-
     @Column(name = "bookingID")
     public int getBookingID() {
         return super.getBookingID();
     }
 
-    public void setBookingID(int bookingID) {
-        super.setBookingID(bookingID);
-    }
-
     @Column(name = "partOccurrenceID")
     public int getPartOccurrenceID() {
         return partOccurrenceID;
+    }
+
+
+    public void setSpcRepID() {
+        // todo implement
+    }
+
+    public void setSpcID(int spcID) {
+        // todo implement
+    }
+
+    public void setDeliveryDate() {
+        // todo implement
+    }
+
+    public void setReturnDate() {
+        // todo implement
+    }
+
+    public void setCost() {
+        // todo implement
+    }
+
+    public void setBookingID(int bookingID) {
+        super.setBookingID(bookingID);
     }
 
     public void setPartOccurrenceID(int partOccurrenceID) {

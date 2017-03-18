@@ -41,7 +41,6 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         this.specRepID = specRepID;
     }
 
-
     @Reflective
     private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
                            @Column(name = "partAbstractionID") int partAbstractionID,
@@ -54,6 +53,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         this.bookingID = bookingID;
         this.specRepID = specRepID;
     }
+
 
     @Column(name = "partOccurrenceID", primary = true)
     public int getPartOccurrenceID() {
