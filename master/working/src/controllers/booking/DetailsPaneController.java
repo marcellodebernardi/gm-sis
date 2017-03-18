@@ -33,6 +33,8 @@ public class DetailsPaneController {
     private DateTimeFormatter dateFormatter;
     private Callback<DatePicker, DateCell> dayCellFactory;
 
+    private DiagRepBooking selectedBooking;
+
     // customer and vehicle ComboBoxes
     @FXML private TextField bookingIDTextField;
     @FXML private TextField customerSearchBar;
@@ -93,7 +95,6 @@ public class DetailsPaneController {
     }
 
 
-    //////////////////// EVENT HANDLERS /////////////////////////
     @FXML private void selectCustomer() {
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
     }
@@ -103,25 +104,23 @@ public class DetailsPaneController {
         System.out.println(getDiagnosisStartTime() + " " + getDiagnosisEndTime());
         System.out.println(getRepairStartTime() + " " + getRepairEndTime());
 
-        DiagRepBooking booking =(new DiagRepBooking(
-                getVehicleRegFromComboBox(),
-                getDescriptionFromTextField(),
-                0,
-                false,
-                getMechanicIDFromComboBox(),
-                getDiagnosisStartTime(),
-                getDiagnosisEndTime(),
-                getRepairStartTime(),
-                getRepairEndTime(),
-                null,
-                getPartsListFromList()
-        ));
+        // todo implement bill and parts
+        selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
+        selectedBooking.setDescription(getDescriptionFromTextField());
+        selectedBooking.setBill(new Bill(0, false));
+        selectedBooking.setMechanicID(getMechanicIDFromComboBox());
+        selectedBooking.setDiagnosisStart(getDiagnosisStartTime());
+        selectedBooking.setDiagnosisEnd(getDiagnosisEndTime());
+        selectedBooking.setRepairStart(getRepairStartTime());
+        selectedBooking.setRepairEnd(getRepairEndTime());
 
-        if (bookingSystem.commitBooking(booking)) {
+
+        if (bookingSystem.commitBooking(selectedBooking)) {
             ((ListPaneController)master.getController(ListPaneController.class))
                     .refreshBookingTable();
             ((CalendarPaneController)master.getController(CalendarPaneController.class))
-                    .addBookingAppointment(booking);
+                    .addBookingAppointment(selectedBooking);
+            clearDetails();
         }
     }
 
@@ -135,6 +134,8 @@ public class DetailsPaneController {
     }
 
     @FXML private void clearDetails() {
+        selectedBooking = null;
+
         bookingIDTextField.clear();
         customerSearchBar.clear();
         populateVehicleComboBox(Collections.emptyList());
@@ -150,7 +151,11 @@ public class DetailsPaneController {
         populatePartsTable(Collections.emptyList());
     }
 
+
+    /* HELPER: fills in the details of a booking in the details pane */
     void populateDetailFields(DiagRepBooking booking) {
+        selectedBooking = booking;
+
         Customer customer = booking.getCustomer();
         Vehicle vehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
         ZonedDateTime diagnosisStart = booking.getDiagnosisStart();
@@ -178,8 +183,7 @@ public class DetailsPaneController {
 
     }
 
-
-    ///////////////////// DATA MANIPULATIONS /////////////////////
+    /* HELPER: adds all customers to the customer search bar's autocomplete function */
     private void populateCustomerTextField(List<Customer> customers) {
         List<String> customerInfo = new ArrayList<>();
         for (Customer c : customers) {
@@ -188,6 +192,7 @@ public class DetailsPaneController {
         TextFields.bindAutoCompletion(customerSearchBar, customerInfo);
     }
 
+    /* HELPER: adds customer's vehicle to the vehicle selection ComboBox */
     private void populateVehicleComboBox(List<Vehicle> vehicles) {
         List<String> vehicleInfo = new ArrayList<>();
         for (Vehicle v : vehicles) {
@@ -197,6 +202,7 @@ public class DetailsPaneController {
         vehicleComboBox.setItems(vehicleInfoObservable);
     }
 
+    /* HELPER: adds all mechanics to the ComboBox for mechanic selection */
     private void populateMechanicComboBox(List<Mechanic> mechanics) {
         List<String> mechanicInfo = new ArrayList<>();
         for (Mechanic m : mechanics) {
@@ -206,6 +212,7 @@ public class DetailsPaneController {
         mechanicComboBox.setItems(mechanicInfoObservable);
     }
 
+    /* HELPER: generates rows for the table containing a booking's parts */
     private void populatePartsTable(List<PartOccurrence> parts) {
         ObservableList<PartOccurrence> partsObservable = FXCollections.observableArrayList(parts);
 
@@ -228,8 +235,7 @@ public class DetailsPaneController {
         partsTable.refresh();
     }
 
-
-    //////////////////////// HELPERS ///////////////////////////
+    /* HELPER: generates confirmation alert for vehicle deletion */
     private boolean confirmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Deletion Confirmation");
@@ -239,14 +245,14 @@ public class DetailsPaneController {
                 .isPresent();
     }
 
-    // Returns the customer selected in the customer search bar
+    /* HELPER: gets the name of the selected customer from the search bar */
     private Customer getCustomerFromSearchBar() {
         return customerSystem.getACustomers(Integer.parseInt(customerSearchBar
                 .getText()
                 .split(":")[0]));
     }
 
-    // returns the vehicle reg of the selected vehicle
+    /* HELPER: gets the selected vehicle registration number from the ComboBox */
     private String getVehicleRegFromComboBox() {
         return vehicleComboBox
                 .getSelectionModel()
@@ -254,7 +260,7 @@ public class DetailsPaneController {
                 .split(":")[0];
     }
 
-    // gets the description of the booking
+    /* HELPER: gets the description from the appropriate textfield */
     private String getDescriptionFromTextField() {
         return descriptionTextField.getText();
     }

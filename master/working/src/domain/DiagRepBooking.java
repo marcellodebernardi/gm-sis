@@ -51,6 +51,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         this.repairStart = repairStart;
         this.repairEnd = repairEnd;
         this.specRepBooking = specRepBooking;
+
         for (PartOccurrence part : repairParts) {
             addRequiredPart(part);
         }
@@ -192,4 +193,21 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     public void setDescription(String description) {
         super.setDescription(description);
     }
+
+    public void setDiagnosisStart(ZonedDateTime diagnosisStart) {
+        this.diagnosisStart = diagnosisStart;
+    }
+
+    public void setDiagnosisEnd(ZonedDateTime diagnosisEnd) {
+        this.diagnosisEnd = diagnosisEnd;
+    }
+
+    public void setRepairStart(ZonedDateTime repairStart) {
+        this.repairStart = repairStart;
+    }
+
+    public void setRepairEnd(ZonedDateTime repairEnd) {
+        this.repairEnd = repairEnd;
+    }
+
 }

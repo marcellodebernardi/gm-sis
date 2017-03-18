@@ -45,7 +45,7 @@ public class ListPaneController {
     public ListPaneController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
-        timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
+        timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     }
 

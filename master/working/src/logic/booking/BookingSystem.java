@@ -154,7 +154,7 @@ public class BookingSystem {
         return true;
     }
 
-    /* Checks that the booking does not clash temporally with other bookings */
+    /* HELPER: Checks that the booking does not clash temporally with other bookings */
     private boolean clashes(DiagRepBooking booking) {
         List<ZonedDateTime> times = new ArrayList<>();
         times.add(booking.getDiagnosisStart());
