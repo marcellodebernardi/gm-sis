@@ -451,7 +451,7 @@ public class SpecialistController implements Initializable{
                     item_found_lbl.setVisible(true);
                 }
             }
-            catch (IndexOutOfBoundsException ex)
+                catch (NullPointerException ex)
             {
                 item_found_lbl.setTextFill(Color.RED);
                 item_found_lbl.setText("Please enter exact vehicle reg");
@@ -738,7 +738,7 @@ public class SpecialistController implements Initializable{
     private Button hideInstalls, addInsta, editInsta, deleteInsta,cancelInstallationUpdate,allowUpdate,clearPartsFields;
 
     @FXML
-    private TextField instaAbsID, instaOccID, instaVReg;
+    private TextField instaVReg;
     @FXML
     private Label instaAbsID_lbl, instaOccID_lbl, instaVReg_lbl,instaDate_lbl, wEndDate_lbl = new Label();
 
@@ -816,10 +816,10 @@ public class SpecialistController implements Initializable{
     {
         try {
             Installation installation = Installations.getSelectionModel().getSelectedItem();
-            PartAbstraction partAbstraction = partsSystem.getPartbyID(installation.getPartAbstractionID());
+            PartOccurrence partOccurrence = partsSystem.getByInstallationID(installation.getInstallationID());
+            PartAbstraction partAbstraction = partsSystem.getPartbyID(partOccurrence.getPartAbstractionID());
             instaVReg.setText(installation.getVehicleRegNumber());
             partDes.setValue(partAbstraction.getPartName());
-            partDes.setValue(Integer.toString(installation.getPartAbstractionID()));
             installationID = installation.getInstallationID();
             partSerial.setValue(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
             java.time.LocalDate installationDate = toLocalDate(installation.getInstallationDate());
@@ -829,7 +829,7 @@ public class SpecialistController implements Initializable{
         }
         catch (NullPointerException e)
         {
-            showAlert("No available installations.");
+            e.printStackTrace();
         }
     }
 
@@ -888,8 +888,8 @@ public class SpecialistController implements Initializable{
         Installation installation = new Installation(fromLocalDate(instaDate.getValue()), fromLocalDate(wEndDate.getValue()), instaVReg.getText(), partAbs, partOccurrence);
         installations.add(installation);
         vehicle.setInstallationList(installations);
-        VehicleSys.getInstance().updateVehicle(vehicle);
-        //specRepairSystem.commitInstallations(installation);
+        //VehicleSys.getInstance().updateVehicle(vehicle);
+        specRepairSystem.commitInstallations(installation);
     }
 
     public void editInstallation()

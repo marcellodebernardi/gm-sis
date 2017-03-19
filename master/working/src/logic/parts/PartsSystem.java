@@ -1,5 +1,6 @@
 package logic.parts;
 
+import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
 import domain.Searchable;
@@ -93,6 +94,11 @@ public class PartsSystem {
     public List<PartOccurrence> getAllUninstalled(int partAbstractionID)
     {
         return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0).and("partAbstractionID",EqualTo,partAbstractionID));
+    }
+
+    public PartOccurrence getByInstallationID(int InstallationID)
+    {
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"installationID",EqualTo, InstallationID)).get(0);
     }
 }
 
