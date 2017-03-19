@@ -1,5 +1,6 @@
 package logic.booking;
 
+import domain.Customer;
 import domain.DiagRepBooking;
 import domain.Mechanic;
 import logic.criterion.Criterion;
@@ -115,10 +116,20 @@ public class BookingSystem {
      */
     public List<DiagRepBooking> searchBookings(String query) {
         if (query == null) throw new NullPointerException();
+        if (query.equals("")) return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
 
-        return persistence.getByCriteria(
-                new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Regex, query)
-        );
+        List<DiagRepBooking> results = new ArrayList<>();
+
+        results.addAll(persistence.getByCriteria(new Criterion<>
+                (DiagRepBooking.class, "vehicleRegNumber", Regex, query)));
+
+        List<Customer> customers = persistence.getByCriteria(new Criterion<>
+                (Customer.class, "customerFirstname", Regex, query)
+                .or("customerSurname", Regex, query));
+
+        for (Customer c : customers) results.addAll(c.getBookings());
+
+        return results;
     }
 
     /**

@@ -129,7 +129,8 @@ public class ListPaneController {
             Customer customer = p.getValue().getCustomer();
             return customer == null ?
                     new ReadOnlyObjectWrapper<>("") :
-                    new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
+                    new ReadOnlyObjectWrapper<>(customer.getCustomerFirstname() + " "
+                            + customer.getCustomerSurname());
         });
         vehicleRegColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())

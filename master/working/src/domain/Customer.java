@@ -5,6 +5,7 @@ import logic.criterion.CriterionOperator;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -125,13 +126,13 @@ public class Customer implements Searchable {
 
     @Lazy
     public List<DiagRepBooking> getBookings() {
-        List<DiagRepBooking> bookings = persistence.getByCriteria(new Criterion<>(
-                DiagRepBooking.class,
-                "customerID",
-                EqualTo,
-                customerID));
+        List<DiagRepBooking> bookings = new ArrayList<>();
 
-        return bookings != null ? bookings : Collections.emptyList();
+        for (Vehicle v : getVehicles()) {
+            bookings.addAll(v.getBookingList());
+        }
+
+        return bookings;
     }
 
 
