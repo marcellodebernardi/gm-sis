@@ -133,7 +133,7 @@
                                                 <TableColumn fx:id="warrantyEnd" minWidth="0.0" prefWidth="105.88302612304688" text="Warranty End" />
                                                 <TableColumn fx:id="partAbsID" prefWidth="96.96728515625" text="Part ID" />
                                                 <TableColumn fx:id="partOccID" minWidth="0.0" prefWidth="77.534912109375" text="Part Occ" />
-                                                <TableColumn fx:id="regNumber" prefWidth="171.465087890625" text="Registration" />
+                                                <TableColumn fx:id="vehicleRegNumber" prefWidth="171.465087890625" text="Registration" />
                                     <TableColumn fx:id="bookingID" prefWidth="79.409912109375" text="Booking ID" />
                                     <TableColumn fx:id="firstName" prefWidth="120.4403076171875" text="First Name" />
                                     <TableColumn fx:id="surname" prefWidth="123.5596923828125" text="Surname" />

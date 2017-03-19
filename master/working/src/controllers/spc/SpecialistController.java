@@ -229,8 +229,8 @@ public class SpecialistController implements Initializable{
                     vehicles.addAll(customer.getVehicles());
                 }
                 for (Vehicle vehicle : vehicles) {
-                    if (specRepairSystem.getVehicleBookings(vehicle.getRegNumber()) != null) {
-                        vehicleRepairs.addAll(specRepairSystem.getVehicleBookings(vehicle.getRegNumber()));
+                    if (specRepairSystem.getVehicleBookings(vehicle.getVehicleRegNumber()) != null) {
+                        vehicleRepairs.addAll(specRepairSystem.getVehicleBookings(vehicle.getVehicleRegNumber()));
                     }
                 }
                 displaySpecRepBookings(vehicleRepairs);
@@ -750,7 +750,7 @@ public class SpecialistController implements Initializable{
             Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(vehicleRepair.getVehicleRegNumber());
             Installations.setVisible(true);
             hideInstalls.setVisible(true);
-            List<Installation> installations = specRepairSystem.getVehicleInstallations(vehicle.getRegNumber());
+            List<Installation> installations = specRepairSystem.getVehicleInstallations(vehicle.getVehicleRegNumber());
             displayInstallations(installations);
             addInsta.setVisible(true);
             editInsta.setVisible(true);

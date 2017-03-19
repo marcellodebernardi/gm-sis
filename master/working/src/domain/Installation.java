@@ -50,14 +50,12 @@ public class Installation implements Searchable {
                          @Column(name = "installationDate") Date installationDate,
                          @Column(name = "endWarrantyDate") Date endWarrantyDate,
                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
-                         @Column(name = "partAbstractionID") int partAbstractionID,
                          @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence) {
         this.installationID = installationID;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
-        this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;
     }
 
@@ -82,13 +80,7 @@ public class Installation implements Searchable {
         return vehicleRegNumber;
     }
 
-    @Column(name = "partAbstractionID")
-    public int getPartAbstractionID() {
-        return partAbstractionID;
-    }
-
     @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
-
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
     }
@@ -105,6 +97,16 @@ public class Installation implements Searchable {
             if (customers.size() != 0) return customers.get(0);
         }
         return null;
+    }
+
+    @Lazy
+    public PartAbstraction getPartAbstraction() {
+        return partOccurrence.getPartAbstraction();
+    }
+
+    @Lazy @Deprecated
+    public int getPartAbstractionID() {
+        return partAbstractionID;
     }
 
 

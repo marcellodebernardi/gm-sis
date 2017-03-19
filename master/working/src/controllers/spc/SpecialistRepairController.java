@@ -450,7 +450,7 @@ public class SpecialistRepairController implements Initializable{
                                 }
                                 if (vehicles.size() > 0) {
                                     for (Vehicle vehicle : vehicles) {
-                                        vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(vehicle.getRegNumber()));
+                                        vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(vehicle.getVehicleRegNumber()));
                                     }
                                     if (vehicleRepairList != null) {
                                         showToTable(vehicleRepairList);
@@ -470,7 +470,7 @@ public class SpecialistRepairController implements Initializable{
                         }
                         if (vehicles.size() > 0) {
                             for (Vehicle v : vehicles)
-                                vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getRegNumber()));
+                                vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getVehicleRegNumber()));
                             if (vehicleRepairList != null) {
                                 showToTable(vehicleRepairList);
                             }

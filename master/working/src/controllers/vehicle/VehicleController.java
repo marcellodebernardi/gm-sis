@@ -263,11 +263,11 @@ public class VehicleController implements Initializable
             {
                 throw new  Exception();
             }
-            System.out.println(vehicle.getRegNumber());
+            System.out.println(vehicle.getVehicleRegNumber());
             if ((!showAlertC("Sure you want to delete this Vehicle?"))) {
                 return;
             }
-            boolean check = vSys.deleteVehicle(vehicle.getRegNumber());
+            boolean check = vSys.deleteVehicle(vehicle.getVehicleRegNumber());
             if (check) {
                 showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
                 searchVehicleA();
@@ -285,13 +285,13 @@ public class VehicleController implements Initializable
 
     public void setVehicleDets(Vehicle vehicle) {
         AddEditL.setText("Edit Vehicle");
-        reg.setText(vehicle.getRegNumber());
+        reg.setText(vehicle.getVehicleRegNumber());
         addV.setText("Edit");
         VehicleS.setDisable(true);
         deleteV.setDisable(false);
         newVB.setDisable(false);
         ClearV.setDisable(true);
-        reg.setText(vehicle.getRegNumber());
+        reg.setText(vehicle.getVehicleRegNumber());
         cID.setValue(Integer.toString(vehicle.getCustomerID()));
         vType.setValue(vehicle.getVehicleType().toString());
         mod.setText(vehicle.getModel());
@@ -410,7 +410,7 @@ public class VehicleController implements Initializable
             tReg.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
-                    (event.getTableView().getItems().get(event.getTablePosition().getRow())).setRegNumber(event.getNewValue());
+                    (event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleRegNumber(event.getNewValue());
                 }
             });
 
@@ -1040,7 +1040,7 @@ public class VehicleController implements Initializable
         try {
             BookingsTable.setDisable(false);
             tableEntriesB.removeAll(tableEntriesB);
-            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getVehicleRegNumber());
             if (arrayList.size()==0)
             {
                 //showAlert("No Bookings");
@@ -1208,7 +1208,7 @@ public class VehicleController implements Initializable
         try {
             VehicleParts();
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getVehicleRegNumber());
             if (arrayList.size() == 0)
             {
                 return;
@@ -1286,7 +1286,7 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(A.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Vehicle Reg: " +  vehicle.getRegNumber());
+            PartLabel.setText("Vehicle Reg: " +  vehicle.getVehicleRegNumber());
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }

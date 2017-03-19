@@ -171,7 +171,7 @@ public class DetailsPaneController {
         bookingIDTextField.setText(booking.getBookingID() + "");
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
-        vehicleComboBox.getSelectionModel().select(selectedVehicle.getRegNumber() + ": " + selectedVehicle.getModel());
+        vehicleComboBox.getSelectionModel().select(selectedVehicle.getVehicleRegNumber() + ": " + selectedVehicle.getModel());
         descriptionTextField.setText(booking.getDescription());
 
         diagnosisDatePicker.setValue(diagnosisStart.toLocalDate());
@@ -200,7 +200,7 @@ public class DetailsPaneController {
     private void populateVehicleComboBox(List<Vehicle> vehicles) {
         List<String> vehicleInfo = new ArrayList<>();
         for (Vehicle v : vehicles) {
-            vehicleInfo.add(v.getRegNumber() + ": " + v.getManufacturer() + " " + v.getModel());
+            vehicleInfo.add(v.getVehicleRegNumber() + ": " + v.getManufacturer() + " " + v.getModel());
         }
         ObservableList<String> vehicleInfoObservable = FXCollections.observableArrayList(vehicleInfo);
         vehicleComboBox.setItems(vehicleInfoObservable);

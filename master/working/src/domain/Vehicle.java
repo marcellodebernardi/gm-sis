@@ -5,7 +5,7 @@ import java.util.*;
  * @author Dillon Vaghela on 2/9/17.
  */
 public class Vehicle implements Searchable {
-    private String regNumber;
+    private String vehicleRegNumber;
     private VehicleType vehicleType;
     private String model;
     private String manufacturer;
@@ -28,7 +28,7 @@ public class Vehicle implements Searchable {
     private int customerID;
 
     @Reflective
-    public Vehicle(@Column(name = "regNumber", primary = true) String regNumber,
+    public Vehicle(@Column(name = "vehicleRegNumber", primary = true) String vehicleRegNumber,
                    @Column(name = "customerID") int customerID,
                    @Column(name = "vehicleType") VehicleType vehicleType,
                    @Column(name = "model") String model,
@@ -47,7 +47,7 @@ public class Vehicle implements Searchable {
                                List<Installation> installationList,
                    @TableReference(baseType = Booking.class, subTypes = DiagRepBooking.class, key = "vehicleRegNumber")
                                List<DiagRepBooking> bookingList) {
-        this.regNumber = regNumber;
+        this.vehicleRegNumber = vehicleRegNumber;
         this.customerID = customerID;
         this.vehicleType = vehicleType;
         this.model = model;
@@ -67,9 +67,9 @@ public class Vehicle implements Searchable {
     }
 
 
-    @Column(name = "regNumber", primary = true)
-    public String getRegNumber() {
-        return regNumber;
+    @Column(name = "vehicleRegNumber", primary = true)
+    public String getVehicleRegNumber() {
+        return vehicleRegNumber;
     }
 
     @Column(name = "customerID")
@@ -153,8 +153,8 @@ public class Vehicle implements Searchable {
     }
 
 
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        this.vehicleRegNumber = vehicleRegNumber;
     }
 
     public void setCustomerID(int customerID) {
