@@ -328,7 +328,7 @@ public class SpecRepairSystem {
 
     public Vehicle findVehicle(String reg)
     {
-        return persistence.getByCriteria(new Criterion<>(Vehicle.class,"regNumber",EqualTo,reg)).get(0);
+        return persistence.getByCriteria(new Criterion<>(Vehicle.class,"vehicleRegNumber",EqualTo,reg)).get(0);
     }
 
     public PartOccurrence findAPart(int partID)

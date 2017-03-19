@@ -164,7 +164,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                 .getByCriteria(
                         new Criterion<>(
                                 Vehicle.class,
-                                "regNumber",
+                                "vehicleRegNumber",
                                 CriterionOperator.EqualTo,
                                 getVehicleRegNumber()));
 

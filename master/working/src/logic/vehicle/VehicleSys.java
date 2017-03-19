@@ -28,7 +28,7 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicleT(String regNumber, String manufacturer, VehicleType vt) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer).and("vehicleType", EqualTo, vt));
+                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer).and("vehicleType", EqualTo, vt));
         return results;
 
     }
@@ -42,7 +42,7 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
+                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
         return results;
 
     }
@@ -50,7 +50,7 @@ public class VehicleSys {
     public Vehicle searchAVehicle(String regNumber)
     {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", EqualTo, regNumber));
+                "vehicleRegNumber", EqualTo, regNumber));
         return results !=null && results.size() != 0 ? results.get(0) : null;
     }
 
@@ -63,7 +63,7 @@ public class VehicleSys {
 
     public boolean deleteVehicle(String regNumber){
         persistence.deleteItem(new Criterion<>(VehicleRepair.class,"vehicleRegNumber",EqualTo,regNumber));
-        return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
+        return persistence.deleteItem(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, regNumber));
     }
 
 
@@ -74,7 +74,7 @@ public class VehicleSys {
 
     public boolean VehicleExists(String reg)
     {
-        if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", EqualTo,reg)).isEmpty())
+        if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo,reg)).isEmpty())
             return true;
         return false;
     }

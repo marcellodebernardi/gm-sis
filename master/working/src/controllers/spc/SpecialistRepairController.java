@@ -331,7 +331,7 @@ public class SpecialistRepairController implements Initializable{
         }
         vehicleDetails.getItems().clear();
         vehicleObservableList.addAll(vehicles);
-        veh_reg_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+        veh_reg_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
         veh_reg_column.setCellFactory(TextFieldTableCell.forTableColumn());
         veh_make_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("manufacturer"));
         veh_make_column.setCellFactory(TextFieldTableCell.forTableColumn());

@@ -71,7 +71,7 @@ public class CustomerSystem {
 
     public List<Customer> searchCustomerByVehicleRegistrationNumber(String regNumber)
     {
-        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", Regex, regNumber));
+        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", Regex, regNumber));
         int customerID = vResult.get(0).getCustomerID();
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
         return results;

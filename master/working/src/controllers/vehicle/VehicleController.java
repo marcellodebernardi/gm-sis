@@ -405,7 +405,7 @@ public class VehicleController implements Initializable
             }
 
 
-            tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+            tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
             tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
             tReg.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
                 @Override

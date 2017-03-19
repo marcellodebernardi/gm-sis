@@ -35,7 +35,7 @@ class StatementNode implements Comparable<StatementNode> {
     private String primaryKey;                                  // the primary key attribute of the object
     private Object primaryKeyValue;                             // the value of the primary key of the object
     private StatementType statementType;                        // INSERT or UPDATE
-    private Map<String, Object> solvedValues;               // att/val pairs ready to be added to SQL statement
+    private Map<String, Object> solvedValues;                   // att/val pairs ready to be added to SQL statement
 
     // database instance
     private DatabaseRepository persistence;                     // for helper queries
