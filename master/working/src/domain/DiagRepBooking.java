@@ -22,7 +22,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     private ZonedDateTime repairStart;
     private ZonedDateTime repairEnd;
 
-    // direction inversion in database
+    // direction inversion in database todo make list of specRepBookings
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
 

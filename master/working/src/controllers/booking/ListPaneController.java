@@ -8,15 +8,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import logic.booking.BookingSystem;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +28,8 @@ public class ListPaneController {
 
     @FXML private TextField listSearchBar;
     @FXML private ComboBox filterComboBox; // todo
+    @FXML private ComboBox viewByComboBox;
+    @FXML private DatePicker listDatePicker;
     @FXML private TableView<DiagRepBooking> bookingTableView;
     @FXML private TableColumn<DiagRepBooking, Integer> bookingIDColumn;
     @FXML private TableColumn<DiagRepBooking, String> customerColumn;
@@ -51,6 +51,7 @@ public class ListPaneController {
 
     @FXML private void initialize() {
         populateFilterComboBox();
+        populateViewByComboBox();
         setBookingTableCellValueFactories();
         populateBookingListView(bookingSystem.getAllBookings());
         setColumnWidths();
@@ -135,7 +136,23 @@ public class ListPaneController {
                 billAmountColumn, billSettledColumn);
     }
 
-    private void populateFilterComboBox() {    }
+    private void populateFilterComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add("All");
+        options.add("Past");
+        options.add("Future");
+
+        filterComboBox.setItems(FXCollections.observableArrayList(options));
+    }
+
+    private void populateViewByComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add("Day");
+        options.add("Week");
+        options.add("Month");
+
+        viewByComboBox.setItems(FXCollections.observableArrayList(options));
+    }
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////////
