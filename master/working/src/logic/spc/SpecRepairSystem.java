@@ -273,7 +273,7 @@ public class SpecRepairSystem {
 
     }
 
-    public boolean updateInstallation(Installation installation)
+    public boolean commitInstallations(Installation installation)
     {
         return persistence.commitItem(installation);
     }
@@ -346,5 +346,6 @@ public class SpecRepairSystem {
     {
         return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,"bookingID",EqualTo, bookingID)).get(0);
     }
+
 
 }

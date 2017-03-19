@@ -1,8 +1,6 @@
 package logic.vehicle;
 
-import domain.FuelType;
-import domain.Vehicle;
-import domain.VehicleType;
+import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -64,6 +62,7 @@ public class VehicleSys {
     }
 
     public boolean deleteVehicle(String regNumber){
+        persistence.deleteItem(new Criterion<>(VehicleRepair.class,"vehicleRegNumber",EqualTo,regNumber));
         return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
     }
 
@@ -78,6 +77,11 @@ public class VehicleSys {
         if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", EqualTo,reg)).isEmpty())
             return true;
         return false;
+    }
+
+    public void updateVehicle(Vehicle vehicle)
+    {
+        persistence.commitItem(vehicle);
     }
 
 }

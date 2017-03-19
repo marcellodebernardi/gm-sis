@@ -88,6 +88,7 @@ public class Installation implements Searchable {
     }
 
     @TableReference(baseType = Installation.class, subTypes = PartOccurrence.class, key = "installationID")
+
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
     }

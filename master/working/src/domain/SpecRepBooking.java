@@ -119,7 +119,7 @@ public abstract class SpecRepBooking implements Searchable {
     }
 
     public void setCost(double cost) {
-        if (cost != -1) {
+        if (!(cost <= -1)) {
             this.cost = cost;
         }
     }

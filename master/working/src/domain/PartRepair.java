@@ -77,26 +77,6 @@ public class PartRepair extends SpecRepBooking {
     }
 
 
-    public void setSpcRepID() {
-        // todo implement
-    }
-
-    public void setSpcID(int spcID) {
-        // todo implement
-    }
-
-    public void setDeliveryDate() {
-        // todo implement
-    }
-
-    public void setReturnDate() {
-        // todo implement
-    }
-
-    public void setCost() {
-        // todo implement
-    }
-
     public void setBookingID(int bookingID) {
         super.setBookingID(bookingID);
     }
