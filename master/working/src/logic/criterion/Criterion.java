@@ -64,7 +64,7 @@ import static logic.criterion.CriterionOperator.Regex;
  * @since 0.1
  */
 public class Criterion<E extends Searchable> {
-    private static boolean DEVELOPMENT_MODE = true;
+    private static boolean DEVELOPMENT_MODE = false;
 
     private Class<E> eClass;
     private StringBuilder criterionQuery;
@@ -124,7 +124,7 @@ public class Criterion<E extends Searchable> {
         if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
             throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
-        criterionQuery.append(" AND ").append(attribute).append(" ").append(operator);
+        criterionQuery.append(" AND ").append(attribute).append(" ").append(operator).append(" ");
         appendValue(value, operator);
         return this;
     }
@@ -143,7 +143,7 @@ public class Criterion<E extends Searchable> {
         if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
             throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
-        criterionQuery.append(" OR ").append(attribute).append(" ").append(operator);
+        criterionQuery.append(" OR ").append(attribute).append(" ").append(operator).append(" ");
         appendValue(value, operator);
         return this;
     }

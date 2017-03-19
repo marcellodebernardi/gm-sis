@@ -71,11 +71,15 @@
             <Label GridPane.rowIndex="9" GridPane.columnIndex="0">Parts</Label>
             <TableView GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="bookingPartsTable" fx:id="partsTable"></TableView>
+
+            <Label GridPane.rowIndex="10" GridPane.columnIndex="0">Vehicle Mileage</Label>
+            <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField"></TextField>
         </GridPane>
     </center>
     <bottom>
         <HBox id="detailsButtons">
-            <Button onAction="#addBooking">Save Booking</Button>
+            <Button onAction="#saveBooking">Save Booking</Button>
             <Button>Subcontract</Button>
             <Button onAction="#clearDetails">New Booking</Button>
             <Button onAction="#deleteBooking">Delete</Button>

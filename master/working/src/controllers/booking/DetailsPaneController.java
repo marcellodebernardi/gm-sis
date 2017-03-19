@@ -11,6 +11,7 @@ import logic.booking.BookingSystem;
 import logic.customer.CustomerSystem;
 import logic.vehicle.VehicleSys;
 import org.controlsfx.control.textfield.TextFields;
+import persistence.DatabaseRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -34,6 +35,7 @@ public class DetailsPaneController {
     private Callback<DatePicker, DateCell> dayCellFactory;
 
     private DiagRepBooking selectedBooking;
+    private Vehicle selectedVehicle;
 
     // customer and vehicle ComboBoxes
     @FXML private TextField bookingIDTextField;
@@ -44,6 +46,7 @@ public class DetailsPaneController {
     // mechanic and parts
     @FXML private ComboBox<String> mechanicComboBox;
     @FXML private TableView<PartOccurrence> partsTable;
+    @FXML private TextField vehicleMileageTextField;
     // dates and times
     @FXML private DatePicker diagnosisDatePicker;
     @FXML private DatePicker repairDatePicker;
@@ -99,10 +102,9 @@ public class DetailsPaneController {
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
     }
 
-    // todo make check for broken shit
-    @FXML private void addBooking() {
-        System.out.println(getDiagnosisStartTime() + " " + getDiagnosisEndTime());
-        System.out.println(getRepairStartTime() + " " + getRepairEndTime());
+    @FXML private void saveBooking() {
+        selectedVehicle.setMileage(Integer.parseInt(vehicleMileageTextField.getText()));
+        DatabaseRepository.getInstance().commitItem(selectedVehicle);
 
         // todo implement bill and parts
         selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
@@ -135,6 +137,7 @@ public class DetailsPaneController {
 
     @FXML private void clearDetails() {
         selectedBooking = null;
+        selectedVehicle = null;
 
         bookingIDTextField.clear();
         customerSearchBar.clear();
@@ -149,15 +152,16 @@ public class DetailsPaneController {
         repairEndTimeTextField.clear();
         mechanicComboBox.getSelectionModel().clearSelection();
         populatePartsTable(Collections.emptyList());
+        vehicleMileageTextField.clear();
     }
 
 
     /* HELPER: fills in the details of a booking in the details pane */
     void populateDetailFields(DiagRepBooking booking) {
         selectedBooking = booking;
+        selectedVehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
 
         Customer customer = booking.getCustomer();
-        Vehicle vehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
         ZonedDateTime diagnosisStart = booking.getDiagnosisStart();
         ZonedDateTime diagnosisEnd = booking.getDiagnosisEnd();
         ZonedDateTime repairStart = booking.getRepairStart();
@@ -167,7 +171,7 @@ public class DetailsPaneController {
         bookingIDTextField.setText(booking.getBookingID() + "");
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
-        vehicleComboBox.getSelectionModel().select(vehicle.getRegNumber() + ": " + vehicle.getModel());
+        vehicleComboBox.getSelectionModel().select(selectedVehicle.getRegNumber() + ": " + selectedVehicle.getModel());
         descriptionTextField.setText(booking.getDescription());
 
         diagnosisDatePicker.setValue(diagnosisStart.toLocalDate());

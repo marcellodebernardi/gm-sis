@@ -49,6 +49,7 @@ public class CalendarPaneController {
         master.setController(CalendarPaneController.class, this);
     }
 
+
     ///////////////////// EVENT HANDLERS ////////////////////////////
     @FXML private void selectCalendarDate() {
         bookingAgenda.setDisplayedLocalDateTime(LocalDateTime.of(calendarDatePicker.getValue(),

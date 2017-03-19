@@ -47,6 +47,53 @@ public class BookingSystem {
     }
 
     /**
+     * Returns a list containing all diagnosis and repair bookings for which either the diagnosis
+     * or the repair is yet to take place.
+     *
+     * @return list of future bookings
+     */
+    public List<DiagRepBooking> getFutureBookings() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
+                "diagnosisStart", MoreThan, now)
+                .or("repairStart", MoreThan, now)
+        );
+    }
+
+    /**
+     * Returns a list containing all diagnosis and repair bookings for which either the diagnosis
+     * or the repair has already taken place.
+     *
+     * @return list of past bookings
+     */
+    public List<DiagRepBooking> getPastBookings() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
+                "diagnosisStart", LessThan, now)
+                .or("repairStart", LessThan, now)
+        );
+    }
+
+    /**
+     * Returns all diagnosis and repair bookings such that the booking has either a diagnosis
+     * appointment or a repair appointment inside the specified time range.
+     *
+     * @param start start time of time range
+     * @param end end time of time range
+     * @return list of bookings in range
+     */
+    public List<DiagRepBooking> getBookingsBetween(ZonedDateTime start, ZonedDateTime end) {
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
+                "diagnosisStart", MoreThan, start)
+                .and("diagnosisStart", LessThan, end)
+                .or("repairStart", MoreThan, start)
+                .and("repairStart", LessThan, end)
+        );
+    }
+
+    /**
      * Returns a list of all mechanics.
      *
      * @return list of mechanics
@@ -118,9 +165,8 @@ public class BookingSystem {
      * @return true if addition successful, false otherwise
      */
     public boolean commitBooking(DiagRepBooking booking) {
-        return isClosed(booking)
-                && isHoliday(booking)
-                && persistence.commitItem(booking);
+        // if is not closed, not on holiday and does not clash, commit and return result
+        return !isClosed(booking) && !isHoliday(booking) && !clashes(booking) && persistence.commitItem(booking);
     }
 
     /**

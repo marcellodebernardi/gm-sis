@@ -25,6 +25,9 @@ public class ListPaneController {
     private BookingSystem bookingSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
+    private Filter currentFilter;
+    private ViewBy currentViewBy;
+    private ZonedDateTime selectedDay;
 
     @FXML private TextField listSearchBar;
     @FXML private ComboBox filterComboBox; // todo
@@ -47,13 +50,16 @@ public class ListPaneController {
         bookingSystem = BookingSystem.getInstance();
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        currentFilter = Filter.FUTURE;
+        currentViewBy = ViewBy.WEEK;
+        selectedDay = ZonedDateTime.now();
     }
 
     @FXML private void initialize() {
         populateFilterComboBox();
         populateViewByComboBox();
         setBookingTableCellValueFactories();
-        populateBookingListView(bookingSystem.getAllBookings());
+        refreshBookingTable();
         setColumnWidths();
         setSelectionListener();
 
@@ -75,8 +81,35 @@ public class ListPaneController {
         }
     }
 
+    @FXML private void applyListFilter() {
+        currentFilter = Filter.asEnum(filterComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshBookingTable();
+    }
+
+    @FXML private void applyListViewType() {
+        currentViewBy = ViewBy.asEnum(viewByComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshBookingTable();
+    }
+
+    @FXML private void selectListPeriod() {
+        selectedDay = ZonedDateTime.parse(listDatePicker.getValue().format(dateFormatter), dateFormatter);
+
+    }
+
     void refreshBookingTable() {
-        populateBookingListView(bookingSystem.getAllBookings());
+        switch (currentFilter) {
+            case ALL:
+                populateBookingListView(bookingSystem.getAllBookings());
+                break;
+            case FUTURE:
+                populateBookingListView(bookingSystem.getFutureBookings());
+                break;
+            case PAST:
+                populateBookingListView(bookingSystem.getPastBookings());
+                break;
+            default:
+                System.err.println("Unrecognized list filter applied.");
+        }
     }
 
 
@@ -138,18 +171,18 @@ public class ListPaneController {
 
     private void populateFilterComboBox() {
         List<String> options = new ArrayList<>();
-        options.add("All");
-        options.add("Past");
-        options.add("Future");
+        options.add(Filter.ALL.toString());
+        options.add(Filter.PAST.toString());
+        options.add(Filter.FUTURE.toString());
 
         filterComboBox.setItems(FXCollections.observableArrayList(options));
     }
 
     private void populateViewByComboBox() {
         List<String> options = new ArrayList<>();
-        options.add("Day");
-        options.add("Week");
-        options.add("Month");
+        options.add(ViewBy.DAY.toString());
+        options.add(ViewBy.WEEK.toString());
+        options.add(ViewBy.MONTH.toString());
 
         viewByComboBox.setItems(FXCollections.observableArrayList(options));
     }
@@ -180,7 +213,38 @@ public class ListPaneController {
                 );
     }
 
-    enum FilterType {
-        ALL, PAST, FUTURE, MONTH, WEEK, DAY;
+
+    enum Filter {
+        ALL, PAST, FUTURE;
+
+        static Filter asEnum(String string) throws IllegalArgumentException {
+            if (string.equalsIgnoreCase(ALL.toString())) return ALL;
+            else if (string.equalsIgnoreCase(PAST.toString())) return PAST;
+            else if (string.equalsIgnoreCase(FUTURE.toString())) return FUTURE;
+            else throw new IllegalArgumentException();
+        }
+
+        @Override public String toString() {
+            if (this == ALL) return "All";
+            else if (this == PAST) return "Past";
+            else return "Future";
+        }
+    }
+
+    enum ViewBy {
+        DAY, WEEK, MONTH;
+
+        static ViewBy asEnum(String string) throws IllegalArgumentException {
+            if (string.equalsIgnoreCase(DAY.toString())) return DAY;
+            else if (string.equalsIgnoreCase(WEEK.toString())) return WEEK;
+            else if (string.equalsIgnoreCase(MONTH.toString())) return MONTH;
+            else throw new IllegalArgumentException();
+        }
+
+        @Override public String toString() {
+            if (this == DAY) return "Day";
+            else if (this == WEEK) return "Week";
+            else return "Month";
+        }
     }
 }
