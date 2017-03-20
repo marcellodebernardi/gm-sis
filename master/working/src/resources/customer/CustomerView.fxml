@@ -49,9 +49,9 @@
    <center>
       <Pane prefHeight="604.0" prefWidth="961.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="customerSearch" disable="false" layoutX="58.0" prefHeight="25.0" prefWidth="565.0" promptText="by Customer's First name, Surname or Vehicle Registration number" />
-            <Button fx:id="customerSearchButton" layoutX="739.0" mnemonicParsing="false" onAction="#searchCustomerInDB" prefHeight="25.0" prefWidth="93.0" text="Search" />
-            <TableView fx:id="customerTable" layoutX="14.0" layoutY="40.0" prefHeight="180.0" prefWidth="817.0">
+            <TextField fx:id="customerSearch" disable="false" layoutX="58.0" onKeyTyped="#searchCustomerInDB" prefHeight="25.0" prefWidth="565.0" promptText="by Customer's First name, Surname or Vehicle Registration number" />
+            <Button fx:id="customerSearchButton" layoutX="739.0" mnemonicParsing="false" onAction="#searchAllCustomersInDB" prefHeight="25.0" prefWidth="93.0" text="View All" />
+            <TableView fx:id="customerTable" layoutX="14.0" layoutY="40.0" onMouseClicked="#tableViewOfCustomerVehicleFromDB" prefHeight="180.0" prefWidth="817.0">
               <columns>
                 <TableColumn fx:id="customerTableColumnID" prefWidth="44.0" text="ID" />
                 <TableColumn fx:id="customerTableColumnFirstname" prefWidth="94.0" text="First name" />
@@ -76,30 +76,32 @@
             </ComboBox>
             <Button fx:id="makeBookingButton" layoutX="842.0" layoutY="122.0" mnemonicParsing="false" onAction="#initiateNewBooking" prefHeight="25.0" prefWidth="95.0" text="Make Booking" />
             <Label layoutX="15.0" layoutY="4.0" prefHeight="17.0" prefWidth="39.0" text="Search" />
-            <TableView fx:id="customerVehicleTable" layoutX="15.0" layoutY="254.0" prefHeight="126.0" prefWidth="419.0">
+            <TableView fx:id="customerVehicleTable" layoutX="15.0" layoutY="254.0" onMouseClicked="#tableViewOfCustomerVehiclePartFromDB" prefHeight="126.0" prefWidth="419.0">
               <columns>
-                <TableColumn prefWidth="104.0" text="Registration No." />
-                <TableColumn prefWidth="56.0" text="Type" />
-                  <TableColumn prefWidth="77.0" text="Model" />
-                  <TableColumn prefWidth="110.0" text="Manufacturer" />
-                  <TableColumn prefWidth="71.0" text="Warranty" />
+                <TableColumn fx:id="customerVehicleTableColumnRegistrationNumber" prefWidth="104.0" text="Registration No." />
+                <TableColumn fx:id="customerVehicleTableColumnType" prefWidth="56.0" text="Type" />
+                  <TableColumn fx:id="customerVehicleTableColumnModel" prefWidth="77.0" text="Model" />
+                  <TableColumn fx:id="customerVehicleTableColumnManufacturer" prefWidth="110.0" text="Manufacturer" />
+                  <TableColumn fx:id="customerVehicleTableColumnWarranty" prefWidth="71.0" text="Warranty" />
               </columns>
             </TableView>
-            <TableView layoutX="461.0" layoutY="254.0" prefHeight="126.0" prefWidth="369.0">
+            <TableView fx:id="customerVehiclePartTable" layoutX="461.0" layoutY="254.0" prefHeight="126.0" prefWidth="369.0">
               <columns>
-                <TableColumn prefWidth="108.0" text="Name" />
-                <TableColumn prefWidth="260.0" text="Description" />
+                <TableColumn fx:id="customerVehiclePartTableColumnName" prefWidth="108.0" text="Name" />
+                <TableColumn fx:id="customerVehiclePartTableColumnDescription" prefWidth="260.0" text="Description" />
               </columns>
             </TableView>
             <Label layoutX="15.0" layoutY="230.0" text="VEHICLE(S)" />
             <Label layoutX="461.0" layoutY="230.0" text="PART(S)" />
-            <TableView layoutX="15.0" layoutY="413.0" prefHeight="149.0" prefWidth="816.0">
+            <TableView fx:id="customerBookingTable" layoutX="15.0" layoutY="413.0" prefHeight="149.0" prefWidth="816.0">
               <columns>
-                <TableColumn prefWidth="94.0" text="Booking ID" />
-                  <TableColumn prefWidth="164.0" text="Repair Date" />
-                  <TableColumn prefWidth="189.0" text="Repair Time" />
-                  <TableColumn prefWidth="179.0" text="Bill (£)" />
-                  <TableColumn prefWidth="189.0" text="Settlement Status" />
+                <TableColumn fx:id="customerBookingTableColumnBookingID" prefWidth="94.0" text="Booking ID" />
+                  <TableColumn fx:id="customerBookingTableColumnVehicleRegistrationNumber" prefWidth="177.0" text="Vehicle Registration No." />
+                  <TableColumn fx:id="customerBookingTableColumnRepairDate" prefWidth="148.0" text="Repair Date" />
+                  <TableColumn fx:id="customerBookingTableColumnRepairTime" prefWidth="146.0" text="Repair Time" />
+                  <TableColumn fx:id="customerBookingTableColumnBill" prefWidth="135.0" text="Bill (£)" />
+                  <TableColumn fx:id="customerBookingTableColumnSettlementStatus" prefWidth="115.0" text="Settlement Status" />
+
               </columns>
             </TableView>
             <Label layoutX="16.0" layoutY="390.0" text="BOOKING(S)" />

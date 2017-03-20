@@ -1,9 +1,6 @@
 package logic.customer;
 
-import domain.Customer;
-import domain.CustomerType;
-import domain.Vehicle;
-import domain.DiagRepBooking;
+import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -92,6 +89,22 @@ public class CustomerSystem {
     public List<DiagRepBooking> searchCustomerBookings(String vehicleRegNumber)
     {
         List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        return results;
+    }
+
+    public List<Installation> searchCustomerVehiclePartInstallation(String vehicleRegNumber)
+    {
+        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
+        return iResult;
+    }
+
+    public List<PartAbstraction> searchCustomerVehiclePart(int partAbstractionID)
+    {
+        //List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
+        //int partAbstID = result.get(0).getPartAbstractionID();
+        List<PartAbstraction> results = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
         return results;
     }
 
