@@ -231,36 +231,36 @@ public class CustomerController implements Initializable
                     {
                         newCustomerForm();
 
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
-                        Parent menu = fxmlLoader.load();
-                        addVehicleStage = new Stage();
-                        addVehicleStage.setTitle("Add Vehicle");
-                        addVehicleStage.setScene(new Scene(menu));
-                        addVehicleStage.show();
-                        //addVehicleStage.showAndWait();
-                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                        //    @Override
-                        //    public void handle(WindowEvent event) {
-                        //        System.out.println("Add Vehicle stage is closing");
-                        //    }
-                        //});
-                        //addVehicleStage.close();
-
-                        List<Customer> allCustomers = cSystem.getAllCustomers();
-                        int cvCustomerID = 0;
-                        for(int i=allCustomers.size()-1; i>0; i--)
-                        {
-                            cvCustomerID = allCustomers.get(i).getCustomerID();
-                            System.out.println("Count customers: " + cvCustomerID);
-                            break;
-                        }
-
-                        Customer customer = cSystem.getACustomers(cvCustomerID);
-                        System.out.println("Customer ID: " + cvCustomerID);
-                        reg.setText(Integer.toString(cvCustomerID));
-
-                        //cID.setText(Integer.toString(cvCustomerID));
-                        System.out.println("Hello World 3");
+//                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
+//                        Parent menu = fxmlLoader.load();
+//                        addVehicleStage = new Stage();
+//                        addVehicleStage.setTitle("Add Vehicle");
+//                        addVehicleStage.setScene(new Scene(menu));
+//                        addVehicleStage.show();
+//                        //addVehicleStage.showAndWait();
+//                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//                        //    @Override
+//                        //    public void handle(WindowEvent event) {
+//                        //        System.out.println("Add Vehicle stage is closing");
+//                        //    }
+//                        //});
+//                        //addVehicleStage.close();
+//
+//                        List<Customer> allCustomers = cSystem.getAllCustomers();
+//                        int cvCustomerID = 0;
+//                        for(int i=allCustomers.size()-1; i>0; i--)
+//                        {
+//                            cvCustomerID = allCustomers.get(i).getCustomerID();
+//                            System.out.println("Count customers: " + cvCustomerID);
+//                            break;
+//                        }
+//
+//                        Customer customer = cSystem.getACustomers(cvCustomerID);
+//                        System.out.println("Customer ID: " + cvCustomerID);
+//                        reg.setText(Integer.toString(cvCustomerID));
+//
+//                        //cID.setText(Integer.toString(cvCustomerID));
+//                        System.out.println("Hello World 3");
 
                     }
 

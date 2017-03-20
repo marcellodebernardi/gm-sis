@@ -206,7 +206,7 @@ class StatementNode implements Comparable<StatementNode> {
             // has primary key but is Vehicle: INSERT if not exists, else UPDATE
             else if (table.equals(Vehicle.class)) {
                 List<Vehicle> results = persistence.getByCriteria(
-                                new Criterion<>(Vehicle.class, "regNumber", EqualTo, primaryKeyValue));
+                                new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, primaryKeyValue));
 
                 statementType = results.size() == 0 ? StatementType.INSERT : StatementType.UPDATE;
             }
