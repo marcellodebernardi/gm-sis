@@ -95,7 +95,7 @@ public class CustomerSystem {
 
     public List<Installation> searchInstallationTable(String vehicleRegNumber)
     {
-        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches, vehicleRegNumber));
         //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
         return iResult;
     }
