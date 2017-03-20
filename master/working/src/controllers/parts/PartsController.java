@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
 import logic.parts.PartsSystem;
+import logic.spc.SpecRepairSystem;
 import persistence.DatabaseRepository;
 import logic.criterion.Criterion;
 import javafx.event.EventHandler;
@@ -306,7 +307,7 @@ public class PartsController implements Initializable {
     public void viewAllBookingsClick(){
 
         Criterion c2 = new Criterion<>(Installation.class);
-        List2 = instance.getByCriteria(c2);
+        List2 = pSys.getAllInstallations();
         List2.get(0).getPartOccurrence().getPartOccurrenceID();
         System.out.println( List2.get(0).getPartOccurrence().getPartOccurrenceID());
         System.out.println( List2.get(0).getVehicleRegNumber());
@@ -323,40 +324,20 @@ public class PartsController implements Initializable {
 
         installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
         installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
-        installationID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Installation, Integer> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setInstallationID(event.getNewValue());
-            }
-        });
 
         installationDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
         installationDate.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
-        installationDate.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Date>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Installation, Date> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setInstallationDate(event.getNewValue());
-            }
-        });
 
         warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
         warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
-        warrantyEnd.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Date>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Installation, Date> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setEndWarrantyDate(event.getNewValue());
+
+        partAbsID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                ObservableValue<Integer>>() {
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartAbstractionID());
             }
         });
-
-        partAbsID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("partAbstractionID"));
-        partAbsID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
-        partAbsID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Installation, Integer> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartAbstractionID(event.getNewValue());
-            }
-        });
-
+        
         partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                 ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
@@ -364,37 +345,8 @@ public class PartsController implements Initializable {
             }
         });
 
-        bookingID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
-                ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getBookingID());
-            }
-        });
-
-        firstName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Installation, String> p) {
-                Customer customer = p.getValue().getCustomer();
-                return new ReadOnlyObjectWrapper<>(customer.getCustomerFirstname());
-            }
-        });
-
-        surname.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Installation, String> p) {
-                Customer customer = p.getValue().getCustomer();
-                return new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
-            }
-        });
-
         regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
-        regNumber.setCellFactory(TextFieldTableCell.<Installation>forTableColumn());
-        regNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Installation, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Installation, String> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleRegNumber(event.getNewValue());
-            }
-        });
+        regNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
         PartsBookings.setItems(tableEntries2);
 
