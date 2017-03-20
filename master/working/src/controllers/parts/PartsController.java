@@ -85,7 +85,7 @@ public class PartsController implements Initializable {
     @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<String> CB1, CB2, CB3,CB4, addPartID;
+    private ComboBox<String> CB1, CB2, CB3,CB4, addPartToInst, availableOcc;
     @FXML
     private TextField price1, price2, price3, price4;
     @FXML
@@ -117,6 +117,7 @@ public class PartsController implements Initializable {
     ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
 
     ObservableList<String> CB=FXCollections.observableArrayList();
+    ObservableList<String> CBB=FXCollections.observableArrayList();
 
 
     /*****************************************************************************************************************/
@@ -133,7 +134,7 @@ public class PartsController implements Initializable {
             CB2.setItems(CB);
             CB3.setItems(CB);
             CB4.setItems(CB);
-            addPartID.setItems(CB);
+            addPartToInst.setItems(CBB);
             updateTable();
             viewAllBookingsClick();
 
@@ -162,6 +163,7 @@ public class PartsController implements Initializable {
             tableEntries.add(List.get(i));
             data.add(List.get(i).getPartName());
             CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
+            CBB.add(List.get(i).getPartAbstractionID() + ": " + List.get(i).getPartName());
 
         }
 
@@ -580,10 +582,10 @@ public class PartsController implements Initializable {
 
         System.out.print(date_Installation + " , " + date_Warranty);
 
-
+       // PartOccurrence partOccurrence = pSys.getAllFreeOccurrences(addPartToInst.getSelectionModel().getSelectedItem());
 
         Installation newInst = new Installation(date_Installation, date_Warranty, regNumberInstallation.getText(),
-         addPartID.getVisibleRowCount(), null);
+                addPartToInst.getVisibleRowCount(), null);
 
         System.out.println(newInst);
 
