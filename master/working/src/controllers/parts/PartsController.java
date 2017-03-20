@@ -134,7 +134,7 @@ public class PartsController implements Initializable {
             CB2.setItems(CB);
             CB3.setItems(CB);
             CB4.setItems(CB);
-            addPartToInst.setItems(CBB);
+            addPartToInst.setItems(CB);
             updateTable();
             viewAllBookingsClick();
 
@@ -162,8 +162,8 @@ public class PartsController implements Initializable {
 
             tableEntries.add(List.get(i));
             data.add(List.get(i).getPartName());
-            CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
-            CBB.add(List.get(i).getPartAbstractionID() + ": " + List.get(i).getPartName());
+           // CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
+            CB.add(List.get(i).getPartAbstractionID() + ": " + List.get(i).getPartName());
 
         }
 
