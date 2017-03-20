@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
@@ -231,36 +232,40 @@ public class CustomerController implements Initializable
                     {
                         newCustomerForm();
 
-//                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
-//                        Parent menu = fxmlLoader.load();
-//                        addVehicleStage = new Stage();
-//                        addVehicleStage.setTitle("Add Vehicle");
-//                        addVehicleStage.setScene(new Scene(menu));
-//                        addVehicleStage.show();
-//                        //addVehicleStage.showAndWait();
-//                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//                        //    @Override
-//                        //    public void handle(WindowEvent event) {
-//                        //        System.out.println("Add Vehicle stage is closing");
-//                        //    }
-//                        //});
-//                        //addVehicleStage.close();
-//
-//                        List<Customer> allCustomers = cSystem.getAllCustomers();
-//                        int cvCustomerID = 0;
-//                        for(int i=allCustomers.size()-1; i>0; i--)
-//                        {
-//                            cvCustomerID = allCustomers.get(i).getCustomerID();
-//                            System.out.println("Count customers: " + cvCustomerID);
-//                            break;
-//                        }
-//
-//                        Customer customer = cSystem.getACustomers(cvCustomerID);
-//                        System.out.println("Customer ID: " + cvCustomerID);
-//                        reg.setText(Integer.toString(cvCustomerID));
-//
-//                        //cID.setText(Integer.toString(cvCustomerID));
-//                        System.out.println("Hello World 3");
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
+                        Parent menu = fxmlLoader.load();
+                        addVehicleStage = new Stage();
+                        addVehicleStage.setTitle("Add Vehicle");
+                        addVehicleStage.setScene(new Scene(menu));
+
+                        addVehicleStage.initModality(Modality.APPLICATION_MODAL);
+                        addVehicleStage.showAndWait();
+
+                        //addVehicleStage.show();
+                        //addVehicleStage.showAndWait();
+                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        //    @Override
+                        //    public void handle(WindowEvent event) {
+                        //        System.out.println("Add Vehicle stage is closing");
+                        //    }
+                        //});
+                        //addVehicleStage.close();
+
+                        List<Customer> allCustomers = cSystem.getAllCustomers();
+                        int cvCustomerID = 0;
+                        for(int i=allCustomers.size()-1; i>0; i--)
+                        {
+                            cvCustomerID = allCustomers.get(i).getCustomerID();
+                            System.out.println("Count customers: " + cvCustomerID);
+                            break;
+                        }
+
+                        Customer customer = cSystem.getACustomers(cvCustomerID);
+                        System.out.println("Customer ID: " + cvCustomerID);
+                        reg.setText(Integer.toString(cvCustomerID));
+
+                        //cID.setText(Integer.toString(cvCustomerID));
+                        System.out.println("Hello World 3");
 
                     }
 
@@ -780,37 +785,6 @@ public class CustomerController implements Initializable
         return null;
     }
 
-//    public List<PartAbstraction> searchOldCustomerVehiclePartsInstalledInDB()
-//    {
-//        try
-//        {
-//            List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
-//            List<Installation> searchCustomerVehiclePartInstallationList = new ArrayList<Installation>(0);
-//
-//            Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
-//            searchCustomerVehiclePartInstallationList = cSystem.searchInstallationTable(vehicle.getVehicleRegNumber());
-//            System.out.println("Installations: " + searchCustomerVehiclePartInstallationList.size());//testing;
-//
-//            for(int i=0; i<searchCustomerVehiclePartInstallationList.size(); i++)
-//            {
-//                searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(searchInstallationTable.get(i));
-//            }
-//            System.out.println("Parts: " + searchCustomerVehiclePartList.size());//testing
-//            return searchCustomerVehiclePartList;
-//
-//            //List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
-//            //Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
-//            //searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(vehicle.getRegNumber());
-//            //return searchCustomerVehiclePartList;
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println("Search Customer Vehicle Part Error");
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
     public void initiateNewBooking()
     {
         try
@@ -1202,7 +1176,7 @@ public class CustomerController implements Initializable
                 errorAlert("'Customer First name' is too long. Maximum is 30 characters");
                 return false;
             }
-            if((customerFirstname.getText().equals("`"))||(customerFirstname.getText().equals("¬"))||(customerFirstname.getText().equals("!"))||(customerFirstname.getText().equals('"'))||(customerFirstname.getText().equals("£"))||(customerFirstname.getText().equals("$"))||(customerFirstname.getText().equals("%"))||(customerFirstname.getText().equals("^"))||(customerFirstname.getText().equals("&"))||(customerFirstname.getText().equals("*"))||(customerFirstname.getText().equals("("))||(customerFirstname.getText().equals(")"))||(customerFirstname.getText().equals("_"))||(customerFirstname.getText().equals("+"))||(customerFirstname.getText().equals("="))||(customerFirstname.getText().equals("{"))||(customerFirstname.getText().equals("}"))||(customerFirstname.getText().equals("["))||(customerFirstname.getText().equals("]"))||(customerFirstname.getText().equals(":"))||(customerFirstname.getText().equals(";"))||(customerFirstname.getText().equals("@"))||(customerFirstname.getText().equals("'"))||(customerFirstname.getText().equals("~"))||(customerFirstname.getText().equals("#"))||(customerFirstname.getText().equals("<"))||(customerFirstname.getText().equals(">"))||(customerFirstname.getText().equals(","))||(customerFirstname.getText().equals("."))||(customerFirstname.getText().equals("?"))||(customerFirstname.getText().equals("/"))||(customerFirstname.getText().equals("|"))||(customerFirstname.getText().equals("1"))||(customerFirstname.getText().equals("2"))||(customerFirstname.getText().equals("3"))||(customerFirstname.getText().equals("4"))||(customerFirstname.getText().equals("5"))||(customerFirstname.getText().equals("6"))||(customerFirstname.getText().equals("7"))||(customerFirstname.getText().equals("8"))||(customerFirstname.getText().equals("9"))||(customerFirstname.getText().equals("0")))
+            if((customerFirstname.getText().contains("`"))||(customerFirstname.getText().contains("¬"))||(customerFirstname.getText().contains("!"))||(customerFirstname.getText().contains("\""))||(customerFirstname.getText().contains("£"))||(customerFirstname.getText().contains("$"))||(customerFirstname.getText().contains("%"))||(customerFirstname.getText().contains("^"))||(customerFirstname.getText().contains("&"))||(customerFirstname.getText().contains("*"))||(customerFirstname.getText().contains("("))||(customerFirstname.getText().contains(")"))||(customerFirstname.getText().contains("_"))||(customerFirstname.getText().contains("+"))||(customerFirstname.getText().contains("="))||(customerFirstname.getText().contains("{"))||(customerFirstname.getText().contains("}"))||(customerFirstname.getText().contains("["))||(customerFirstname.getText().contains("]"))||(customerFirstname.getText().contains(":"))||(customerFirstname.getText().contains(";"))||(customerFirstname.getText().contains("@"))||(customerFirstname.getText().contains("'"))||(customerFirstname.getText().contains("~"))||(customerFirstname.getText().contains("#"))||(customerFirstname.getText().contains("<"))||(customerFirstname.getText().contains(">"))||(customerFirstname.getText().contains(","))||(customerFirstname.getText().contains("."))||(customerFirstname.getText().contains("?"))||(customerFirstname.getText().contains("/"))||(customerFirstname.getText().contains("|"))||(customerFirstname.getText().contains("1"))||(customerFirstname.getText().contains("2"))||(customerFirstname.getText().contains("3"))||(customerFirstname.getText().contains("4"))||(customerFirstname.getText().contains("5"))||(customerFirstname.getText().contains("6"))||(customerFirstname.getText().contains("7"))||(customerFirstname.getText().contains("8"))||(customerFirstname.getText().contains("9"))||(customerFirstname.getText().contains("0")))
             {
                 errorAlert("'Customer First name' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
                 return false;
@@ -1223,7 +1197,7 @@ public class CustomerController implements Initializable
                 errorAlert("'Customer Surname' is too long. Maximum is 30 characters");
                 return false;
             }
-            if((customerSurname.getText().equals("`"))||(customerSurname.getText().equals("¬"))||(customerSurname.getText().equals("!"))||(customerSurname.getText().equals('"'))||(customerSurname.getText().equals("£"))||(customerSurname.getText().equals("$"))||(customerSurname.getText().equals("%"))||(customerSurname.getText().equals("^"))||(customerSurname.getText().equals("&"))||(customerSurname.getText().equals("*"))||(customerSurname.getText().equals("("))||(customerSurname.getText().equals(")"))||(customerSurname.getText().equals("_"))||(customerSurname.getText().equals("+"))||(customerSurname.getText().equals("="))||(customerSurname.getText().equals("{"))||(customerSurname.getText().equals("}"))||(customerSurname.getText().equals("["))||(customerSurname.getText().equals("]"))||(customerSurname.getText().equals(":"))||(customerSurname.getText().equals(";"))||(customerSurname.getText().equals("@"))||(customerSurname.getText().equals("'"))||(customerSurname.getText().equals("~"))||(customerSurname.getText().equals("#"))||(customerSurname.getText().equals("<"))||(customerSurname.getText().equals(">"))||(customerSurname.getText().equals(","))||(customerSurname.getText().equals("."))||(customerSurname.getText().equals("?"))||(customerSurname.getText().equals("/"))||(customerSurname.getText().equals("|"))||(customerSurname.getText().equals("1"))||(customerSurname.getText().equals("2"))||(customerSurname.getText().equals("3"))||(customerSurname.getText().equals("4"))||(customerSurname.getText().equals("5"))||(customerSurname.getText().equals("6"))||(customerSurname.getText().equals("7"))||(customerSurname.getText().equals("8"))||(customerSurname.getText().equals("9"))||(customerSurname.getText().equals("0")))
+            if((customerSurname.getText().contains("`"))||(customerSurname.getText().contains("¬"))||(customerSurname.getText().contains("!"))||(customerSurname.getText().contains("\""))||(customerSurname.getText().contains("£"))||(customerSurname.getText().contains("$"))||(customerSurname.getText().contains("%"))||(customerSurname.getText().contains("^"))||(customerSurname.getText().contains("&"))||(customerSurname.getText().contains("*"))||(customerSurname.getText().contains("("))||(customerSurname.getText().contains(")"))||(customerSurname.getText().contains("_"))||(customerSurname.getText().contains("+"))||(customerSurname.getText().contains("="))||(customerSurname.getText().contains("{"))||(customerSurname.getText().contains("}"))||(customerSurname.getText().contains("["))||(customerSurname.getText().contains("]"))||(customerSurname.getText().contains(":"))||(customerSurname.getText().contains(";"))||(customerSurname.getText().contains("@"))||(customerSurname.getText().contains("'"))||(customerSurname.getText().contains("~"))||(customerSurname.getText().contains("#"))||(customerSurname.getText().contains("<"))||(customerSurname.getText().contains(">"))||(customerSurname.getText().contains(","))||(customerSurname.getText().contains("."))||(customerSurname.getText().contains("?"))||(customerSurname.getText().contains("/"))||(customerSurname.getText().contains("|"))||(customerSurname.getText().contains("1"))||(customerSurname.getText().contains("2"))||(customerSurname.getText().contains("3"))||(customerSurname.getText().contains("4"))||(customerSurname.getText().contains("5"))||(customerSurname.getText().contains("6"))||(customerSurname.getText().contains("7"))||(customerSurname.getText().contains("8"))||(customerSurname.getText().contains("9"))||(customerSurname.getText().contains("0")))
             {
                 errorAlert("'Customer Surname' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
                 return false;
