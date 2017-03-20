@@ -759,8 +759,6 @@ public class SpecialistController implements Initializable{
             wEndDate.setVisible(true);
             partDes.setVisible(true);
             partSerial.setVisible(true);
-//            instaAbsID.setVisible(true);
-  //          instaOccID.setVisible(true);
             instaVReg.setVisible(true);
             instaAbsID_lbl.setVisible(true);
             instaDate_lbl.setVisible(true);
@@ -881,14 +879,11 @@ public class SpecialistController implements Initializable{
     public void addInstallation()
     {
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
-        Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(instaVReg.getText());
         Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
         int partAbs = c.getNumericValue(c);
         List<Installation> installations = new ArrayList<>();
         Installation installation = new Installation(fromLocalDate(instaDate.getValue()), fromLocalDate(wEndDate.getValue()), instaVReg.getText(), partAbs, partOccurrence);
         installations.add(installation);
-        vehicle.setInstallationList(installations);
-        //VehicleSys.getInstance().updateVehicle(vehicle);
         specRepairSystem.commitInstallations(installation);
     }
 
