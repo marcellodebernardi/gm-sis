@@ -83,7 +83,7 @@ public class SpecRepairSystem {
      */
     public List<VehicleRepair> getVehicleBookings(String regNumber)
     {
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, regNumber));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, regNumber));
         if(vehicleRepairs.size()>0)
         {
             return vehicleRepairs;
@@ -103,7 +103,7 @@ public class SpecRepairSystem {
 
     public List<SpecialistRepairCenter>getBookingsByName(String spcName)
     {
-        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "name",Regex, spcName));
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "name", Matches, spcName));
     }
 
     /**
@@ -113,7 +113,7 @@ public class SpecRepairSystem {
      */
     public List<VehicleRepair> getOutstandingV()
     {
-        List<VehicleRepair> vehicleRepairs =  persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Regex, ""));
+        List<VehicleRepair> vehicleRepairs =  persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, ""));
         List<VehicleRepair> outstanding = new ArrayList<>();
         for(VehicleRepair v: vehicleRepairs)
         {
@@ -238,16 +238,16 @@ public class SpecRepairSystem {
 
     public List<PartRepair> returnAllPartRepairs()
     {
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID",Regex, ""));
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", Matches, ""));
     }
     public List<VehicleRepair> returnAllVehicleRepairs()
     {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber",Regex, ""));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, ""));
     }
 
     public List<Installation> getVehicleInstallations(String reg)
     {
-        return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber",Regex,reg));
+        return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches,reg));
     }
 
     public boolean deleteByRepIDV(int rep)
@@ -338,7 +338,7 @@ public class SpecRepairSystem {
 
     public List<Customer> getByName(String query)
     {
-        return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",Regex,query).or("customerSurname",Regex,query));
+        return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname", Matches,query).or("customerSurname", Matches,query));
 
     }
 

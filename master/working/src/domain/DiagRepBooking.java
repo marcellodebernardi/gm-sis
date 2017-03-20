@@ -17,6 +17,8 @@ import java.util.List;
 public class DiagRepBooking extends Booking implements DependencyConnectable {
     // dependency connections
     List<DependencyConnection> dependencyConnections;
+
+    // times
     private ZonedDateTime diagnosisStart;
     private ZonedDateTime diagnosisEnd;
     private ZonedDateTime repairStart;
@@ -26,6 +28,16 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     private SpecRepBooking specRepBooking;
     private List<PartOccurrence> requiredPartsList;
 
+
+    public DiagRepBooking() {
+        super();
+        diagnosisStart = null;
+        diagnosisEnd = null;
+        repairStart = null;
+        repairEnd = null;
+        specRepBooking = null;
+        requiredPartsList = null;
+    }
 
     /**
      * Creates a new diagnosis and repair booking.

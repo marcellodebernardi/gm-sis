@@ -3,6 +3,7 @@ package logic.booking;
 import domain.Customer;
 import domain.DiagRepBooking;
 import domain.Mechanic;
+import domain.Vehicle;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -118,18 +119,13 @@ public class BookingSystem {
         if (query == null) throw new NullPointerException();
         if (query.equals("")) return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
 
-        List<DiagRepBooking> results = new ArrayList<>();
-
-        results.addAll(persistence.getByCriteria(new Criterion<>
-                (DiagRepBooking.class, "vehicleRegNumber", Regex, query)));
-
-        List<Customer> customers = persistence.getByCriteria(new Criterion<>
-                (Customer.class, "customerFirstname", Regex, query)
-                .or("customerSurname", Regex, query));
-
-        for (Customer c : customers) results.addAll(c.getBookings());
-
-        return results;
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
+                "vehicleRegNumber", Matches, query)
+                .or("vehicleRegNumber", In, new Criterion<>(Vehicle.class,
+                        "manufacturer", Matches, query)
+                        .or("customerID", In, new Criterion<>(Customer.class,
+                                "customerFirstname", Matches, query)
+                                .or("customerSurname", Matches, query))));
     }
 
     /**

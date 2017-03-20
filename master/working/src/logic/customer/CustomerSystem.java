@@ -56,20 +56,20 @@ public class CustomerSystem {
     public List<Customer> searchCustomerByFirstname(String customerFirstname)
     {
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
-                "customerFirstname", Regex, customerFirstname));
+                "customerFirstname", Matches, customerFirstname));
         return results;
     }
 
     public List<Customer> searchCustomerBySurname(String customerSurname)
     {
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
-                "customerSurname", Regex, customerSurname));
+                "customerSurname", Matches, customerSurname));
         return results;
     }
 
     public List<Customer> searchCustomerByVehicleRegistrationNumber(String vehicleRegNumber)
     {
-        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", Matches, vehicleRegNumber));
         int customerID = vResult.get(0).getCustomerID();
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
         return results;
@@ -89,13 +89,13 @@ public class CustomerSystem {
 
     public List<DiagRepBooking> searchCustomerBookings(String vehicleRegNumber)
     {
-        List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Matches, vehicleRegNumber));
         return results;
     }
 
     public List<Installation> searchInstallationTable(String vehicleRegNumber)
     {
-        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Regex, vehicleRegNumber));
+        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches, vehicleRegNumber));
         //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
         return iResult;
     }

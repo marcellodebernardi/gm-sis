@@ -28,21 +28,21 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicleT(String regNumber, String manufacturer, VehicleType vt) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer).and("vehicleType", EqualTo, vt));
+                "vehicleRegNumber", Matches, regNumber).and("manufacturer", Matches, manufacturer).and("vehicleType", EqualTo, vt));
         return results;
 
     }
 
     public List<Vehicle> searchByTemplate(String model, String manufacturer, Double engineSize, VehicleType vt, FuelType ft) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "model", Regex, model).and("manufacturer",Regex, manufacturer).and("engineSize",EqualTo,engineSize).and("vehicleType", EqualTo, vt).and("fuelType", EqualTo, ft));
+                "model", Matches, model).and("manufacturer", Matches, manufacturer).and("engineSize",EqualTo,engineSize).and("vehicleType", EqualTo, vt).and("fuelType", EqualTo, ft));
         return results;
 
     }
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
+                "vehicleRegNumber", Matches, regNumber).and("manufacturer", Matches, manufacturer));
         return results;
 
     }

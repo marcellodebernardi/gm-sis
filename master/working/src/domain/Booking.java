@@ -16,6 +16,15 @@ public abstract class Booking implements Searchable {
     private int mechanicID;
 
 
+    public Booking() {
+        this.bookingID = -1;
+        this.description = null;
+        this.complete = false;
+        this.vehicleRegNumber = null;
+        this.bill = null;
+        this.mechanicID = -1;
+    }
+
     /**
      * Full constructor which allows setting all fields manually.
      *
