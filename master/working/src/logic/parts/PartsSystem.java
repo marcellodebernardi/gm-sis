@@ -100,6 +100,11 @@ public class PartsSystem {
     {
         return persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"installationID",EqualTo, InstallationID)).get(0);
     }
+
+    public List<Installation> getAllInstallations ()
+    {
+        return persistence.getByCriteria(new Criterion<>(Installation.class,"installationID",MoreThan, 0));
+    }
 }
 
 
