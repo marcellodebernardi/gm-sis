@@ -14,7 +14,9 @@ import java.util.regex.Pattern;
 
 import static logic.criterion.CriterionException.Cause.ARGUMENTS_INCOMPATIBLE;
 import static logic.criterion.CriterionException.Cause.NULL_INPUTS;
-import static logic.criterion.CriterionOperator.Regex;
+import static logic.criterion.CriterionException.Cause.SUBQUERY_NOT_IN;
+import static logic.criterion.CriterionOperator.In;
+import static logic.criterion.CriterionOperator.Matches;
 
 /**
  * <p>
@@ -30,7 +32,7 @@ import static logic.criterion.CriterionOperator.Regex;
  * for said field, and operator is one of the four operators defined in the CriterionOperator enum.
  * </p>
  * <p>
- * The four operators are LessThan, MoreThan, EqualTo and Regex. Regex can only be used when the
+ * The four operators are LessThan, MoreThan, EqualTo and Matches. Matches can only be used when the
  * value object is of type String or type Pattern. The other operators can be used unrestrictedly.
  * </p>
  * <p>
@@ -99,6 +101,19 @@ public class Criterion<E extends Searchable> {
         appendValue(value, operator);
     }
 
+    public Criterion(Class<E> eClass, String attribute, CriterionOperator operator,
+                     Criterion<? extends Searchable> subQuery) throws CriterionException {
+        this.eClass = eClass;
+
+        // check inputs for correctness
+        if (eClass == null || attribute == null || operator == null || subQuery == null)
+            throw new CriterionException().because(NULL_INPUTS);
+        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+
+        criterionQuery = new StringBuilder(attribute).append(" ").append(operator).append(" ");
+        appendSubquery(subQuery, attribute);
+    }
+
     /**
      * Creates a criterion object specifying no criteria whatsoever. Is used when all objects of class
      *
@@ -129,6 +144,14 @@ public class Criterion<E extends Searchable> {
         return this;
     }
 
+    public Criterion<E> and(String attribute, CriterionOperator operator, Criterion<? extends Searchable> subquery) {
+        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+
+        criterionQuery.append(" AND ").append(attribute).append(" ").append(operator).append(" ");
+        appendSubquery(subquery, attribute);
+        return this;
+    }
+
     /**
      * Adds a criterion to the Criterion object, connected to previous criteria by an OR
      * logical connective.
@@ -145,6 +168,14 @@ public class Criterion<E extends Searchable> {
 
         criterionQuery.append(" OR ").append(attribute).append(" ").append(operator).append(" ");
         appendValue(value, operator);
+        return this;
+    }
+
+    public Criterion<E> or(String attribute, CriterionOperator operator, Criterion<? extends Searchable> subquery) {
+        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+
+        criterionQuery.append(" OR ").append(attribute).append(" ").append(operator).append(" ");
+        appendSubquery(subquery, attribute);
         return this;
     }
 
@@ -187,10 +218,19 @@ public class Criterion<E extends Searchable> {
             criterionQuery.append(((LocalDateTime)value).toEpochSecond(ZoneOffset.UTC) * 1000);
         else if (value.getClass() == ZonedDateTime.class)
             criterionQuery.append(((ZonedDateTime)value).toEpochSecond() * 1000);
-        else if (operator == Regex)
+        else if (operator == Matches)
             criterionQuery.append("'%").append(value).append("%'");
         else
             criterionQuery.append("'").append(value).append("'");
+    }
+
+    /* HELPER: appends the given subquery to the Criterion */
+    private void appendSubquery(Criterion<? extends Searchable> subquery, String attribute) {
+        this.criterionQuery.append("(SELECT ").append(attribute).append(" FROM ");
+        this.criterionQuery.append(subquery.getCriterionClass().getSimpleName());
+        this.criterionQuery.append(" WHERE ");
+        this.criterionQuery.append(subquery.toString());
+        this.criterionQuery.append(")");
     }
 
     // HELPER: returns true if attribute and value are compatible with class of Criterion
@@ -236,7 +276,7 @@ public class Criterion<E extends Searchable> {
 
     // HELPER: returns true if operator and value are compatible
     private boolean isRegexCompatible(CriterionOperator operator, Object value) {
-        return !(operator.equals(Regex) &&
+        return !(operator.equals(Matches) &&
                 !(value.getClass().equals(String.class) || value.getClass().equals(Pattern.class)));
     }
 }

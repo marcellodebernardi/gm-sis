@@ -65,7 +65,7 @@ public interface CriterionRepository {
      * link away from it. Other updates must be performed manually if necessary.
      * </p>
      * <p>
-     *     Regex operator should be avoided. Using the regex operator on identifiers can
+     *     Matches operator should be avoided. Using the regex operator on identifiers can
      *     cause catastrophic loss of database contents.
      * </p>
      *

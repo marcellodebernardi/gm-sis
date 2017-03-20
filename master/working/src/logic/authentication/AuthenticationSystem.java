@@ -9,7 +9,7 @@ import persistence.DatabaseRepository;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.EqualTo;
-import static logic.criterion.CriterionOperator.Regex;
+import static logic.criterion.CriterionOperator.Matches;
 
 /**
  * @author Marcello De Bernardi, Dillon Vaghela, Muhammad Shakib Hoque
@@ -55,14 +55,14 @@ public class AuthenticationSystem {
     }
 
     public List<User> searchUsers(String userID, String firstName, String surname) {
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Regex, userID).and("firstName",Regex,firstName)
-        .and("surname", Regex, surname));
+        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID).and("firstName", Matches,firstName)
+        .and("surname", Matches, surname));
         return results;
     }
 
     public List<User> searchUsersT(String userID, String firstName, String surname,  UserType userType) {
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Regex, userID).and("firstName",Regex,firstName)
-                .and("surname", Regex, surname).and("userType", Regex, userType));
+        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID).and("firstName", Matches,firstName)
+                .and("surname", Matches, surname).and("userType", Matches, userType));
         return results;
     }
 

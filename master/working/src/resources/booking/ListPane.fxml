@@ -29,9 +29,9 @@
     <center>
         <TableView fx:id="bookingTableView">
             <columns>
-                <TableColumn text="Booking ID" fx:id="bookingIDColumn" prefWidth="11"></TableColumn>
                 <TableColumn text="Customer" fx:id="customerColumn"></TableColumn>
                 <TableColumn text="Vehicle Reg" fx:id="vehicleRegColumn"></TableColumn>
+                <TableColumn text="Manufacturer" fx:id="manufacturerColumn"></TableColumn>
                 <TableColumn text="Diagnosis Date" fx:id="diagnosisDateColumn"></TableColumn>
                 <TableColumn text="Diagnosis Time" fx:id="diagnosisTimeColumn"></TableColumn>
                 <TableColumn text="Repair Date" fx:id="repairDateColumn"></TableColumn>

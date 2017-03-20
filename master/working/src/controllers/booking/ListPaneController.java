@@ -2,6 +2,7 @@ package controllers.booking;
 
 import domain.Customer;
 import domain.DiagRepBooking;
+import domain.Vehicle;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -10,12 +11,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import logic.booking.BookingSystem;
+import logic.criterion.Criterion;
+import persistence.DatabaseRepository;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static logic.criterion.CriterionOperator.EqualTo;
 
 /**
  * @author Marcello De Bernardi
@@ -34,9 +39,9 @@ public class ListPaneController {
     @FXML private ComboBox viewByComboBox;
     @FXML private DatePicker listDatePicker;
     @FXML private TableView<DiagRepBooking> bookingTableView;
-    @FXML private TableColumn<DiagRepBooking, Integer> bookingIDColumn;
     @FXML private TableColumn<DiagRepBooking, String> customerColumn;
     @FXML private TableColumn<DiagRepBooking, String> vehicleRegColumn;
+    @FXML private TableColumn<DiagRepBooking, String> manufacturerColumn;
     @FXML private TableColumn<DiagRepBooking, String> diagnosisDateColumn;
     @FXML private TableColumn<DiagRepBooking, String> diagnosisTimeColumn;
     @FXML private TableColumn<DiagRepBooking, String> repairDateColumn;
@@ -122,9 +127,6 @@ public class ListPaneController {
 
     /* Set the cell value factories for each column in the table */
     private void setBookingTableCellValueFactories() {
-        bookingIDColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getBookingID())
-        );
         customerColumn.setCellValueFactory(p -> {
             Customer customer = p.getValue().getCustomer();
             return customer == null ?
@@ -135,6 +137,11 @@ public class ListPaneController {
         vehicleRegColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
         );
+        manufacturerColumn.setCellValueFactory(p -> {
+            Vehicle vehicle = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                    (Vehicle.class, "vehicleRegNumber", EqualTo, p.getValue().getVehicleRegNumber())).get(0);
+            return new ReadOnlyObjectWrapper<>(vehicle.getManufacturer());
+        });
         diagnosisDateColumn.setCellValueFactory(p -> {
             ZonedDateTime date = p.getValue().getDiagnosisStart();
             return new ReadOnlyObjectWrapper<>(date == null ? "" : date.toLocalDate().format(dateFormatter));
@@ -165,7 +172,7 @@ public class ListPaneController {
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));
 
-        bookingTableView.getColumns().setAll(bookingIDColumn, customerColumn, vehicleRegColumn,
+        bookingTableView.getColumns().setAll(customerColumn, vehicleRegColumn, manufacturerColumn,
                 diagnosisDateColumn, diagnosisTimeColumn, repairDateColumn, repairTimeColumn,
                 billAmountColumn, billSettledColumn);
     }
@@ -193,7 +200,6 @@ public class ListPaneController {
     private void setColumnWidths() {
         DoubleBinding binding = bookingTableView.widthProperty().subtract(15).divide(9);
 
-        bookingIDColumn.prefWidthProperty().bind(binding);
         customerColumn.prefWidthProperty().bind(binding);
         vehicleRegColumn.prefWidthProperty().bind(binding);
         diagnosisDateColumn.prefWidthProperty().bind(binding);

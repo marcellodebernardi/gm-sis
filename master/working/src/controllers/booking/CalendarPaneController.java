@@ -37,6 +37,7 @@ public class CalendarPaneController {
 
     @FXML private void initialize() {
         populateCalendarMechanicComboBox(bookingSystem.getAllMechanics());
+        calendarMechanicComboBox.getSelectionModel().select(0);
         populateAgenda(bookingSystem.getAllBookings());
 
         bookingAgenda.setActionCallback((appointment) -> {
@@ -63,7 +64,7 @@ public class CalendarPaneController {
                 .toString()
                 .split(":")[0])
         );
-        // todo do stuff
+        refreshAGenda(mechanic.getBookings());
     }
 
     @FXML private void openListPane() {
@@ -77,9 +78,9 @@ public class CalendarPaneController {
 
 
     //////////////////// DATA MANIPULATIONS /////////////////////////
-    void refreshAGenda() {
+    void refreshAGenda(List<DiagRepBooking> bookings) {
         bookingAgenda.appointments().clear();
-        populateAgenda(bookingSystem.getAllBookings());
+        populateAgenda(bookings);
     }
 
     void addBookingAppointment(DiagRepBooking booking) {

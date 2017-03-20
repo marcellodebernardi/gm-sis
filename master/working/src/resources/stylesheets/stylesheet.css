@@ -45,7 +45,7 @@
     -fx-pref-width: 9em;
 }
 #calendarPaneTopControls TextField, #listPaneTopControls TextField {
-    -fx-pref-width: 25em;
+    -fx-pref-width: 15em;
     -fx-background-radius: 15px;
 }
 

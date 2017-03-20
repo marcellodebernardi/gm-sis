@@ -1,5 +1,12 @@
 package domain;
 
+import logic.criterion.Criterion;
+import persistence.DatabaseRepository;
+
+import java.util.List;
+
+import static logic.criterion.CriterionOperator.EqualTo;
+
 /**
  * @author Marcello De Bernardi
  *
@@ -41,6 +48,12 @@ public class Mechanic implements Searchable {
     @Column(name = "hourlyRate")
     public double getHourlyRate() {
         return hourlyRate;
+    }
+
+    @Lazy
+    public List<DiagRepBooking> getBookings() {
+        return DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                (DiagRepBooking.class, "mechanicID", EqualTo, mechanicID));
     }
 
 

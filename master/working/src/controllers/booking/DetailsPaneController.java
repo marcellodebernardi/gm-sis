@@ -38,7 +38,6 @@ public class DetailsPaneController {
     private Vehicle selectedVehicle;
 
     // customer and vehicle ComboBoxes
-    @FXML private TextField bookingIDTextField;
     @FXML private TextField customerSearchBar;
     @FXML private ComboBox<String> vehicleComboBox;
     // description
@@ -69,8 +68,6 @@ public class DetailsPaneController {
     }
 
     @FXML private void initialize() {
-        bookingIDTextField.setDisable(true);
-
         populateCustomerTextField(customerSystem.getAllCustomers());
         populateMechanicComboBox(bookingSystem.getAllMechanics());
 
@@ -81,15 +78,15 @@ public class DetailsPaneController {
 
         // todo change to method reference?
         dayCellFactory = datePicker -> new DateCell() {
-                @Override
-                public void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item.isBefore(LocalDate.now())) {
-                        this.setDisable(true);
-                        this.setStyle(" -fx-background-color: #ff6666; ");
-                    }
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    this.setDisable(true);
+                    this.setStyle(" -fx-background-color: #ff6666; ");
                 }
-            };
+            }
+        };
 
         diagnosisDatePicker.setDayCellFactory(dayCellFactory);
         repairDatePicker.setDayCellFactory(dayCellFactory);
@@ -103,8 +100,20 @@ public class DetailsPaneController {
     }
 
     @FXML private void saveBooking() {
-        selectedVehicle.setMileage(Integer.parseInt(vehicleMileageTextField.getText()));
-        DatabaseRepository.getInstance().commitItem(selectedVehicle);
+        selectedVehicle = vehicleSystem.searchAVehicle(getVehicleRegFromComboBox());
+        if (selectedBooking == null) {
+            selectedBooking = new DiagRepBooking();
+            selectedVehicle.getBookingList().add(selectedBooking);
+        }
+
+        int vehicleMileage = 0;
+        try {
+            vehicleMileage = Integer.parseInt(vehicleMileageTextField.getText());
+        }
+        catch (NumberFormatException e) {
+            // do nothing, keep 0 as mileage
+        }
+        selectedVehicle.setMileage(vehicleMileage);
 
         // todo implement bill and parts
         selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
@@ -116,21 +125,34 @@ public class DetailsPaneController {
         selectedBooking.setRepairStart(getRepairStartTime());
         selectedBooking.setRepairEnd(getRepairEndTime());
 
+        boolean committed = DatabaseRepository.getInstance().commitItem(selectedVehicle);
+        CalendarPaneController calendarController
+                = (CalendarPaneController) master.getController(CalendarPaneController.class);
+        ListPaneController listController
+                = (ListPaneController) master.getController(ListPaneController.class);
 
-        if (bookingSystem.commitBooking(selectedBooking)) {
-            ((ListPaneController)master.getController(ListPaneController.class))
-                    .refreshBookingTable();
-            ((CalendarPaneController)master.getController(CalendarPaneController.class))
-                    .addBookingAppointment(selectedBooking);
+        if (committed) {
+            if (calendarController != null)
+                ((CalendarPaneController) master.getController(CalendarPaneController.class))
+                        .addBookingAppointment(selectedBooking);
+            else if (listController != null)
+                ((ListPaneController) master.getController(ListPaneController.class))
+                        .refreshBookingTable();
+
             clearDetails();
         }
     }
 
     @FXML private void deleteBooking() {
-        if (!bookingIDTextField.getText().equals("") && confirmDelete()) {
-            bookingSystem.deleteBookingByID(Integer.parseInt(bookingIDTextField.getText()));
-            ((ListPaneController)master.getController(ListPaneController.class)).refreshBookingTable();
-            ((CalendarPaneController)master.getController(CalendarPaneController.class)).refreshAGenda();
+
+        if (selectedBooking.getBookingID() != -1 && confirmDelete()) {
+            bookingSystem.deleteBookingByID(selectedBooking.getBookingID());
+            ((ListPaneController) master
+                    .getController(ListPaneController.class))
+                    .refreshBookingTable();
+            ((CalendarPaneController) master
+                    .getController(CalendarPaneController.class))
+                    .refreshAGenda(bookingSystem.getAllBookings());
             clearDetails();
         }
     }
@@ -139,7 +161,6 @@ public class DetailsPaneController {
         selectedBooking = null;
         selectedVehicle = null;
 
-        bookingIDTextField.clear();
         customerSearchBar.clear();
         populateVehicleComboBox(Collections.emptyList());
         vehicleComboBox.getSelectionModel().select("");
@@ -172,7 +193,6 @@ public class DetailsPaneController {
         ZonedDateTime repairEnd = booking.getRepairEnd();
         Mechanic mechanic = bookingSystem.getMechanicByID(booking.getMechanicID());
 
-        bookingIDTextField.setText(booking.getBookingID() + "");
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
         vehicleComboBox.getSelectionModel().select(selectedVehicle.getVehicleRegNumber() + ": " + selectedVehicle.getModel());
@@ -186,9 +206,11 @@ public class DetailsPaneController {
         repairEndTimeTextField.setText(repairEnd.format(timeFormatter));
 
         populatePartsTable(booking.getRequiredPartsList());
+
         mechanicComboBox.getSelectionModel().select(mechanic.getMechanicID() + ": "
                 + mechanic.getFirstName() + " " + mechanic.getSurname());
 
+        vehicleMileageTextField.setText("" + selectedVehicle.getMileage());
     }
 
     /* HELPER: adds all customers to the customer search bar's autocomplete function */
@@ -273,7 +295,7 @@ public class DetailsPaneController {
         return descriptionTextField.getText();
     }
 
-    // returns the mechanic selected in the mechanic ComboBox
+    /* HELPER: returns the mechanic selected in the mechanic ComboBox */
     private int getMechanicIDFromComboBox() {
         return Integer.parseInt(mechanicComboBox
                 .getSelectionModel()
@@ -281,7 +303,7 @@ public class DetailsPaneController {
                 .split(":")[0]);
     }
 
-    // returns the diagnosis start time
+    /* HELPER: returns the diagnosis start time */
     private ZonedDateTime getDiagnosisStartTime() {
         return ZonedDateTime.of(
                 diagnosisDatePicker.getValue(),
@@ -289,7 +311,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    // returns the diagnosis end time
+    /* HELPER: returns the diagnosis end time */
     private ZonedDateTime getDiagnosisEndTime() {
         return ZonedDateTime.of(
                 diagnosisDatePicker.getValue(),
@@ -297,7 +319,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    // returns the repair start time
+    /* HELPER: returns the repair start time */
     private ZonedDateTime getRepairStartTime() {
         return ZonedDateTime.of(
                 repairDatePicker.getValue(),
@@ -305,7 +327,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    // returns the repair end time
+    /* HELPER: returns the repair end time */
     private ZonedDateTime getRepairEndTime() {
         return ZonedDateTime.of(
                 repairDatePicker.getValue(),
@@ -313,6 +335,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
+    /* HELPER: gets the list of parts from the list */
     private List<PartOccurrence> getPartsListFromList() {
         List<PartOccurrence> parts = new ArrayList<>();
         parts.addAll(partsTable.getItems());
