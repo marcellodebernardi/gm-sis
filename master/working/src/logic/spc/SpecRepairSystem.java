@@ -306,12 +306,6 @@ public class SpecRepairSystem {
         return customers.get(0);
     }
 
-    public Installation checkIfInstalled(int partOccurrence)  {
-
-        return persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID",EqualTo,partOccurrence)).get(0);
-
-
-    }
 
     public VehicleRepair getBySpcRepID(int spcRep)
     {

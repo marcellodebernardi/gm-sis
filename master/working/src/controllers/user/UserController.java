@@ -1,5 +1,6 @@
 package controllers.user;
 
+import com.sun.xml.internal.ws.api.model.MEP;
 import domain.User;
 import domain.UserType;
 import javafx.collections.FXCollections;
@@ -75,7 +76,9 @@ public class UserController implements Initializable {
                     userType = UserType.NORMAL;
                 }
                 boolean checker = auth.addEditUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
-                showAlert("User " + addOrEdit + ": " + checker);
+                AllUsers();
+                clear();
+               // showAlert("User " + addOrEdit + ": " + checker);
 
             }
         }
@@ -84,29 +87,35 @@ public class UserController implements Initializable {
     public void deleteUser() {
         try {
             if (UID.getText().equals(auth.getLoggedInUser())) {
-                showAlert("cant delete yourself");
+                showAlert("Stop trying to delete yourself");
                 return;
             }
             else {
-                if (!showAlertC("Sure you want to delete?")) {
-                    return;
-                }
-                delete(UID.getText());
+               if(getConfirmation("Are you sure you want to delete this user? ")) {
+                   delete(UID.getText());
+                   AllUsers();
+                   clear();
+               }
             }
         }
         catch (Exception e) {
-            showAlert("cant delete User, check User ID entered");
+            showAlert("Unable to delete user...check User ID entered");
         }
     }
 
     public void deleteFromList() {
         User user = ((User) tUsers.getSelectionModel().getSelectedItem());
-        delete(user.getUserID());
+        if(getConfirmation("Are you sure you want to delete this user? ")) {
+            delete(user.getUserID());
+        }
+        AllUsers();
+        clear();
     }
 
     public void delete(String userID) {
         try {
             boolean check = auth.deleteUser(userID);
+            clear();
             showAlert("User deleted: " + check);
         }
         catch (Exception e) {
@@ -145,7 +154,7 @@ public class UserController implements Initializable {
     }
 
     public boolean checkFields() {
-        if ((!UID.getText().equals("")) && (!P.getText().equals("")) && (!FN.getText().equals("")) && (!SN.getText().equals("")) && (!UT.getSelectionModel().getSelectedItem().toString().equals(""))) {
+        if ((!UID.getText().equals("")) && UID.getText().length() ==5 && (!P.getText().equals("")) && (!FN.getText().equals("")) && (!SN.getText().equals("")) && (!UT.getSelectionModel().getSelectedItem().toString().equals(""))) {
             return true;
         }
         return false;
@@ -178,7 +187,8 @@ public class UserController implements Initializable {
         displayTable(arrayList);
     }
 
-    public boolean showAlertC(String message) {
+    @SuppressWarnings("Duplicates")
+    private boolean showAlertC(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(message);
@@ -291,7 +301,7 @@ public class UserController implements Initializable {
         deleteButton.setDisable(true);
     }
 
-    public boolean checkFieldFormat() {
+    private boolean checkFieldFormat() {
         try {
             int userID = Integer.parseInt(UID.getText());
             if (!(FN.getText().matches("[a-zA-Z]+"))) {
@@ -305,9 +315,33 @@ public class UserController implements Initializable {
             return true;
         }
         catch (Exception e) {
-            showAlert(e.getMessage());
+            if(e instanceof NumberFormatException)
+            {
+                showAlert("Please enter 5 NUMERICAL VALUES!");
+            }
+            else {
+                showAlert(e.getMessage());
+            }
             return false;
         }
     }
 
+    private boolean getConfirmation(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Confirm deletion");
+        alert.setContentText(message);
+        alert.showAndWait();
+        return alert.getResult() == ButtonType.OK;
+    }
+    public void clear()
+    {
+        UID.clear();
+        P.clear();
+        FN.clear();
+        SN.clear();
+        sUID.clear();
+        sFN.clear();
+        AllUsers();
+    }
 }

@@ -23,10 +23,7 @@ import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 import domain.PartRepair;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.time.*;
 
 
@@ -131,6 +128,7 @@ public class SpecialistController implements Initializable{
                 this.setDisable(true);
                 this.setStyle("-fx-background-color: rgba(171,171,171,0)");
             }
+
         }
     };
     @FXML
@@ -317,24 +315,31 @@ public class SpecialistController implements Initializable{
                             clearBookingFields();
                             showAlert("Successfully added vehicle booking");
                         }
-                    } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")){
-                        // PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText()));
-                        ////Installation installation = partOccurrence.getInstallation();
-                        //if(installation!=null) {
-                        //if(!installation.getEndWarrantyDate().before(new Date()))
-                        //{
-                        //  bookingCost.setText("0");
-                        //}
+                    } else if(bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
+                        PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText()));
+                        Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
+                        if (installation != null) {
+                            if (installation.getEndWarrantyDate().after(new Date())) {
+                                bookingCost.setText("0");
+                            }
 
-                        Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
-                        diagRepBookings.setBill(bill);
-                        PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
-                        specRepairSystem.addSpecialistBooking(partRepair);
-                        bookingSystem.commitBooking(diagRepBookings);
-                        findSRCBookings();
-                        clearBookingFields();
-                        showAlert("Successfully added part booking ");
-                        // }
+
+                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
+                            diagRepBookings.setBill(bill);
+                            PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
+                            PartRepair repair = specRepairSystem.findPartRepairBooking(Integer.parseInt(bookingID.getText()));
+                            partOccurrence.setSpecRepID(repair.getSpcRepID());
+                            partsSystem.addPartOccurrence(partOccurrence);
+                            specRepairSystem.addSpecialistBooking(partRepair);
+                            bookingSystem.commitBooking(diagRepBookings);
+                            findSRCBookings();
+                            clearBookingFields();
+                            showAlert("Successfully added part booking ");
+                        }
+                        else
+                        {
+                            showAlert("No part found.");
+                        }
                     }
                 }
 
@@ -478,6 +483,7 @@ public class SpecialistController implements Initializable{
         bookingSPCID.clear();
         bookingSPCID.setEditable(true);
         spc_found_lbl.setVisible(false);
+        itemLabel.setText("Item ID: ");
     }
 
     public void findSRC()
@@ -543,7 +549,7 @@ public class SpecialistController implements Initializable{
                 }
 
             }
-            //TODO when installation is working make sure to set cost to 0 if selected part is under warranty
+
             if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
                 PartRepair partRepair = specRepairSystem.findPartRepairBooking(spcRepID);
                 if (partRepair != null) {
@@ -594,6 +600,8 @@ public class SpecialistController implements Initializable{
                 }
                 diagRepBooking.setBill(bill);
                 bookingSystem.commitBooking(diagRepBooking);
+                clearBookingFields();
+                clearFields();
                 specRepairSystem.deleteByRepIDV(spcRepID);
                 findSRCBookings();
             }
@@ -611,6 +619,8 @@ public class SpecialistController implements Initializable{
                 diagRepBooking.setBill(bill);
                 bookingSystem.commitBooking(diagRepBooking);
                 specRepairSystem.deleteByRepIDP(spcRepID);
+                clearBookingFields();
+                clearFields();
                 findSRCBookings();
             }
             else
@@ -735,7 +745,7 @@ public class SpecialistController implements Initializable{
     @FXML
     private ObservableList<Installation> installationObservableList = FXCollections.observableArrayList();
     @FXML
-    private Button hideInstalls, addInsta, editInsta, deleteInsta,cancelInstallationUpdate,allowUpdate,clearPartsFields;
+    private Button hideInstalls, addInsta, editInsta, deleteInsta,allowUpdate,clearPartsFields;
 
     @FXML
     private TextField instaVReg;
@@ -791,13 +801,12 @@ public class SpecialistController implements Initializable{
     private void displayInstallations(List<Installation> installations) {
         Installations.getItems().clear();
         installationObservableList.addAll(installations);
-        VehicleReg.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
+        VehicleReg.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
         VehicleReg.setCellFactory(TextFieldTableCell.forTableColumn());
-        instDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
+        instDate.setCellValueFactory(new PropertyValueFactory<>("installationDate"));
         instDate.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
-        warrDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
+        warrDate.setCellValueFactory(new PropertyValueFactory<>("endWarrantyDate"));
         warrDate.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
-
         partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                 ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
@@ -878,13 +887,26 @@ public class SpecialistController implements Initializable{
 
     public void addInstallation()
     {
-        PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
-        Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
-        int partAbs = c.getNumericValue(c);
-        List<Installation> installations = new ArrayList<>();
-        Installation installation = new Installation(fromLocalDate(instaDate.getValue()), fromLocalDate(wEndDate.getValue()), instaVReg.getText(), partAbs, partOccurrence);
-        installations.add(installation);
-        specRepairSystem.commitInstallations(installation);
+        try {
+            Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(instaVReg.getText());
+            if(vehicle == null)
+            {
+                throw new Exception();
+            }
+            PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
+            Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
+            int partAbs = c.getNumericValue(c);
+            Installation installation = new Installation(fromLocalDate(instaDate.getValue()), fromLocalDate(wEndDate.getValue()), instaVReg.getText(), partAbs, partOccurrence);
+            specRepairSystem.commitInstallations(installation);
+            showAlert("Installation added");
+            List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
+            displayInstallations(installations);
+        }
+        catch (Exception e)
+        {
+            showAlert("Please enter a valid Vehicle registration.");
+        }
+
     }
 
     public void editInstallation()
@@ -903,9 +925,11 @@ public class SpecialistController implements Initializable{
         installation.setPartAbstractionID(abs);
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
         installation.setPartOccurrence(partOccurrence);
+        wEndDate.setValue(LocalDate.now());
         installation.setEndWarrantyDate(fromLocalDate(wEndDate.getValue()));
         installation.setInstallationDate(fromLocalDate(instaDate.getValue()));
         specRepairSystem.commitInstallations(installation);
+        showAlert("Installation updated");
     }
 
     public void cancelUpdate()
@@ -919,8 +943,10 @@ public class SpecialistController implements Initializable{
         try {
             Installation installation = specRepairSystem.getByInstallationID(installationID);
             if (deleteConfirmation("Are you sure you want to delete this installation?")) {
+                List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
                 specRepairSystem.deleteInstallation(installation.getInstallationID());
                 findSRCBookings();
+                displayInstallations(installations);
             }
         }
         catch (NullPointerException e)

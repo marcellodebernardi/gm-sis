@@ -13,14 +13,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="935.0" prefWidth="1096.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.spc.SpecialistController">
    <center>
-      <TableView fx:id="specialistBookings" onMouseClicked="#showDetails" prefHeight="417.0" prefWidth="613.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="specialistBookings" onMouseClicked="#showDetails" prefHeight="124.0" prefWidth="885.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="itemID" prefWidth="131.0" text="Item ID:" />
-          <TableColumn fx:id="deliveryDateOfBooking" prefWidth="100.0" text="Delivery Date:" />
-            <TableColumn fx:id="returnDateOfBooking" prefWidth="93.0" text="Return Date:" />
-            <TableColumn fx:id="costOfBooking" prefWidth="83.0" text="Cost:" />
-            <TableColumn fx:id="spcIDOfBooking" prefWidth="90.0" text="SPC ID:" />
-            <TableColumn fx:id="bookingIDOfBooking" prefWidth="144.0" text="Booking ID" />
+          <TableColumn fx:id="itemID" prefWidth="136.0" text="Item ID:" />
+          <TableColumn fx:id="deliveryDateOfBooking" prefWidth="145.0" text="Delivery Date:" />
+            <TableColumn fx:id="returnDateOfBooking" prefWidth="149.0" text="Return Date:" />
+            <TableColumn fx:id="costOfBooking" prefWidth="121.0" text="Cost:" />
+            <TableColumn fx:id="spcIDOfBooking" prefWidth="172.0" text="SPC ID:" />
+            <TableColumn fx:id="bookingIDOfBooking" prefWidth="161.0" text="Booking ID" />
         </columns>
       </TableView>
    </center>
@@ -85,9 +85,9 @@
             <Button fx:id="clearPartsFields" layoutX="15.0" layoutY="535.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="27.0" prefWidth="130.0" text="Clear" visible="false" />
             <Label fx:id="lbl_booking_found" layoutX="124.0" layoutY="6.0" prefHeight="10.0" prefWidth="105.0" text="Booking found" textFill="#229e1c" visible="false" />
             <Label fx:id="lbl_booking_notFound" layoutX="124.0" layoutY="6.0" prefHeight="10.0" prefWidth="105.0" text="No Booking found" textFill="#ff441a" visible="false" />
-            <Label fx:id="item_found_lbl" layoutX="307.0" layoutY="6.0" text="Item Found" textFill="#4aff02" visible="false" />
+            <Label fx:id="item_found_lbl" layoutX="387.0" layoutY="2.0" text="Vehicle found" textFill="#229e1c" visible="false" />
             <Button layoutX="15.0" layoutY="124.0" mnemonicParsing="false" onAction="#clearBookingFields" text=" Clear" />
-            <Label fx:id="spc_found_lbl" layoutX="325.0" layoutY="66.0" prefHeight="15.0" prefWidth="90.0" text="SPC Found" textFill="#04eb04" visible="false" />
+            <Label fx:id="spc_found_lbl" layoutX="325.0" layoutY="66.0" prefHeight="15.0" prefWidth="90.0" text="SPC Found" textFill="#229e1c" visible="false" />
             <ComboBox fx:id="partDes" layoutX="14.0" layoutY="442.0" onAction="#setOccs" prefWidth="150.0" promptText="Select Part Type" visible="false" />
             <ComboBox fx:id="partSerial" layoutX="176.0" layoutY="443.0" prefWidth="150.0" promptText="Select Part serial" visible="false" />
          </children>

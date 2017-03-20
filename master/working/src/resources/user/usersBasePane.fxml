@@ -37,14 +37,14 @@
          <children>
             <Label text="UserID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="firstName" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="surname" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label text="userType" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Surname:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Type:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="UID" promptText="Enter User ID" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="P" promptText="enter password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="FN" promptText="enter first Name" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <TextField fx:id="SN" promptText="enter Surname" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <ComboBox fx:id="UT" promptText="enter User Type" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <TextField fx:id="P" promptText="Enter a password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="FN" promptText="Enter first name" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="SN" promptText="Enter surname" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ComboBox fx:id="UT" promptText="Select type" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Admin" />
@@ -90,11 +90,11 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#AllUsers" text="View All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
                   <TextField fx:id="sUID" onKeyTyped="#SearchUsers" prefHeight="27.0" prefWidth="210.0" promptText="Enter User ID" GridPane.halignment="RIGHT" />
-                  <TextField fx:id="sFN" onKeyTyped="#SearchUsers" promptText="enter first Name" GridPane.columnIndex="1" />
+                  <TextField fx:id="sFN" onKeyTyped="#SearchUsers" promptText="Enter first name" GridPane.columnIndex="1" />
                   <Button mnemonicParsing="false" onAction="#deleteFromList" text="Delete" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
                   <Button mnemonicParsing="false" onAction="#getUser" text="Edit" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
                   <TextField fx:id="sS" onKeyTyped="#SearchUsers" promptText="enter surname" GridPane.columnIndex="2" />
-                  <ComboBox fx:id="sUT" onAction="#SearchUsers" promptText="enter User Type" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+                  <ComboBox fx:id="sUT" onAction="#SearchUsers" promptText="Select User Type" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
                            <String fx:value="Admin" />
@@ -108,9 +108,9 @@
                <columns>
                   <TableColumn fx:id="userID" prefWidth="208.77859497070312" text="UserID" />
                   <TableColumn fx:id="password" prefWidth="175.221435546875" text="Password" />
-                  <TableColumn fx:id="firstname" minWidth="1.0" prefWidth="144.28387451171875" text="firstName" />
-                  <TableColumn fx:id="surname" minWidth="0.0" prefWidth="153.0" text="surname" />
-                  <TableColumn fx:id="userType" prefWidth="203.0" text="userType" />
+                  <TableColumn fx:id="firstname" minWidth="1.0" prefWidth="144.28387451171875" text="First name" />
+                  <TableColumn fx:id="surname" minWidth="0.0" prefWidth="153.0" text="Surname" />
+                  <TableColumn fx:id="userType" prefWidth="203.0" text="User Type:" />
                </columns>
             </TableView>
          </items>
