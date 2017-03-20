@@ -8,6 +8,7 @@ package domain;
 public abstract class Booking implements Searchable {
     private int bookingID;
     private String description;
+    private boolean complete;
 
     // inverse hierarchical database links
     private String vehicleRegNumber;
@@ -25,12 +26,13 @@ public abstract class Booking implements Searchable {
      * @param mechanicID       the ID of the associated mechanic
      */
     public Booking(int bookingID, String vehicleRegNumber, String description,
-                   Bill bill, int mechanicID) {
+                   Bill bill, int mechanicID, boolean complete) {
         this.bookingID = bookingID;
         this.vehicleRegNumber = vehicleRegNumber;
         this.description = description;
         this.bill = bill;
         this.mechanicID = mechanicID;
+        this.complete = complete;
     }
 
 
@@ -54,6 +56,10 @@ public abstract class Booking implements Searchable {
         return mechanicID;
     }
 
+    public boolean isComplete() {
+        return complete;
+    }
+
 
     public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
@@ -69,5 +75,9 @@ public abstract class Booking implements Searchable {
 
     public void setMechanicID(int mechanicID) {
         this.mechanicID = mechanicID;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

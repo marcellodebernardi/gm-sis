@@ -42,10 +42,10 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
      * @param specRepBooking   potential specialist repair booking
      */
     public DiagRepBooking(String vehicleRegNumber, String description, double billAmount,
-                          boolean billSettled, int mechanicID, ZonedDateTime diagnosisStart, ZonedDateTime diagnosisEnd,
-                          ZonedDateTime repairStart, ZonedDateTime repairEnd, SpecRepBooking specRepBooking,
-                          List<PartOccurrence> repairParts) {
-        super(-1, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
+                          boolean billSettled, int mechanicID, boolean complete, ZonedDateTime diagnosisStart,
+                          ZonedDateTime diagnosisEnd, ZonedDateTime repairStart, ZonedDateTime repairEnd,
+                          SpecRepBooking specRepBooking, List<PartOccurrence> repairParts) {
+        super(-1, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID, complete);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
         this.repairStart = repairStart;
@@ -64,13 +64,14 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                            @Column(name = "billAmount") double billAmount,
                            @Column(name = "billSettled") boolean billSettled,
                            @Column(name = "mechanicID") int mechanicID,
+                           @Column(name = "complete") boolean complete,
                            @Column(name = "diagnosisStart") ZonedDateTime diagnosisStart,
                            @Column(name = "diagnosisEnd") ZonedDateTime diagnosisEnd,
                            @Column(name = "repairStart") ZonedDateTime repairStart,
                            @Column(name = "repairEnd") ZonedDateTime repairEnd,
                            @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                    SpecRepBooking specRepBooking) {
-        super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID);
+        super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID, complete);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
         this.repairStart = repairStart;
@@ -107,6 +108,11 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     @Column(name = "mechanicID")
     public int getMechanicID() {
         return super.getMechanicID();
+    }
+
+    @Column(name = "complete")
+    public boolean isComplete() {
+        return super.isComplete();
     }
 
     @Column(name = "diagnosisStart")

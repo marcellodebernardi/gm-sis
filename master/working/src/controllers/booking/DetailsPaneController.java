@@ -155,6 +155,10 @@ public class DetailsPaneController {
         vehicleMileageTextField.clear();
     }
 
+    @FXML private void completeBooking() {
+        selectedBooking.setComplete(true);
+    }
+
 
     /* HELPER: fills in the details of a booking in the details pane */
     void populateDetailFields(DiagRepBooking booking) {
