@@ -2,9 +2,12 @@ package controllers.customer;
 
 import controllers.booking.BookingController;
 import controllers.login.LoginController;
+import controllers.user.UserController;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -12,31 +15,50 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.stage.WindowEvent;
+import javafx.util.*;
+import javafx.fxml.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.BooleanStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.stage.Stage;
 import javafx.fxml.FXML;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.lang.*;
+import java.text.ParseException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 //import logic.*;
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
 import logic.customer.CustomerSystem;
 import logic.vehicle.*;
 import logic.booking.*;
+import logic.criterion.Criterion;
 import domain.*;
 import domain.DiagRepBooking;
-
+import persistence.DatabaseRepository;
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 
@@ -725,24 +747,30 @@ public class CustomerController implements Initializable
     {
         try
         {
-            List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
-            List<Installation> searchCustomerVehiclePartInstallationList = new ArrayList<Installation>(0);
+            List<PartAbstraction> searchPartList = new ArrayList<PartAbstraction>(0);
+            List<Installation> searchInstallationList = new ArrayList<Installation>(0);
+            List<PartOccurrence> searchPartOccurrenceList = new ArrayList<PartOccurrence>(0);
 
             Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
-            searchCustomerVehiclePartInstallationList = cSystem.searchCustomerVehiclePartInstallation(vehicle.getRegNumber());
-            System.out.println("Installations: " + searchCustomerVehiclePartInstallationList.size());//testing;
+            searchInstallationList = cSystem.searchInstallationTable(vehicle.getVehicleRegNumber());
+            System.out.println("Installation: " + searchInstallationList.size());//testing searchInstallationList
 
-            for(int i=0; i<searchCustomerVehiclePartInstallationList.size(); i++)
+            for(int i=0; i<searchInstallationList.size(); i++)
             {
-                searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(searchCustomerVehiclePartInstallationList.get(i).getPartAbstractionID());
+                searchPartOccurrenceList = cSystem.searchPartOccurrenceTable(searchInstallationList.get(i).getInstallationID());
+                System.out.println("Part Occurrence " + i + ": " + searchPartOccurrenceList.size());//testing searchPartOccurrenceList
             }
-            System.out.println("Parts: " + searchCustomerVehiclePartList.size());//testing
-            return searchCustomerVehiclePartList;
+            System.out.println("Part Occurrence: " + searchPartOccurrenceList.size());//testing searchPartOccurrenceList
 
-            //List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
-            //Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
-            //searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(vehicle.getRegNumber());
-            //return searchCustomerVehiclePartList;
+            for(int i=0; i<searchPartOccurrenceList.size(); i++)
+            {
+                searchPartList = cSystem.searchPartAbstractionTable(searchPartOccurrenceList.get(i).getPartAbstractionID());
+                System.out.println("Part Abstraction " + i + searchPartList.size());//testing searchPartList
+            }
+            System.out.print("Part Abstraction: " + searchPartList.size());//testing searchPartList
+
+            return searchPartList;
+
         }
         catch(Exception e)
         {
@@ -751,6 +779,37 @@ public class CustomerController implements Initializable
         }
         return null;
     }
+
+//    public List<PartAbstraction> searchOldCustomerVehiclePartsInstalledInDB()
+//    {
+//        try
+//        {
+//            List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
+//            List<Installation> searchCustomerVehiclePartInstallationList = new ArrayList<Installation>(0);
+//
+//            Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
+//            searchCustomerVehiclePartInstallationList = cSystem.searchInstallationTable(vehicle.getVehicleRegNumber());
+//            System.out.println("Installations: " + searchCustomerVehiclePartInstallationList.size());//testing;
+//
+//            for(int i=0; i<searchCustomerVehiclePartInstallationList.size(); i++)
+//            {
+//                searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(searchInstallationTable.get(i));
+//            }
+//            System.out.println("Parts: " + searchCustomerVehiclePartList.size());//testing
+//            return searchCustomerVehiclePartList;
+//
+//            //List<PartAbstraction> searchCustomerVehiclePartList = new ArrayList<PartAbstraction>(0);
+//            //Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
+//            //searchCustomerVehiclePartList = cSystem.searchCustomerVehiclePart(vehicle.getRegNumber());
+//            //return searchCustomerVehiclePartList;
+//        }
+//        catch(Exception e)
+//        {
+//            System.out.println("Search Customer Vehicle Part Error");
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public void initiateNewBooking()
     {
@@ -819,7 +878,7 @@ public class CustomerController implements Initializable
                 tableEntriesVehicle.add(searchList.get(i));
             }
 
-            customerVehicleTableColumnRegistrationNumber.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+            customerVehicleTableColumnRegistrationNumber.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
             customerVehicleTableColumnRegistrationNumber.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
 
             customerVehicleTableColumnType.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("vehicleType"));
