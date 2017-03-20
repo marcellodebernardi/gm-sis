@@ -64,7 +64,7 @@ public class PersistenceTests {
         List<Vehicle> vehicles = persistence.getByCriteria(new Criterion<>(Vehicle.class));
 
         for (Vehicle v : vehicles) {
-            System.out.println(v.getRegNumber() + " " + v.getCustomerID());
+            System.out.println(v.getVehicleRegNumber() + " " + v.getCustomerID());
         }
     }
 }

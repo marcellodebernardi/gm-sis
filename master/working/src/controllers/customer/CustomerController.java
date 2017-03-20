@@ -2,12 +2,9 @@ package controllers.customer;
 
 import controllers.booking.BookingController;
 import controllers.login.LoginController;
-import controllers.user.UserController;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -15,50 +12,31 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.stage.WindowEvent;
-import javafx.util.*;
-import javafx.fxml.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.BooleanStringConverter;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.stage.Stage;
 import javafx.fxml.FXML;
-import java.util.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.lang.*;
-import java.text.ParseException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 //import logic.*;
-import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
 import logic.customer.CustomerSystem;
 import logic.vehicle.*;
 import logic.booking.*;
-import logic.criterion.Criterion;
 import domain.*;
 import domain.DiagRepBooking;
-import persistence.DatabaseRepository;
+
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 
@@ -730,7 +708,7 @@ public class CustomerController implements Initializable
             searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
             for(int i = 0; i < searchVehicleList.size(); i++)
             {
-                searchBookingList = cSystem.searchCustomerBookings(searchVehicleList.get(i).getRegNumber());
+                searchBookingList = cSystem.searchCustomerBookings(searchVehicleList.get(i).getVehicleRegNumber());
             }
 
             return searchBookingList;

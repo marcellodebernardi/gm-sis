@@ -12,4 +12,6 @@
 /master/working/lib/GM-SIS - Copy.db
 
 # Scratch folders
-/scratch
+scratch/
+.idea/workspace.xml
+target/

@@ -23,13 +23,18 @@ public class MenuController implements Initializable {
 
     @FXML
     private Button UsersButton;
+    @FXML
+    private Button SRCButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
             UsersButton.setDisable(false);
+            SRCButton.setDisable(false);
+
         } else {
             UsersButton.setDisable(true);
+            SRCButton.setDisable(true);
         }
     }
     public void openTodayTab() {

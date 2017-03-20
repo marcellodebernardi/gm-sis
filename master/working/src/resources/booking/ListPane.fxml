@@ -8,13 +8,18 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.booking.ListPaneController"
             id="listPane" fx:id="listPane">
     <top>
         <HBox id="listPaneTopControls">
             <Label>Filter</Label>
-            <ComboBox id="filterComboBox" fx:id="filterComboBox"></ComboBox>
+            <ComboBox id="filterComboBox" fx:id="filterComboBox" onAction="#applyListFilter"></ComboBox>
+            <Label>View By</Label>
+            <ComboBox id="viewByComboBox" fx:id="viewByComboBox" onAction="#applyListViewType"></ComboBox>
+            <Label>Period</Label>
+            <DatePicker id="listDatePicker" fx:id="listDatePicker" onAction="#selectListPeriod"></DatePicker>
             <Label>Search:</Label>
             <TextField id="listSearchBar" fx:id="listSearchBar" onKeyReleased="#searchBookings"></TextField>
             <Button>List View</Button>

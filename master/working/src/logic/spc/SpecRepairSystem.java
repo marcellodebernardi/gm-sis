@@ -88,7 +88,7 @@ public class SpecRepairSystem {
         {
             return vehicleRepairs;
         }
-        throw new NullPointerException(regNumber);
+        else return null;
     }
 
     /**
@@ -131,7 +131,7 @@ public class SpecRepairSystem {
      */
     public List<PartRepair> getOutstandingP()
     {
-        List<PartRepair> partRepairs =  persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo, 2));
+        List<PartRepair> partRepairs =  persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", MoreThan, 0));
         List<PartRepair> outstanding = new ArrayList<>();
         for(PartRepair p: partRepairs)
         {
@@ -150,16 +150,11 @@ public class SpecRepairSystem {
      */
     public SpecialistRepairCenter getByID(int spcID)
     {
-        try {
+
             List<SpecialistRepairCenter> specialistRepairCenters = persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, spcID));
             if (specialistRepairCenters != null) {
                 return specialistRepairCenters.get(0);
             }
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-            e.printStackTrace();
-        }
         return null;
     }
 
@@ -278,7 +273,7 @@ public class SpecRepairSystem {
 
     }
 
-    public boolean updateInstallation(Installation installation)
+    public boolean commitInstallations(Installation installation)
     {
         return persistence.commitItem(installation);
     }
@@ -311,14 +306,11 @@ public class SpecRepairSystem {
         return customers.get(0);
     }
 
-    public Installation checkIfInstalled(int partOccurrence) throws IndexOutOfBoundsException {
-        PartOccurrence part = persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"partOccurrenceID",EqualTo,partOccurrence)).get(0);
-        List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID", EqualTo, part.getPartOccurrenceID()));
-        if(installations.get(0)!=null)
-        {
-            return installations.get(0);
-        }
-        throw new IndexOutOfBoundsException("No such installations");
+    public Installation checkIfInstalled(int partOccurrence)  {
+
+        return persistence.getByCriteria(new Criterion<>(Installation.class, "partOccurrenceID",EqualTo,partOccurrence)).get(0);
+
+
     }
 
     public VehicleRepair getBySpcRepID(int spcRep)
@@ -336,7 +328,7 @@ public class SpecRepairSystem {
 
     public Vehicle findVehicle(String reg)
     {
-        return persistence.getByCriteria(new Criterion<>(Vehicle.class,"regNumber",EqualTo,reg)).get(0);
+        return persistence.getByCriteria(new Criterion<>(Vehicle.class,"vehicleRegNumber",EqualTo,reg)).get(0);
     }
 
     public PartOccurrence findAPart(int partID)
@@ -349,5 +341,11 @@ public class SpecRepairSystem {
         return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",Regex,query).or("customerSurname",Regex,query));
 
     }
+
+    public DiagRepBooking findBooking(int bookingID)
+    {
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,"bookingID",EqualTo, bookingID)).get(0);
+    }
+
 
 }

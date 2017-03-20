@@ -52,13 +52,10 @@ public class PartAbstraction implements Searchable {
         this.occurrenceList = occurrenceList;
     }
 
+
     @Column(name = "partAbstractionID", primary = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
-    }
-
-    public void setPartAbstractionID(int partAbstractionID) {
-        this.partAbstractionID = partAbstractionID;
     }
 
     @Column(name = "partName")
@@ -66,17 +63,9 @@ public class PartAbstraction implements Searchable {
         return partName;
     }
 
-    public void setPartName(String partName) {
-        this.partName = partName;
-    }
-
     @Column(name = "partDescription")
     public String getPartDescription() {
         return partDescription;
-    }
-
-    public void setPartDescription(String partDescription) {
-        this.partDescription = partDescription;
     }
 
     @Column(name = "partPrice")
@@ -84,22 +73,35 @@ public class PartAbstraction implements Searchable {
         return partPrice;
     }
 
-    public void setPartPrice(double partPrice) {
-        this.partPrice = partPrice;
-    }
-
     @Column(name = "partStockLevel")
     public int getPartStockLevel() {
         return partStockLevel;
     }
 
-    public void setPartStockLevel(int partStockLevel) {
-        this.partStockLevel = partStockLevel;
-    }
-
     @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "partAbstractionID")
     public List<PartOccurrence> getOccurrenceList() {
         return occurrenceList;
+    }
+
+
+    public void setPartAbstractionID(int partAbstractionID) {
+        this.partAbstractionID = partAbstractionID;
+    }
+
+    public void setPartName(String partName) {
+        this.partName = partName;
+    }
+
+    public void setPartDescription(String partDescription) {
+        this.partDescription = partDescription;
+    }
+
+    public void setPartPrice(double partPrice) {
+        this.partPrice = partPrice;
+    }
+
+    public void setPartStockLevel(int partStockLevel) {
+        this.partStockLevel = partStockLevel;
     }
 
     public void setOccurrenceList(List<PartOccurrence> occurrenceList) {

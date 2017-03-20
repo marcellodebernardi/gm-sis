@@ -16,38 +16,19 @@ public class Bill implements Searchable {
     }
 
 
-    /**
-     * Returns the billAmount the customer has to pay.
-     *
-     * @return billAmount for customer to pay
-     */
     public double getBillAmount() {
         return billAmount;
     }
 
-    /**
-     * Returns the settlement status of the bill.
-     *
-     * @return true if bill is billSettled, false otherwise
-     */
     public boolean isBillSettled() {
         return billSettled;
     }
 
-    /**
-     * Sets the settlement status of the bill.
-     *
-     * @param billSettled true if customer has paid, false if not.
-     */
+
     public void setBillSettled(boolean billSettled) {
         this.billSettled = billSettled;
     }
 
-    /**
-     * Sets the amount to be paid for the bill.
-     *
-     * @param billAmount new amount to be paid
-     */
     public void setBillAmount(double billAmount) {
         this.billAmount = billAmount;
     }

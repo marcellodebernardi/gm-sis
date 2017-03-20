@@ -8,6 +8,7 @@ package domain;
 public abstract class Booking implements Searchable {
     private int bookingID;
     private String description;
+    private boolean complete;
 
     // inverse hierarchical database links
     private String vehicleRegNumber;
@@ -25,95 +26,58 @@ public abstract class Booking implements Searchable {
      * @param mechanicID       the ID of the associated mechanic
      */
     public Booking(int bookingID, String vehicleRegNumber, String description,
-                   Bill bill, int mechanicID) {
+                   Bill bill, int mechanicID, boolean complete) {
         this.bookingID = bookingID;
         this.vehicleRegNumber = vehicleRegNumber;
         this.description = description;
         this.bill = bill;
         this.mechanicID = mechanicID;
+        this.complete = complete;
     }
 
 
-    /**
-     * Get unique ID of this booking.
-     *
-     * @return booking ID
-     */
     public int getBookingID() {
         return bookingID;
     }
 
-    /**
-     * Get unique registration number of associated vehicle
-     *
-     * @return vehicle registration number
-     */
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
 
-    /**
-     * Get description of booking as entered by some user.
-     *
-     * @return booking description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Get the bill associated with this booking.
-     *
-     * @return booking bill
-     */
     public Bill getBill() {
         return bill;
     }
 
-    /**
-     * Get the ID of the mechanic performing this booking work.
-     *
-     * @return mechanic ID
-     */
     public int getMechanicID() {
         return mechanicID;
     }
 
-    /**
-     * Associate the booking to a different vehicle, by giving the registration number
-     * of the new vehicle. Note that the list of bookings in the corresponding vehicle must also
-     * be updated.
-     *
-     * @param vehicleRegNumber unique registration number of new vehicle to associate
-     */
+    public boolean isComplete() {
+        return complete;
+    }
+
+
     public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    /**
-     * Sets the description of the booking.
-     *
-     * @param description new description
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * Associates a new bill to the booking.
-     *
-     * @param bill the new bill
-     */
     public void setBill(Bill bill) {
         this.bill = bill;
     }
 
-    /**
-     * Sets the ID of the mechanic performing the work for this booking.
-     *
-     * @param mechanicID new mechanic tasked on this booking
-     */
     public void setMechanicID(int mechanicID) {
         this.mechanicID = mechanicID;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

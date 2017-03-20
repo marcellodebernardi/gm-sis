@@ -1,8 +1,10 @@
 package controllers.parts;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
+import domain.PartOccurrence;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
@@ -408,13 +410,27 @@ public class PartsController implements Initializable {
         PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
                 Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
                 null);
-
         boolean s = instance.commitItem(newPart);
+        List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
+        for(int i=0;i<partAbstractionList.size();i++)
+        {
+            if(i == partAbstractionList.size()-1)
+            {
+                for(int j=0;j<Integer.parseInt(partStockLevelField.getText());j++)
+                {
+                    PartAbstraction partAbstraction = partAbstractionList.get(i);
+                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(),0,-1);
+                    pSys.addPartOccurrence(partOccurrence);
+                }
+            }
+        }
 
         clearAddForm();
         updateTable();
 
     }
+
+
 
     /**
      * This method just resets the text fields on the add part form
@@ -522,6 +538,8 @@ public class PartsController implements Initializable {
         try{
 
             PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
+            PartOccurrence partOccurrence = new PartOccurrence(partIncrease.getPartAbstractionID(), 0,0);
+            pSys.addPartOccurrence(partOccurrence);
             int c=partIncrease.getPartStockLevel()+1;
             System.out.println(c);
 
@@ -551,16 +569,26 @@ public class PartsController implements Initializable {
 
             int c=partDecrease.getPartStockLevel()-1;
             System.out.println(c);
-
+            System.out.println(partDecrease.getPartAbstractionID());
+            List<PartOccurrence> partOccurrences = pSys.getAllFreeOccurrences(partDecrease);
+            System.out.println("size is " + partOccurrences.size());
+            PartOccurrence partOccurrence = partOccurrences.get(0);
+            pSys.deleteOccurrence(partOccurrence,partDecrease);
             partDecrease.setPartStockLevel(c);
 
             saveChanges();
             updateTable();
 
 
-        }catch(Exception e){
+        }catch(IndexOutOfBoundsException | NullPointerException e){
 
-            showError("Please select a part first to decrease stock");
+            if(e instanceof IndexOutOfBoundsException)
+            {
+               e.printStackTrace();
+            }
+            else if(e instanceof NullPointerException){
+                showError("Please select a part first to decrease stock");
+            }
 
         }
 
@@ -612,6 +640,17 @@ public class PartsController implements Initializable {
         viewAllBookingsClick();
 
 
+    }
+    private java.time.LocalDate toLocalDate(Date date)
+    {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Instant instant = date.toInstant();
+        return instant.atZone(zoneId).toLocalDate();
+    }
+
+    private Date fromLocalDate(java.time.LocalDate localDate)
+    {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 

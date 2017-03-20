@@ -36,6 +36,7 @@ public class SpecialistRepairController implements Initializable{
     private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
     @FXML
     private Label id_lbl,name_lbl,address_lbl,number_lbl,email_lbl = new Label();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -330,7 +331,7 @@ public class SpecialistRepairController implements Initializable{
         }
         vehicleDetails.getItems().clear();
         vehicleObservableList.addAll(vehicles);
-        veh_reg_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+        veh_reg_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
         veh_reg_column.setCellFactory(TextFieldTableCell.forTableColumn());
         veh_make_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("manufacturer"));
         veh_make_column.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -449,7 +450,7 @@ public class SpecialistRepairController implements Initializable{
                                 }
                                 if (vehicles.size() > 0) {
                                     for (Vehicle vehicle : vehicles) {
-                                        vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(vehicle.getRegNumber()));
+                                        vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(vehicle.getVehicleRegNumber()));
                                     }
                                     if (vehicleRepairList != null) {
                                         showToTable(vehicleRepairList);
@@ -469,7 +470,7 @@ public class SpecialistRepairController implements Initializable{
                         }
                         if (vehicles.size() > 0) {
                             for (Vehicle v : vehicles)
-                                vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getRegNumber()));
+                                vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getVehicleRegNumber()));
                             if (vehicleRepairList != null) {
                                 showToTable(vehicleRepairList);
                             }
@@ -484,6 +485,7 @@ public class SpecialistRepairController implements Initializable{
 
     }
 
+    @SuppressWarnings("Duplicates")
     private <E> void showToTable(List<E> specRepBookings)
     {
         specRepBooking.getItems().clear();

@@ -8,15 +8,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import logic.booking.BookingSystem;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,9 +25,14 @@ public class ListPaneController {
     private BookingSystem bookingSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
+    private Filter currentFilter;
+    private ViewBy currentViewBy;
+    private ZonedDateTime selectedDay;
 
     @FXML private TextField listSearchBar;
     @FXML private ComboBox filterComboBox; // todo
+    @FXML private ComboBox viewByComboBox;
+    @FXML private DatePicker listDatePicker;
     @FXML private TableView<DiagRepBooking> bookingTableView;
     @FXML private TableColumn<DiagRepBooking, Integer> bookingIDColumn;
     @FXML private TableColumn<DiagRepBooking, String> customerColumn;
@@ -45,14 +48,18 @@ public class ListPaneController {
     public ListPaneController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
-        timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
+        timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        currentFilter = Filter.FUTURE;
+        currentViewBy = ViewBy.WEEK;
+        selectedDay = ZonedDateTime.now();
     }
 
     @FXML private void initialize() {
         populateFilterComboBox();
+        populateViewByComboBox();
         setBookingTableCellValueFactories();
-        populateBookingListView(bookingSystem.getAllBookings());
+        refreshBookingTable();
         setColumnWidths();
         setSelectionListener();
 
@@ -74,8 +81,35 @@ public class ListPaneController {
         }
     }
 
+    @FXML private void applyListFilter() {
+        currentFilter = Filter.asEnum(filterComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshBookingTable();
+    }
+
+    @FXML private void applyListViewType() {
+        currentViewBy = ViewBy.asEnum(viewByComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshBookingTable();
+    }
+
+    @FXML private void selectListPeriod() {
+        selectedDay = ZonedDateTime.parse(listDatePicker.getValue().format(dateFormatter), dateFormatter);
+
+    }
+
     void refreshBookingTable() {
-        populateBookingListView(bookingSystem.getAllBookings());
+        switch (currentFilter) {
+            case ALL:
+                populateBookingListView(bookingSystem.getAllBookings());
+                break;
+            case FUTURE:
+                populateBookingListView(bookingSystem.getFutureBookings());
+                break;
+            case PAST:
+                populateBookingListView(bookingSystem.getPastBookings());
+                break;
+            default:
+                System.err.println("Unrecognized list filter applied.");
+        }
     }
 
 
@@ -95,7 +129,8 @@ public class ListPaneController {
             Customer customer = p.getValue().getCustomer();
             return customer == null ?
                     new ReadOnlyObjectWrapper<>("") :
-                    new ReadOnlyObjectWrapper<>(customer.getCustomerSurname());
+                    new ReadOnlyObjectWrapper<>(customer.getCustomerFirstname() + " "
+                            + customer.getCustomerSurname());
         });
         vehicleRegColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
@@ -135,7 +170,23 @@ public class ListPaneController {
                 billAmountColumn, billSettledColumn);
     }
 
-    private void populateFilterComboBox() {    }
+    private void populateFilterComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(Filter.ALL.toString());
+        options.add(Filter.PAST.toString());
+        options.add(Filter.FUTURE.toString());
+
+        filterComboBox.setItems(FXCollections.observableArrayList(options));
+    }
+
+    private void populateViewByComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(ViewBy.DAY.toString());
+        options.add(ViewBy.WEEK.toString());
+        options.add(ViewBy.MONTH.toString());
+
+        viewByComboBox.setItems(FXCollections.observableArrayList(options));
+    }
 
 
     ///////////////// STRUCTURAL MODIFICATIONS ////////////////////
@@ -163,7 +214,38 @@ public class ListPaneController {
                 );
     }
 
-    enum FilterType {
-        ALL, PAST, FUTURE, MONTH, WEEK, DAY;
+
+    enum Filter {
+        ALL, PAST, FUTURE;
+
+        static Filter asEnum(String string) throws IllegalArgumentException {
+            if (string.equalsIgnoreCase(ALL.toString())) return ALL;
+            else if (string.equalsIgnoreCase(PAST.toString())) return PAST;
+            else if (string.equalsIgnoreCase(FUTURE.toString())) return FUTURE;
+            else throw new IllegalArgumentException();
+        }
+
+        @Override public String toString() {
+            if (this == ALL) return "All";
+            else if (this == PAST) return "Past";
+            else return "Future";
+        }
+    }
+
+    enum ViewBy {
+        DAY, WEEK, MONTH;
+
+        static ViewBy asEnum(String string) throws IllegalArgumentException {
+            if (string.equalsIgnoreCase(DAY.toString())) return DAY;
+            else if (string.equalsIgnoreCase(WEEK.toString())) return WEEK;
+            else if (string.equalsIgnoreCase(MONTH.toString())) return MONTH;
+            else throw new IllegalArgumentException();
+        }
+
+        @Override public String toString() {
+            if (this == DAY) return "Day";
+            else if (this == WEEK) return "Week";
+            else return "Month";
+        }
     }
 }

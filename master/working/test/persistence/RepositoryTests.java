@@ -91,7 +91,7 @@ public class RepositoryTests {
         DatabaseRepository.getInstance().commitItem(new Vehicle(
                 "TEST REG", 1, VehicleType.Car, "TestModel", "QMUL Car company",
                 69.5, FuelType.diesel, "red", 100, new Date(), new Date(),
-                false, null, null, null, null));
+                false, null, null, null, null, null));
 
         List<Vehicle> vehicle = DatabaseRepository
                 .getInstance()
@@ -123,14 +123,14 @@ public class RepositoryTests {
                 SpecialistRepairCenter.class,
                 "spcID",
                 CriterionOperator.EqualTo,
-                8));
+                2));
         List<SpecialistRepairCenter> result = DatabaseRepository
                 .getInstance()
                 .getByCriteria(new Criterion<>(
                         SpecialistRepairCenter.class,
                         "spcID",
                         CriterionOperator.EqualTo,
-                        8
+                        2
                 ));
         assertTrue(result.size() == 0);
     }
@@ -139,7 +139,7 @@ public class RepositoryTests {
     public void testINSERTTransaction() {
         while (true) {
             Customer customer = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)).get(0);
-            List<String> result = ObjectRelationalMapper.getInstance().toINSERTTransaction(customer);
+            List<String> result = ObjectRelationalMapper.getInstance().toCOMMITTransaction(customer);
 
             System.out.println(result);
         }

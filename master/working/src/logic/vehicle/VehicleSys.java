@@ -1,8 +1,6 @@
 package logic.vehicle;
 
-import domain.FuelType;
-import domain.Vehicle;
-import domain.VehicleType;
+import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -30,7 +28,7 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicleT(String regNumber, String manufacturer, VehicleType vt) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer).and("vehicleType", EqualTo, vt));
+                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer).and("vehicleType", EqualTo, vt));
         return results;
 
     }
@@ -44,7 +42,7 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
+                "vehicleRegNumber", Regex, regNumber).and("manufacturer",Regex, manufacturer));
         return results;
 
     }
@@ -52,19 +50,20 @@ public class VehicleSys {
     public Vehicle searchAVehicle(String regNumber)
     {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "regNumber", EqualTo, regNumber));
+                "vehicleRegNumber", EqualTo, regNumber));
         return results !=null && results.size() != 0 ? results.get(0) : null;
     }
 
     public boolean addEditVehicle(String regNumber, int customerID, VehicleType vehicleType, String model, String manufacturer, double engineSize, FuelType fuelType, String colour, int mileage, Date renewalDateMot, Date dateLastServiced, boolean coveredByWarranty, String warrantyName, String warrantyCompAddress, Date warrantyExpirationDate)
     {
-        Vehicle addEdit = new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate, null);
+        Vehicle addEdit = new Vehicle(regNumber,customerID,vehicleType, model,manufacturer,engineSize,fuelType,colour,mileage,renewalDateMot,dateLastServiced,coveredByWarranty,warrantyName,warrantyCompAddress,warrantyExpirationDate, null, null);
         boolean result = persistence.commitItem(addEdit);
         return result;
     }
 
     public boolean deleteVehicle(String regNumber){
-        return persistence.deleteItem(new Criterion<>(Vehicle.class, "regNumber", EqualTo, regNumber));
+        persistence.deleteItem(new Criterion<>(VehicleRepair.class,"vehicleRegNumber",EqualTo,regNumber));
+        return persistence.deleteItem(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, regNumber));
     }
 
 
@@ -75,9 +74,14 @@ public class VehicleSys {
 
     public boolean VehicleExists(String reg)
     {
-        if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", EqualTo,reg)).isEmpty())
+        if(!persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo,reg)).isEmpty())
             return true;
         return false;
+    }
+
+    public void updateVehicle(Vehicle vehicle)
+    {
+        persistence.commitItem(vehicle);
     }
 
 }

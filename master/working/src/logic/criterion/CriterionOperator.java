@@ -7,4 +7,11 @@ package logic.criterion;
  */
 public enum CriterionOperator {
     LessThan, MoreThan, EqualTo, Regex;
+
+    public String toString() {
+        if (this == LessThan) return "<";
+        else if (this == MoreThan) return ">";
+        else if (this == EqualTo) return "=";
+        else return "LIKE";
+    }
 }

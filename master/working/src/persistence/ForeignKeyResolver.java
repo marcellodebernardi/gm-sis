@@ -37,25 +37,35 @@ class ForeignKeyResolver {
      * @return list of resolved statements
      */
     List<String> resolveForeignKeys(List<StatementNode> statementGraph) {
-        List<String> transaction = new ArrayList<>();
+        List<String> transactionList = new ArrayList<>();
+
+        // ALGORITHM: keeps the node graph in a list sorted by ascending number of
+        // unresolved dependencies. Steps through the list left to right. At every
+        // node, if the node is complete, turns it into a SQL statement and removes
+        // the node from the graph; if the node is not complete, resolves its primary
+        // key (potentially bringing other nodes to 0 unresolved dependencies) and
+        // moves on to the next node. After each such action, the list is sorted again.
+        // If the end of the list is reached, return to the start. Terminates when
+        // list is empty.
 
         Collections.sort(statementGraph);
 
         for (int i = 0; i < statementGraph.size(); i++) {
             StatementNode sN = statementGraph.get(i);
+
             if (sN.getUnresolvedDependencies() == 0) {
                 sN.getPrimaryKeyValue();
                 sN.setForeignKeys();
                 statementGraph.remove(i);
-                transaction.add(sN.toString());
+                transactionList.add(sN.toString());
                 i--;
             }
-            else {
-                sN.getPrimaryKeyValue();
-                if (i + 1 == statementGraph.size()) i = 0; // todo replace with outer loop?
-            }
+            else sN.getPrimaryKeyValue();
+
+            if (i + 1 == statementGraph.size()) i = 0;
+
             Collections.sort(statementGraph);
         }
-        return transaction;
+        return transactionList;
     }
 }

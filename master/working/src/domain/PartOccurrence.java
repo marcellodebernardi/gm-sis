@@ -8,6 +8,8 @@ import persistence.DependencyConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static logic.criterion.CriterionOperator.EqualTo;
+
 /**
  *
  */
@@ -28,8 +30,8 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
      * Constructor for PartOccurrence.
      *
      * @param partAbstractionID id of the type of part this occurrence belongs to
-     * @param installationID if installed on a vehicle, id of the installation
-     * @param specRepID if sent to SPC, id of specialist repair center
+     * @param installationID    if installed on a vehicle, id of the installation
+     * @param specRepID         if sent to SPC, id of specialist repair center
      */
     public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
         partOccurrenceID = -1;
@@ -39,19 +41,19 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         this.specRepID = specRepID;
     }
 
-
     @Reflective
     private PartOccurrence(@Column(name = "partOccurrenceID", primary = true) int partOccurrenceID,
                            @Column(name = "partAbstractionID") int partAbstractionID,
                            @Column(name = "installationID") int installationID,
                            @Column(name = "bookingID") int bookingID,
-                           @Column(name = "specRepID") int specRepID){
+                           @Column(name = "specRepID") int specRepID) {
         this.partOccurrenceID = partOccurrenceID;
         this.partAbstractionID = partAbstractionID;
         this.installationID = installationID;
         this.bookingID = bookingID;
         this.specRepID = specRepID;
     }
+
 
     @Column(name = "partOccurrenceID", primary = true)
     public int getPartOccurrenceID() {
@@ -92,14 +94,22 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
 
     @Lazy
     public PartAbstraction getPartAbstraction() {
-        List<PartAbstraction> partTypes = DatabaseRepository
-                .getInstance()
-                .getByCriteria(new Criterion<>(
-                        PartAbstraction.class,
-                        "partAbstractionID",
-                        CriterionOperator.EqualTo,
-                        partOccurrenceID));
-        return partTypes != null ? partTypes.get(0) : null;
+        List<PartAbstraction> partTypes = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(
+                PartAbstraction.class,
+                "partAbstractionID",
+                EqualTo,
+                partOccurrenceID));
+        return partTypes != null && partTypes.size() != 0? partTypes.get(0) : null;
+    }
+
+    @Lazy
+    public Installation getInstallation() {
+        List<Installation> installations = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(
+                Installation.class,
+                "installationID",
+                EqualTo,
+                installationID));
+        return installations != null && installations.size() != 0 ? installations.get(0) : null;
     }
 
 

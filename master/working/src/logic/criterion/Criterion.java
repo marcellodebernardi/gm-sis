@@ -6,9 +6,15 @@ import domain.Searchable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.regex.Pattern;
+
+import static logic.criterion.CriterionException.Cause.ARGUMENTS_INCOMPATIBLE;
+import static logic.criterion.CriterionException.Cause.NULL_INPUTS;
+import static logic.criterion.CriterionOperator.Regex;
 
 /**
  * <p>
@@ -58,12 +64,10 @@ import java.util.regex.Pattern;
  * @since 0.1
  */
 public class Criterion<E extends Searchable> {
+    private static boolean DEVELOPMENT_MODE = false;
+
     private Class<E> eClass;
-    private List<String> attributes;
-    private List<CriterionOperator> operators;
-    private List<Object> values;
-    private List<String> logicalConnectives;
-    // todo add overloaded methods for inner criteria of different type?
+    private StringBuilder criterionQuery;
 
 
     /**
@@ -83,27 +87,16 @@ public class Criterion<E extends Searchable> {
      */
     public Criterion(Class<E> eClass, String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
-        if (attribute == null || operator == null || value == null) {
-            throw new CriterionException("CONSTRUCTOR: null value in required field. Use single-arg "
-                    + "constructor for empty criterion");
-        }
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value)) throw new CriterionException("CONSTRUCTOR: operator incompatible.");
-
-        // extract fields and check if arguments are compatible
         this.eClass = eClass;
-        if (isClassCompatible(attribute, value)) {
-            attributes = new ArrayList<>();
-            operators = new ArrayList<>();
-            values = new ArrayList<>();
-            logicalConnectives = new ArrayList<>();
-            attributes.add(attribute);
-            operators.add(operator);
-            values.add(value);
-            return;
-        }
-        // throw error if criteria not acceptable
-        throw new CriterionException("CONSTRUCTOR: no such field, or value type does not match field type.");
+
+        // check inputs for correctness
+        if (eClass == null || attribute == null || operator == null || value == null)
+            throw new CriterionException().because(NULL_INPUTS);
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
+
+        criterionQuery = new StringBuilder(attribute).append(" ").append(operator).append(" ");
+        appendValue(value, operator);
     }
 
     /**
@@ -113,10 +106,7 @@ public class Criterion<E extends Searchable> {
      */
     public Criterion(Class<E> eClass) {
         this.eClass = eClass;
-        attributes = new ArrayList<>();
-        operators = new ArrayList<>();
-        values = new ArrayList<>();
-        logicalConnectives = new ArrayList<>();
+        criterionQuery = new StringBuilder(50);
     }
 
 
@@ -130,24 +120,13 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion<E> and(String attribute, CriterionOperator operator, Object value)
-            throws CriterionException {
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value))
-            throw new CriterionException("AND (" + attribute + "): operator incompatible.");
+    public Criterion<E> and(String attribute, CriterionOperator operator, Object value) throws CriterionException {
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
-        // check criteria if acceptable
-        if (isClassCompatible(attribute, value)) {
-            attributes.add(attribute);
-            operators.add(operator);
-            values.add(value);
-            logicalConnectives.add("AND");
-            return this;
-        }
-
-        // throw error if criteria not acceptable
-        throw new CriterionException("AND (" + attribute + "): no such field, or value type "
-                + "does not match field type.");
+        criterionQuery.append(" AND ").append(attribute).append(" ").append(operator).append(" ");
+        appendValue(value, operator);
+        return this;
     }
 
     /**
@@ -160,55 +139,14 @@ public class Criterion<E extends Searchable> {
      * @return modified Criterion object
      * @throws CriterionException if poorly specified arguments
      */
-    public Criterion<E> or(String attribute, CriterionOperator operator, Object value)
-            throws CriterionException {
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value))
-            throw new CriterionException("OR (" + attribute + "): operator incompatible.");
+    public Criterion<E> or(String attribute, CriterionOperator operator, Object value) throws CriterionException {
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
 
-        // check criteria if acceptable
-        if (isClassCompatible(attribute, value)) {
-            attributes.add(attribute);
-            operators.add(operator);
-            values.add(value);
-            logicalConnectives.add("OR");
-            return this;
-        }
-
-        // throw error if criteria not acceptable
-        throw new CriterionException("OR (" + attribute + "): no such field, or value type "
-                + "does not match field type.");
+        criterionQuery.append(" OR ").append(attribute).append(" ").append(operator).append(" ");
+        appendValue(value, operator);
+        return this;
     }
-
-    /**
-     * Adds a criterion to the Criterion object, connected to previous criteria by a SET DIFFERENCE
-     * set operator.
-     *
-     * @param attribute attribute to add to the criterion
-     * @param operator  operator connecting attribute to value
-     * @param value     value of attribute
-     * @return modified Criterion object
-     * @throws CriterionException if poorly specified arguments
-     */
-    /* public Criterion<E> except(String attribute, CriterionOperator operator, Object value)
-            throws CriterionException {
-        // check compatibility of operator and value
-        if (!operatorIsCompatible(operator, value))
-            throw new CriterionException("EXCEPT (" + attribute + "): operator incompatible.");
-
-        // check criteria if acceptable
-        if (isClassCompatible(attribute, value)) {
-            attributes.add(attribute);
-            operators.add(operator);
-            values.add(value);
-            logicalConnectives.add("EXCEPT");
-            return this;
-        }
-
-        // throw error if criteria not acceptable
-        throw new CriterionException("EXCEPT (" + attribute + "): no such field, or value type "
-                + "does not match field type.");
-    } */
 
     /**
      * <p>
@@ -229,53 +167,7 @@ public class Criterion<E extends Searchable> {
      * @return String representing search criteria
      */
     public String toString() {
-        // todo fix date handling
-        if (attributes.size() == 0) return "";
-
-        // first element
-        String returnString = "" + attributes.get(0);
-        switch (operators.get(0)) {
-            case EqualTo:
-                returnString += " = '" + values.get(0) + "'";
-                break;
-            case LessThan:
-                returnString += " < '" + values.get(0) + "'";
-                break;
-            case MoreThan:
-                returnString += " > '" + values.get(0) + "'";
-                break;
-            case Regex:
-                returnString += " LIKE '%" + values.get(0) + "%'";
-                break;
-            default:
-                break;
-        }
-
-        // additional elements
-        if (attributes.size() > 1) {
-            for (int i = 1, j = 0; i < attributes.size(); i++, j++) {
-                returnString += " " + logicalConnectives.get(j) + " " + attributes.get(i);
-
-                // todo fix
-                switch (operators.get(0)) {
-                    case EqualTo:
-                        returnString += " = '" + values.get(i) + "'";
-                        break;
-                    case LessThan:
-                        returnString += " < '" + values.get(i) + "'";
-                        break;
-                    case MoreThan:
-                        returnString += " > '" + values.get(i) + "'";
-                        break;
-                    case Regex:
-                        returnString += " LIKE '" + "%" + values.get(i) + "%" + "'";
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        return returnString;
+        return criterionQuery.toString();
     }
 
     /**
@@ -287,11 +179,23 @@ public class Criterion<E extends Searchable> {
         return eClass;
     }
 
+    /* HELPER: appends the value to the query, with syntax according to type of value */
+    private void appendValue(Object value, CriterionOperator operator) {
+        if (value.getClass() == Date.class)
+            criterionQuery.append(((Date)value).getTime());
+        else if (value.getClass() == LocalDateTime.class)
+            criterionQuery.append(((LocalDateTime)value).toEpochSecond(ZoneOffset.UTC) * 1000);
+        else if (value.getClass() == ZonedDateTime.class)
+            criterionQuery.append(((ZonedDateTime)value).toEpochSecond() * 1000);
+        else if (operator == Regex)
+            criterionQuery.append("'%").append(value).append("%'");
+        else
+            criterionQuery.append("'").append(value).append("'");
+    }
 
-    // returns true if attribute and value are compatible with class of Criterion
+    // HELPER: returns true if attribute and value are compatible with class of Criterion
     private boolean isClassCompatible(String attribute, Object value) {
-        // System.out.println("\nCRITERION VALIDITY CHECK: class " + eClass.getSimpleName() + ", "
-        //        + "attribute " + attribute + ", value " + value);
+        if (!DEVELOPMENT_MODE) return true; // checks not performed in deployment for performance
 
         // get argument types of reflective constructor
         Class<?>[] constructorArgumentTypes = new Class<?>[0];
@@ -315,10 +219,6 @@ public class Criterion<E extends Searchable> {
                 if (annotations[i][0].annotationType().equals(Column.class)) {
                     Column metadata = (Column)annotations[i][0];
                     if (metadata.name().equals(attribute)) {
-                        // System.out.println(i + "th constructor parameter " + metadata.name()
-                        //        + " (" + constructorArgumentTypes[i].getSimpleName()
-                        //        + ") matches query parameter " + attribute
-                        //        + " (" + value.getClass().getSimpleName() + ")");
                         return constructorArgumentTypes[i].isPrimitive() ?
                                 constructorArgumentTypes[i].toString().substring(0,1)
                                         .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))
@@ -334,9 +234,9 @@ public class Criterion<E extends Searchable> {
         }
     }
 
-    // returns true if operator and value are compatible
-    private boolean operatorIsCompatible(CriterionOperator operator, Object value) {
-        return !(operator.equals(CriterionOperator.Regex) &&
+    // HELPER: returns true if operator and value are compatible
+    private boolean isRegexCompatible(CriterionOperator operator, Object value) {
+        return !(operator.equals(Regex) &&
                 !(value.getClass().equals(String.class) || value.getClass().equals(Pattern.class)));
     }
 }

@@ -263,11 +263,11 @@ public class VehicleController implements Initializable
             {
                 throw new  Exception();
             }
-            System.out.println(vehicle.getRegNumber());
+            System.out.println(vehicle.getVehicleRegNumber());
             if ((!showAlertC("Sure you want to delete this Vehicle?"))) {
                 return;
             }
-            boolean check = vSys.deleteVehicle(vehicle.getRegNumber());
+            boolean check = vSys.deleteVehicle(vehicle.getVehicleRegNumber());
             if (check) {
                 showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
                 searchVehicleA();
@@ -285,13 +285,13 @@ public class VehicleController implements Initializable
 
     public void setVehicleDets(Vehicle vehicle) {
         AddEditL.setText("Edit Vehicle");
-        reg.setText(vehicle.getRegNumber());
+        reg.setText(vehicle.getVehicleRegNumber());
         addV.setText("Edit");
         VehicleS.setDisable(true);
         deleteV.setDisable(false);
         newVB.setDisable(false);
         ClearV.setDisable(true);
-        reg.setText(vehicle.getRegNumber());
+        reg.setText(vehicle.getVehicleRegNumber());
         cID.setValue(Integer.toString(vehicle.getCustomerID()));
         vType.setValue(vehicle.getVehicleType().toString());
         mod.setText(vehicle.getModel());
@@ -405,12 +405,12 @@ public class VehicleController implements Initializable
             }
 
 
-            tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("regNumber"));
+            tReg.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
             tReg.setCellFactory(TextFieldTableCell.<Vehicle>forTableColumn());
             tReg.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Vehicle, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<Vehicle, String> event) {
-                    (event.getTableView().getItems().get(event.getTablePosition().getRow())).setRegNumber(event.getNewValue());
+                    (event.getTableView().getItems().get(event.getTablePosition().getRow())).setVehicleRegNumber(event.getNewValue());
                 }
             });
 
@@ -1040,7 +1040,7 @@ public class VehicleController implements Initializable
         try {
             BookingsTable.setDisable(false);
             tableEntriesB.removeAll(tableEntriesB);
-            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getVehicleRegNumber());
             if (arrayList.size()==0)
             {
                 //showAlert("No Bookings");
@@ -1104,7 +1104,7 @@ public class VehicleController implements Initializable
         try {
             DiagRepBooking DRB = BookingsTable.getSelectionModel().getSelectedItem();
             List<PartOccurrence> parts = DRB.getRequiredPartsList();
-            if (parts.size()==0)
+            if (parts.size()==0 || parts == null)
             {
                 showAlert("No parts for this Booking");
                 return;
@@ -1116,13 +1116,24 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(PO.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Booking DiagStart: " + DRB.getDiagnosisStart().toString());
+            String date;
+            if (DRB.getDiagnosisStart() == null)
+            {
+                date  = null;
+            }
+            else
+            {
+                date  =  DRB.getDiagnosisStart().toString();
+            }
+            PartLabel.setText("Booking DiagStart: " + date);
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }
         catch (Exception e)
         {
             showAlert("No Booking selected");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -1136,8 +1147,13 @@ public class VehicleController implements Initializable
             setNextBookingDate();
             ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
+            if (cSys.getACustomers(vehicle.getCustomerID()) == null)
+            {
+                return;
+            }
             Customer customer = cSys.getACustomers(vehicle.getCustomerID());
             custInfo.clear();
+            custInfo2.clear();
             custInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
             custInfo.appendText("Surname : " + customer.getCustomerSurname() +  "\n");
             custInfo.appendText("Phone number : " + customer.getCustomerPhone() );
@@ -1192,7 +1208,7 @@ public class VehicleController implements Initializable
         try {
             VehicleParts();
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
-            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getRegNumber());
+            List<DiagRepBooking> arrayList = bSys.getVehicleBookings(vehicle.getVehicleRegNumber());
             if (arrayList.size() == 0)
             {
                 return;
@@ -1260,6 +1276,7 @@ public class VehicleController implements Initializable
                 //showAlert("No parts installed for this Vehicle");
                 PartLabel.setText("No parts");
                 PartLabel.setVisible(true);
+                ListParts.setItems(null);
                 return;
             }
             ObservableList<String> items = FXCollections.observableArrayList();
@@ -1269,7 +1286,7 @@ public class VehicleController implements Initializable
                 PartAbstraction PA = pSys.getPartbyID(A.getPartAbstractionID());
                 items.add(PA.getPartName());
             }
-            PartLabel.setText("Vehicle Reg: " +  vehicle.getRegNumber());
+            PartLabel.setText("Vehicle Reg: " +  vehicle.getVehicleRegNumber());
             PartLabel.setVisible(true);
             ListParts.setItems(items);
         }

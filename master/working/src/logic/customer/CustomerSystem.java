@@ -68,7 +68,7 @@ public class CustomerSystem {
 
     public List<Customer> searchCustomerByVehicleRegistrationNumber(String regNumber)
     {
-        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "regNumber", Regex, regNumber));
+        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", Regex, regNumber));
         int customerID = vResult.get(0).getCustomerID();
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
         return results;
@@ -110,7 +110,7 @@ public class CustomerSystem {
 
     public Customer getACustomers(int customerID) {
         List<Customer> results =  persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
-        return results !=null ? results.get(0) : null;
+        return results.size() !=0 ? results.get(0) : null;
     }
 
 }

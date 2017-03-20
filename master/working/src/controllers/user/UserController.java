@@ -6,18 +6,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 import logic.authentication.AuthenticationSystem;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by DillonVaghela on 2/20/17.
  */
-public class UserController {
+public class UserController implements Initializable {
+
+
 
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
@@ -35,11 +40,17 @@ public class UserController {
     private TableColumn userID, password, firstname, surname, userType;
     final ObservableList tableEntries = FXCollections.observableArrayList();
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        AllUsers();
+    }
+
 
     public void addEditUser() throws Exception {
         String addOrEdit;
         if (userLabel.equals("Edit User")) {
             addOrEdit = "edit";
+            UID.setDisable(true);
             // true is edit
         }
         else {
@@ -149,13 +160,16 @@ public class UserController {
 
     public void SearchUsers() {
         UserType UT;
-        if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin")) {
-            UT = UserType.ADMINISTRATOR;
+        List<User> arrayList;
+        if (sUT.getSelectionModel().getSelectedItem() !=null) {
+            if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin")) {
+                UT = UserType.ADMINISTRATOR;
+            } else {
+                UT = UserType.NORMAL;
+            }
+            arrayList = auth.searchUsersT(sUID.getText(), sFN.getText(), sS.getText(), UT);
         }
-        else {
-            UT = UserType.NORMAL;
-        }
-        List<User> arrayList = auth.searchUsers(sUID.getText(), sFN.getText(), sS.getText(), UT);
+        arrayList = auth.searchUsers(sUID.getText(), sFN.getText(), sS.getText());
         displayTable(arrayList);
     }
 
@@ -179,7 +193,7 @@ public class UserController {
 
     public void displayTable(List<User> arrayList) {
         if (arrayList.size() == 0) {
-            showAlert("Nothing to display");
+            //showAlert("Nothing to display");
             return;
         }
         try {
@@ -269,6 +283,7 @@ public class UserController {
 
     public void NewVehicle() {
         ClearFields();
+        UID.setDisable(false);
         userLabel.setText("Add User");
         addButton.setText("Add");
         clearButton.setDisable(false);
