@@ -239,7 +239,7 @@ public class VehicleController implements Initializable
     public void VehicleEditS()  {
         try {
             reg.setEditable(false);
-            Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
             if (vehicle == null)
             {
                 throw new  Exception();
@@ -258,7 +258,7 @@ public class VehicleController implements Initializable
     public void DeleteSelectedVehicle()
     {
         try {
-            Vehicle vehicle =((Vehicle) searchTable.getSelectionModel().getSelectedItem());
+            Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
             if (vehicle == null)
             {
                 throw new  Exception();
