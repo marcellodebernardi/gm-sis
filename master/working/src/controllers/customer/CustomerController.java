@@ -77,8 +77,6 @@ public class CustomerController implements Initializable
     final ObservableList tableEntriesVehicle = FXCollections.observableArrayList();
     final ObservableList tableEntriesBooking = FXCollections.observableArrayList();
     final ObservableList tableEntriesParts = FXCollections.observableArrayList();
-    final ObservableList comboEntries = FXCollections.observableArrayList();
-    final ObservableList vehicleCustomerID = FXCollections.observableArrayList();
 
     ////for 'CustomerView.fxml' instance variables
     ////left pane (add and edit customer view)
@@ -228,6 +226,9 @@ public class CustomerController implements Initializable
                     else
                     {
                         newCustomerForm();
+                        customerVehicleTable.setItems(null);
+                        customerVehiclePartTable.setItems(null);
+                        customerBookingTable.setItems(null);
                         CustomerVehicleController.getInstance().showVehiclePopup();
                     }
                 }
@@ -273,11 +274,9 @@ public class CustomerController implements Initializable
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
-
-                    tableViewOfCustomerVehicleFromDB();
-                    tableViewOfCustomerVehiclePartFromDB();
-                    tableViewOfCustomerBookingFromDB();
-
+                    customerVehicleTable.setItems(null);
+                    customerVehiclePartTable.setItems(null);
+                    customerBookingTable.setItems(null);
                     newCustomerForm();
 
                 } else {
@@ -301,7 +300,6 @@ public class CustomerController implements Initializable
         {
             Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
             String cID = Integer.toString(customer.getCustomerID());
-
             boolean check = false;
 
             if(cID.equals(""))
@@ -318,11 +316,9 @@ public class CustomerController implements Initializable
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
-
-                    tableViewOfCustomerVehicleFromDB();
-                    tableViewOfCustomerVehiclePartFromDB();
-                    tableViewOfCustomerBookingFromDB();
-
+                    customerVehicleTable.setItems(null);
+                    customerVehiclePartTable.setItems(null);
+                    customerBookingTable.setItems(null);
                     newCustomerForm();
 
                 } else {
@@ -341,6 +337,10 @@ public class CustomerController implements Initializable
     {
         try
         {
+            customerVehicleTable.setItems(null);
+            customerVehiclePartTable.setItems(null);
+            customerBookingTable.setItems(null);
+
             List<Customer> allCustomers = cSystem.getAllCustomers();
             tableViewOfCustomersFromDB(allCustomers);
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
@@ -354,6 +354,10 @@ public class CustomerController implements Initializable
 
     public void searchCustomerTypeInDB()
     {
+        customerVehicleTable.setItems(null);
+        customerVehiclePartTable.setItems(null);
+        customerBookingTable.setItems(null);
+
         try
         {
             CustomerType cType = null;
@@ -382,7 +386,11 @@ public class CustomerController implements Initializable
     //method for searching for customer in database
     public void searchCustomerInDB()
     {
+        customerVehicleTable.setItems(null);
+        customerVehiclePartTable.setItems(null);
+        customerBookingTable.setItems(null);
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
+
         try
         {
             List<Customer> searchCustomerList = new ArrayList<Customer>(0);
@@ -464,7 +472,6 @@ public class CustomerController implements Initializable
             }));
 
             customerTable.setItems(tableEntriesCustomer);
-            //searchCustomerVehicleInDB();//testing to find customer's vehicles
         }
         catch(Exception e)
         {
@@ -508,6 +515,10 @@ public class CustomerController implements Initializable
 
     public void updateCustomerInDB() throws Exception
     {
+        customerVehicleTable.setItems(null);
+        customerVehiclePartTable.setItems(null);
+        customerBookingTable.setItems(null);
+
         try
         {
             String cFirstname = customerFirstname.getText();
@@ -566,6 +577,10 @@ public class CustomerController implements Initializable
 
     public void newCustomerForm()
     {
+        customerVehicleTable.setItems(null);
+        customerVehiclePartTable.setItems(null);
+        customerBookingTable.setItems(null);
+
         clearCustomerFields();
         formName.setText("Add Customer");
         saveCustomerAndAddVehicleButton.setVisible(true);
@@ -577,6 +592,10 @@ public class CustomerController implements Initializable
 
     public void clearCustomerFields()
     {
+        customerVehicleTable.setItems(null);
+        customerVehiclePartTable.setItems(null);
+        customerBookingTable.setItems(null);
+
         customerID.clear();
         customerFirstname.clear();
         customerSurname.clear();
@@ -624,6 +643,8 @@ public class CustomerController implements Initializable
             }
             searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
             searchCustomerBookingInDB();//testing to find customer's bookings for their vehicles
+            System.out.println("testing Total Vehicles: " + searchVehicleList.size());//testing REMOVE LATER
+
             return searchVehicleList;
         }
         catch(Exception e)
@@ -639,14 +660,8 @@ public class CustomerController implements Initializable
         try
         {
             List<DiagRepBooking> searchBookingList = new ArrayList<DiagRepBooking>(0);
-            List<Vehicle> searchVehicleList = new ArrayList<Vehicle>(0);
-            Customer customer = customerTable.getSelectionModel().getSelectedItem();
-            searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
-            for(int i = 0; i < searchVehicleList.size(); i++)
-            {
-                searchBookingList = cSystem.searchCustomerBookings(searchVehicleList.get(i).getVehicleRegNumber());
-            }
-            System.out.println("testing Total Bookings: " + searchBookingList.size());//testing REMOVE LATER
+            Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
+            searchBookingList = cSystem.searchCustomerBookings(vehicle.getVehicleRegNumber());
             return searchBookingList;
         }
         catch(Exception e)
@@ -661,30 +676,34 @@ public class CustomerController implements Initializable
     {
         try
         {
-            List<PartAbstraction> searchPartList = new ArrayList<PartAbstraction>(0);
-            List<Installation> searchInstallationList = new ArrayList<Installation>(0);
-            List<PartOccurrence> searchPartOccurrenceList = new ArrayList<PartOccurrence>(0);
+            List<Installation> installationList = new ArrayList<Installation>(0);
+            List<PartOccurrence> partOccurrenceList = new ArrayList<PartOccurrence>(0);
+            List<PartAbstraction> partAbstractionList = new ArrayList<PartAbstraction>(0);
+            List<PartAbstraction> partList = new ArrayList<PartAbstraction>(0);
 
             Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
-            searchInstallationList = cSystem.searchInstallationTable(vehicle.getVehicleRegNumber());
-            System.out.println("Installation: " + searchInstallationList.size());//testing searchInstallationList
+            installationList = cSystem.searchInstallationTable(vehicle.getVehicleRegNumber());
+            List<Integer> installationIDList = new ArrayList<Integer>(0);
+            List<Integer> partAbstractionIDList = new ArrayList<Integer>(0);
 
-            for(int i=0; i<searchInstallationList.size(); i++)
+            for(int i=0; i<installationList.size(); i++)
             {
-                searchPartOccurrenceList = cSystem.searchPartOccurrenceTable(searchInstallationList.get(i).getInstallationID());
-                System.out.println("Part Occurrence " + i + ": " + searchPartOccurrenceList.size());//testing searchPartOccurrenceList
+                installationIDList.add(installationList.get(i).getInstallationID());
             }
-            System.out.println("Part Occurrence: " + searchPartOccurrenceList.size());//testing searchPartOccurrenceList
 
-            for(int i=0; i<searchPartOccurrenceList.size(); i++)
+            for(int i=0; i<installationIDList.size(); i++)
             {
-                searchPartList = cSystem.searchPartAbstractionTable(searchPartOccurrenceList.get(i).getPartAbstractionID());
-                System.out.println("Part Abstraction " + i + searchPartList.size());//testing searchPartList
+                partOccurrenceList = cSystem.searchPartOccurrenceTable(installationIDList.get(i));
+                partAbstractionIDList.add(partOccurrenceList.get(i).getPartAbstractionID());
             }
-            System.out.print("Part Abstraction: " + searchPartList.size());//testing searchPartList
 
-            return searchPartList;
-
+            for(int i=0; i<partAbstractionIDList.size(); i++)
+            {
+                partAbstractionList = cSystem.searchPartAbstractionTable(partAbstractionIDList.get(i));
+                PartAbstraction pa = new PartAbstraction(partAbstractionList.get(i).getPartName(), partAbstractionList.get(i).getPartDescription(), partAbstractionList.get(i).getPartPrice(), partAbstractionList.get(i).getPartStockLevel(), null);
+                partList.add(pa);
+            }
+            return partList;
         }
         catch(Exception e)
         {
@@ -784,6 +803,7 @@ public class CustomerController implements Initializable
             customerVehicleTable.setItems(tableEntriesVehicle);
 
             tableViewOfCustomerBookingFromDB();
+            tableViewOfCustomerVehiclePartFromDB();//MAY REMOVE
         }
         catch(Exception e)
         {
@@ -823,6 +843,8 @@ public class CustomerController implements Initializable
             customerVehiclePartTableColumnDescription.setCellFactory(TextFieldTableCell.<PartAbstraction>forTableColumn());
 
             customerVehiclePartTable.setItems(tableEntriesParts);
+
+            tableViewOfCustomerBookingFromDB();//for populating
         }
         catch(Exception e)
         {
