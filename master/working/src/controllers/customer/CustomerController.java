@@ -68,6 +68,7 @@ import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
  */
 public class CustomerController implements Initializable
 {
+    private static CustomerController instance;
 
     //DatabaseRepository db = DatabaseRepository.getInstance();
     @FXML
@@ -78,6 +79,7 @@ public class CustomerController implements Initializable
     final ObservableList tableEntriesBooking = FXCollections.observableArrayList();
     final ObservableList tableEntriesParts = FXCollections.observableArrayList();
     final ObservableList comboEntries = FXCollections.observableArrayList();
+    final ObservableList vehicleCustomerID = FXCollections.observableArrayList();
 
 
 
@@ -172,16 +174,22 @@ public class CustomerController implements Initializable
     private Label AddEditL = new Label();
     @FXML
     //private TextField cvRegistrationNumber, cvManufacturer, cvModel, cvEngineSize, cvColour, cvMileage, cvCompanyName, cvCompanyAddress = new TextField();
-    private TextField cID, reg, mod, manuf, eSize, col, mil, wName, wCompAddress, regS, manufS = new TextField();
+    private TextField reg, mod, manuf, eSize, col, mil, wName, wCompAddress, regS, manufS = new TextField();
     @FXML
     //private ComboBox cvSelectVehicle, cvCustomerID, cvVehicleType, cvFuelType, cvWarranty = new ComboBox();
-    private ComboBox vType, fType, cByWarranty, VehicleS, typeS, VehicleTS = new ComboBox();
+    private ComboBox cID, vType, fType, cByWarranty, VehicleS, typeS, VehicleTS = new ComboBox();
     @FXML
     //private DatePicker cvMOTRenewalDate, cvDateLastServiced, CVExpiationDate = new DatePicker();
     private DatePicker rDateMot, dLastServiced, wExpirationDate = new DatePicker();
     @FXML
     private Button addV, clearV = new Button();
 
+
+    public static CustomerController getInstance()
+    {
+        if (instance == null) instance = new CustomerController();
+        return instance;
+    }
 
     //method for adding customer to database
     public void addCustomerToDB() throws Exception
@@ -232,41 +240,7 @@ public class CustomerController implements Initializable
                     {
                         newCustomerForm();
 
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
-                        Parent menu = fxmlLoader.load();
-                        addVehicleStage = new Stage();
-                        addVehicleStage.setTitle("Add Vehicle");
-                        addVehicleStage.setScene(new Scene(menu));
-
-                        addVehicleStage.initModality(Modality.APPLICATION_MODAL);
-                        addVehicleStage.showAndWait();
-
-                        //addVehicleStage.show();
-                        //addVehicleStage.showAndWait();
-                        //addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                        //    @Override
-                        //    public void handle(WindowEvent event) {
-                        //        System.out.println("Add Vehicle stage is closing");
-                        //    }
-                        //});
-                        //addVehicleStage.close();
-
-                        List<Customer> allCustomers = cSystem.getAllCustomers();
-                        int cvCustomerID = 0;
-                        for(int i=allCustomers.size()-1; i>0; i--)
-                        {
-                            cvCustomerID = allCustomers.get(i).getCustomerID();
-                            System.out.println("Count customers: " + cvCustomerID);
-                            break;
-                        }
-
-                        Customer customer = cSystem.getACustomers(cvCustomerID);
-                        System.out.println("Customer ID: " + cvCustomerID);
-                        reg.setText(Integer.toString(cvCustomerID));
-
-                        //cID.setText(Integer.toString(cvCustomerID));
-                        System.out.println("Hello World 3");
-
+                        CustomerVehicleController.getInstance().showVehiclePopup();
                     }
 
                 }
@@ -315,6 +289,11 @@ public class CustomerController implements Initializable
                     //errorAlert("Customer has been deleted");
 
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
+
+                    tableViewOfCustomerVehicleFromDB();
+                    tableViewOfCustomerVehiclePartFromDB();
+                    tableViewOfCustomerBookingFromDB();
+
                     newCustomerForm();
 
                 } else {
@@ -358,6 +337,11 @@ public class CustomerController implements Initializable
                     //errorAlert("Customer has been deleted");
 
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
+
+                    tableViewOfCustomerVehicleFromDB();
+                    tableViewOfCustomerVehiclePartFromDB();
+                    tableViewOfCustomerBookingFromDB();
+
                     newCustomerForm();
 
                 } else {
@@ -660,47 +644,6 @@ public class CustomerController implements Initializable
     }
 
 
-    //ALL THE LOGIC FOR ADD VEHICLE TO NEW CUSTOMER RECORD
-
-
-    public void addVehicle() throws Exception
-    {
-
-
-        if(!checkVehicleFormat())
-        {
-            return;
-        }
-
-        try
-        {
-            boolean check = checkVehicleFields();
-            if(check)
-            {
-
-            }
-
-
-
-
-            ////
-            clearCustomerFields();
-            addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    System.out.println("Add Vehicle stage is closing");
-                }
-            });
-            addVehicleStage.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Add Customer's Vehicle Error");
-            e.printStackTrace();
-        }
-    }
-
-
     public List<Vehicle> searchCustomerVehicleInDB()
     {
         try
@@ -802,11 +745,7 @@ public class CustomerController implements Initializable
     {
         try
         {
-            /////ADD SAVE VEHICLE LOGIC
-
             BookingController.getInstance().show();
-
-            /////ADD CLOSE VEHICLE POPUP WINDOW
         }
         catch(Exception e)
         {
@@ -995,165 +934,12 @@ public class CustomerController implements Initializable
         }
     }
 
-    public void clearVehicleFields()
-    {
-        reg.clear();
-        //cID.setValue(null);
-        mod.clear();
-        manuf.clear();
-        eSize.clear();
-        col.clear();
-        mil.clear();
-        rDateMot.setValue(null);
-        dLastServiced.setValue(null);
-        wName.clear();
-        wCompAddress.clear();
-        wExpirationDate.setValue(null);
-        vType.setValue(null);
-        fType.setValue(null);
-        cByWarranty.setValue(null);
-        //hiddenWarranty();
-        //customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
-    }
-
-    public boolean checkVehicleFields()
-    {
-        boolean check = false;
-        if ((!reg.getText().equals("")) && (!cID.getText().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals("")))
-        {
-            check = true;
-            if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True"))
-            {
-                if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getValue().equals(""))
-                {
-                    check = false;
-                }
-            }
-        }
-        return check;
-    }
-
-    public boolean checkVehicleFormat()
-    {
-        try {
-            Date date = java.sql.Date.valueOf(dLastServiced.getValue());
-            date = java.sql.Date.valueOf(rDateMot.getValue());
-            if (cByWarranty != null)
-            {
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null))
-                {
-                    date = java.sql.Date.valueOf(wExpirationDate.getValue());
-                }}
-
-            Double engineSize = Double.parseDouble(eSize.getText());
-            int mileage = Integer.parseInt(mil.getText());
-            if (col.getText().matches(".*\\d+.*"))
-            {
-                errorAlert("Colour must be a string");
-                return false;
-            }
-
-            if (vType == null || fType == null)
-            {
-                errorAlert("Pick fuel type and vehicle Type");
-                return false;
-            }
-            return true;
-        }
-        catch (Exception e)
-        {
-            errorAlert(e.getMessage() + " and make sure all fields required are not blank");
-            return false;
-        }
-    }
-
-
-    public void selectVehicle()
-    {
-        if (VehicleS.getSelectionModel().isSelected(0))
-        {
-            setVehicle("Civic", "Honda", "1.6", "Car", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(1))
-        {
-            setVehicle("Focus", "Ford", "1.2", "Car", "Diesel");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(2))
-        {
-            setVehicle("5 Series", "BMw", "2.2", "Car", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(3))
-        {
-            setVehicle("3 Series", "BMw", "2.9", "Car", "Diesel");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(4))
-        {
-            setVehicle("A Class", "Mercedes", "3.0", "Car", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(5))
-        {
-            setVehicle("Transit", "Ford", "2.2", "Van", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(6))
-        {
-            setVehicle("Roadster", "Nissan", "1.2", "Truck", "Diesel");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(7))
-        {
-            setVehicle("Y-8 Van", "Audi", "3.6", "Van", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(8))
-        {
-            setVehicle("Enzo", "Ferrari", "4.4", "Car", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(9))
-        {
-            setVehicle("Truckster", "Ford", "2.8", "Truck", "Diesel");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(10))
-        {
-            setVehicle("Hybrid Van", "Renault", "2.3", "Can", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(11))
-        {
-            setVehicle("Sport", "MG", "2.0", "Car", "Diesel");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(12))
-        {
-            setVehicle("Model S", "Acura", "2.2", "Car", "Petrol");
-        }
-        else if (VehicleS.getSelectionModel().isSelected(13))
-        {
-            setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
-        }
-        else
-        {
-            setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
-        }
-    }
-
-    public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType)
-    {
-        mod.setText(model);
-        manuf.setText(manufacturer);
-        eSize.setText(engineSize);
-        vType.setValue(vehicleType);
-        fType.setValue(fuelType);
-    }
-
-
     /////
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         searchAllCustomersInDB();
-        //setCustomerCombo();
-        //searchVehicleA();
-        //rDateMot.setDayCellFactory(motDayFactory);
-        //dLastServiced.setDayCellFactory(dlsDayFactory);
-        //wExpirationDate.setDayCellFactory(weDayFactory);
-
     }
 
 
