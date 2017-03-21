@@ -9,6 +9,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static persistence.DependencyConnection.Directionality.TRANSMITTER;
+
 /**
  * @author Marcello De Bernardi
  * @version 0.1
@@ -82,13 +84,16 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                            @Column(name = "repairStart") ZonedDateTime repairStart,
                            @Column(name = "repairEnd") ZonedDateTime repairEnd,
                            @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
-                                   SpecRepBooking specRepBooking) {
+                                   SpecRepBooking specRepBooking,
+                           @TableReference(baseType = PartOccurrence.class, subTypes = {PartOccurrence.class}, key = "bookingID")
+                                       List<PartOccurrence> requiredPartsList) {
         super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID, complete);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
         this.repairStart = repairStart;
         this.repairEnd = repairEnd;
         this.specRepBooking = specRepBooking;
+        this.requiredPartsList = requiredPartsList;
     }
 
 
@@ -97,7 +102,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return super.getBookingID();
     }
 
-    @Column(name = "vehicleRegNumber") @Override
+    @Column(name = "vehicleRegNumber", foreign = true) @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
     }
@@ -117,7 +122,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return super.getBill().isBillSettled();
     }
 
-    @Column(name = "mechanicID")
+    @Column(name = "mechanicID", foreign = true)
     public int getMechanicID() {
         return super.getMechanicID();
     }
@@ -155,8 +160,22 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
     @DependencyHandler
     public void addRequiredPart(PartOccurrence part) {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
-        DependencyConnection transmitter = new DependencyConnection(DependencyConnection.Directionality.TRANSMITTER);
-        part.setBooking(transmitter.pair());
+        DependencyConnection transmitter
+                = new DependencyConnection(TRANSMITTER).host(this);
+        dependencyConnections.add(transmitter);
+        part.setBooking(transmitter.pair().host(part));
+
+        if(requiredPartsList == null) requiredPartsList = new ArrayList<>();
+        requiredPartsList.add(part);
+    }
+
+    @DependencyHandler
+    public void removeRequiredPart(PartOccurrence part) {
+        if (requiredPartsList == null) return;
+
+        final int id = part.getPartOccurrenceID();
+        requiredPartsList.removeIf(p -> p.getPartOccurrenceID() == id);
+        part.unsetBooking();
     }
 
     @DependencyHandler

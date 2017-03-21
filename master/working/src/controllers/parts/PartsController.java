@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import javafx.util.converter.DateStringConverter;
+import javafx.util.converter.*;
 import logic.parts.PartsSystem;
 import logic.spc.SpecRepairSystem;
 import persistence.DatabaseRepository;
@@ -18,16 +18,12 @@ import logic.criterion.Criterion;
 import javafx.event.EventHandler;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,9 +62,9 @@ public class PartsController implements Initializable {
     @FXML
     private TableColumn<Installation, Integer> installationID;
     @FXML
-    private TableColumn<Installation, Date> installationDate;
+    private TableColumn<Installation, ZonedDateTime> installationDate;
     @FXML
-    private TableColumn<Installation, Date> warrantyEnd;
+    private TableColumn<Installation, ZonedDateTime> warrantyEnd;
     @FXML
     private TableColumn<Installation, Integer> partAbsID;
     @FXML
@@ -327,11 +323,11 @@ public class PartsController implements Initializable {
         installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
         installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
 
-        installationDate.setCellValueFactory(new PropertyValueFactory<Installation, Date>("installationDate"));
-        installationDate.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
+        installationDate.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("installationDate"));
+        installationDate.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
 
-        warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, Date>("endWarrantyDate"));
-        warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, Date>forTableColumn(new DateStringConverter()));
+        warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("endWarrantyDate"));
+        warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
 
         partAbsID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                 ObservableValue<Integer>>() {
@@ -576,15 +572,15 @@ public class PartsController implements Initializable {
 
     public void addInstallation() {
 
-        java.sql.Date date_Installation= java.sql.Date.valueOf(instDate.getValue());
-        java.sql.Date date_Warranty = java.sql.Date.valueOf(warDate.getValue());
+        ZonedDateTime dateInstallation= ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
+        ZonedDateTime dateWarranty = ZonedDateTime.of(warDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
 
 
-        System.out.print(date_Installation + " , " + date_Warranty);
+        System.out.print(dateInstallation + " , " + dateWarranty);
 
        // PartOccurrence partOccurrence = pSys.getAllFreeOccurrences(addPartToInst.getSelectionModel().getSelectedItem());
 
-        Installation newInst = new Installation(date_Installation, date_Warranty, regNumberInstallation.getText(),
+        Installation newInst = new Installation(dateInstallation, dateWarranty, regNumberInstallation.getText(),
                 addPartToInst.getVisibleRowCount(), null);
 
         System.out.println(newInst);

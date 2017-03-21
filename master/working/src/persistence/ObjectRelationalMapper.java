@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static logic.criterion.CriterionOperator.EqualTo;
+import static persistence.DependencyConnection.Directionality.TRANSMITTER;
 
 /**
  * @author Marcello De Bernardi
@@ -28,7 +29,7 @@ class ObjectRelationalMapper {
     private static ObjectRelationalMapper instance;
 
     // helpers
-    private ForeignKeyResolver resolver;
+    private StatementGraphResolver resolver;
     private DatabaseRepository persistence;
     private CellGetterInterface cellGetter;
 
@@ -50,7 +51,7 @@ class ObjectRelationalMapper {
      * Singleton constructor for ObjectRelationalMapper
      */
     private ObjectRelationalMapper() {
-        resolver = ForeignKeyResolver.getInstance();
+        resolver = StatementGraphResolver.getInstance();
         cellGetter = new CellGetterDispatcher();
 
         populateSearchableList();
@@ -196,6 +197,12 @@ class ObjectRelationalMapper {
                     if (attribute != null && !(noQuotesTypes.contains(attribute.getClass()) && attribute.equals(-1)))
                         columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
                 }
+                else {
+                    Object attribute = column.invoke(item);
+
+                    if (attribute != null && !(noQuotesTypes.contains(attribute.getClass()) && attribute.equals(-1)))
+                        columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
+                }
             }
             catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -210,8 +217,16 @@ class ObjectRelationalMapper {
             parent.addDependent(sN);
         }
         if (item instanceof DependencyConnectable) {
+            System.out.println(((DependencyConnectable) item).getDependencies());
+
             for (DependencyConnection connection : ((DependencyConnectable) item).getDependencies()) {
                 connection.transmit(sN);
+
+                // todo this shouldn't break since it only goes one way
+                if (connection.directionality() == TRANSMITTER) {
+                    System.out.println("RECURSING VIA TRANSMITTER.");
+                    statementGraph.addAll(generateStatementGraph(connection.pair().getHost(), null));
+                }
             }
         }
         statementGraph.add(sN);
@@ -239,6 +254,7 @@ class ObjectRelationalMapper {
                 System.err.println(e.getMessage());
             }
         }
+
         return statementGraph;
     }
 

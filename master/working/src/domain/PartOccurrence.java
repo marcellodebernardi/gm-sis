@@ -33,10 +33,19 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
      * @param installationID    if installed on a vehicle, id of the installation
      * @param specRepID         if sent to SPC, id of specialist repair center
      */
+    @Deprecated
     public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
         partOccurrenceID = -1;
         this.partAbstractionID = partAbstractionID;
-        this.installationID = installationID;
+        this.installationID = -1;
+        this.bookingID = -1;
+        this.specRepID = specRepID;
+    }
+
+    public PartOccurrence(int partAbstractionID, int specRepID) {
+        partOccurrenceID = -1;
+        this.partAbstractionID = partAbstractionID;
+        this.installationID = -1;
         this.bookingID = -1;
         this.specRepID = specRepID;
     }
@@ -60,22 +69,22 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return partOccurrenceID;
     }
 
-    @Column(name = "partAbstractionID")
+    @Column(name = "partAbstractionID", foreign = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
 
-    @Column(name = "installationID")
+    @Column(name = "installationID", foreign = true)
     public int getInstallationID() {
         return installationID;
     }
 
-    @Column(name = "bookingID")
+    @Column(name = "bookingID", foreign = true)
     public int getBookingID() {
         return bookingID;
     }
 
-    @Column(name = "specRepID")
+    @Column(name = "specRepID", foreign = true)
     public int getSpecRepID() {
         return specRepID;
     }
@@ -90,6 +99,11 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     public void setBooking(DependencyConnection pair) {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         dependencyConnections.add(pair);
+        bookingID = ((DiagRepBooking)pair.pair().getHost()).getBookingID(); // todo does this break?
+    }
+
+    public void unsetBooking() {
+        bookingID = -2;
     }
 
     @Lazy
@@ -98,8 +112,8 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 PartAbstraction.class,
                 "partAbstractionID",
                 EqualTo,
-                partOccurrenceID));
-        return partTypes != null && partTypes.size() != 0? partTypes.get(0) : null;
+                partAbstractionID));
+        return partTypes != null && partTypes.size() != 0 ? partTypes.get(0) : null;
     }
 
     @Lazy

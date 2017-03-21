@@ -1,6 +1,8 @@
 package persistence;
 
 
+import domain.Searchable;
+
 /**
  * Allows the formation of arbitrary dependencies between nodes in a graph of StatementNode
  * objects.
@@ -11,6 +13,7 @@ public class DependencyConnection {
     private Directionality role;
     private DependencyConnection pair;
     private StatementNode connection;
+    private Searchable host;
 
     /**
      * Create the first of the two DependencyConnection objects. Its role is
@@ -34,6 +37,11 @@ public class DependencyConnection {
     public DependencyConnection pair() {
         if (pair == null) pair = new DependencyConnection(this);
         return pair;
+    }
+
+    public DependencyConnection host(Searchable host) {
+        this.host = host;
+        return this;
     }
 
     /**
@@ -62,8 +70,18 @@ public class DependencyConnection {
     }
 
 
+    public Searchable getHost() {
+        if (host == null) throw new DependencyException("Dependency connection has no host.");
+        return host;
+    }
+
+    public Directionality directionality() {
+        return this.role;
+    }
+
+
 
     public enum Directionality {
-        TRANSMITTER, RECEIVER, BIDIRECTIONAL;
+        TRANSMITTER, RECEIVER, BIDIRECTIONAL
     }
 }

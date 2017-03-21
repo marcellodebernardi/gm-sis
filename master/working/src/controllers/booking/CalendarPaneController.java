@@ -43,6 +43,7 @@ public class CalendarPaneController {
         bookingAgenda.setActionCallback((appointment) -> {
             DiagRepBooking booking = bookingSystem.getBookingByID(((BookingAppointment) appointment).getBookingID());
             ((DetailsPaneController) master.getController(DetailsPaneController.class)).populateDetailFields(booking);
+            ((DetailsPaneController) master.getController(DetailsPaneController.class)).setPaneTitleToView();
             return null;
         });
         bookingAgenda.setEditAppointmentCallback((appointment) -> null );
@@ -84,8 +85,11 @@ public class CalendarPaneController {
     }
 
     void addBookingAppointment(DiagRepBooking booking) {
-        this.bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
+        bookingAgenda.appointments().removeIf(p ->
+            p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
+        );
 
+        this.bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
         if (booking.getRepairStart() != null)
             bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
     }

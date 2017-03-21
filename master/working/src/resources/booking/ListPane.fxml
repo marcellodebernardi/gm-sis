@@ -14,13 +14,11 @@
             id="listPane" fx:id="listPane">
     <top>
         <HBox id="listPaneTopControls">
-            <Label>Filter</Label>
             <ComboBox id="filterComboBox" fx:id="filterComboBox" onAction="#applyListFilter"></ComboBox>
-            <Label>View By</Label>
             <ComboBox id="viewByComboBox" fx:id="viewByComboBox" onAction="#applyListViewType"></ComboBox>
             <Label>Period</Label>
             <DatePicker id="listDatePicker" fx:id="listDatePicker" onAction="#selectListPeriod"></DatePicker>
-            <Label>Search:</Label>
+            <Label>Search</Label>
             <TextField id="listSearchBar" fx:id="listSearchBar" onKeyReleased="#searchBookings"></TextField>
             <Button>List View</Button>
             <Button onAction="#openCalendarPane">Calendar View</Button>
