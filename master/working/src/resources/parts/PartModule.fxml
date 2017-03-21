@@ -15,7 +15,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="652.0" prefWidth="1302.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.parts.PartsController">
+<BorderPane prefHeight="652.0" prefWidth="1302.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.parts.PartsController" stylesheets="/resources/stylesheets/parts.css">
     <center>
 
 

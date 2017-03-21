@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="BorderPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.login.LoginController">
+<BorderPane id="BorderPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.login.LoginController" stylesheets="/resources/stylesheets/login.css">
     <top>
         <HBox>
             <Text id="titleText">Garage Management System</Text>

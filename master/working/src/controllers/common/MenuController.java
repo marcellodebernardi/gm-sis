@@ -20,27 +20,41 @@ import java.util.ResourceBundle;
  *         todo clean up and add comments
  */
 public class MenuController implements Initializable {
+    private BorderPane todayPane;
+    private BorderPane customersBasePane;
+    private BorderPane bookingBasePane;
+    private BorderPane vehicleBasePane;
+    private BorderPane partsBasePane;
+    private BorderPane specialistBasePane;
+    private BorderPane spcManagementBasePane;
+    private BorderPane usersBasePane;
 
-    @FXML
-    private Button UsersButton;
-    @FXML
-    private Button SRCButton;
+    @FXML private Button UsersButton;
+    @FXML private Button SRCButton;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @Override public void initialize(URL location, ResourceBundle resources) {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
             UsersButton.setDisable(false);
             SRCButton.setDisable(false);
 
-        } else {
+        }
+        else {
             UsersButton.setDisable(true);
             SRCButton.setDisable(true);
         }
     }
+
+
+    @FXML private void logout() {
+
+    }
+
+
+
     public void openTodayTab() {
         try {
-            BorderPane todayPane = FXMLLoader.load(getClass().getResource("/resources/today/TodayPane.fxml"));
-            todayPane.setVisible(true);
+            if (todayPane == null) todayPane
+                    = FXMLLoader.load(getClass().getResource("/resources/today/TodayPane.fxml"));
             Main.getInstance().replaceTabContent(todayPane);
         }
         catch (IOException e) {
@@ -50,75 +64,72 @@ public class MenuController implements Initializable {
 
     public void openCustomersTab() {
         try {
-            BorderPane customerBasePane = FXMLLoader.load(getClass().getResource("/resources/customer/CustomerView.fxml"));
-            customerBasePane.setVisible(true);
-            Main.getInstance().replaceTabContent(customerBasePane);
-        } catch (IOException e) {
+            if (customersBasePane == null) customersBasePane
+                    = FXMLLoader.load(getClass().getResource("/resources/customer/CustomerView.fxml"));
+            Main.getInstance().replaceTabContent(customersBasePane);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openBookingsTab() {
-        BookingController.getInstance().show();
+        BookingController.getInstance().show(); // todo standardize
     }
 
     public void openVehiclesTab() {
-        BorderPane VehicleBasePane = new BorderPane();
         try {
-            VehicleBasePane = FXMLLoader.load(getClass().getResource("/resources/vehicle/vehiclesBasePane.fxml"));
-            VehicleBasePane.setVisible(true);
-            Main.getInstance().replaceTabContent(VehicleBasePane);
-        } catch (IOException e) {
+            if (vehicleBasePane == null) vehicleBasePane
+                    = FXMLLoader.load(getClass().getResource("/resources/vehicle/vehiclesBasePane.fxml"));
+            Main.getInstance().replaceTabContent(vehicleBasePane);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openPartsTab() {
-        BorderPane partsBasePane;
         try {
-            partsBasePane = FXMLLoader.load(getClass().getResource("/resources/parts/PartModule.fxml"));
-            partsBasePane.setVisible(true);
+            if (partsBasePane == null) partsBasePane
+                    = FXMLLoader.load(getClass().getResource("/resources/parts/PartModule.fxml"));
             Main.getInstance().replaceTabContent(partsBasePane);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openSRCTab() {
-        BorderPane specialistBasePane = new BorderPane();
         try {
-            BorderPane leftPane = FXMLLoader.load(getClass().getResource("/spc/SPBookingManagement.fxml"));
-            specialistBasePane.setVisible(true);
-            specialistBasePane.setCenter(leftPane);
+            if (specialistBasePane == null) specialistBasePane
+                    = FXMLLoader.load(getClass().getResource("/spc/SPBookingManagement.fxml"));
             Main.getInstance().replaceTabContent(specialistBasePane);
 
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openSRCManagementTab() {
-        BorderPane specialistBasePane = new BorderPane();
         try {
-            BorderPane centerPane = FXMLLoader.load(getClass().getResource("/spc/SPCManagement.fxml"));
-            specialistBasePane.setVisible(true);
-            specialistBasePane.setCenter(centerPane);
-            Main.getInstance().replaceTabContent(specialistBasePane);
-
-
-        } catch (IOException e) {
+            if (spcManagementBasePane == null) spcManagementBasePane =
+                    FXMLLoader.load(getClass().getResource("/spc/SPCManagement.fxml"));
+            Main.getInstance().replaceTabContent(spcManagementBasePane);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void openUsersTab() {
-        BorderPane UserBasePane = new BorderPane();
         try {
-            UserBasePane = FXMLLoader.load(getClass().getResource("/resources/user/usersBasePane.fxml"));
-            UserBasePane.setVisible(true);
-            Main.getInstance().replaceTabContent(UserBasePane);
-        } catch (IOException e) {
+            if (usersBasePane == null) usersBasePane
+                    = FXMLLoader.load(getClass().getResource("/resources/user/usersBasePane.fxml"));
+            Main.getInstance().replaceTabContent(usersBasePane);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
