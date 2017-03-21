@@ -130,6 +130,8 @@ class StatementNode implements Comparable<StatementNode> {
                     values += "0";
                 else if (noQuotesTypes.contains(value.getClass()))
                     values += value;
+                else if (noQuotesTypes.contains(value.getClass()) && value.equals(-2))
+                    values += -1;
                 else
                     values += "'" + value + "'";
 
@@ -158,6 +160,8 @@ class StatementNode implements Comparable<StatementNode> {
                     newInfo += delim + key + " = 1";
                 else if (value.getClass() == boolean.class && !(boolean)value)
                     newInfo += delim + key + " = 0";
+                else if (noQuotesTypes.contains(value.getClass()) && value.equals(-2))
+                    newInfo += delim + key + " = -1";
                 else
                     newInfo += noQuotesTypes.contains(value.getClass()) ? delim + key + " = " + value
                             : delim + key + " = '" + value + "'";

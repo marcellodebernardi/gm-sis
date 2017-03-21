@@ -103,7 +103,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     }
 
     public void unsetBooking() {
-        bookingID = -1;
+        bookingID = -2;
     }
 
     @Lazy
@@ -113,7 +113,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 "partAbstractionID",
                 EqualTo,
                 partAbstractionID));
-        return partTypes != null && partTypes.size() != 0? partTypes.get(0) : null;
+        return partTypes != null && partTypes.size() != 0 ? partTypes.get(0) : null;
     }
 
     @Lazy
