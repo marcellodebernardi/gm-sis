@@ -1,18 +1,23 @@
 package controllers.booking;
 
 import domain.*;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import logic.booking.BookingSystem;
 import logic.customer.CustomerSystem;
+import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
+import org.controlsfx.control.PopOver;
 import org.controlsfx.control.textfield.TextFields;
 import persistence.DatabaseRepository;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -30,12 +35,14 @@ public class DetailsPaneController {
     private CustomerSystem customerSystem;
     private BookingSystem bookingSystem;
     private VehicleSys vehicleSystem;
+    private PartsSystem partsSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
-    private Callback<DatePicker, DateCell> dayCellFactory;
 
     private DiagRepBooking selectedBooking;
     private Vehicle selectedVehicle;
+    private PartOccurrence selectedPart;
+    private List<PartOccurrence> detachedParts;
 
     // customer and vehicle ComboBoxes
     @FXML private TextField customerSearchBar;
@@ -45,7 +52,13 @@ public class DetailsPaneController {
     // mechanic and parts
     @FXML private ComboBox<String> mechanicComboBox;
     @FXML private TableView<PartOccurrence> partsTable;
+    @FXML private TableColumn<PartOccurrence, String> nameColumn;
+    @FXML private TableColumn<PartOccurrence, Double> costColumn;
+    @FXML private TableColumn<PartOccurrence, Boolean> subcontractedColumn;
     @FXML private TextField vehicleMileageTextField;
+    @FXML private TextField newVehicleMileageTextField;
+    @FXML private Button addPartButton;
+    @FXML private Button removePartButton;
     // dates and times
     @FXML private DatePicker diagnosisDatePicker;
     @FXML private DatePicker repairDatePicker;
@@ -61,13 +74,18 @@ public class DetailsPaneController {
         customerSystem = CustomerSystem.getInstance();
         bookingSystem = BookingSystem.getInstance();
         vehicleSystem = VehicleSys.getInstance();
+        partsSystem = PartsSystem.getInstance(DatabaseRepository.getInstance());
 
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         dateFormatter = DateTimeFormatter.ofPattern("dd:MM:yyyy");
 
+        detachedParts = new ArrayList<>();
+
     }
 
     @FXML private void initialize() {
+        master.setController(DetailsPaneController.class, this);
+
         populateCustomerTextField(customerSystem.getAllCustomers());
         populateMechanicComboBox(bookingSystem.getAllMechanics());
 
@@ -76,8 +94,7 @@ public class DetailsPaneController {
         diagnosisDatePicker.setPrefWidth(Double.MAX_VALUE);
         repairDatePicker.setPrefWidth(Double.MAX_VALUE);
 
-        // todo change to method reference?
-        dayCellFactory = datePicker -> new DateCell() {
+        Callback<DatePicker, DateCell> dayCellFactory = datePicker -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -91,16 +108,29 @@ public class DetailsPaneController {
         diagnosisDatePicker.setDayCellFactory(dayCellFactory);
         repairDatePicker.setDayCellFactory(dayCellFactory);
 
-        master.setController(DetailsPaneController.class, this);
+        setPartsTableCellValueFactories();
+        setColumnWidths();
+        setPartsSelectionListener();
     }
 
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     EVENT LISTENERS                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void selectCustomer() {
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
     }
 
+    @FXML private void selectVehicle() {
+        selectedVehicle = vehicleSystem.searchAVehicle(vehicleComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .split(":")[0]);
+        vehicleMileageTextField.setText("" + selectedVehicle.getMileage());
+        vehicleMileageTextField.setDisable(true);
+    }
+
     @FXML private void saveBooking() {
-        selectedVehicle = vehicleSystem.searchAVehicle(getVehicleRegFromComboBox());
         if (selectedBooking == null) {
             selectedBooking = new DiagRepBooking();
             selectedVehicle.getBookingList().add(selectedBooking);
@@ -115,7 +145,7 @@ public class DetailsPaneController {
         }
         selectedVehicle.setMileage(vehicleMileage);
 
-        // todo implement bill and parts
+        // todo implement bill
         selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
         selectedBooking.setDescription(getDescriptionFromTextField());
         selectedBooking.setBill(new Bill(0, false));
@@ -132,6 +162,10 @@ public class DetailsPaneController {
                 = (ListPaneController) master.getController(ListPaneController.class);
 
         if (committed) {
+            for (PartOccurrence p : detachedParts) {
+                DatabaseRepository.getInstance().commitItem(p);
+            }
+
             if (calendarController != null)
                 ((CalendarPaneController) master.getController(CalendarPaneController.class))
                         .addBookingAppointment(selectedBooking);
@@ -160,10 +194,12 @@ public class DetailsPaneController {
     @FXML private void clearDetails() {
         selectedBooking = null;
         selectedVehicle = null;
+        selectedPart = null;
+        detachedParts = new ArrayList<>();
 
         customerSearchBar.clear();
         populateVehicleComboBox(Collections.emptyList());
-        vehicleComboBox.getSelectionModel().select("");
+        vehicleComboBox.getSelectionModel().clearSelection();
         descriptionTextField.clear();
         diagnosisDatePicker.setValue(null);
         diagnosisStartTimeTextField.clear();
@@ -174,15 +210,69 @@ public class DetailsPaneController {
         mechanicComboBox.getSelectionModel().clearSelection();
         populatePartsTable(Collections.emptyList());
         vehicleMileageTextField.clear();
+
+        customerSearchBar.setDisable(false);
+        vehicleComboBox.setDisable(false);
+        descriptionTextField.setDisable(false);
+        diagnosisDatePicker.setDisable(false);
+        diagnosisStartTimeTextField.setDisable(false);
+        diagnosisEndTimeTextField.setDisable(false);
+        repairDatePicker.setDisable(false);
+        repairStartTimeTextField.setDisable(false);
+        repairEndTimeTextField.setDisable(false);
+        partsTable.setDisable(false);
+        mechanicComboBox.setDisable(false);
+        vehicleMileageTextField.setDisable(false);
     }
 
     @FXML private void completeBooking() {
         selectedBooking.setComplete(true);
+        selectedVehicle.setMileage(Integer.parseInt(newVehicleMileageTextField.getText()));
+        bookingSystem.commitBooking(selectedBooking);
+        populateDetailFields(selectedBooking);
+    }
+
+    @FXML private void addPart() {
+        try {
+            PopOver partMenu = new PopOver(FXMLLoader.load(getClass().getResource("/resources/booking/PartsPopOver.fxml")));
+            partMenu.setDetachable(false);
+            partMenu.setArrowIndent(100);
+            partMenu.setCornerRadius(0);
+            partMenu.show(partsTable);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private void removeSelectedPart() {
+        selectedBooking.removeRequiredPart(selectedPart);
+
+        selectedPart.unsetBooking();
+        detachedParts.add(selectedPart);
+
+        populatePartsTable(selectedBooking.getRequiredPartsList());
     }
 
 
-    /* HELPER: fills in the details of a booking in the details pane */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                INTER-CONTROLLER COMMUNICATION                                       //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    DiagRepBooking getSelectedBooking() {
+        return selectedBooking;
+    }
+
+    List<PartOccurrence> getDetachedParts() {
+        return detachedParts;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                   FIELD POPULATION                                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // fills in the details of a booking in the details pane */
     void populateDetailFields(DiagRepBooking booking) {
+        clearDetails();
         selectedBooking = booking;
         selectedVehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
 
@@ -211,9 +301,29 @@ public class DetailsPaneController {
                 + mechanic.getFirstName() + " " + mechanic.getSurname());
 
         vehicleMileageTextField.setText("" + selectedVehicle.getMileage());
+
+        customerSearchBar.setDisable(booking.isComplete());
+        vehicleComboBox.setDisable(booking.isComplete());
+        descriptionTextField.setDisable(booking.isComplete());
+        diagnosisDatePicker.setDisable(booking.isComplete());
+        diagnosisStartTimeTextField.setDisable(booking.isComplete());
+        diagnosisEndTimeTextField.setDisable(booking.isComplete());
+        repairDatePicker.setDisable(booking.isComplete());
+        repairStartTimeTextField.setDisable(booking.isComplete());
+        repairEndTimeTextField.setDisable(booking.isComplete());
+        partsTable.setDisable(booking.isComplete());
+        mechanicComboBox.setDisable(booking.isComplete());
+        newVehicleMileageTextField.setDisable(booking.isComplete());
     }
 
-    /* HELPER: adds all customers to the customer search bar's autocomplete function */
+    // generates rows for the table containing a booking's parts
+    void populatePartsTable(List<PartOccurrence> parts) {
+        ObservableList<PartOccurrence> partsObservable = FXCollections.observableArrayList(parts);
+        partsTable.setItems(partsObservable);
+        partsTable.refresh();
+    }
+
+    // adds all customers to the customer search bar's autocomplete function
     private void populateCustomerTextField(List<Customer> customers) {
         List<String> customerInfo = new ArrayList<>();
         for (Customer c : customers) {
@@ -222,7 +332,7 @@ public class DetailsPaneController {
         TextFields.bindAutoCompletion(customerSearchBar, customerInfo);
     }
 
-    /* HELPER: adds customer's vehicle to the vehicle selection ComboBox */
+    // adds customer's vehicle to the vehicle selection ComboBox
     private void populateVehicleComboBox(List<Vehicle> vehicles) {
         List<String> vehicleInfo = new ArrayList<>();
         for (Vehicle v : vehicles) {
@@ -232,7 +342,7 @@ public class DetailsPaneController {
         vehicleComboBox.setItems(vehicleInfoObservable);
     }
 
-    /* HELPER: adds all mechanics to the ComboBox for mechanic selection */
+    // adds all mechanics to the ComboBox for mechanic selection
     private void populateMechanicComboBox(List<Mechanic> mechanics) {
         List<String> mechanicInfo = new ArrayList<>();
         for (Mechanic m : mechanics) {
@@ -242,30 +352,7 @@ public class DetailsPaneController {
         mechanicComboBox.setItems(mechanicInfoObservable);
     }
 
-    /* HELPER: generates rows for the table containing a booking's parts */
-    private void populatePartsTable(List<PartOccurrence> parts) {
-        ObservableList<PartOccurrence> partsObservable = FXCollections.observableArrayList(parts);
-
-        partsTable.setItems(partsObservable);
-
-        TableColumn<PartOccurrence, Integer> partOccurrenceID = new TableColumn<>();
-        TableColumn<PartOccurrence, String> partAbstractionName = new TableColumn<>();
-
-        partOccurrenceID.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrenceID()));
-
-        partAbstractionName.setCellValueFactory(p -> {
-            PartAbstraction stockItem = p.getValue().getPartAbstraction();
-            return stockItem == null ?
-                    new ReadOnlyObjectWrapper<>("") :
-                    new ReadOnlyObjectWrapper<>(stockItem.getPartName());
-        });
-
-        partsTable.getColumns().setAll(partOccurrenceID, partAbstractionName);
-        partsTable.refresh();
-    }
-
-    /* HELPER: generates confirmation alert for vehicle deletion */
+    // generates confirmation alert for vehicle deletion
     private boolean confirmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Deletion Confirmation");
@@ -275,14 +362,54 @@ public class DetailsPaneController {
                 .isPresent();
     }
 
-    /* HELPER: gets the name of the selected customer from the search bar */
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     TABLE BUILDERS                                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private void setPartsTableCellValueFactories() {
+        nameColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartName())
+        );
+        costColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartPrice())
+        );
+        subcontractedColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != -1)
+        );
+
+        partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
+    }
+
+    private void setColumnWidths() {
+        DoubleBinding binding = partsTable.widthProperty().divide(3);
+
+        nameColumn.prefWidthProperty().bind(binding);
+        costColumn.prefWidthProperty().bind(binding);
+        subcontractedColumn.prefWidthProperty().bind(binding);
+    }
+
+    // sets the selection listeners for the parts table
+    private void setPartsSelectionListener() {
+        partsTable
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((obs, oldSelection, newSelection) ->
+                        selectedPart = newSelection
+                );
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     FIELD EXTRACTORS                                                //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // gets the name of the selected customer from the search bar
     private Customer getCustomerFromSearchBar() {
         return customerSystem.getACustomers(Integer.parseInt(customerSearchBar
                 .getText()
                 .split(":")[0]));
     }
 
-    /* HELPER: gets the selected vehicle registration number from the ComboBox */
+    // gets the selected vehicle registration number from the ComboBox
     private String getVehicleRegFromComboBox() {
         return vehicleComboBox
                 .getSelectionModel()
@@ -290,12 +417,12 @@ public class DetailsPaneController {
                 .split(":")[0];
     }
 
-    /* HELPER: gets the description from the appropriate textfield */
+    // gets the description from the appropriate textfield
     private String getDescriptionFromTextField() {
         return descriptionTextField.getText();
     }
 
-    /* HELPER: returns the mechanic selected in the mechanic ComboBox */
+    // returns the mechanic selected in the mechanic ComboBox
     private int getMechanicIDFromComboBox() {
         return Integer.parseInt(mechanicComboBox
                 .getSelectionModel()
@@ -303,7 +430,7 @@ public class DetailsPaneController {
                 .split(":")[0]);
     }
 
-    /* HELPER: returns the diagnosis start time */
+    // returns the diagnosis start time
     private ZonedDateTime getDiagnosisStartTime() {
         return ZonedDateTime.of(
                 diagnosisDatePicker.getValue(),
@@ -311,7 +438,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    /* HELPER: returns the diagnosis end time */
+    // returns the diagnosis end time
     private ZonedDateTime getDiagnosisEndTime() {
         return ZonedDateTime.of(
                 diagnosisDatePicker.getValue(),
@@ -319,7 +446,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    /* HELPER: returns the repair start time */
+    // returns the repair start time
     private ZonedDateTime getRepairStartTime() {
         return ZonedDateTime.of(
                 repairDatePicker.getValue(),
@@ -327,7 +454,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    /* HELPER: returns the repair end time */
+    // returns the repair end time
     private ZonedDateTime getRepairEndTime() {
         return ZonedDateTime.of(
                 repairDatePicker.getValue(),
@@ -335,7 +462,7 @@ public class DetailsPaneController {
                 ZoneId.systemDefault());
     }
 
-    /* HELPER: gets the list of parts from the list */
+    // gets the list of parts from the list
     private List<PartOccurrence> getPartsListFromList() {
         List<PartOccurrence> parts = new ArrayList<>();
         parts.addAll(partsTable.getItems());

@@ -5,6 +5,7 @@ import logic.criterion.Criterion;
 import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import java.util.List;
 public class Installation implements Searchable {
 
     private int installationID;
-    private Date installationDate;
-    private Date endWarrantyDate;
+    private ZonedDateTime installationDate;
+    private ZonedDateTime endWarrantyDate;
 
     // hierarchical links
     private PartOccurrence partOccurrence;
@@ -34,11 +35,11 @@ public class Installation implements Searchable {
      * @param partAbstractionID
      * @param partOccurrence
      */
-    public Installation(Date installationDate, Date endWarrantyDate, String vehicleRegNumber,
+    public Installation(ZonedDateTime installationDate, ZonedDateTime endWarrantyDate, String vehicleRegNumber,
                         int partAbstractionID, PartOccurrence partOccurrence) {
         this.installationID = -1;
         this.installationDate = installationDate;
-        this.endWarrantyDate = endWarrantyDate;
+        this.endWarrantyDate = installationDate;
         this.vehicleRegNumber = vehicleRegNumber;
         this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;
@@ -47,8 +48,8 @@ public class Installation implements Searchable {
     // reflection only, do not use
     @Reflective
     private Installation(@Column(name = "installationID", primary = true) int installationID,
-                         @Column(name = "installationDate") Date installationDate,
-                         @Column(name = "endWarrantyDate") Date endWarrantyDate,
+                         @Column(name = "installationDate") ZonedDateTime installationDate,
+                         @Column(name = "endWarrantyDate") ZonedDateTime endWarrantyDate,
                          @Column(name = "vehicleRegNumber") String vehicleRegNumber,
                          @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence) {
@@ -66,12 +67,12 @@ public class Installation implements Searchable {
     }
 
     @Column(name = "installationDate")
-    public Date getInstallationDate() {
+    public ZonedDateTime getInstallationDate() {
         return installationDate;
     }
 
     @Column(name = "endWarrantyDate")
-    public Date getEndWarrantyDate() {
+    public ZonedDateTime getEndWarrantyDate() {
         return endWarrantyDate;
     }
 
@@ -114,11 +115,11 @@ public class Installation implements Searchable {
         this.installationID = installationID;
     }
 
-    public void setInstallationDate(Date installationDate) {
+    public void setInstallationDate(ZonedDateTime installationDate) {
         this.installationDate = installationDate;
     }
 
-    public void setEndWarrantyDate(Date endWarrantyDate) {
+    public void setEndWarrantyDate(ZonedDateTime endWarrantyDate) {
         this.endWarrantyDate = endWarrantyDate;
     }
 

@@ -33,10 +33,19 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
      * @param installationID    if installed on a vehicle, id of the installation
      * @param specRepID         if sent to SPC, id of specialist repair center
      */
+    @Deprecated
     public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
         partOccurrenceID = -1;
         this.partAbstractionID = partAbstractionID;
-        this.installationID = installationID;
+        this.installationID = -1;
+        this.bookingID = -1;
+        this.specRepID = specRepID;
+    }
+
+    public PartOccurrence(int partAbstractionID, int specRepID) {
+        partOccurrenceID = -1;
+        this.partAbstractionID = partAbstractionID;
+        this.installationID = -1;
         this.bookingID = -1;
         this.specRepID = specRepID;
     }
@@ -90,6 +99,11 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     public void setBooking(DependencyConnection pair) {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         dependencyConnections.add(pair);
+        bookingID = ((DiagRepBooking)pair.pair().getHost()).getBookingID(); // todo does this break?
+    }
+
+    public void unsetBooking() {
+        bookingID = -1;
     }
 
     @Lazy
@@ -98,7 +112,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 PartAbstraction.class,
                 "partAbstractionID",
                 EqualTo,
-                partOccurrenceID));
+                partAbstractionID));
         return partTypes != null && partTypes.size() != 0? partTypes.get(0) : null;
     }
 

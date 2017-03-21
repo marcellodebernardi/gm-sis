@@ -319,7 +319,7 @@ public class SpecialistController implements Initializable{
                         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText()));
                         Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
                         if (installation != null) {
-                            if (installation.getEndWarrantyDate().after(new Date())) {
+                            if (installation.getEndWarrantyDate().isAfter(ZonedDateTime.now())) {
                                 bookingCost.setText("0");
                             }
 
@@ -829,8 +829,8 @@ public class SpecialistController implements Initializable{
             partDes.setValue(partAbstraction.getPartName());
             installationID = installation.getInstallationID();
             partSerial.setValue(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
-            java.time.LocalDate installationDate = toLocalDate(installation.getInstallationDate());
-            java.time.LocalDate returnDate = toLocalDate(installation.getEndWarrantyDate());
+            java.time.LocalDate installationDate = installation.getInstallationDate().toLocalDate();
+            java.time.LocalDate returnDate = installation.getEndWarrantyDate().toLocalDate();
             instaDate.setValue(installationDate);
             wEndDate.setValue(returnDate);
         }
@@ -896,7 +896,7 @@ public class SpecialistController implements Initializable{
             PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
             Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
             int partAbs = c.getNumericValue(c);
-            Installation installation = new Installation(fromLocalDate(instaDate.getValue()), fromLocalDate(wEndDate.getValue()), instaVReg.getText(), partAbs, partOccurrence);
+            Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(wEndDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
             specRepairSystem.commitInstallations(installation);
             showAlert("Installation added");
             List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
@@ -926,8 +926,8 @@ public class SpecialistController implements Initializable{
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
         installation.setPartOccurrence(partOccurrence);
         wEndDate.setValue(LocalDate.now());
-        installation.setEndWarrantyDate(fromLocalDate(wEndDate.getValue()));
-        installation.setInstallationDate(fromLocalDate(instaDate.getValue()));
+        installation.setEndWarrantyDate(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
+        installation.setInstallationDate(ZonedDateTime.of(wEndDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
         specRepairSystem.commitInstallations(installation);
         showAlert("Installation updated");
     }

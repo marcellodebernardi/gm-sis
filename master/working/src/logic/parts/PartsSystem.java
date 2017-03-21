@@ -59,12 +59,6 @@ public class PartsSystem {
 
     }
 
-    public boolean editPart() {
-
-        return false;
-
-    }
-
     public PartAbstraction getPartbyID(int partAbstractionID) {
         List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
         return result.size() == 0 ? null : result.get(0);
@@ -80,7 +74,8 @@ public class PartsSystem {
     }
 
     public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0).and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1)
+                .and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
     }
 
     public void deleteOccurrence(PartOccurrence partOccurrence, PartAbstraction partAbstraction) {

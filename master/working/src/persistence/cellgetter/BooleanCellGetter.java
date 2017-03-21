@@ -1,7 +1,5 @@
 package persistence.cellgetter;
 
-import persistence.CellGetterInterface;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

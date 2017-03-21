@@ -2,6 +2,7 @@ package controllers.booking;
 
 import domain.Customer;
 import domain.DiagRepBooking;
+import domain.PartOccurrence;
 import domain.Vehicle;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -62,7 +63,9 @@ public class ListPaneController {
 
     @FXML private void initialize() {
         populateFilterComboBox();
+        filterComboBox.getSelectionModel().select(0);
         populateViewByComboBox();
+        viewByComboBox.getSelectionModel().select(0);
         setBookingTableCellValueFactories();
         refreshBookingTable();
         setColumnWidths();
@@ -72,7 +75,9 @@ public class ListPaneController {
     }
 
 
-    /////////////////// EVENT HANDLERS //////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                        EVENT HANDLERS                                               //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void searchBookings() {
         populateBookingListView(bookingSystem.searchBookings(listSearchBar.getText()));
     }
@@ -118,14 +123,38 @@ public class ListPaneController {
     }
 
 
-    /////////////////// DATA MANIPULATIONS ////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     FIELD POPULATION                                                //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void populateBookingListView(List<DiagRepBooking> bookings) {
         ObservableList<DiagRepBooking> bookingsObservable = FXCollections.observableArrayList(bookings);
         bookingTableView.setItems(bookingsObservable);
         bookingTableView.refresh();
     }
 
-    /* Set the cell value factories for each column in the table */
+    private void populateFilterComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(Filter.ALL.toString());
+        options.add(Filter.PAST.toString());
+        options.add(Filter.FUTURE.toString());
+
+        filterComboBox.setItems(FXCollections.observableArrayList(options));
+    }
+
+    private void populateViewByComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(ViewBy.DAY.toString());
+        options.add(ViewBy.WEEK.toString());
+        options.add(ViewBy.MONTH.toString());
+
+        viewByComboBox.setItems(FXCollections.observableArrayList(options));
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     TABLE CONSTRUCTION                                              //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /* Set the cell value factories for each column in the table */
     private void setBookingTableCellValueFactories() {
         customerColumn.setCellValueFactory(p -> {
             Customer customer = p.getValue().getCustomer();
@@ -177,26 +206,6 @@ public class ListPaneController {
                 billAmountColumn, billSettledColumn);
     }
 
-    private void populateFilterComboBox() {
-        List<String> options = new ArrayList<>();
-        options.add(Filter.ALL.toString());
-        options.add(Filter.PAST.toString());
-        options.add(Filter.FUTURE.toString());
-
-        filterComboBox.setItems(FXCollections.observableArrayList(options));
-    }
-
-    private void populateViewByComboBox() {
-        List<String> options = new ArrayList<>();
-        options.add(ViewBy.DAY.toString());
-        options.add(ViewBy.WEEK.toString());
-        options.add(ViewBy.MONTH.toString());
-
-        viewByComboBox.setItems(FXCollections.observableArrayList(options));
-    }
-
-
-    ///////////////// STRUCTURAL MODIFICATIONS ////////////////////
     private void setColumnWidths() {
         DoubleBinding binding = bookingTableView.widthProperty().subtract(15).divide(9);
 
@@ -214,10 +223,16 @@ public class ListPaneController {
         bookingTableView
                 .getSelectionModel()
                 .selectedItemProperty()
-                .addListener((obs, oldSelection, newSelection) ->
+                .addListener((obs, oldSelection, newSelection) -> {
+                    if (oldSelection != null) {
+                        for (PartOccurrence p : ((DetailsPaneController) master.getController(DetailsPaneController.class)).getDetachedParts()) {
+                            oldSelection.getRequiredPartsList().add(p);
+                        }
+                    }
+                    if (newSelection != null)
                         ((DetailsPaneController) master.getController(DetailsPaneController.class))
-                                .populateDetailFields(newSelection)
-                );
+                            .populateDetailFields(newSelection);
+                });
     }
 
 
