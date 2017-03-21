@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.time.*;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -94,7 +95,10 @@ public class VehicleController implements Initializable
 
     private ObservableList tableEntries = FXCollections.observableArrayList(), tableEntriesB = FXCollections.observableArrayList(), comboEntriesC= FXCollections.observableArrayList();
 
-
+    private Date fromLocalDate(java.time.LocalDate localDate)
+    {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
 
 
 
@@ -119,6 +123,7 @@ public class VehicleController implements Initializable
 
     public boolean checkFields() {
         boolean check = false;
+
         if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals(""))  && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
             check = true;
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
@@ -146,12 +151,15 @@ public class VehicleController implements Initializable
         try {
             boolean check = checkFields();
             if (check) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date rdm = java.sql.Date.valueOf(rDateMot.getValue());
-                Date dls = java.sql.Date.valueOf(dLastServiced.getValue());
+                Date rdm = fromLocalDate(rDateMot.getValue());
+                Date dls = fromLocalDate(dLastServiced.getValue());
                 Date wed = new Date();
                 if ((!(wExpirationDate.getValue() ==  null))) {
-                    wed = java.sql.Date.valueOf(wExpirationDate.getValue());
+                    wed = fromLocalDate(wExpirationDate.getValue());
+                }
+                else {
+                    showAlert("error");
+                    wed = null;
                 }
                 VehicleType vT;
                 if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
@@ -172,6 +180,9 @@ public class VehicleController implements Initializable
                     W = true;
                 } else {
                     W = false;
+                    wName.setText("");
+                    wCompAddress.setText("");
+                    //wExpirationDate = null;
                 }
                 if (addOrEdit.equals("add"))
                 {
@@ -989,7 +1000,9 @@ public class VehicleController implements Initializable
         dLastServiced.setValue(null);
         wName.clear();
         wCompAddress.clear();
-        wExpirationDate.setValue(null);
+        if (wExpirationDate!= null) {
+            wExpirationDate.setValue(null);
+        }
         vType.setValue(null);
         fType.setValue(null);
         cByWarranty.setValue(null);
@@ -1292,20 +1305,20 @@ public class VehicleController implements Initializable
         }
         catch (Exception e)
         {
-            showAlert("error");
+            //showAlert("error");
         }
     }
 
     public boolean CheckFormat()
     {
         try {
-            Date date = java.sql.Date.valueOf(dLastServiced.getValue());
-            date = java.sql.Date.valueOf(rDateMot.getValue());
+            Date date = fromLocalDate(dLastServiced.getValue());
+            date = fromLocalDate(rDateMot.getValue());
             if (cByWarranty != null)
             {
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null))
             {
-                date = java.sql.Date.valueOf(wExpirationDate.getValue());
+                date = fromLocalDate(wExpirationDate.getValue());
             }}
 
             Double engineSize = Double.parseDouble(eSize.getText());
