@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.booking.BasePaneController"
-            fx:id="basePane">
+            fx:id="basePane" stylesheets="/resources/stylesheets/booking.css">
     <left>
 
     </left>

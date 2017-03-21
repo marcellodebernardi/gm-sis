@@ -120,6 +120,7 @@ public class DetailsPaneController {
     //                                     EVENT LISTENERS                                                 //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void selectCustomer() {
+        if (!validateCustomerSelection()) return;
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
         selectedBooking = new DiagRepBooking();
     }
@@ -258,6 +259,27 @@ public class DetailsPaneController {
         detachedParts.add(selectedPart);
 
         populatePartsTable(selectedBooking.getRequiredPartsList());
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     INPUT VALIDATION                                                //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private boolean validateCustomerSelection() {
+        if (getCustomerFromSearchBar() == null) {
+            PopOver customerHelper = new PopOver(new Label("You're a fag"));
+            customerHelper.setDetachable(false);
+            customerHelper.setArrowIndent(100);
+            customerHelper.setCornerRadius(0);
+            customerHelper.show(customerSearchBar);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateNewMileage() {
+        int oldMileage = Integer.parseInt(vehicleMileageTextField.getText());
+        return false;
     }
 
 
@@ -410,9 +432,10 @@ public class DetailsPaneController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // gets the name of the selected customer from the search bar
     private Customer getCustomerFromSearchBar() {
-        return customerSystem.getACustomers(Integer.parseInt(customerSearchBar
-                .getText()
-                .split(":")[0]));
+        String query = customerSearchBar.getText();
+        return query.matches("[0-9]+.*") ?
+                customerSystem.getACustomers(Integer.parseInt(customerSearchBar.getText().split(":")[0]))
+                : null;
     }
 
     // gets the selected vehicle registration number from the ComboBox

@@ -59,7 +59,6 @@ public class Main extends Application {
         try {
             BorderPane loginPane = FXMLLoader.load(getClass().getResource("/common/loginPane.fxml"));
             this.primaryStage.setScene(new Scene(loginPane));
-            primaryStage.getScene().getStylesheets().add("/resources/stylesheets/login.css");
             this.primaryStage.show();
         }
         catch(LoadException e) {
@@ -107,7 +106,6 @@ public class Main extends Application {
 
         primaryStage.setScene(mainScene);
         primaryStage.setMaximized(true);
-        primaryStage.getScene().getStylesheets().add("/resources/stylesheets/stylesheet.css");
     }
 
     /**
