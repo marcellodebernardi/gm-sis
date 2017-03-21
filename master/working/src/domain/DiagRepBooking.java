@@ -102,7 +102,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return super.getBookingID();
     }
 
-    @Column(name = "vehicleRegNumber") @Override
+    @Column(name = "vehicleRegNumber", foreign = true) @Override
     public String getVehicleRegNumber() {
         return super.getVehicleRegNumber();
     }
@@ -122,7 +122,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return super.getBill().isBillSettled();
     }
 
-    @Column(name = "mechanicID")
+    @Column(name = "mechanicID", foreign = true)
     public int getMechanicID() {
         return super.getMechanicID();
     }

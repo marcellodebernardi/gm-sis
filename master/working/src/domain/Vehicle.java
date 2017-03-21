@@ -72,7 +72,7 @@ public class Vehicle implements Searchable {
         return vehicleRegNumber;
     }
 
-    @Column(name = "customerID")
+    @Column(name = "customerID", foreign = true)
     public int getCustomerID() {
         return customerID;
     }

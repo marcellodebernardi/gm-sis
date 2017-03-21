@@ -194,8 +194,13 @@ class ObjectRelationalMapper {
                 else if (!annotation.foreign()) {
                     Object attribute = column.invoke(item);
 
-                    // && !(noQuotesTypes.contains(attribute.getClass()) && attribute.equals(-1))
                     if (attribute != null)
+                        columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
+                }
+                else {
+                    Object attribute = column.invoke(item);
+
+                    if (attribute != null && !(noQuotesTypes.contains(attribute.getClass()) && attribute.equals(-1)))
                         columnValues.put(((Column) column.getDeclaredAnnotations()[0]).name(), attribute);
                 }
             }

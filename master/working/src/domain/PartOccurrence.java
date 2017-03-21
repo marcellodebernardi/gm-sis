@@ -69,22 +69,22 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return partOccurrenceID;
     }
 
-    @Column(name = "partAbstractionID")
+    @Column(name = "partAbstractionID", foreign = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
 
-    @Column(name = "installationID")
+    @Column(name = "installationID", foreign = true)
     public int getInstallationID() {
         return installationID;
     }
 
-    @Column(name = "bookingID")
+    @Column(name = "bookingID", foreign = true)
     public int getBookingID() {
         return bookingID;
     }
 
-    @Column(name = "specRepID")
+    @Column(name = "specRepID", foreign = true)
     public int getSpecRepID() {
         return specRepID;
     }

@@ -46,7 +46,7 @@ public class PartRepair extends SpecRepBooking {
         return super.getSpcRepID();
     }
 
-    @Column(name = "spcID")
+    @Column(name = "spcID", foreign = true)
     public int getspcID() {
         return super.getSpcID();
     }
@@ -66,12 +66,12 @@ public class PartRepair extends SpecRepBooking {
         return super.getCost();
     }
 
-    @Column(name = "bookingID")
+    @Column(name = "bookingID", foreign = true)
     public int getBookingID() {
         return super.getBookingID();
     }
 
-    @Column(name = "partOccurrenceID")
+    @Column(name = "partOccurrenceID", foreign = true)
     public int getPartOccurrenceID() {
         return partOccurrenceID;
     }

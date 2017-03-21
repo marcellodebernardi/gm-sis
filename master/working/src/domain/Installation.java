@@ -76,7 +76,7 @@ public class Installation implements Searchable {
         return endWarrantyDate;
     }
 
-    @Column(name = "vehicleRegNumber")
+    @Column(name = "vehicleRegNumber", foreign = true)
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
