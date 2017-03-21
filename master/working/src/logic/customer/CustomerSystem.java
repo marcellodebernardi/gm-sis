@@ -1,6 +1,5 @@
 package logic.customer;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
@@ -42,11 +41,6 @@ public class CustomerSystem {
     {
         return persistence.commitItem(customer);
     }
-
-//    public boolean editCustomer(int customerID, String customerFirstname, String customerSurname, String customerAddress, String customerPostcode, String customerPhone, String customerEmail, CustomerType customerType) {
-//        Customer edit = new Customer(customerFirstname, customerSurname, customerAddress, customerPostcode, customerPhone, customerEmail, customerType, null);
-//        return persistence.commitItem(edit);
-//    }
 
     public boolean deleteCustomer(int customerID)
     {
@@ -96,7 +90,6 @@ public class CustomerSystem {
     public List<Installation> searchInstallationTable(String vehicleRegNumber)
     {
         List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches, vehicleRegNumber));
-        //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
         return iResult;
     }
 
@@ -114,9 +107,6 @@ public class CustomerSystem {
 
     public List<PartAbstraction> searchCustomerVehiclePart(int partAbstractionID)
     {
-        //List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Regex, vehicleRegNumber));
-        //System.out.println("number of part abstraction ID's: " + iResult.size());//testing. remove later
-        //int partAbstID = result.get(0).getPartAbstractionID();
         List<PartAbstraction> results = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
         return results;
     }
@@ -125,5 +115,4 @@ public class CustomerSystem {
         List<Customer> results =  persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
         return results.size() !=0 ? results.get(0) : null;
     }
-
 }

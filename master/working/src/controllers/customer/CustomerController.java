@@ -62,15 +62,14 @@ import domain.DiagRepBooking;
 import persistence.DatabaseRepository;
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
-
 /**
  * Created by EBUBECHUKWU on 19/02/2017.
  */
+
 public class CustomerController implements Initializable
 {
     private static CustomerController instance;
 
-    //DatabaseRepository db = DatabaseRepository.getInstance();
     @FXML
     public CustomerSystem cSystem = CustomerSystem.getInstance();
 
@@ -80,8 +79,6 @@ public class CustomerController implements Initializable
     final ObservableList tableEntriesParts = FXCollections.observableArrayList();
     final ObservableList comboEntries = FXCollections.observableArrayList();
     final ObservableList vehicleCustomerID = FXCollections.observableArrayList();
-
-
 
     ////for 'CustomerView.fxml' instance variables
     ////left pane (add and edit customer view)
@@ -94,7 +91,6 @@ public class CustomerController implements Initializable
     @FXML
     private Button saveCustomerAndAddVehicleButton, saveCustomerButton, deleteCustomerButton, clearCustomerButton = new Button();
 
-
     ////right pane (search customer)
     @FXML
     private TextField customerSearch = new TextField();
@@ -102,7 +98,6 @@ public class CustomerController implements Initializable
     private ComboBox customerTypeSearch = new ComboBox();
     @FXML
     private Button customerSearchButton, newCustomerFormButton, editSelectedCustomerButton, makeBookingButton, deleteSelectedCustomerButton, logoutButton = new Button();
-
 
     ////right pane (customer table view)
     @FXML
@@ -156,12 +151,9 @@ public class CustomerController implements Initializable
     @FXML
     private TableColumn<PartAbstraction, String> customerVehiclePartTableColumnDescription;
 
-
     ////for 'DeleteCustomerConfirmation.fxml' instance variables
     @FXML
-    private Button deleteCustomerConfirmationYes = new Button();
-    @FXML
-    private Button deleteCustomerConfirmationNo = new Button();
+    private Button deleteCustomerConfirmationYes, deleteCustomerConfirmationNo = new Button();
 
 
     ////for 'AddCustomerVehiclePopupView.fxml' instance variables
@@ -222,10 +214,7 @@ public class CustomerController implements Initializable
                 boolean addedCustomer = cSystem.addCustomer(cFirstname, cSurname, cAddress, cPostcode, cPhone, cEmail, cType);
                 if(addedCustomer)
                 {
-                    //errorAlert("SUCCESSFULLY ADDED!!!");
-
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
-
 
                     if(addVehicleStage != null)
                     {
@@ -239,10 +228,8 @@ public class CustomerController implements Initializable
                     else
                     {
                         newCustomerForm();
-
                         CustomerVehicleController.getInstance().showVehiclePopup();
                     }
-
                 }
                 else
                 {
@@ -270,7 +257,6 @@ public class CustomerController implements Initializable
         try
         {
             String cID = customerID.getText();
-
             boolean check = false;
 
             if(cID.equals(""))
@@ -286,8 +272,6 @@ public class CustomerController implements Initializable
             if(check) {
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
-                    //errorAlert("Customer has been deleted");
-
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
 
                     tableViewOfCustomerVehicleFromDB();
@@ -308,7 +292,6 @@ public class CustomerController implements Initializable
             e.printStackTrace();
         }
     }
-
 
     //method for deleting customer from database
     public void deleteTableSelectedCustomerFromDB() throws Exception
@@ -334,8 +317,6 @@ public class CustomerController implements Initializable
             if(check) {
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
-                    //errorAlert("Customer has been deleted");
-
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
 
                     tableViewOfCustomerVehicleFromDB();
@@ -355,7 +336,6 @@ public class CustomerController implements Initializable
             e.printStackTrace();
         }
     }
-
 
     public void searchAllCustomersInDB()
     {
@@ -391,7 +371,6 @@ public class CustomerController implements Initializable
             }
             customers = cSystem.searchCustomerByType(cType);
             tableViewOfCustomersFromDB(customers);
-
         }
         catch(Exception e)
         {
@@ -429,14 +408,11 @@ public class CustomerController implements Initializable
         }
     }
 
-
     //method for showing customer details in table view
     public void tableViewOfCustomersFromDB(List<Customer> searchList) throws Exception
     {
         try
         {
-            //Customer customers = customerTable.getSelectionModel().getSelectedItem();
-
             customerTable.setDisable(false);
             tableEntriesCustomer.removeAll(tableEntriesCustomer);
 
@@ -497,12 +473,10 @@ public class CustomerController implements Initializable
         }
     }
 
-
     public void editTableSelectedCustomerFromDB() throws Exception
     {
         try
         {
-            //Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
             Customer customer = customerTable.getSelectionModel().getSelectedItem();
             if(customer == null)
             {
@@ -545,7 +519,6 @@ public class CustomerController implements Initializable
             CustomerType cType = null;
 
             boolean checkFields = false;
-
             checkFields = checkCustomerFields();
 
             if(customerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
@@ -574,7 +547,6 @@ public class CustomerController implements Initializable
 
                 if(editedCustomer)
                 {
-                    //errorAlert("SUCCESSFULLY UPDATED CUSTOMER'S DETAIL!!!");
                     newCustomerForm();
                     searchAllCustomersInDB();
                 }
@@ -616,8 +588,6 @@ public class CustomerController implements Initializable
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
     }
 
-
-
     public void errorAlert(String message)
     {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -625,7 +595,6 @@ public class CustomerController implements Initializable
         errorAlert.setHeaderText(message);
         errorAlert.showAndWait();
     }
-
 
     public boolean confirmationAlert(String title, String message)
     {
@@ -643,7 +612,6 @@ public class CustomerController implements Initializable
         }
     }
 
-
     public List<Vehicle> searchCustomerVehicleInDB()
     {
         try
@@ -655,9 +623,7 @@ public class CustomerController implements Initializable
                 throw new Exception();
             }
             searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
-
             searchCustomerBookingInDB();//testing to find customer's bookings for their vehicles
-
             return searchVehicleList;
         }
         catch(Exception e)
@@ -680,7 +646,7 @@ public class CustomerController implements Initializable
             {
                 searchBookingList = cSystem.searchCustomerBookings(searchVehicleList.get(i).getVehicleRegNumber());
             }
-
+            System.out.println("testing Total Bookings: " + searchBookingList.size());//testing REMOVE LATER
             return searchBookingList;
         }
         catch(Exception e)
@@ -741,19 +707,6 @@ public class CustomerController implements Initializable
         }
     }
 
-    public void saveVehicleAndMakeBooking()
-    {
-        try
-        {
-            BookingController.getInstance().show();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Save and Make Booking Error");
-            e.printStackTrace();
-        }
-    }
-
     public void logout()
     {
         try
@@ -782,7 +735,6 @@ public class CustomerController implements Initializable
         {
             customerVehicleTable.setDisable(false);
             tableEntriesVehicle.removeAll(tableEntriesVehicle);
-
             List<Vehicle> searchList = searchCustomerVehicleInDB();
 
             //arranging default list from newest to oldest customer vehicle
@@ -854,7 +806,6 @@ public class CustomerController implements Initializable
         {
             customerVehiclePartTable.setDisable(false);
             tableEntriesParts.removeAll(tableEntriesParts);
-
             List<PartAbstraction> searchList = searchCustomerVehiclePartsInstalledInDB();
 
             System.out.println("testing parts. total installed: " + searchList.size());//testing parts
@@ -886,7 +837,6 @@ public class CustomerController implements Initializable
         {
             customerBookingTable.setDisable(false);
             tableEntriesBooking.removeAll(tableEntriesBooking);
-
             List<DiagRepBooking> searchList = searchCustomerBookingInDB();
 
             //arranging default list from newest to oldest customer booking
@@ -934,14 +884,12 @@ public class CustomerController implements Initializable
         }
     }
 
-    /////
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         searchAllCustomersInDB();
     }
-
 
     public boolean checkCustomerFields()
     {
@@ -1087,7 +1035,6 @@ public class CustomerController implements Initializable
                 errorAlert("Pick Customer Type");
                 return false;
             }
-
             return true;
         }
         catch(Exception e)
@@ -1097,5 +1044,3 @@ public class CustomerController implements Initializable
         }
     }
 }
-
-
