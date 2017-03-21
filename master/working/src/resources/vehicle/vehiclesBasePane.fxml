@@ -178,9 +178,9 @@
                                     <children>
                                         <Label prefHeight="17.0" prefWidth="155.0" text="Search Bar" />
                                         <TextField fx:id="regS" onKeyTyped="#searchVehicle" prefHeight="27.0" prefWidth="141.0" promptText="enter vehicle reg" GridPane.columnIndex="1" />
-                                        <Button mnemonicParsing="false" onAction="#searchVehicleA" text="View All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-                                        <Button fx:id="DeleteVT" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="5" GridPane.halignment="RIGHT" />
-                                        <Button fx:id="EditVehicle" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" text="Edit " GridPane.columnIndex="5" GridPane.halignment="LEFT" />
+                                        <Button mnemonicParsing="false" onAction="#searchVehicleA" prefHeight="27.0" prefWidth="67.0" text="View All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+                                        <Button fx:id="DeleteVT" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="5" GridPane.halignment="RIGHT" />
+                                        <Button fx:id="EditVehicle" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" prefHeight="27.0" prefWidth="58.0" text="Edit " textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="LEFT" />
                               <TextField fx:id="manufS" onKeyTyped="#searchVehicle" prefHeight="27.0" prefWidth="299.0" promptText="enter manufacturer" GridPane.columnIndex="2" />
                               <ComboBox fx:id="typeS" onAction="#searchVehicle" prefHeight="27.0" prefWidth="117.0" promptText="Type" GridPane.columnIndex="3">
                                  <items>
@@ -216,7 +216,7 @@
                                 </GridPane>
                             </center>
                         </BorderPane>
-                        <TableView fx:id="searchTable" disable="true" onMouseClicked="#ShowCustomerDetails" prefHeight="265.0" prefWidth="804.0">
+                        <TableView fx:id="searchTable" disable="true" onKeyPressed="#ShowCustomerDetails" onMouseClicked="#ShowCustomerDetails" prefHeight="265.0" prefWidth="804.0">
                             <columns>
                                 <TableColumn fx:id="tReg" prefWidth="65.0" text="Reg" />
                                 <TableColumn fx:id="tCID" prefWidth="33.0" text="CID" />

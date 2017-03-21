@@ -123,7 +123,7 @@ public class CustomerSystem {
 
     public Customer getACustomers(int customerID) {
         List<Customer> results =  persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
-        return results !=null ? results.get(0) : null;
+        return results.size() !=0 ? results.get(0) : null;
     }
 
 }

@@ -258,8 +258,8 @@ public class VehicleController implements Initializable
                 setVehicleDets(vehicle);
         } catch (Exception e) {
             showAlert("No Vehicle Selected");
-            System.out.println(e);
-            e.printStackTrace();
+            //System.out.println(e);
+            //e.printStackTrace();
         }
 
     }
@@ -1207,6 +1207,7 @@ public class VehicleController implements Initializable
 
     public void newVehicle()
     {
+        reg.setDisable(false);
         deleteV.setDisable(true);
         AddEditL.setText("Add Vehicle");
         VehicleS.setDisable(false);
@@ -1284,19 +1285,20 @@ public class VehicleController implements Initializable
         try {
             Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
             List<Installation> Installations = vehicle.getInstallationList();
-            if (Installations.size() ==0)
+            if (Installations.size() ==0 || Installations == null)
             {
                 //showAlert("No parts installed for this Vehicle");
                 PartLabel.setText("No parts");
                 PartLabel.setVisible(true);
                 ListParts.setItems(null);
+                //showAlert("No parts");
                 return;
             }
             ObservableList<String> items = FXCollections.observableArrayList();
             for (int i = 0; i < Installations.size(); i++)
             {
                 Installation A = Installations.get(i);
-                PartAbstraction PA = pSys.getPartbyID(A.getPartAbstractionID());
+                PartAbstraction PA = A.getPartAbstraction();
                 items.add(PA.getPartName());
             }
             PartLabel.setText("Vehicle Reg: " +  vehicle.getVehicleRegNumber());
@@ -1306,6 +1308,7 @@ public class VehicleController implements Initializable
         catch (Exception e)
         {
             //showAlert("error");
+            //e.printStackTrace();
         }
     }
 
