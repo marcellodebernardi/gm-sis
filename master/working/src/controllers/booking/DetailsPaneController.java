@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import logic.booking.BookingSystem;
 import logic.customer.CustomerSystem;
@@ -44,6 +45,7 @@ public class DetailsPaneController {
     private PartOccurrence selectedPart;
     private List<PartOccurrence> detachedParts;
 
+    @FXML private Text paneTitle;
     // customer and vehicle ComboBoxes
     @FXML private TextField customerSearchBar;
     @FXML private ComboBox<String> vehicleComboBox;
@@ -226,6 +228,7 @@ public class DetailsPaneController {
         vehicleMileageTextField.setDisable(false);
 
         selectedBooking = new DiagRepBooking();
+        setPaneTitleToAdd();
     }
 
     @FXML private void completeBooking() {
@@ -470,5 +473,17 @@ public class DetailsPaneController {
         List<PartOccurrence> parts = new ArrayList<>();
         parts.addAll(partsTable.getItems());
         return parts;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                   STRUCTURAL MODIFICATIONS                                          //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void setPaneTitleToAdd() {
+        paneTitle.setText("Add Booking");
+    }
+
+    void setPaneTitleToView() {
+        paneTitle.setText("View Booking");
     }
 }

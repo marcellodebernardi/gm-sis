@@ -229,9 +229,12 @@ public class ListPaneController {
                             oldSelection.getRequiredPartsList().add(p);
                         }
                     }
-                    if (newSelection != null)
+                    if (newSelection != null) {
                         ((DetailsPaneController) master.getController(DetailsPaneController.class))
-                            .populateDetailFields(newSelection);
+                                .populateDetailFields(newSelection);
+                        ((DetailsPaneController) master.getController(DetailsPaneController.class))
+                                .setPaneTitleToView();
+                    }
                 });
     }
 
