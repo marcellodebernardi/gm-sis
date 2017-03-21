@@ -119,6 +119,7 @@ public class DetailsPaneController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void selectCustomer() {
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
+        selectedBooking = new DiagRepBooking();
     }
 
     @FXML private void selectVehicle() {
@@ -223,6 +224,8 @@ public class DetailsPaneController {
         partsTable.setDisable(false);
         mechanicComboBox.setDisable(false);
         vehicleMileageTextField.setDisable(false);
+
+        selectedBooking = new DiagRepBooking();
     }
 
     @FXML private void completeBooking() {
