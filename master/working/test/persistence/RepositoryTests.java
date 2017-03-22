@@ -97,7 +97,7 @@ public class RepositoryTests {
                 .getInstance()
                 .getByCriteria(new Criterion<>(
                         Vehicle.class,
-                        "regNumber",
+                        "vehicleRegNumber",
                         CriterionOperator.EqualTo,
                         "TEST REG"));
 

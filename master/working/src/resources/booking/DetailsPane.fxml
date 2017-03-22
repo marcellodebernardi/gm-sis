@@ -40,7 +40,7 @@
             <!-- Diagnosis date and time -->
             <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Date</Label>
             <DatePicker GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="diagnosisDatePicker" onAction="#selectDiagnosisDate"/>
+                        fx:id="diagnosisDatePicker" />
             <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Time</Label>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="1"
                        fx:id="diagnosisStartTimeTextField" />
@@ -60,7 +60,7 @@
             <!-- Mechanic tasked on repair -->
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
             <ComboBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="mechanicComboBox" />
+                      fx:id="mechanicComboBox" onAction="#selectMechanic"/>
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
@@ -83,14 +83,14 @@
                        id="vehicleMileageTextField" fx:id="vehicleMileageTextField" />
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="newVehicleMileageTextField" fx:id="newVehicleMileageTextField" />
+                       id="newVehicleMileageTextField" fx:id="newMileageTextField" />
         </GridPane>
     </center>
     <bottom>
         <HBox id="detailsButtons">
             <Button onAction="#saveBooking">Save</Button>
             <Button onAction="#completeBooking">Complete</Button>
-            <Button onAction="#clearDetails">New</Button>
+            <Button onAction="#clearFields">New</Button>
             <Button onAction="#deleteBooking">Delete</Button>
         </HBox>
     </bottom>

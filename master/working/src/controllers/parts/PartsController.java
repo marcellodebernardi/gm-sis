@@ -315,7 +315,6 @@ public class PartsController implements Initializable {
         tableEntries2.removeAll(tableEntries2);
 
         for(int i =0; i< List2.size(); i++){
-
             tableEntries2.add(List2.get(i));
 
         }

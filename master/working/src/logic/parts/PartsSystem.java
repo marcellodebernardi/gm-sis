@@ -98,7 +98,7 @@ public class PartsSystem {
 
     public List<Installation> getAllInstallations ()
     {
-        return persistence.getByCriteria(new Criterion<>(Installation.class,"installationID",MoreThan, 0));
+        return persistence.getByCriteria(new Criterion<>(Installation.class));
     }
 }
 
