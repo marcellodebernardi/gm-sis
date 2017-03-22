@@ -3,8 +3,7 @@
     -fx-font-family: 'Roboto Light';
     -fx-background-color: white;
 }
-
-#tabTilePane {
+#tabHBox {
     -fx-background-color: white;
     -fx-fit-to-width: true;
     -fx-alignment: top-center;
@@ -13,13 +12,13 @@
     -fx-border-color: darkgrey;
     -fx-border-width: 0px 0px 1px 0px;
 }
-#tabTilePane Button {
+#tabHBox Button {
     -fx-pref-height: 3.5em;
     -fx-background-color: #e0e0e0;
 
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
 }
-#tabTilePane Button:hover {
+#tabHBox Button:hover {
     -fx-background-color: lightgray;
 }
