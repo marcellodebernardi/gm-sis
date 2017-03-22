@@ -39,7 +39,7 @@ public class Installation implements Searchable {
                         int partAbstractionID, PartOccurrence partOccurrence) {
         this.installationID = -1;
         this.installationDate = installationDate;
-        this.endWarrantyDate = installationDate;
+        this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
         this.partAbstractionID = partAbstractionID;
         this.partOccurrence = partOccurrence;

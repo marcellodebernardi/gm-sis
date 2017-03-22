@@ -51,7 +51,7 @@ public class SpecialistController implements Initializable{
     @FXML
     private Label itemLabel = new Label();
     @FXML
-    private ComboBox<String> partDes, partSerial ,getBookings= new ComboBox<>();
+    private ComboBox<String> partDes, partSerial =  new ComboBox<>();
     @FXML
     private ObservableList<String> partAbs = FXCollections.observableArrayList();
     private List<PartAbstraction> partAbstractions = new ArrayList<>();
@@ -82,20 +82,26 @@ public class SpecialistController implements Initializable{
     private void setPartDes() {
         partAbstractions = partsSystem.getPartAbstractions();
         for (PartAbstraction partAbstraction : partAbstractions) {
-            partAbs.add(Integer.toString(partAbstraction.getPartAbstractionID()) + " " + partAbstraction.getPartName());
+            partAbs.add(Integer.toString(partAbstraction.getPartAbstractionID()) + " - " + partAbstraction.getPartName());
         }
     }
 
     public void setOccs()
     {
-        Character c = partDes.getSelectionModel().getSelectedItem().charAt(0);
-        int cd = c.getNumericValue(c);
-         System.out.println(cd);
-        partOccurrences.removeAll(partOccurrences);
-        partOccurrences.addAll(partsSystem.getAllUninstalled(cd));
-        partSerial.getItems().removeAll(partSerial.getItems());
-        for(PartOccurrence partOccurrence: partOccurrences) {
-            partSerial.getItems().add(Integer.toString(partOccurrence.getPartOccurrenceID()));
+        try {
+            String[] s = partDes.getSelectionModel().getSelectedItem().split("-");
+            String x = s[0].trim();
+            System.out.println(x);
+            partOccurrences.removeAll(partOccurrences);
+            partOccurrences.addAll(partsSystem.getAllUninstalled(Integer.parseInt(x)));
+            partSerial.getItems().removeAll(partSerial.getItems());
+            for (PartOccurrence partOccurrence : partOccurrences) {
+                partSerial.getItems().add(Integer.toString(partOccurrence.getPartOccurrenceID()));
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Showing part description.");
         }
 
     }
