@@ -13,15 +13,13 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.spc.SpecialistRepairController">
    <top>
-      <Pane prefHeight="125.0" prefWidth="1175.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="111.0" prefWidth="1175.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="266.0" layoutY="25.0" prefHeight="50.0" prefWidth="542.0" text="Repair centre management">
                <font>
                   <Font size="40.0" />
                </font>
             </Label>
-            <TextField fx:id="searchSRC" layoutX="355.0" layoutY="138.0" onKeyReleased="#findSRC" prefHeight="27.0" prefWidth="504.0" promptText="Enter a Specialist repair centre ID or name..." />
-            <Button layoutX="867.0" layoutY="138.0" mnemonicParsing="false" onAction="#findSRC" prefHeight="27.0" prefWidth="118.0" text="Search" />
          </children>
       </Pane>
    </top>
@@ -101,18 +99,18 @@
    <center>
       <Pane prefHeight="514.0" prefWidth="636.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="SpecialistRepairCenters" onMouseClicked="#showSpcDetails" prefHeight="387.0" prefWidth="631.0">
+            <TableView fx:id="SpecialistRepairCenters" onMouseClicked="#showSpcDetails" prefHeight="387.0" prefWidth="727.0">
               <columns>
                 <TableColumn fx:id="spc_id_column" prefWidth="75.0" text="SPC ID:" />
-                <TableColumn fx:id="spc_name_column" prefWidth="123.0" text="SPC Name:" />
-                  <TableColumn fx:id="spc_phone_column" prefWidth="132.0" text="SPC Phone:" />
-                  <TableColumn fx:id="spc_address_column" prefWidth="172.0" text="SPC Address" />
-                  <TableColumn fx:id="spc_email_column" minWidth="7.0" prefWidth="128.0" text="SPC Email" />
+                <TableColumn fx:id="spc_name_column" prefWidth="223.0" text="SPC Name:" />
+                  <TableColumn fx:id="spc_phone_column" prefWidth="144.0" text="SPC Phone:" />
+                  <TableColumn fx:id="spc_address_column" prefWidth="145.0" text="SPC Address" />
+                  <TableColumn fx:id="spc_email_column" minWidth="7.0" prefWidth="139.0" text="SPC Email" />
               </columns>
             </TableView>
          </children></Pane>
    </center>
    <right>
-      <Pane prefHeight="614.0" prefWidth="188.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="410.0" prefWidth="154.0" BorderPane.alignment="CENTER" />
    </right>
 </BorderPane>

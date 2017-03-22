@@ -89,7 +89,7 @@ public class SpecialistController implements Initializable{
     {
         Character c = partDes.getSelectionModel().getSelectedItem().charAt(0);
         int cd = c.getNumericValue(c);
-       // System.out.println(cd);
+         System.out.println(cd);
         partOccurrences.removeAll(partOccurrences);
         partOccurrences.addAll(partsSystem.getAllUninstalled(cd));
         partSerial.getItems().removeAll(partSerial.getItems());
@@ -108,6 +108,12 @@ public class SpecialistController implements Initializable{
         specRepBookingList.addAll(partRepairs);
         specRepBookingList.addAll(vehicleRepairs);
         displaySpecRepBookings(specRepBookingList);
+    }
+
+    @FXML
+    public void queryReturned()
+    {
+        displaySpecRepBookings(specRepairSystem.getReturned());
     }
 
     private Callback<DatePicker, DateCell> dateChecker = dp1 -> new DateCell()
@@ -292,14 +298,16 @@ public class SpecialistController implements Initializable{
                 Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
                 Date returnDate = fromLocalDate(bookingReturnDate.getValue());
 
-                if(returnDate.before(deliveryDate))
+                 if(returnDate.before(deliveryDate))
                 {
                     throw new InvalidDateException("Return date before delivery date.");
                 }
                 else
                 {
                     if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
+                        System.out.println("got here");
                         Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(bookingItemID.getText());
+                        System.out.println(vehicle);
                         if(vehicle !=null) {
                             if(vehicle.isCoveredByWarranty())
                             {
@@ -327,10 +335,10 @@ public class SpecialistController implements Initializable{
                             Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
                             diagRepBookings.setBill(bill);
                             PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText()));
-                            PartRepair repair = specRepairSystem.findPartRepairBooking(Integer.parseInt(bookingID.getText()));
-                            partOccurrence.setSpecRepID(repair.getSpcRepID());
                             partsSystem.addPartOccurrence(partOccurrence);
                             specRepairSystem.addSpecialistBooking(partRepair);
+                            PartRepair repair = specRepairSystem.findPartRepairBooking(Integer.parseInt(bookingID.getText()));
+                            partOccurrence.setSpecRepID(repair.getSpcRepID());
                             bookingSystem.commitBooking(diagRepBookings);
                             findSRCBookings();
                             clearBookingFields();
@@ -551,7 +559,7 @@ public class SpecialistController implements Initializable{
             }
 
             if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
-                PartRepair partRepair = specRepairSystem.findPartRepairBooking(spcRepID);
+                PartRepair partRepair = specRepairSystem.findPartRepairBookingByRep(spcRepID);
                 if (partRepair != null) {
                     partRepair.setPartOccurrenceID(Integer.parseInt(bookingItemID.getText()));
                     partRepair.setCost(Double.parseDouble(bookingCost.getText()));

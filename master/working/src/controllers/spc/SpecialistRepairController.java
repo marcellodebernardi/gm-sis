@@ -65,22 +65,9 @@ public class SpecialistRepairController implements Initializable{
     private ObservableList<SpecialistRepairCenter> specialistRepairCenterObservableList = FXCollections.observableArrayList();
 
     @FXML
-    public void findSRC() {
+    private void findSRC() {
 
-        try{
-            List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getAllBookings(Integer.parseInt(searchSRC.getText()));
-            displayCentersToTable(specialistRepairCenters);
-
-        }
-        catch (NumberFormatException | NullPointerException e)
-        {
-            if(e instanceof  NumberFormatException)
-            {
-                List<SpecialistRepairCenter> specialistRepairCenters = specRepairSystem.getBookingsByName(searchSRC.getText());
-                displayCentersToTable(specialistRepairCenters);
-            }
-
-        }
+      displayCentersToTable(specRepairSystem.getRepairCenterList());
 
 
     }
@@ -197,10 +184,11 @@ public class SpecialistRepairController implements Initializable{
     public void deleteSRC()
     {
         try {
-            if(deleteConfirmation("Are you sure you want to delete this Specialist repair center?"))
+            if(deleteConfirmation("Are you sure you want to delete this Specialist repair center?")) {
                 specRepairSystem.deleteAllSubsequentBookings(spcID);
                 specRepairSystem.deleteRepairCenter(spcID);
                 clearSRCFields();
+            }
         }
         catch (NullPointerException e)
         {
@@ -247,12 +235,14 @@ public class SpecialistRepairController implements Initializable{
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     private boolean deleteConfirmation(String message)
     {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
         deleteAlert.setTitle("Delete Booking");
         deleteAlert.setHeaderText(message);
         deleteAlert.showAndWait();
+        System.out.println(deleteAlert.getResult() == ButtonType.OK);
         return deleteAlert.getResult() == ButtonType.OK;
 
     }
@@ -347,16 +337,17 @@ public class SpecialistRepairController implements Initializable{
     public void showCustyDetails()
     {
         try {
-            Vehicle vehicle = vehicleDetails.getSelectionModel().getSelectedItem();
-            Customer customer = specRepairSystem.getByCustomerID(vehicle.getCustomerID());
-            custyInfo.clear();
-            custyInfo.appendText("ID : " + customer.getCustomerAddress() + "\n");
-            custyInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
-            custyInfo.appendText("Surname : " + customer.getCustomerSurname() + "\n");
-            custyInfo.appendText("Phone number : " + customer.getCustomerPhone() + "\n");
-            custyInfo.appendText("Address : " + customer.getCustomerAddress() + "\n");
-            custyInfo.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
-            custyInfo.appendText("Type : " + customer.getCustomerType().toString() + "\n");
+                custy_label.setText("Customer Details :");
+                Vehicle vehicle = vehicleDetails.getSelectionModel().getSelectedItem();
+                Customer customer = CustomerSystem.getInstance().getACustomers(vehicle.getCustomerID());
+                custyInfo.clear();
+                custyInfo.appendText("ID : " + customer.getCustomerAddress() + "\n");
+                custyInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
+                custyInfo.appendText("Surname : " + customer.getCustomerSurname() + "\n");
+                custyInfo.appendText("Phone number : " + customer.getCustomerPhone() + "\n");
+                custyInfo.appendText("Address : " + customer.getCustomerAddress() + "\n");
+                custyInfo.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
+                custyInfo.appendText("Type : " + customer.getCustomerType().toString() + "\n");
         }
         catch (NullPointerException e)
         {
@@ -551,5 +542,6 @@ public class SpecialistRepairController implements Initializable{
         }
 
     }
+
 
 }
