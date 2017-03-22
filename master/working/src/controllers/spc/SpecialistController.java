@@ -790,6 +790,7 @@ public class SpecialistController implements Initializable{
             Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(vehicleRepair.getVehicleRegNumber());
             Installations.setVisible(true);
             hideInstalls.setVisible(true);
+            clearBookingFields();
             List<Installation> installations = specRepairSystem.getVehicleInstallations(vehicle.getVehicleRegNumber());
             displayInstallations(installations);
             addInsta.setVisible(true);
@@ -852,6 +853,7 @@ public class SpecialistController implements Initializable{
     public void showInstallationDetails()
     {
         try {
+             clearBookingFields();
             Installation installation = Installations.getSelectionModel().getSelectedItem();
             PartOccurrence partOccurrence = partsSystem.getByInstallationID(installation.getInstallationID());
             PartAbstraction partAbstraction = partsSystem.getPartbyID(partOccurrence.getPartAbstractionID());
@@ -859,8 +861,6 @@ public class SpecialistController implements Initializable{
             partDes.setValue(partAbstraction.getPartName());
             installationID = installation.getInstallationID();
             partSerial.setValue(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
-          //  java.time.LocalDate installationDate = installation.getInstallationDate().toLocalDate();
-            //java.time.LocalDate returnDate = installation.getEndWarrantyDate().toLocalDate();
            instaDate.setValue(installation.getInstallationDate().toLocalDate());
             wEndDate.setValue(installation.getEndWarrantyDate().toLocalDate());
         }

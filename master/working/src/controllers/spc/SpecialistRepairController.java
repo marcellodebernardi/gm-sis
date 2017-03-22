@@ -36,6 +36,7 @@ public class SpecialistRepairController implements Initializable{
     private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
     @FXML
     private Label id_lbl,name_lbl,address_lbl,number_lbl,email_lbl = new Label();
+    private boolean isShowing;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -91,6 +92,10 @@ public class SpecialistRepairController implements Initializable{
 
     public void showSpcDetails()
     {
+        if(isShowing)
+        {
+            showRepairs();
+        }
         SpecialistRepairCenter specialistRepairCenter = SpecialistRepairCenters.getSelectionModel().getSelectedItem();
         src_id.setText(Integer.toString(specialistRepairCenter.getSpcID()));
         src_name.setText(specialistRepairCenter.getName());
@@ -313,6 +318,7 @@ public class SpecialistRepairController implements Initializable{
 
     private void showVehicle()
     {
+        isShowing = true;
         List<VehicleRepair> vehicleRepairs = specRepairSystem.getBySpcID(spcID);
         ArrayList<Vehicle> vehicles = new ArrayList<>();
         for(VehicleRepair v: vehicleRepairs)
