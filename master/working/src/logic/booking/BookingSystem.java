@@ -83,7 +83,7 @@ public class BookingSystem {
      * appointment or a repair appointment inside the specified time range.
      *
      * @param start start time of time range
-     * @param end end time of time range
+     * @param end   end time of time range
      * @return list of bookings in range
      */
     public List<DiagRepBooking> getBookingsBetween(ZonedDateTime start, ZonedDateTime end) {
@@ -106,7 +106,7 @@ public class BookingSystem {
 
     /**
      * Returns a list of all bookings matching the query in one of several ways:
-     *
+     * <p>
      * 1. the query is the bookingID of a booking
      * 2. the query can be pattern-matched to the vehicle registration number
      * 3. the query can be pattern-matched to the customer name todo
@@ -130,6 +130,7 @@ public class BookingSystem {
 
     /**
      * Returns a booking as identified by its booking ID.
+     *
      * @param bookingID ID of booking
      * @return booking, may be null
      */
@@ -143,6 +144,7 @@ public class BookingSystem {
 
     /**
      * Returns a mechanic as identified by their ID.
+     *
      * @param mechanicID ID of mechanic
      * @return mechanic, may be null
      */

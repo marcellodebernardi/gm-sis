@@ -1,41 +1,35 @@
 package controllers.parts;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Part;
-import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Callback;
-import javafx.util.converter.*;
-import logic.parts.PartsSystem;
-import logic.spc.SpecRepairSystem;
-import persistence.DatabaseRepository;
-import logic.criterion.Criterion;
-import javafx.event.EventHandler;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import javafx.collections.ObservableList;
+import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import logic.criterion.Criterion;
+import logic.parts.PartsSystem;
+import persistence.DatabaseRepository;
+
 import java.net.URL;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.lang.*;
 import java.util.ResourceBundle;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ComboBox;
 //import java.sql.Connection;
 //import org.controlsfx.control.textfield.TextFields;
 //import javax.swing.*;d
@@ -43,8 +37,12 @@ import javafx.scene.control.ComboBox;
 
 public class PartsController implements Initializable {
 
+    DatabaseRepository instance = DatabaseRepository.getInstance();
+    ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
+    ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
+    ObservableList<String> CB = FXCollections.observableArrayList();
+    ObservableList<String> CBB = FXCollections.observableArrayList();
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
-
     @FXML
     private TableView<PartAbstraction> PartsTable;
     @FXML
@@ -77,11 +75,10 @@ public class PartsController implements Initializable {
     private TableColumn<Installation, String> firstName;
     @FXML
     private TableColumn<Installation, String> surname;
-
     @FXML
     private TextField searchParts;
     @FXML
-    private ComboBox<String> CB1, CB2, CB3,CB4, addPartToInst, availableOcc;
+    private ComboBox<String> CB1, CB2, CB3, CB4, addPartToInst, availableOcc;
     @FXML
     private TextField price1, price2, price3, price4;
     @FXML
@@ -94,26 +91,17 @@ public class PartsController implements Initializable {
     private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn, deleteInstBtn;
     @FXML
     private Button increaseStock, decreaseStock;
-
     @FXML
     private TextField regNumberInstallation;
     @FXML
     private DatePicker instDate;
     @FXML
     private DatePicker warDate;
-
     private Stage AddPartStage;
     private Stage WithdrawPartStage;
-    private ArrayList data=new ArrayList();
+    private ArrayList data = new ArrayList();
     private List<PartAbstraction> List;
     private List<Installation> List2;
-
-    DatabaseRepository instance = DatabaseRepository.getInstance();
-    ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
-    ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
-
-    ObservableList<String> CB=FXCollections.observableArrayList();
-    ObservableList<String> CBB=FXCollections.observableArrayList();
 
 
     /*****************************************************************************************************************/
@@ -121,9 +109,8 @@ public class PartsController implements Initializable {
     /**
      * The initialize method ensures that the combo-boxes which i have created refers to an observableArrayList (CB).
      * Need to click "View All Parts" button so that the updateTable() method puts data into that list object.
-     *
      */
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         try {
             CB1.setItems(CB);
@@ -134,7 +121,10 @@ public class PartsController implements Initializable {
             updateTable();
             viewAllBookingsClick();
 
-        }catch(NullPointerException e){e.printStackTrace();}
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -172,7 +162,7 @@ public class PartsController implements Initializable {
      * The setPartsTable() method has been created to set the data in the TableView
      * Each field has been made to be editable when double clicked, the data can be edited using the interface
      */
-    public void setPartsTable(){
+    public void setPartsTable() {
 
         partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
         partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
@@ -229,9 +219,9 @@ public class PartsController implements Initializable {
 
         tableEntries.removeAll(tableEntries);
 
-        for(int i=0; i<List.size(); i++){
+        for (int i = 0; i < List.size(); i++) {
 
-            if(List.get(i).getPartName().toLowerCase().contains(searchParts.getText())){
+            if (List.get(i).getPartName().toLowerCase().contains(searchParts.getText())) {
                 tableEntries.add(List.get(i));
             }
         }
@@ -244,35 +234,38 @@ public class PartsController implements Initializable {
      * to display the price...
      */
 
-    public void CbSelect(){
+    public void CbSelect() {
 
-        int IdIndex=CB1.getSelectionModel().getSelectedIndex();
+        int IdIndex = CB1.getSelectionModel().getSelectedIndex();
         System.out.println(IdIndex);
-        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        String price = Double.toString(List.get(IdIndex).getPartPrice());
         price1.setText(price);
 
     }
-    public void CbSelect2(){
 
-        int IdIndex=CB2.getSelectionModel().getSelectedIndex();
+    public void CbSelect2() {
+
+        int IdIndex = CB2.getSelectionModel().getSelectedIndex();
         System.out.println(IdIndex);
-        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        String price = Double.toString(List.get(IdIndex).getPartPrice());
         price2.setText(price);
 
     }
-    public void CbSelect3(){
 
-        int IdIndex=CB3.getSelectionModel().getSelectedIndex();
+    public void CbSelect3() {
+
+        int IdIndex = CB3.getSelectionModel().getSelectedIndex();
         System.out.println(IdIndex);
-        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        String price = Double.toString(List.get(IdIndex).getPartPrice());
         price3.setText(price);
 
     }
-    public void CbSelect4(){
 
-        int IdIndex=CB4.getSelectionModel().getSelectedIndex();
+    public void CbSelect4() {
+
+        int IdIndex = CB4.getSelectionModel().getSelectedIndex();
         System.out.println(IdIndex);
-        String price= Double.toString(List.get(IdIndex).getPartPrice());
+        String price = Double.toString(List.get(IdIndex).getPartPrice());
         price4.setText(price);
 
     }
@@ -282,39 +275,38 @@ public class PartsController implements Initializable {
      * Once that button is clicked, the user selects the part id from relevent combo-box and the price is displayed
      * The user needs to input the quantity and click the button which stores the values into an array
      */
-    public void calculateBill(){
+    public void calculateBill() {
 
-        TextField[] prices={price1,price2,price3,price4};
-        TextField[] quantity={qty1,qty2,qty3,qty4};
-        Double total=0.00;
+        TextField[] prices = {price1, price2, price3, price4};
+        TextField[] quantity = {qty1, qty2, qty3, qty4};
+        Double total = 0.00;
 
-        for(int i=0;i<4;i++){
+        for (int i = 0; i < 4; i++) {
 
-            if(!prices[i].getText().equals("")&&!quantity[i].getText().equals("")){
-                total+=(Double.parseDouble(prices[i].getText())*Integer.parseInt(quantity[i].getText()));
+            if (!prices[i].getText().equals("") && !quantity[i].getText().equals("")) {
+                total += (Double.parseDouble(prices[i].getText()) * Integer.parseInt(quantity[i].getText()));
             }
         }
-        totalBill.setText("£ " + total.toString()+"");
+        totalBill.setText("£ " + total.toString() + "");
     }
 
 
     /**
      * TODO: fix the Installation data and set Occurence as editable
-     *
      */
-    public void viewAllBookingsClick(){
+    public void viewAllBookingsClick() {
 
         Criterion c2 = new Criterion<>(Installation.class);
         List2 = pSys.getAllInstallations();
         List2.get(0).getPartOccurrence().getPartOccurrenceID();
-        System.out.println( List2.get(0).getPartOccurrence().getPartOccurrenceID());
-        System.out.println( List2.get(0).getVehicleRegNumber());
-        System.out.println( List2.get(0).getPartOccurrence().getBookingID());
+        System.out.println(List2.get(0).getPartOccurrence().getPartOccurrenceID());
+        System.out.println(List2.get(0).getVehicleRegNumber());
+        System.out.println(List2.get(0).getPartOccurrence().getBookingID());
 
 
         tableEntries2.removeAll(tableEntries2);
 
-        for(int i =0; i< List2.size(); i++){
+        for (int i = 0; i < List2.size(); i++) {
             tableEntries2.add(List2.get(i));
 
         }
@@ -334,7 +326,7 @@ public class PartsController implements Initializable {
                 return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartAbstractionID());
             }
         });
-        
+
         partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                 ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
@@ -353,7 +345,7 @@ public class PartsController implements Initializable {
      * The addToDb() method is responsible for adding new part items to the database, a new object is created which uses
      * the constructor from PartAbstraction and is then saved to the database using commitItem().
      **/
-    public void addToDB() throws Exception{
+    public void addToDB() throws Exception {
 
 
         PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
@@ -361,14 +353,11 @@ public class PartsController implements Initializable {
                 null);
         boolean s = instance.commitItem(newPart);
         List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
-        for(int i=0;i<partAbstractionList.size();i++)
-        {
-            if(i == partAbstractionList.size()-1)
-            {
-                for(int j=0;j<Integer.parseInt(partStockLevelField.getText());j++)
-                {
+        for (int i = 0; i < partAbstractionList.size(); i++) {
+            if (i == partAbstractionList.size() - 1) {
+                for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
                     PartAbstraction partAbstraction = partAbstractionList.get(i);
-                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(),0,-1);
+                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, -1);
                     pSys.addPartOccurrence(partOccurrence);
                 }
             }
@@ -380,11 +369,10 @@ public class PartsController implements Initializable {
     }
 
 
-
     /**
      * This method just resets the text fields on the add part form
      */
-    public void clearAddForm(){
+    public void clearAddForm() {
 
         partNameField.clear();
         partDescriptionField.clear();
@@ -393,27 +381,27 @@ public class PartsController implements Initializable {
 
     }
 
-    public void saveChanges(){
+    public void saveChanges() {
 
-            PartAbstraction singlePart;
+        PartAbstraction singlePart;
 
-            for (int i = 0; i < tableEntries.size(); i++) {
+        for (int i = 0; i < tableEntries.size(); i++) {
 
-                PartsTable.getSelectionModel().select(i);
-                singlePart = PartsTable.getSelectionModel().getSelectedItem();
-                System.out.println(singlePart.getPartStockLevel());
-                boolean c = instance.commitItem(singlePart);
+            PartsTable.getSelectionModel().select(i);
+            singlePart = PartsTable.getSelectionModel().getSelectedItem();
+            System.out.println(singlePart.getPartStockLevel());
+            boolean c = instance.commitItem(singlePart);
 
-            }
+        }
 
 
-            showInfo("Changes have been saved");
-            PartsTable.getSelectionModel().clearSelection();
+        showInfo("Changes have been saved");
+        PartsTable.getSelectionModel().clearSelection();
 
 
     }
 
-    public void showInfo(String message){
+    public void showInfo(String message) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Updated to Database");
@@ -426,29 +414,29 @@ public class PartsController implements Initializable {
      * deletes stock item
      */
 
-    public void deletePart(){
+    public void deletePart() {
 
         try {
 
             PartAbstraction part = PartsTable.getSelectionModel().getSelectedItem();
 
-            if (part == null)
-            {
+            if (part == null) {
                 throw new Exception();
             }
             if ((!showConfirmation("Sure you want to delete this part?"))) {
                 return;
             }
             boolean result = pSys.deletePart(part.getPartAbstractionID());
-            if(result){
+            if (result) {
                 updateTable();
             }
-            else{
+            else {
                 showError("Part hasn't been deleted");
             }
 
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
             showError("No part has been selected");
 
@@ -456,7 +444,7 @@ public class PartsController implements Initializable {
 
     }
 
-    public void showError(String message){
+    public void showError(String message) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -473,23 +461,24 @@ public class PartsController implements Initializable {
         conAlert.showAndWait();
         if (conAlert.getResult() == ButtonType.OK) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
     /**
-     *  This method increases stock by 1 when selecting a part from table and pressing +Stock
+     * This method increases stock by 1 when selecting a part from table and pressing +Stock
      */
-    public void increaseStockLevel(){
+    public void increaseStockLevel() {
 
 
-        try{
+        try {
 
             PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
-            PartOccurrence partOccurrence = new PartOccurrence(partIncrease.getPartAbstractionID(), 0,0);
+            PartOccurrence partOccurrence = new PartOccurrence(partIncrease.getPartAbstractionID(), 0, 0);
             pSys.addPartOccurrence(partOccurrence);
-            int c=partIncrease.getPartStockLevel()+1;
+            int c = partIncrease.getPartStockLevel() + 1;
             System.out.println(c);
 
             partIncrease.setPartStockLevel(c);
@@ -498,7 +487,8 @@ public class PartsController implements Initializable {
             updateTable();
 
 
-        }catch(Exception e){
+        }
+        catch (Exception e) {
 
             showError("Please select a part first to increase stock");
 
@@ -509,33 +499,33 @@ public class PartsController implements Initializable {
     /**
      * This method decreases stock by 1 when selecting a part from table and pressing -Stock
      */
-    public void decreaseStockLevel(){
+    public void decreaseStockLevel() {
 
 
-        try{
+        try {
 
             PartAbstraction partDecrease = PartsTable.getSelectionModel().getSelectedItem();
 
-            int c=partDecrease.getPartStockLevel()-1;
+            int c = partDecrease.getPartStockLevel() - 1;
             System.out.println(c);
             System.out.println(partDecrease.getPartAbstractionID());
             List<PartOccurrence> partOccurrences = pSys.getAllFreeOccurrences(partDecrease);
             System.out.println("size is " + partOccurrences.size());
             PartOccurrence partOccurrence = partOccurrences.get(0);
-            pSys.deleteOccurrence(partOccurrence,partDecrease);
+            pSys.deleteOccurrence(partOccurrence, partDecrease);
             partDecrease.setPartStockLevel(c);
 
             saveChanges();
             updateTable();
 
 
-        }catch(IndexOutOfBoundsException | NullPointerException e){
+        }
+        catch (IndexOutOfBoundsException | NullPointerException e) {
 
-            if(e instanceof IndexOutOfBoundsException)
-            {
-               e.printStackTrace();
+            if (e instanceof IndexOutOfBoundsException) {
+                e.printStackTrace();
             }
-            else if(e instanceof NullPointerException){
+            else if (e instanceof NullPointerException) {
                 showError("Please select a part first to decrease stock");
             }
 
@@ -561,7 +551,8 @@ public class PartsController implements Initializable {
             }
 
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
             showError("Please select an installation first to delete");
 
@@ -571,13 +562,13 @@ public class PartsController implements Initializable {
 
     public void addInstallation() {
 
-        ZonedDateTime dateInstallation= ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
+        ZonedDateTime dateInstallation = ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
         ZonedDateTime dateWarranty = ZonedDateTime.of(warDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
 
 
         System.out.print(dateInstallation + " , " + dateWarranty);
 
-       // PartOccurrence partOccurrence = pSys.getAllFreeOccurrences(addPartToInst.getSelectionModel().getSelectedItem());
+        // PartOccurrence partOccurrence = pSys.getAllFreeOccurrences(addPartToInst.getSelectionModel().getSelectedItem());
 
         Installation newInst = new Installation(dateInstallation, dateWarranty, regNumberInstallation.getText(),
                 addPartToInst.getVisibleRowCount(), null);
@@ -590,15 +581,14 @@ public class PartsController implements Initializable {
 
 
     }
-    private java.time.LocalDate toLocalDate(Date date)
-    {
+
+    private java.time.LocalDate toLocalDate(Date date) {
         ZoneId zoneId = ZoneId.systemDefault();
         Instant instant = date.toInstant();
         return instant.atZone(zoneId).toLocalDate();
     }
 
-    private Date fromLocalDate(java.time.LocalDate localDate)
-    {
+    private Date fromLocalDate(java.time.LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 

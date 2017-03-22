@@ -46,7 +46,7 @@ public class CalendarPaneController {
             ((DetailsPaneController) master.getController(DetailsPaneController.class)).setPaneTitleToView();
             return null;
         });
-        bookingAgenda.setEditAppointmentCallback((appointment) -> null );
+        bookingAgenda.setEditAppointmentCallback((appointment) -> null);
 
         master.setController(CalendarPaneController.class, this);
     }
@@ -86,7 +86,7 @@ public class CalendarPaneController {
 
     void addBookingAppointment(DiagRepBooking booking) {
         bookingAgenda.appointments().removeIf(p ->
-            p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
+                p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
         );
 
         this.bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));

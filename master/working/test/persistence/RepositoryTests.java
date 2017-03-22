@@ -4,7 +4,6 @@ import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionOperator;
 import logic.criterion.CriterionRepository;
-
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -13,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcello De Bernardi
@@ -32,7 +31,7 @@ public class RepositoryTests {
         long endTime = System.nanoTime();
 
         try {
-            assertTrue((endTime - startTime)/1000 < 400000);
+            assertTrue((endTime - startTime) / 1000 < 400000);
         }
         catch (AssertionError e) {
             e.printStackTrace();
@@ -83,10 +82,10 @@ public class RepositoryTests {
         List<User> result = DatabaseRepository
                 .getInstance()
                 .getByCriteria(new Criterion<>(
-                                User.class,
-                                "userID",
-                                CriterionOperator.EqualTo,
-                                "55555"));
+                        User.class,
+                        "userID",
+                        CriterionOperator.EqualTo,
+                        "55555"));
 
         DatabaseRepository.getInstance().commitItem(new Vehicle(
                 "TEST REG", 1, VehicleType.Car, "TestModel", "QMUL Car company",
@@ -107,7 +106,7 @@ public class RepositoryTests {
                 10,
                 10,
                 null
-                ));
+        ));
 
         List<PartAbstraction> parts = DatabaseRepository
                 .getInstance()

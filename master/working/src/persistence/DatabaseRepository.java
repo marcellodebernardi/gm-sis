@@ -1,8 +1,8 @@
 package persistence;
 
+import domain.Searchable;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
-import domain.Searchable;
 
 import java.sql.*;
 import java.util.List;
@@ -35,7 +35,8 @@ public class DatabaseRepository implements CriterionRepository {
             connection = DriverManager.getConnection(DB_URL);
             mapper = ObjectRelationalMapper.getInstance();
             mapper.initialize(this);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
@@ -63,7 +64,8 @@ public class DatabaseRepository implements CriterionRepository {
     protected void finalize() {
         try {
             connection.close();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
@@ -77,7 +79,8 @@ public class DatabaseRepository implements CriterionRepository {
         try {
             statement = connection.prepareStatement(mapper.toSELECTQuery(criteria).toString());
             return mapper.toObjects(criteria.getCriterionClass(), statement.executeQuery());
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.err.print(e.getMessage());
             return null;
         }
@@ -102,7 +105,8 @@ public class DatabaseRepository implements CriterionRepository {
             connection.commit();
             connection.setAutoCommit(true);
             return true;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.err.print(e.getMessage());
             return false;
         }
@@ -127,7 +131,8 @@ public class DatabaseRepository implements CriterionRepository {
             connection.commit();
             connection.setAutoCommit(false);
             return true;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.err.print(e.getMessage());
             return false;
         }
@@ -137,7 +142,7 @@ public class DatabaseRepository implements CriterionRepository {
      * Gets the next ID that will be used for a row in the table specified as
      * the argument.
      *
-     * @param table table to check
+     * @param table      table to check
      * @param primaryKey column used as primary key
      * @return next ID value that will be used
      */
@@ -162,7 +167,8 @@ public class DatabaseRepository implements CriterionRepository {
     ResultSet runSQL(String query) {
         try {
             return connection.prepareStatement(query).executeQuery();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;
         }

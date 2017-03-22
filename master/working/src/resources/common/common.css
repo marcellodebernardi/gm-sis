@@ -3,6 +3,7 @@
     -fx-font-family: 'Roboto Light';
     -fx-background-color: white;
 }
+
 #tabHBox {
     -fx-background-color: white;
     -fx-fit-to-width: true;
@@ -12,6 +13,7 @@
     -fx-border-color: darkgrey;
     -fx-border-width: 0px 0px 1px 0px;
 }
+
 #tabHBox Button {
     -fx-pref-height: 3.5em;
     -fx-background-color: #e0e0e0;
@@ -19,12 +21,15 @@
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
 }
+
 #tabHBox Button:hover {
     -fx-background-color: lightgray;
 }
+
 #logoutButton {
     -fx-background-color: darkgrey;
 }
+
 #logoutButton:hover {
     -fx-background-color: red;
     -fx-text-fill: white;

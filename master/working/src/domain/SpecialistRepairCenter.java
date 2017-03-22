@@ -86,6 +86,9 @@ public class SpecialistRepairCenter implements Searchable {
         return this.bookings;
     }
 
+    public void setBookings(List SpecRepBookings) {
+        this.bookings = SpecRepBookings;
+    }
 
     public boolean setName(String name) {
         if (!name.equals("")) {
@@ -118,11 +121,6 @@ public class SpecialistRepairCenter implements Searchable {
         }
         return false;
     }
-
-    public void setBookings(List SpecRepBookings) {
-        this.bookings = SpecRepBookings;
-    }
-
 
     private boolean containsChar(String number) {
         try {

@@ -2,82 +2,46 @@ package controllers.customer;
 
 import controllers.booking.BookingController;
 import controllers.login.LoginController;
-import controllers.user.UserController;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ComboBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.collections.*;
+import domain.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
-import javafx.stage.WindowEvent;
-import javafx.util.*;
-import javafx.fxml.*;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.util.Callback;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.BooleanStringConverter;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.lang.*;
-import java.text.ParseException;
+import logic.booking.BookingSystem;
+import logic.customer.CustomerSystem;
+import logic.vehicle.VehicleSys;
+
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
 //import logic.*;
-import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
-import logic.customer.CustomerSystem;
-import logic.vehicle.*;
-import logic.booking.*;
-import logic.criterion.Criterion;
-import domain.*;
-import domain.DiagRepBooking;
-import persistence.DatabaseRepository;
-import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 /**
  * Created by EBUBECHUKWU on 19/02/2017.
  */
 
-public class CustomerController implements Initializable
-{
+public class CustomerController implements Initializable {
     private static CustomerController instance;
-
-    @FXML
-    public CustomerSystem cSystem = CustomerSystem.getInstance();
-
     final ObservableList tableEntriesCustomer = FXCollections.observableArrayList();
     final ObservableList tableEntriesVehicle = FXCollections.observableArrayList();
     final ObservableList tableEntriesBooking = FXCollections.observableArrayList();
     final ObservableList tableEntriesParts = FXCollections.observableArrayList();
-
+    @FXML
+    public CustomerSystem cSystem = CustomerSystem.getInstance();
+    ////for 'AddCustomerVehiclePopupView.fxml' instance variables
+    Stage addVehicleStage;
     ////for 'CustomerView.fxml' instance variables
     ////left pane (add and edit customer view)
     @FXML
@@ -88,7 +52,6 @@ public class CustomerController implements Initializable
     private ComboBox customerType = new ComboBox();
     @FXML
     private Button saveCustomerAndAddVehicleButton, saveCustomerButton, deleteCustomerButton, clearCustomerButton = new Button();
-
     ////right pane (search customer)
     @FXML
     private TextField customerSearch = new TextField();
@@ -96,7 +59,6 @@ public class CustomerController implements Initializable
     private ComboBox customerTypeSearch = new ComboBox();
     @FXML
     private Button customerSearchButton, newCustomerFormButton, editSelectedCustomerButton, makeBookingButton, deleteSelectedCustomerButton, logoutButton = new Button();
-
     ////right pane (customer table view)
     @FXML
     private TableView<Customer> customerTable;
@@ -106,7 +68,6 @@ public class CustomerController implements Initializable
     private TableColumn<Customer, String> customerTableColumnFirstname, customerTableColumnSurname, customerTableColumnAddress, customerTableColumnPostcode, customerTableColumnPhone, customerTableColumnEmail;
     @FXML
     private TableColumn<Customer, CustomerType> customerTableColumnType;
-
     ////(customer vehicle table view)
     @FXML
     private TableView<Vehicle> customerVehicleTable;
@@ -120,7 +81,6 @@ public class CustomerController implements Initializable
     private TableColumn<Vehicle, String> customerVehicleTableColumnManufacturer;
     @FXML
     private TableColumn<Vehicle, Boolean> customerVehicleTableColumnWarranty;
-
     ////(customer booking table view)
     private BookingController master;
     private BookingSystem bookingSystem;
@@ -140,7 +100,6 @@ public class CustomerController implements Initializable
     private TableColumn<DiagRepBooking, Double> customerBookingTableColumnBill;
     @FXML
     private TableColumn<DiagRepBooking, String> customerBookingTableColumnSettlementStatus;
-
     ////(customer vehicle parts table view)
     @FXML
     private TableView<PartAbstraction> customerVehiclePartTable;
@@ -148,15 +107,9 @@ public class CustomerController implements Initializable
     private TableColumn<PartAbstraction, String> customerVehiclePartTableColumnName;
     @FXML
     private TableColumn<PartAbstraction, String> customerVehiclePartTableColumnDescription;
-
     ////for 'DeleteCustomerConfirmation.fxml' instance variables
     @FXML
     private Button deleteCustomerConfirmationYes, deleteCustomerConfirmationNo = new Button();
-
-
-    ////for 'AddCustomerVehiclePopupView.fxml' instance variables
-    Stage addVehicleStage;
-
     private VehicleSys vSystem = VehicleSys.getInstance();
     private BookingSystem bSystem = BookingSystem.getInstance();
 
@@ -175,17 +128,21 @@ public class CustomerController implements Initializable
     private Button addV, clearV = new Button();
 
 
-    public static CustomerController getInstance()
-    {
+    public CustomerController() {
+        master = BookingController.getInstance();
+        bookingSystem = BookingSystem.getInstance();
+        timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
+        dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    }
+
+    public static CustomerController getInstance() {
         if (instance == null) instance = new CustomerController();
         return instance;
     }
 
     //method for adding customer to database
-    public void addCustomerToDB() throws Exception
-    {
-        try
-        {
+    public void addCustomerToDB() throws Exception {
+        try {
             //initialising variables
             String cFirstname = customerFirstname.getText();
             String cSurname = customerSurname.getText();
@@ -198,33 +155,26 @@ public class CustomerController implements Initializable
 
             checkFields = checkCustomerFields();
 
-            if(customerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
-            {
+            if (customerType.getSelectionModel().getSelectedItem().toString().equals("Private")) {
                 cType = CustomerType.Private;
             }
-            else if(customerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
-            {
+            else if (customerType.getSelectionModel().getSelectedItem().toString().equals("Business")) {
                 cType = CustomerType.Business;
             }
 
-            if(checkFields)
-            {
+            if (checkFields) {
                 boolean addedCustomer = cSystem.addCustomer(cFirstname, cSurname, cAddress, cPostcode, cPhone, cEmail, cType);
-                if(addedCustomer)
-                {
+                if (addedCustomer) {
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
 
-                    if(addVehicleStage != null)
-                    {
-                        if(addVehicleStage.isShowing())
-                        {
+                    if (addVehicleStage != null) {
+                        if (addVehicleStage.isShowing()) {
                             errorAlert("Vehicle window is already open");
                             addVehicleStage.setAlwaysOnTop(true);
                             return;
                         }
                     }
-                    else
-                    {
+                    else {
                         newCustomerForm();
                         customerVehicleTable.setItems(null);
                         customerVehiclePartTable.setItems(null);
@@ -232,45 +182,37 @@ public class CustomerController implements Initializable
                         CustomerVehicleController.getInstance().showVehiclePopup();
                     }
                 }
-                else
-                {
+                else {
                     errorAlert("Cannot add customer. Ensure all fields have been entered correctly.");
                 }
                 customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
             }
-            else
-            {
+            else {
                 //error message if checkFields=false meaning one or more Customer fields were invalid
                 errorAlert("Cannot add customer. Ensure all fields have been entered correctly.");
             }
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Add Customer Error");
             e.printStackTrace();
         }
     }
 
-
     //method for deleting customer from database
-    public void deleteCustomerFromDB() throws Exception
-    {
-        try
-        {
+    public void deleteCustomerFromDB() throws Exception {
+        try {
             String cID = customerID.getText();
             boolean check = false;
 
-            if(cID.equals(""))
-            {
+            if (cID.equals("")) {
                 errorAlert("Customer has not yet been selected for deletion. Check Customer ID");
                 return;
             }
-            if(confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false)
-            {
+            if (confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false) {
                 return;
             }
             check = true;
-            if(check) {
+            if (check) {
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
@@ -279,40 +221,36 @@ public class CustomerController implements Initializable
                     customerBookingTable.setItems(null);
                     newCustomerForm();
 
-                } else {
+                }
+                else {
                     errorAlert("Can't find Customer record to delete");
                 }
             }
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Delete Customer Error");
             e.printStackTrace();
         }
     }
 
     //method for deleting customer from database
-    public void deleteTableSelectedCustomerFromDB() throws Exception
-    {
+    public void deleteTableSelectedCustomerFromDB() throws Exception {
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
-        try
-        {
+        try {
             Customer customer = (Customer) customerTable.getSelectionModel().getSelectedItem();
             String cID = Integer.toString(customer.getCustomerID());
             boolean check = false;
 
-            if(cID.equals(""))
-            {
+            if (cID.equals("")) {
                 errorAlert("Customer has not yet been selected for deletion. Check Customer ID");
                 return;
             }
-            if(confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false)
-            {
+            if (confirmationAlert("Delete Customer Confirmation", "Are you sure you want to delete Customer?") == false) {
                 return;
             }
             check = true;
-            if(check) {
+            if (check) {
                 boolean deletedCustomer = cSystem.deleteCustomer(Integer.parseInt(cID));
                 if (deletedCustomer) {
                     tableViewOfCustomersFromDB(cSystem.getAllCustomers());
@@ -321,22 +259,20 @@ public class CustomerController implements Initializable
                     customerBookingTable.setItems(null);
                     newCustomerForm();
 
-                } else {
+                }
+                else {
                     errorAlert("Can't find Customer record to delete");
                 }
             }
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Delete Customer Error");
             e.printStackTrace();
         }
     }
 
-    public void searchAllCustomersInDB()
-    {
-        try
-        {
+    public void searchAllCustomersInDB() {
+        try {
             customerVehicleTable.setItems(null);
             customerVehiclePartTable.setItems(null);
             customerBookingTable.setItems(null);
@@ -345,62 +281,51 @@ public class CustomerController implements Initializable
             tableViewOfCustomersFromDB(allCustomers);
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search All Customers Error");
             e.printStackTrace();
         }
     }
 
-    public void searchCustomerTypeInDB()
-    {
+    public void searchCustomerTypeInDB() {
         customerVehicleTable.setItems(null);
         customerVehiclePartTable.setItems(null);
         customerBookingTable.setItems(null);
 
-        try
-        {
+        try {
             CustomerType cType = null;
             List<Customer> customers = new ArrayList<Customer>(0);
-            if(customerTypeSearch.getSelectionModel().getSelectedItem() != null)
-            {
-                if(customerTypeSearch.getSelectionModel().getSelectedItem().toString().equals("Private"))
-                {
+            if (customerTypeSearch.getSelectionModel().getSelectedItem() != null) {
+                if (customerTypeSearch.getSelectionModel().getSelectedItem().toString().equals("Private")) {
                     cType = CustomerType.Private;
                 }
-                else
-                {
+                else {
                     cType = CustomerType.Business;
                 }
             }
             customers = cSystem.searchCustomerByType(cType);
             tableViewOfCustomersFromDB(customers);
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search by Customer Type Error");
             e.printStackTrace();
         }
     }
 
     //method for searching for customer in database
-    public void searchCustomerInDB()
-    {
+    public void searchCustomerInDB() {
         customerVehicleTable.setItems(null);
         customerVehiclePartTable.setItems(null);
         customerBookingTable.setItems(null);
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
 
-        try
-        {
+        try {
             List<Customer> searchCustomerList = new ArrayList<Customer>(0);
             searchCustomerList = cSystem.searchCustomerByFirstname(customerSearch.getText());
-            if(searchCustomerList.size()==0)
-            {
+            if (searchCustomerList.size() == 0) {
                 searchCustomerList = cSystem.searchCustomerBySurname(customerSearch.getText());
                 tableViewOfCustomersFromDB(searchCustomerList);
-                if(searchCustomerList.size()==0)
-                {
+                if (searchCustomerList.size() == 0) {
                     searchCustomerList = cSystem.searchCustomerByVehicleRegistrationNumber(customerSearch.getText());
                     tableViewOfCustomersFromDB(searchCustomerList);
                     return;
@@ -409,24 +334,20 @@ public class CustomerController implements Initializable
             }
             tableViewOfCustomersFromDB(searchCustomerList);
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search Customer Error");
             e.printStackTrace();
         }
     }
 
     //method for showing customer details in table view
-    public void tableViewOfCustomersFromDB(List<Customer> searchList) throws Exception
-    {
-        try
-        {
+    public void tableViewOfCustomersFromDB(List<Customer> searchList) throws Exception {
+        try {
             customerTable.setDisable(false);
             tableEntriesCustomer.removeAll(tableEntriesCustomer);
 
             //arranging default list from newest to oldest customer
-            for(int i=searchList.size()-1; i>=0; i--)
-            {
+            for (int i = searchList.size() - 1; i >= 0; i--) {
                 tableEntriesCustomer.add(searchList.get(i));
             }
 
@@ -460,12 +381,10 @@ public class CustomerController implements Initializable
 
                 @Override
                 public CustomerType fromString(String string) {
-                    if(string.equals("Private"))
-                    {
+                    if (string.equals("Private")) {
                         return CustomerType.Private;
                     }
-                    else
-                    {
+                    else {
                         return CustomerType.Business;
                     }
                 }
@@ -473,20 +392,16 @@ public class CustomerController implements Initializable
 
             customerTable.setItems(tableEntriesCustomer);
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Customer Table view Error");
             e.printStackTrace();
         }
     }
 
-    public void editTableSelectedCustomerFromDB() throws Exception
-    {
-        try
-        {
+    public void editTableSelectedCustomerFromDB() throws Exception {
+        try {
             Customer customer = customerTable.getSelectionModel().getSelectedItem();
-            if(customer == null)
-            {
+            if (customer == null) {
                 throw new Exception();
             }
             customerID.setText(Integer.toString(customer.getCustomerID()));
@@ -506,21 +421,18 @@ public class CustomerController implements Initializable
             searchCustomerVehicleInDB();//testing to find customer's vehicles
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Edit Customer Error");
             e.printStackTrace();
         }
     }
 
-    public void updateCustomerInDB() throws Exception
-    {
+    public void updateCustomerInDB() throws Exception {
         customerVehicleTable.setItems(null);
         customerVehiclePartTable.setItems(null);
         customerBookingTable.setItems(null);
 
-        try
-        {
+        try {
             String cFirstname = customerFirstname.getText();
             String cSurname = customerSurname.getText();
             String cAddress = customerAddress.getText();
@@ -532,19 +444,16 @@ public class CustomerController implements Initializable
             boolean checkFields = false;
             checkFields = checkCustomerFields();
 
-            if(customerType.getSelectionModel().getSelectedItem().toString().equals("Private"))
-            {
+            if (customerType.getSelectionModel().getSelectedItem().toString().equals("Private")) {
                 cType = CustomerType.Private;
             }
-            else if(customerType.getSelectionModel().getSelectedItem().toString().equals("Business"))
-            {
+            else if (customerType.getSelectionModel().getSelectedItem().toString().equals("Business")) {
                 cType = CustomerType.Business;
             }
 
             Customer customer = cSystem.getACustomers(Integer.parseInt(customerID.getText()));
 
-            if(checkFields)
-            {
+            if (checkFields) {
                 customer.setCustomerID(Integer.parseInt(customerID.getText()));
                 customer.setCustomerFirstname(cFirstname);
                 customer.setCustomerSurname(cSurname);
@@ -556,27 +465,23 @@ public class CustomerController implements Initializable
 
                 boolean editedCustomer = cSystem.editCustomer(customer);
 
-                if(editedCustomer)
-                {
+                if (editedCustomer) {
                     newCustomerForm();
                     searchAllCustomersInDB();
                 }
-                else
-                {
+                else {
                     errorAlert("Cannot update customer. Ensure all fields have been entered correctly.");
                 }
             }
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Update Customer Error");
             e.printStackTrace();
         }
     }
 
-    public void newCustomerForm()
-    {
+    public void newCustomerForm() {
         customerVehicleTable.setItems(null);
         customerVehiclePartTable.setItems(null);
         customerBookingTable.setItems(null);
@@ -590,8 +495,7 @@ public class CustomerController implements Initializable
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
     }
 
-    public void clearCustomerFields()
-    {
+    public void clearCustomerFields() {
         customerVehicleTable.setItems(null);
         customerVehiclePartTable.setItems(null);
         customerBookingTable.setItems(null);
@@ -607,38 +511,31 @@ public class CustomerController implements Initializable
         customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
     }
 
-    public void errorAlert(String message)
-    {
+    public void errorAlert(String message) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setTitle("Error Message");
         errorAlert.setHeaderText(message);
         errorAlert.showAndWait();
     }
 
-    public boolean confirmationAlert(String title, String message)
-    {
+    public boolean confirmationAlert(String title, String message) {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
         deleteAlert.setTitle(title);
         deleteAlert.setHeaderText(message);
         deleteAlert.showAndWait();
-        if(deleteAlert.getResult() == ButtonType.OK)
-        {
+        if (deleteAlert.getResult() == ButtonType.OK) {
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
 
-    public List<Vehicle> searchCustomerVehicleInDB()
-    {
-        try
-        {
+    public List<Vehicle> searchCustomerVehicleInDB() {
+        try {
             List<Vehicle> searchVehicleList = new ArrayList<Vehicle>(0);
             Customer customer = customerTable.getSelectionModel().getSelectedItem();
-            if(customer == null)
-            {
+            if (customer == null) {
                 throw new Exception();
             }
             searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
@@ -647,35 +544,29 @@ public class CustomerController implements Initializable
 
             return searchVehicleList;
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search Customer Vehicle Error");
             e.printStackTrace();
         }
         return null;
     }
 
-    public List<DiagRepBooking> searchCustomerBookingInDB()
-    {
-        try
-        {
+    public List<DiagRepBooking> searchCustomerBookingInDB() {
+        try {
             List<DiagRepBooking> searchBookingList = new ArrayList<DiagRepBooking>(0);
             Vehicle vehicle = customerVehicleTable.getSelectionModel().getSelectedItem();
             searchBookingList = cSystem.searchCustomerBookings(vehicle.getVehicleRegNumber());
             return searchBookingList;
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search Customer Booking Error");
             e.printStackTrace();
         }
         return null;
     }
 
-    public List<PartAbstraction> searchCustomerVehiclePartsInstalledInDB()
-    {
-        try
-        {
+    public List<PartAbstraction> searchCustomerVehiclePartsInstalledInDB() {
+        try {
             List<Installation> installationList = new ArrayList<Installation>(0);
             List<PartOccurrence> partOccurrenceList = new ArrayList<PartOccurrence>(0);
             List<PartAbstraction> partAbstractionList = new ArrayList<PartAbstraction>(0);
@@ -686,79 +577,64 @@ public class CustomerController implements Initializable
             List<Integer> installationIDList = new ArrayList<Integer>(0);
             List<Integer> partAbstractionIDList = new ArrayList<Integer>(0);
 
-            for(int i=0; i<installationList.size(); i++)
-            {
+            for (int i = 0; i < installationList.size(); i++) {
                 installationIDList.add(installationList.get(i).getInstallationID());
             }
 
-            for(int i=0; i<installationIDList.size(); i++)
-            {
+            for (int i = 0; i < installationIDList.size(); i++) {
                 partOccurrenceList = cSystem.searchPartOccurrenceTable(installationIDList.get(i));
                 partAbstractionIDList.add(partOccurrenceList.get(i).getPartAbstractionID());
             }
 
-            for(int i=0; i<partAbstractionIDList.size(); i++)
-            {
+            for (int i = 0; i < partAbstractionIDList.size(); i++) {
                 partAbstractionList = cSystem.searchPartAbstractionTable(partAbstractionIDList.get(i));
                 PartAbstraction pa = new PartAbstraction(partAbstractionList.get(i).getPartName(), partAbstractionList.get(i).getPartDescription(), partAbstractionList.get(i).getPartPrice(), partAbstractionList.get(i).getPartStockLevel(), null);
                 partList.add(pa);
             }
             return partList;
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Search Customer Vehicle Part Error");
             e.printStackTrace();
         }
         return null;
     }
 
-    public void initiateNewBooking()
-    {
-        try
-        {
+    public void initiateNewBooking() {
+        try {
             BookingController.getInstance().show();
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Initiate new booking Error");
             e.printStackTrace();
         }
     }
 
-    public void logout()
-    {
-        try
-        {
+    public void logout() {
+        try {
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
-            if(confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true)
-            {
+            if (confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true) {
                 LoginController.getInstance().exitHandler();
             }
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Logout from CustomerController Error");
             e.printStackTrace();
         }
     }
 
-    public void tableViewOfCustomerVehicleFromDB() throws Exception
-    {
-        if(customerTable.getSelectionModel().getSelectedItem() == null)
-        {
+    public void tableViewOfCustomerVehicleFromDB() throws Exception {
+        if (customerTable.getSelectionModel().getSelectedItem() == null) {
             return;
         }
 
-        try
-        {
+        try {
             customerVehicleTable.setDisable(false);
             tableEntriesVehicle.removeAll(tableEntriesVehicle);
             List<Vehicle> searchList = searchCustomerVehicleInDB();
 
             //arranging default list from newest to oldest customer vehicle
-            for(int i=searchList.size()-1; i>=0; i--)
-            {
+            for (int i = searchList.size() - 1; i >= 0; i--) {
                 tableEntriesVehicle.add(searchList.get(i));
             }
 
@@ -768,24 +644,19 @@ public class CustomerController implements Initializable
             customerVehicleTableColumnType.setCellValueFactory(new PropertyValueFactory<Vehicle, VehicleType>("vehicleType"));
             customerVehicleTableColumnType.setCellFactory(TextFieldTableCell.<Vehicle, VehicleType>forTableColumn(new StringConverter<VehicleType>() {
                 @Override
-                public String toString(VehicleType object)
-                {
+                public String toString(VehicleType object) {
                     return object.toString();
                 }
 
                 @Override
-                public VehicleType fromString(String string)
-                {
-                    if(string.equals("Car"))
-                    {
+                public VehicleType fromString(String string) {
+                    if (string.equals("Car")) {
                         return VehicleType.Car;
                     }
-                    else if(string.equals("Van"))
-                    {
+                    else if (string.equals("Van")) {
                         return VehicleType.Van;
                     }
-                    else
-                    {
+                    else {
                         return VehicleType.Truck;
                     }
                 }
@@ -805,25 +676,14 @@ public class CustomerController implements Initializable
             tableViewOfCustomerBookingFromDB();
             tableViewOfCustomerVehiclePartFromDB();//MAY REMOVE
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("tableViewOfCustomerVehicleFromDB Error");
             e.printStackTrace();
         }
     }
 
-    public CustomerController()
-    {
-        master = BookingController.getInstance();
-        bookingSystem = BookingSystem.getInstance();
-        timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
-        dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    }
-
-    public void tableViewOfCustomerVehiclePartFromDB() throws Exception
-    {
-        try
-        {
+    public void tableViewOfCustomerVehiclePartFromDB() throws Exception {
+        try {
             customerVehiclePartTable.setDisable(false);
             tableEntriesParts.removeAll(tableEntriesParts);
             List<PartAbstraction> searchList = searchCustomerVehiclePartsInstalledInDB();
@@ -831,8 +691,7 @@ public class CustomerController implements Initializable
             System.out.println("testing parts. total installed: " + searchList.size());//testing parts
 
             //arranging default list from newest to oldest customer vehicle part
-            for(int i=searchList.size()-1; i>=0; i--)
-            {
+            for (int i = searchList.size() - 1; i >= 0; i--) {
                 tableEntriesParts.add(searchList.get(i));
             }
 
@@ -846,24 +705,20 @@ public class CustomerController implements Initializable
 
             tableViewOfCustomerBookingFromDB();//for populating
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("tableViewOfCustomerVehiclePartFromDB Error");
             e.printStackTrace();
         }
     }
 
-    public void tableViewOfCustomerBookingFromDB() throws Exception
-    {
-        try
-        {
+    public void tableViewOfCustomerBookingFromDB() throws Exception {
+        try {
             customerBookingTable.setDisable(false);
             tableEntriesBooking.removeAll(tableEntriesBooking);
             List<DiagRepBooking> searchList = searchCustomerBookingInDB();
 
             //arranging default list from newest to oldest customer booking
-            for(int i=searchList.size()-1; i>=0; i--)
-            {
+            for (int i = searchList.size() - 1; i >= 0; i--) {
                 tableEntriesBooking.add(searchList.get(i));
             }
 
@@ -899,8 +754,7 @@ public class CustomerController implements Initializable
 
             customerBookingTable.setItems(tableEntriesBooking);
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("tableViewOfCustomerBookingFromDB Error");
             e.printStackTrace();
         }
@@ -908,159 +762,128 @@ public class CustomerController implements Initializable
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
         searchAllCustomersInDB();
     }
 
-    public boolean checkCustomerFields()
-    {
-        try
-        {
-            if(customerFirstname.getText().equals(""))
-            {
+    public boolean checkCustomerFields() {
+        try {
+            if (customerFirstname.getText().equals("")) {
                 errorAlert("'Customer First name' field is empty. Enter First name");
                 return false;
             }
-            if(customerFirstname.getText().length()<2)
-            {
+            if (customerFirstname.getText().length() < 2) {
                 errorAlert("'Customer First name' is too short. Minimum is 2 characters");
                 return false;
             }
-            if(customerFirstname.getText().length()>30)
-            {
+            if (customerFirstname.getText().length() > 30) {
                 errorAlert("'Customer First name' is too long. Maximum is 30 characters");
                 return false;
             }
-            if((customerFirstname.getText().contains("`"))||(customerFirstname.getText().contains("¬"))||(customerFirstname.getText().contains("!"))||(customerFirstname.getText().contains("\""))||(customerFirstname.getText().contains("£"))||(customerFirstname.getText().contains("$"))||(customerFirstname.getText().contains("%"))||(customerFirstname.getText().contains("^"))||(customerFirstname.getText().contains("&"))||(customerFirstname.getText().contains("*"))||(customerFirstname.getText().contains("("))||(customerFirstname.getText().contains(")"))||(customerFirstname.getText().contains("_"))||(customerFirstname.getText().contains("+"))||(customerFirstname.getText().contains("="))||(customerFirstname.getText().contains("{"))||(customerFirstname.getText().contains("}"))||(customerFirstname.getText().contains("["))||(customerFirstname.getText().contains("]"))||(customerFirstname.getText().contains(":"))||(customerFirstname.getText().contains(";"))||(customerFirstname.getText().contains("@"))||(customerFirstname.getText().contains("'"))||(customerFirstname.getText().contains("~"))||(customerFirstname.getText().contains("#"))||(customerFirstname.getText().contains("<"))||(customerFirstname.getText().contains(">"))||(customerFirstname.getText().contains(","))||(customerFirstname.getText().contains("."))||(customerFirstname.getText().contains("?"))||(customerFirstname.getText().contains("/"))||(customerFirstname.getText().contains("|"))||(customerFirstname.getText().contains("1"))||(customerFirstname.getText().contains("2"))||(customerFirstname.getText().contains("3"))||(customerFirstname.getText().contains("4"))||(customerFirstname.getText().contains("5"))||(customerFirstname.getText().contains("6"))||(customerFirstname.getText().contains("7"))||(customerFirstname.getText().contains("8"))||(customerFirstname.getText().contains("9"))||(customerFirstname.getText().contains("0")))
-            {
+            if ((customerFirstname.getText().contains("`")) || (customerFirstname.getText().contains("¬")) || (customerFirstname.getText().contains("!")) || (customerFirstname.getText().contains("\"")) || (customerFirstname.getText().contains("£")) || (customerFirstname.getText().contains("$")) || (customerFirstname.getText().contains("%")) || (customerFirstname.getText().contains("^")) || (customerFirstname.getText().contains("&")) || (customerFirstname.getText().contains("*")) || (customerFirstname.getText().contains("(")) || (customerFirstname.getText().contains(")")) || (customerFirstname.getText().contains("_")) || (customerFirstname.getText().contains("+")) || (customerFirstname.getText().contains("=")) || (customerFirstname.getText().contains("{")) || (customerFirstname.getText().contains("}")) || (customerFirstname.getText().contains("[")) || (customerFirstname.getText().contains("]")) || (customerFirstname.getText().contains(":")) || (customerFirstname.getText().contains(";")) || (customerFirstname.getText().contains("@")) || (customerFirstname.getText().contains("'")) || (customerFirstname.getText().contains("~")) || (customerFirstname.getText().contains("#")) || (customerFirstname.getText().contains("<")) || (customerFirstname.getText().contains(">")) || (customerFirstname.getText().contains(",")) || (customerFirstname.getText().contains(".")) || (customerFirstname.getText().contains("?")) || (customerFirstname.getText().contains("/")) || (customerFirstname.getText().contains("|")) || (customerFirstname.getText().contains("1")) || (customerFirstname.getText().contains("2")) || (customerFirstname.getText().contains("3")) || (customerFirstname.getText().contains("4")) || (customerFirstname.getText().contains("5")) || (customerFirstname.getText().contains("6")) || (customerFirstname.getText().contains("7")) || (customerFirstname.getText().contains("8")) || (customerFirstname.getText().contains("9")) || (customerFirstname.getText().contains("0"))) {
                 errorAlert("'Customer First name' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
                 return false;
             }
 
-            if(customerSurname.getText().equals(""))
-            {
+            if (customerSurname.getText().equals("")) {
                 errorAlert("'Customer Surname' field is empty. Enter First name");
                 return false;
             }
-            if(customerSurname.getText().length()<2)
-            {
+            if (customerSurname.getText().length() < 2) {
                 errorAlert("'Customer Surname' is too short. Minimum is 2 characters");
                 return false;
             }
-            if(customerSurname.getText().length()>30)
-            {
+            if (customerSurname.getText().length() > 30) {
                 errorAlert("'Customer Surname' is too long. Maximum is 30 characters");
                 return false;
             }
-            if((customerSurname.getText().contains("`"))||(customerSurname.getText().contains("¬"))||(customerSurname.getText().contains("!"))||(customerSurname.getText().contains("\""))||(customerSurname.getText().contains("£"))||(customerSurname.getText().contains("$"))||(customerSurname.getText().contains("%"))||(customerSurname.getText().contains("^"))||(customerSurname.getText().contains("&"))||(customerSurname.getText().contains("*"))||(customerSurname.getText().contains("("))||(customerSurname.getText().contains(")"))||(customerSurname.getText().contains("_"))||(customerSurname.getText().contains("+"))||(customerSurname.getText().contains("="))||(customerSurname.getText().contains("{"))||(customerSurname.getText().contains("}"))||(customerSurname.getText().contains("["))||(customerSurname.getText().contains("]"))||(customerSurname.getText().contains(":"))||(customerSurname.getText().contains(";"))||(customerSurname.getText().contains("@"))||(customerSurname.getText().contains("'"))||(customerSurname.getText().contains("~"))||(customerSurname.getText().contains("#"))||(customerSurname.getText().contains("<"))||(customerSurname.getText().contains(">"))||(customerSurname.getText().contains(","))||(customerSurname.getText().contains("."))||(customerSurname.getText().contains("?"))||(customerSurname.getText().contains("/"))||(customerSurname.getText().contains("|"))||(customerSurname.getText().contains("1"))||(customerSurname.getText().contains("2"))||(customerSurname.getText().contains("3"))||(customerSurname.getText().contains("4"))||(customerSurname.getText().contains("5"))||(customerSurname.getText().contains("6"))||(customerSurname.getText().contains("7"))||(customerSurname.getText().contains("8"))||(customerSurname.getText().contains("9"))||(customerSurname.getText().contains("0")))
-            {
+            if ((customerSurname.getText().contains("`")) || (customerSurname.getText().contains("¬")) || (customerSurname.getText().contains("!")) || (customerSurname.getText().contains("\"")) || (customerSurname.getText().contains("£")) || (customerSurname.getText().contains("$")) || (customerSurname.getText().contains("%")) || (customerSurname.getText().contains("^")) || (customerSurname.getText().contains("&")) || (customerSurname.getText().contains("*")) || (customerSurname.getText().contains("(")) || (customerSurname.getText().contains(")")) || (customerSurname.getText().contains("_")) || (customerSurname.getText().contains("+")) || (customerSurname.getText().contains("=")) || (customerSurname.getText().contains("{")) || (customerSurname.getText().contains("}")) || (customerSurname.getText().contains("[")) || (customerSurname.getText().contains("]")) || (customerSurname.getText().contains(":")) || (customerSurname.getText().contains(";")) || (customerSurname.getText().contains("@")) || (customerSurname.getText().contains("'")) || (customerSurname.getText().contains("~")) || (customerSurname.getText().contains("#")) || (customerSurname.getText().contains("<")) || (customerSurname.getText().contains(">")) || (customerSurname.getText().contains(",")) || (customerSurname.getText().contains(".")) || (customerSurname.getText().contains("?")) || (customerSurname.getText().contains("/")) || (customerSurname.getText().contains("|")) || (customerSurname.getText().contains("1")) || (customerSurname.getText().contains("2")) || (customerSurname.getText().contains("3")) || (customerSurname.getText().contains("4")) || (customerSurname.getText().contains("5")) || (customerSurname.getText().contains("6")) || (customerSurname.getText().contains("7")) || (customerSurname.getText().contains("8")) || (customerSurname.getText().contains("9")) || (customerSurname.getText().contains("0"))) {
                 errorAlert("'Customer Surname' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
                 return false;
             }
 
-            if(customerAddress.getText().equals(""))
-            {
+            if (customerAddress.getText().equals("")) {
                 errorAlert("'Customer Address' field is empty. Enter Address");
                 return false;
             }
-            if(customerAddress.getText().length()<4)
-            {
+            if (customerAddress.getText().length() < 4) {
                 errorAlert("'Customer Address' field is too short. Minimum is 4 characters");
                 return false;
             }
-            if(customerAddress.getText().length()>50)
-            {
+            if (customerAddress.getText().length() > 50) {
                 errorAlert("'Customer Address' field is too long. Maximum is 50 characters");
                 return false;
             }
 
-            if(customerPostcode.getText().equals(""))
-            {
+            if (customerPostcode.getText().equals("")) {
                 errorAlert("'Customer Postcode' field is empty. Enter postcode");
                 return false;
             }
-            if(customerPostcode.getText().length()<6)
-            {
+            if (customerPostcode.getText().length() < 6) {
                 errorAlert("'Customer Postcode' field is too short. Enter valid UK Postcode including required spacing");
                 return false;
             }
-            if(customerPostcode.getText().length()>8)
-            {
+            if (customerPostcode.getText().length() > 8) {
                 errorAlert("'Customer Postcode' field is too long. Enter valid UK Postcode including required spacing");
                 return false;
             }
 
-            if(customerPhone.getText().equals(""))
-            {
+            if (customerPhone.getText().equals("")) {
                 errorAlert("'Customer Phone' number field is empty. Enter Phone number");
                 return false;
             }
-            if(customerPhone.getText().length()<7)
-            {
+            if (customerPhone.getText().length() < 7) {
                 errorAlert("'Customer Phone' number field is too short. Enter valid Phone number between 7 and 15 digits");
                 return false;
             }
-            if(customerPhone.getText().length()>15)
-            {
+            if (customerPhone.getText().length() > 15) {
                 errorAlert("'Customer Phone' number field is too long. Enter valid Phone number between 7 and 15 digits");
                 return false;
             }
-            if((customerPhone.getText().equals("`"))||(customerPhone.getText().equals("¬"))||(customerPhone.getText().equals("!"))||(customerPhone.getText().equals('"'))||(customerPhone.getText().equals("£"))||(customerPhone.getText().equals("$"))||(customerPhone.getText().equals("%"))||(customerPhone.getText().equals("^"))||(customerPhone.getText().equals("&"))||(customerPhone.getText().equals("*"))||(customerPhone.getText().equals("("))||(customerPhone.getText().equals(")"))||(customerPhone.getText().equals("_"))||(customerPhone.getText().equals("+"))||(customerPhone.getText().equals("="))||(customerPhone.getText().equals("{"))||(customerPhone.getText().equals("}"))||(customerPhone.getText().equals("["))||(customerPhone.getText().equals("]"))||(customerPhone.getText().equals(":"))||(customerPhone.getText().equals(";"))||(customerPhone.getText().equals("@"))||(customerPhone.getText().equals("'"))||(customerPhone.getText().equals("~"))||(customerPhone.getText().equals("#"))||(customerPhone.getText().equals("<"))||(customerPhone.getText().equals(">"))||(customerPhone.getText().equals(","))||(customerPhone.getText().equals("."))||(customerPhone.getText().equals("?"))||(customerPhone.getText().equals("/"))||(customerPhone.getText().equals("|")))
-            {
+            if ((customerPhone.getText().equals("`")) || (customerPhone.getText().equals("¬")) || (customerPhone.getText().equals("!")) || (customerPhone.getText().equals('"')) || (customerPhone.getText().equals("£")) || (customerPhone.getText().equals("$")) || (customerPhone.getText().equals("%")) || (customerPhone.getText().equals("^")) || (customerPhone.getText().equals("&")) || (customerPhone.getText().equals("*")) || (customerPhone.getText().equals("(")) || (customerPhone.getText().equals(")")) || (customerPhone.getText().equals("_")) || (customerPhone.getText().equals("+")) || (customerPhone.getText().equals("=")) || (customerPhone.getText().equals("{")) || (customerPhone.getText().equals("}")) || (customerPhone.getText().equals("[")) || (customerPhone.getText().equals("]")) || (customerPhone.getText().equals(":")) || (customerPhone.getText().equals(";")) || (customerPhone.getText().equals("@")) || (customerPhone.getText().equals("'")) || (customerPhone.getText().equals("~")) || (customerPhone.getText().equals("#")) || (customerPhone.getText().equals("<")) || (customerPhone.getText().equals(">")) || (customerPhone.getText().equals(",")) || (customerPhone.getText().equals(".")) || (customerPhone.getText().equals("?")) || (customerPhone.getText().equals("/")) || (customerPhone.getText().equals("|"))) {
                 errorAlert("'Customer Phone' number field is invalid . No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
                 return false;
             }
             String customerPhoneNoPlus = customerPhone.getText().replaceAll("\\+", "");
-            if((!customerPhoneNoPlus.matches("[0-9]+")))
-            {
+            if ((!customerPhoneNoPlus.matches("[0-9]+"))) {
                 errorAlert("'Customer Phone' number field is invalid. Letters a-z or A-Z are not allowed. No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
                 return false;
             }
-            for(int i=1; i<customerPhone.getText().length(); i++)
-            {
-                if(customerPhone.getText().substring(i, i+1).equals("+"))
-                {
+            for (int i = 1; i < customerPhone.getText().length(); i++) {
+                if (customerPhone.getText().substring(i, i + 1).equals("+")) {
                     errorAlert("'Customer Phone' number field is invalid. '+' symbol can only be optionally used at the start");
                     return false;
                 }
             }
 
-            if(customerEmail.getText().equals(""))
-            {
+            if (customerEmail.getText().equals("")) {
                 errorAlert("'Customer Email' address field is empty. Enter Email address");
                 return false;
             }
-            if(customerEmail.getText().length()<5)
-            {
+            if (customerEmail.getText().length() < 5) {
                 errorAlert("'Customer Email' address field is too short. Enter valid Email address between 5 to 30 characters long");
                 return false;
             }
-            if(customerEmail.getText().length()>30)
-            {
+            if (customerEmail.getText().length() > 30) {
                 errorAlert("'Customer Email' address field is too long. Enter valid Email address between 5 to 30 characters long");
                 return false;
             }
-            if(!customerEmail.getText().contains("@"))
-            {
+            if (!customerEmail.getText().contains("@")) {
                 errorAlert("'Customer Email' address field does not contain '@' symbol. Enter valid Email address containing '@' and period/dot symbol");
                 return false;
             }
-            if(!customerEmail.getText().contains("."))
-            {
+            if (!customerEmail.getText().contains(".")) {
                 errorAlert("'Customer Email' address field does not contain '.' symbol. Enter valid Email address containing period/dot '.' and '@' symbol");
                 return false;
             }
 
-            if(customerType.getSelectionModel().getSelectedItem() == null)
-            {
+            if (customerType.getSelectionModel().getSelectedItem() == null) {
                 errorAlert("Pick Customer Type");
                 return false;
             }
             return true;
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             errorAlert(e.getMessage() + ": Add or Update Customer Error");
             return false;
         }

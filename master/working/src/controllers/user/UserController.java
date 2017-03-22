@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
  * @author Dillon Vaghela, Marcello De Bernardi
  */
 public class UserController implements Initializable {
+    final ObservableList tableEntries = FXCollections.observableArrayList();
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
-
     @FXML private Button addButton, newButton, clearButton, deleteButton;
     @FXML private Label userLabel;
     @FXML private TextField UID, P, FN, SN;
@@ -35,8 +35,6 @@ public class UserController implements Initializable {
     @FXML private TableColumn<User, UserType> userTypeColumn;
     @FXML private TextField searchBar;
 
-    final ObservableList tableEntries = FXCollections.observableArrayList();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AllUsers();
@@ -46,7 +44,6 @@ public class UserController implements Initializable {
     @FXML private void searchUsers() {
         displayTable(auth.searchUsers(searchBar.getText()));
     }
-
 
 
     public void addEditUser() throws Exception {
@@ -80,7 +77,7 @@ public class UserController implements Initializable {
                 boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
                 clear();
-               // showAlert("User " + addOrEdit + ": " + checker);
+                // showAlert("User " + addOrEdit + ": " + checker);
 
             }
         }
@@ -93,11 +90,11 @@ public class UserController implements Initializable {
                 return;
             }
             else {
-               if(getConfirmation("Are you sure you want to delete this user? ")) {
-                   delete(UID.getText());
-                   AllUsers();
-                   clear();
-               }
+                if (getConfirmation("Are you sure you want to delete this user? ")) {
+                    delete(UID.getText());
+                    AllUsers();
+                    clear();
+                }
             }
         }
         catch (Exception e) {
@@ -107,7 +104,7 @@ public class UserController implements Initializable {
 
     public void deleteFromList() {
         User user = ((User) tUsers.getSelectionModel().getSelectedItem());
-        if(getConfirmation("Are you sure you want to delete this user? ")) {
+        if (getConfirmation("Are you sure you want to delete this user? ")) {
             delete(user.getUserID());
         }
         AllUsers();
@@ -156,7 +153,7 @@ public class UserController implements Initializable {
     }
 
     public boolean checkFields() {
-        if ((!UID.getText().equals("")) && UID.getText().length() ==5 && (!P.getText().equals("")) && (!FN.getText().equals("")) && (!SN.getText().equals("")) && (!UT.getSelectionModel().getSelectedItem().toString().equals(""))) {
+        if ((!UID.getText().equals("")) && UID.getText().length() == 5 && (!P.getText().equals("")) && (!FN.getText().equals("")) && (!SN.getText().equals("")) && (!UT.getSelectionModel().getSelectedItem().toString().equals(""))) {
             return true;
         }
         return false;
@@ -302,8 +299,7 @@ public class UserController implements Initializable {
             return true;
         }
         catch (Exception e) {
-            if(e instanceof NumberFormatException)
-            {
+            if (e instanceof NumberFormatException) {
                 showAlert("Please enter 5 NUMERICAL VALUES!");
             }
             else {
@@ -313,16 +309,15 @@ public class UserController implements Initializable {
         }
     }
 
-    private boolean getConfirmation(String message)
-    {
+    private boolean getConfirmation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Confirm deletion");
         alert.setContentText(message);
         alert.showAndWait();
         return alert.getResult() == ButtonType.OK;
     }
-    public void clear()
-    {
+
+    public void clear() {
         UID.clear();
         P.clear();
         FN.clear();

@@ -16,7 +16,8 @@ class StatementGraphResolver {
     private DatabaseRepository persistence;
 
 
-    private StatementGraphResolver() {}
+    private StatementGraphResolver() {
+    }
 
     static StatementGraphResolver getInstance() {
         if (instance == null) instance = new StatementGraphResolver();
@@ -28,7 +29,8 @@ class StatementGraphResolver {
     }
 
 
-    /** For a correctly formed statement graph stored in a list of nodes, resolves the
+    /**
+     * For a correctly formed statement graph stored in a list of nodes, resolves the
      * missing foreign key dependencies and returns a list of SQL queries ready for
      * execution.
      *

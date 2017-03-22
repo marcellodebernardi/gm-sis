@@ -2,7 +2,8 @@ package logic;
 
 import logic.authentication.AuthenticationSystem;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the authentication module.

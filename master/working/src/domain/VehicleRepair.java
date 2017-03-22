@@ -22,18 +22,17 @@ public class VehicleRepair extends SpecRepBooking {
      */
     @Reflective
     private VehicleRepair(@Column(name = "spcRepID", primary = true) int spcRepID,
-                         @Column(name = "spcID") int spcID,
-                         @Column(name = "deliveryDate") Date deliveryDate,
-                         @Column(name = "returnDate") Date returnDate,
-                         @Column(name = "cost") double cost,
-                         @Column(name = "bookingID") int bookingID,
-                         @Column(name = "vehicleRegNumber") String vehicleRegNumber) {
+                          @Column(name = "spcID") int spcID,
+                          @Column(name = "deliveryDate") Date deliveryDate,
+                          @Column(name = "returnDate") Date returnDate,
+                          @Column(name = "cost") double cost,
+                          @Column(name = "bookingID") int bookingID,
+                          @Column(name = "vehicleRegNumber") String vehicleRegNumber) {
         super(spcRepID, spcID, deliveryDate, returnDate, cost, bookingID);
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    public VehicleRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID, String vehicleRegNumber)
-    {
+    public VehicleRepair(int spcID, Date deliveryDate, Date returnDate, double cost, int bookingID, String vehicleRegNumber) {
         super(spcID, deliveryDate, returnDate, cost, bookingID);
         this.vehicleRegNumber = vehicleRegNumber;
     }
@@ -73,8 +72,7 @@ public class VehicleRepair extends SpecRepBooking {
         return vehicleRegNumber;
     }
 
-    public void setVehicleRegNumber(String vehicleRegNumber)
-    {
+    public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 

@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.TableView?>
-
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TableColumn?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.booking.DetailsPaneController"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.DetailsPaneController"
             id="detailsPane" fx:id="detailsPane">
     <top>
         <HBox id="detailsTitle">
@@ -26,36 +16,36 @@
             <!-- Select a customer -->
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
             <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       fx:id="customerSearchBar" onAction="#selectCustomer" />
+                       fx:id="customerSearchBar" onAction="#selectCustomer"/>
 
             <!-- Select a vehicle -->
             <Label GridPane.rowIndex="1" GridPane.columnIndex="0">Vehicle</Label>
             <ComboBox GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="vehicleComboBox" onAction="#selectVehicle" />
+                      fx:id="vehicleComboBox" onAction="#selectVehicle"/>
 
             <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Description</Label>
             <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="descriptionTextField" id="descriptionTextField" />
+                       fx:id="descriptionTextField" id="descriptionTextField"/>
 
             <!-- Diagnosis date and time -->
             <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Date</Label>
             <DatePicker GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="diagnosisDatePicker" />
+                        fx:id="diagnosisDatePicker"/>
             <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Time</Label>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="1"
-                       fx:id="diagnosisStartTimeTextField" />
+                       fx:id="diagnosisStartTimeTextField"/>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="2"
-                       fx:id="diagnosisEndTimeTextField" />
+                       fx:id="diagnosisEndTimeTextField"/>
 
             <!-- Repair date and time -->
             <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Repair Date</Label>
             <DatePicker GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="repairDatePicker" />
+                        fx:id="repairDatePicker"/>
             <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Repair Time</Label>
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="1"
-                       fx:id="repairStartTimeTextField" />
+                       fx:id="repairStartTimeTextField"/>
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="2"
-                       fx:id="repairEndTimeTextField" />
+                       fx:id="repairEndTimeTextField"/>
 
             <!-- Mechanic tasked on repair -->
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
@@ -67,23 +57,23 @@
             <TableView GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="bookingPartsTable" fx:id="partsTable">
                 <columns>
-                    <TableColumn text="Name" fx:id="nameColumn" />
-                    <TableColumn text="Cost" fx:id="costColumn" />
-                    <TableColumn text="Subcontracted" fx:id="subcontractedColumn" />
+                    <TableColumn text="Name" fx:id="nameColumn"/>
+                    <TableColumn text="Cost" fx:id="costColumn"/>
+                    <TableColumn text="Subcontracted" fx:id="subcontractedColumn"/>
                 </columns>
             </TableView>
             <HBox GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2"
                   id="partsButtonsHBox">
-                <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart" />
-                <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart" />
+                <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart"/>
+                <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart"/>
             </HBox>
 
             <Label GridPane.rowIndex="10" GridPane.columnIndex="0">Mileage</Label>
             <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField" />
+                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField"/>
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="newVehicleMileageTextField" fx:id="newMileageTextField" />
+                       id="newVehicleMileageTextField" fx:id="newMileageTextField"/>
         </GridPane>
     </center>
     <bottom>

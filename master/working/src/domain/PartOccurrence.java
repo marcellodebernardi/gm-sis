@@ -1,7 +1,6 @@
 package domain;
 
 import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
 
@@ -14,16 +13,14 @@ import static logic.criterion.CriterionOperator.EqualTo;
  *
  */
 public class PartOccurrence implements Searchable, DependencyConnectable {
+    // dependency connections
+    List<DependencyConnection> dependencyConnections;
     private int partOccurrenceID;
-
     // inverse hierarchical database links todo finish up
     private int partAbstractionID;
     private int installationID;
     private int bookingID;
     private int specRepID;
-
-    // dependency connections
-    List<DependencyConnection> dependencyConnections;
 
 
     /**
@@ -69,14 +66,26 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return partOccurrenceID;
     }
 
+    public void setPartOccurrenceID(int partOccurrenceID) {
+        this.partOccurrenceID = partOccurrenceID;
+    }
+
     @Column(name = "partAbstractionID", foreign = true)
     public int getPartAbstractionID() {
         return partAbstractionID;
     }
 
+    public void setPartAbstractionID(int partAbstractionID) {
+        this.partAbstractionID = partAbstractionID;
+    }
+
     @Column(name = "installationID", foreign = true)
     public int getInstallationID() {
         return installationID;
+    }
+
+    public void setInstallationID(int installationID) {
+        this.installationID = installationID;
     }
 
     @Column(name = "bookingID", foreign = true)
@@ -89,6 +98,10 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return specRepID;
     }
 
+    public void setSpecRepID(int specRepID) {
+        this.specRepID = specRepID;
+    }
+
     @DependencyHandler
     public List<DependencyConnection> getDependencies() {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
@@ -99,7 +112,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     public void setBooking(DependencyConnection pair) {
         if (dependencyConnections == null) dependencyConnections = new ArrayList<>();
         dependencyConnections.add(pair);
-        bookingID = ((DiagRepBooking)pair.pair().getHost()).getBookingID(); // todo does this break?
+        bookingID = ((DiagRepBooking) pair.pair().getHost()).getBookingID(); // todo does this break?
     }
 
     public void unsetBooking() {
@@ -124,22 +137,5 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 EqualTo,
                 installationID));
         return installations != null && installations.size() != 0 ? installations.get(0) : null;
-    }
-
-
-    public void setPartOccurrenceID(int partOccurrenceID) {
-        this.partOccurrenceID = partOccurrenceID;
-    }
-
-    public void setPartAbstractionID(int partAbstractionID) {
-        this.partAbstractionID = partAbstractionID;
-    }
-
-    public void setInstallationID(int installationID) {
-        this.installationID = installationID;
-    }
-
-    public void setSpecRepID(int specRepID) {
-        this.specRepID = specRepID;
     }
 }

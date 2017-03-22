@@ -86,7 +86,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                            @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
                                    SpecRepBooking specRepBooking,
                            @TableReference(baseType = PartOccurrence.class, subTypes = {PartOccurrence.class}, key = "bookingID")
-                                       List<PartOccurrence> requiredPartsList) {
+                                   List<PartOccurrence> requiredPartsList) {
         super(bookingID, vehicleRegNumber, description, new Bill(billAmount, billSettled), mechanicID, complete);
         this.diagnosisStart = diagnosisStart;
         this.diagnosisEnd = diagnosisEnd;
@@ -107,9 +107,19 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return super.getVehicleRegNumber();
     }
 
+    @Override
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        super.setVehicleRegNumber(vehicleRegNumber);
+    }
+
     @Column(name = "description") @Override
     public String getDescription() {
         return super.getDescription();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
     }
 
     @Column(name = "billAmount")
@@ -137,9 +147,17 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return diagnosisStart;
     }
 
+    public void setDiagnosisStart(ZonedDateTime diagnosisStart) {
+        this.diagnosisStart = diagnosisStart;
+    }
+
     @Column(name = "diagnosisEnd")
     public ZonedDateTime getDiagnosisEnd() {
         return diagnosisEnd;
+    }
+
+    public void setDiagnosisEnd(ZonedDateTime diagnosisEnd) {
+        this.diagnosisEnd = diagnosisEnd;
     }
 
     @Column(name = "repairStart")
@@ -147,9 +165,17 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return repairStart;
     }
 
+    public void setRepairStart(ZonedDateTime repairStart) {
+        this.repairStart = repairStart;
+    }
+
     @Column(name = "repairEnd")
     public ZonedDateTime getRepairEnd() {
         return repairEnd;
+    }
+
+    public void setRepairEnd(ZonedDateTime repairEnd) {
+        this.repairEnd = repairEnd;
     }
 
     @TableReference(baseType = SpecRepBooking.class, subTypes = {PartRepair.class, VehicleRepair.class}, key = "bookingID")
@@ -165,7 +191,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         dependencyConnections.add(transmitter);
         part.setBooking(transmitter.pair().host(part));
 
-        if(requiredPartsList == null) requiredPartsList = new ArrayList<>();
+        if (requiredPartsList == null) requiredPartsList = new ArrayList<>();
         requiredPartsList.add(part);
     }
 
@@ -218,33 +244,6 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
             if (customers.size() != 0) return customers.get(0);
         }
         return null;
-    }
-
-
-    @Override
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        super.setVehicleRegNumber(vehicleRegNumber);
-    }
-
-    @Override
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    public void setDiagnosisStart(ZonedDateTime diagnosisStart) {
-        this.diagnosisStart = diagnosisStart;
-    }
-
-    public void setDiagnosisEnd(ZonedDateTime diagnosisEnd) {
-        this.diagnosisEnd = diagnosisEnd;
-    }
-
-    public void setRepairStart(ZonedDateTime repairStart) {
-        this.repairStart = repairStart;
-    }
-
-    public void setRepairEnd(ZonedDateTime repairEnd) {
-        this.repairEnd = repairEnd;
     }
 
 }

@@ -14,6 +14,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TableReference {
     Class<? extends Searchable> baseType();
+
     Class<? extends Searchable>[] subTypes();
+
     String key();
 }

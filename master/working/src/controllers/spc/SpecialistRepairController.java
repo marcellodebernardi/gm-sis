@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SpecialistRepairController implements Initializable{
+public class SpecialistRepairController implements Initializable {
 
 
     private DatabaseRepository databaseRepository = DatabaseRepository.getInstance();
@@ -35,14 +35,60 @@ public class SpecialistRepairController implements Initializable{
     @FXML
     private Button btn_addSRC, btn_deleteSRC, btn_updateSRC = new Button();
     @FXML
-    private Label id_lbl,name_lbl,address_lbl,number_lbl,email_lbl = new Label();
+    private Label id_lbl, name_lbl, address_lbl, number_lbl, email_lbl = new Label();
     private boolean isShowing;
+    @FXML
+    private TableView<SpecialistRepairCenter> SpecialistRepairCenters;
+    @FXML
+    private TableColumn<SpecialistRepairCenter, Integer> spc_id_column;
+    @FXML
+    private TableColumn<SpecialistRepairCenter, String> spc_name_column, spc_phone_column, spc_address_column, spc_email_column = new TableColumn<>();
+    @FXML
+    private TextField searchSRC, src_id, src_name, src_address, src_email, src_phone = new TextField();
+    @FXML
+    private ObservableList<SpecialistRepairCenter> specialistRepairCenterObservableList = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Vehicle> vehicleDetails;
+    @FXML
+    private TableColumn<Vehicle, String> veh_reg_column;
+    @FXML
+    private TableColumn<Vehicle, String> veh_make_column;
+    @FXML
+    private TableColumn<Vehicle, String> veh_model_column;
+    @FXML
+    private TableColumn<Vehicle, Integer> veh_mileage_column;
+    @FXML
+    private TableColumn<Vehicle, Double> veh_eng_column;
+    @FXML
+    private Label custy_label;
+    @FXML
+    private TextArea custyInfo;
+    @FXML
+    private ObservableList<Vehicle> vehicleObservableList = FXCollections.observableArrayList();
+    @FXML
+    private Button btn_hideDetails = new Button();
+    @FXML
+    private TableView<SpecRepBooking> specRepBooking;
+    @FXML
+    private TableColumn<SpecRepBooking, Integer> spc_rep_column;
+    @FXML
+    private TableColumn<SpecRepBooking, Integer> spc_bookingID_column;
+    @FXML
+    private TableColumn<SpecRepBooking, String> spc_item_column;
+    @FXML
+    private TableColumn<SpecRepBooking, Date> spc_del_column;
+    @FXML
+    private TableColumn<SpecRepBooking, Date> spc_ret_column;
+    @FXML
+    private TextField criteriaToSearchBy;
+    @FXML
+    private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
+    @FXML
+    private Button searchByCriteria;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
-        if(AuthenticationSystem.getInstance().getUserType().equals(UserType.NORMAL))
-        {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (AuthenticationSystem.getInstance().getUserType().equals(UserType.NORMAL)) {
             btn_addSRC.setDisable(true);
             btn_updateSRC.setDisable(true);
             btn_deleteSRC.setDisable(true);
@@ -50,31 +96,16 @@ public class SpecialistRepairController implements Initializable{
         findSRC();
 
     }
-    @FXML
-    private TableView<SpecialistRepairCenter> SpecialistRepairCenters;
-
-    @FXML
-    private TableColumn<SpecialistRepairCenter, Integer> spc_id_column;
-
-    @FXML
-    private TableColumn<SpecialistRepairCenter, String> spc_name_column,spc_phone_column,spc_address_column,spc_email_column = new TableColumn<>();
-
-    @FXML
-    private TextField searchSRC,src_id,src_name,src_address,src_email, src_phone = new TextField();
-
-    @FXML
-    private ObservableList<SpecialistRepairCenter> specialistRepairCenterObservableList = FXCollections.observableArrayList();
 
     @FXML
     private void findSRC() {
 
-      displayCentersToTable(specRepairSystem.getRepairCenterList());
+        displayCentersToTable(specRepairSystem.getRepairCenterList());
 
 
     }
 
-    private void displayCentersToTable(List<SpecialistRepairCenter> specialistRepairCenters)
-    {
+    private void displayCentersToTable(List<SpecialistRepairCenter> specialistRepairCenters) {
         SpecialistRepairCenters.getItems().clear();
         specialistRepairCenterObservableList.addAll(specialistRepairCenters);
         spc_id_column.setCellValueFactory(new PropertyValueFactory<>("spcID"));
@@ -90,10 +121,8 @@ public class SpecialistRepairController implements Initializable{
         SpecialistRepairCenters.setItems(specialistRepairCenterObservableList);
     }
 
-    public void showSpcDetails()
-    {
-        if(isShowing)
-        {
+    public void showSpcDetails() {
+        if (isShowing) {
             showRepairs();
         }
         SpecialistRepairCenter specialistRepairCenter = SpecialistRepairCenters.getSelectionModel().getSelectedItem();
@@ -106,8 +135,7 @@ public class SpecialistRepairController implements Initializable{
         spcID = specialistRepairCenter.getSpcID();
     }
 
-    public void clearSRCFields()
-    {
+    public void clearSRCFields() {
         src_id.clear();
         src_name.clear();
         src_phone.clear();
@@ -116,60 +144,49 @@ public class SpecialistRepairController implements Initializable{
         clearLabels();
     }
 
-    public void addNewSRC()
-    {
+    public void addNewSRC() {
         try {
             if (src_phone.getText().length() != 11) {
                 number_lbl.setVisible(true);
             }
-            else
-            {
+            else {
                 number_lbl.setVisible(false);
             }
         }
-        catch (NumberFormatException e)
-        {
+        catch (NumberFormatException e) {
             number_lbl.setVisible(true);
         }
-            if(!src_id.getText().equals(""))
-            {
-                id_lbl.setVisible(true);
+        if (!src_id.getText().equals("")) {
+            id_lbl.setVisible(true);
+        }
+        else {
+            id_lbl.setVisible(false);
+        }
+        if (src_address.getText().equals("")) {
+            address_lbl.setVisible(true);
+        }
+        else {
+            address_lbl.setVisible(false);
+        }
+        if (src_email.getText().equals("") || !src_email.getText().contains("@")) {
+            email_lbl.setVisible(true);
+        }
+        else {
+            email_lbl.setVisible(false);
+        }
+        if (src_name.getText().equals("")) {
+            name_lbl.setVisible(true);
+        }
+        else {
+            name_lbl.setVisible(false);
+        }
+        if (src_phone.getText().length() == 11 && !src_name.getText().equals("") && !src_address.equals("") && !src_email.equals("") && src_email.getText().contains("@")) {
+            if (addConfirmation()) {
+                specRepairSystem.addRepairCenter(src_name.getText(), src_address.getText(), src_phone.getText(), src_email.getText());
+                clearLabels();
+                clearSRCFields();
             }
-            else
-            {
-                id_lbl.setVisible(false);
-            }
-            if(src_address.getText().equals(""))
-            {
-                address_lbl.setVisible(true);
-            }
-            else
-            {
-                address_lbl.setVisible(false);
-            }
-            if(src_email.getText().equals("") || !src_email.getText().contains("@"))
-            {
-                email_lbl.setVisible(true);
-            }
-            else
-            {
-                email_lbl.setVisible(false);
-            }
-            if(src_name.getText().equals(""))
-            {
-                name_lbl.setVisible(true);
-            }
-            else
-            {
-                name_lbl.setVisible(false);
-            }
-            if(src_phone.getText().length()==11 && !src_name.getText().equals("") && !src_address.equals("") && !src_email.equals("") &&src_email.getText().contains("@")){
-                if(addConfirmation()) {
-                    specRepairSystem.addRepairCenter(src_name.getText(), src_address.getText(), src_phone.getText(), src_email.getText());
-                    clearLabels();
-                    clearSRCFields();
-                }
-                findSRC();
+            findSRC();
 
 
         }
@@ -177,8 +194,7 @@ public class SpecialistRepairController implements Initializable{
         findSRC();
     }
 
-    private void clearLabels()
-    {
+    private void clearLabels() {
         id_lbl.setVisible(false);
         name_lbl.setVisible(false);
         number_lbl.setVisible(false);
@@ -186,41 +202,33 @@ public class SpecialistRepairController implements Initializable{
         email_lbl.setVisible(false);
     }
 
-    public void deleteSRC()
-    {
+    public void deleteSRC() {
         try {
-            if(deleteConfirmation("Are you sure you want to delete this Specialist repair center?")) {
+            if (deleteConfirmation("Are you sure you want to delete this Specialist repair center?")) {
                 specRepairSystem.deleteAllSubsequentBookings(spcID);
                 specRepairSystem.deleteRepairCenter(spcID);
                 clearSRCFields();
             }
         }
-        catch (NullPointerException e)
-        {
+        catch (NullPointerException e) {
             showAlert("No SPC Selected.");
         }
         findSRC();
     }
 
-    public void updateSRC()
-    {
+    public void updateSRC() {
         SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcID);
-        if(updateConfirmation("Are you sure you want to update this SPC?"))
-        {
-            if(!specialistRepairCenter.setEmail(src_email.getText()))
-            {
+        if (updateConfirmation("Are you sure you want to update this SPC?")) {
+            if (!specialistRepairCenter.setEmail(src_email.getText())) {
                 showAlert("Please enter a correct email address.");
             }
-            if(!specialistRepairCenter.setName(src_name.getText()))
-            {
+            if (!specialistRepairCenter.setName(src_name.getText())) {
                 showAlert("Please enter an appropriate name.");
             }
-            if(!specialistRepairCenter.setAddress(src_address.getText()))
-            {
+            if (!specialistRepairCenter.setAddress(src_address.getText())) {
                 showAlert("Please enter an appropriate address.");
             }
-            if(!specialistRepairCenter.setPhone(src_phone.getText().trim()))
-            {
+            if (!specialistRepairCenter.setPhone(src_phone.getText().trim())) {
                 showAlert("Please enter a correct 11 digit, numerical phone number.");
             }
             specRepairSystem.updateRepairCentre(specialistRepairCenter);
@@ -229,8 +237,7 @@ public class SpecialistRepairController implements Initializable{
         findSRC();
     }
 
-    private boolean addConfirmation()
-    {
+    private boolean addConfirmation() {
         Alert addAlert = new Alert(Alert.AlertType.CONFIRMATION);
         addAlert.setTitle("Add Specialist Repair Center");
         addAlert.setHeaderText("Are you sure you want to add this center?");
@@ -241,8 +248,7 @@ public class SpecialistRepairController implements Initializable{
 
     @FXML
     @SuppressWarnings("Duplicates")
-    private boolean deleteConfirmation(String message)
-    {
+    private boolean deleteConfirmation(String message) {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
         deleteAlert.setTitle("Delete Booking");
         deleteAlert.setHeaderText(message);
@@ -260,8 +266,7 @@ public class SpecialistRepairController implements Initializable{
         alert.showAndWait();
     }
 
-    private boolean updateConfirmation(String message)
-    {
+    private boolean updateConfirmation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Update specialist center");
         alert.setHeaderText(message);
@@ -269,38 +274,7 @@ public class SpecialistRepairController implements Initializable{
         return alert.getResult() == ButtonType.OK;
     }
 
-    @FXML
-    private TableView<Vehicle> vehicleDetails;
-
-    @FXML
-    private TableColumn<Vehicle, String> veh_reg_column;
-
-    @FXML
-    private TableColumn<Vehicle, String> veh_make_column;
-
-    @FXML
-    private TableColumn<Vehicle, String> veh_model_column;
-
-    @FXML
-    private TableColumn<Vehicle, Integer> veh_mileage_column;
-    @FXML
-    private TableColumn<Vehicle, Double> veh_eng_column;
-
-    @FXML
-    private Label custy_label;
-
-    @FXML
-    private TextArea custyInfo;
-
-    @FXML
-    private ObservableList<Vehicle> vehicleObservableList = FXCollections.observableArrayList();
-
-    @FXML
-    private Button btn_hideDetails = new Button();
-
-
-    public void showRepairs()
-    {
+    public void showRepairs() {
         try {
             vehicleDetails.setVisible(true);
             custy_label.setVisible(true);
@@ -309,20 +283,17 @@ public class SpecialistRepairController implements Initializable{
             custyInfo.clear();
             showVehicle();
         }
-        catch (NullPointerException e)
-        {
+        catch (NullPointerException e) {
             showAlert("No repair center selected.");
         }
 
     }
 
-    private void showVehicle()
-    {
+    private void showVehicle() {
         isShowing = true;
         List<VehicleRepair> vehicleRepairs = specRepairSystem.getBySpcID(spcID);
         ArrayList<Vehicle> vehicles = new ArrayList<>();
-        for(VehicleRepair v: vehicleRepairs)
-        {
+        for (VehicleRepair v : vehicleRepairs) {
             vehicles.add(VehicleSys.getInstance().searchAVehicle(v.getVehicleRegNumber()));
         }
         vehicleDetails.getItems().clear();
@@ -340,68 +311,36 @@ public class SpecialistRepairController implements Initializable{
         vehicleDetails.setItems(vehicleObservableList);
     }
 
-    public void showCustyDetails()
-    {
+    public void showCustyDetails() {
         try {
-                custy_label.setText("Customer Details :");
-                Vehicle vehicle = vehicleDetails.getSelectionModel().getSelectedItem();
-                Customer customer = CustomerSystem.getInstance().getACustomers(vehicle.getCustomerID());
-                custyInfo.clear();
-                custyInfo.appendText("ID : " + customer.getCustomerAddress() + "\n");
-                custyInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
-                custyInfo.appendText("Surname : " + customer.getCustomerSurname() + "\n");
-                custyInfo.appendText("Phone number : " + customer.getCustomerPhone() + "\n");
-                custyInfo.appendText("Address : " + customer.getCustomerAddress() + "\n");
-                custyInfo.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
-                custyInfo.appendText("Type : " + customer.getCustomerType().toString() + "\n");
+            custy_label.setText("Customer Details :");
+            Vehicle vehicle = vehicleDetails.getSelectionModel().getSelectedItem();
+            Customer customer = CustomerSystem.getInstance().getACustomers(vehicle.getCustomerID());
+            custyInfo.clear();
+            custyInfo.appendText("ID : " + customer.getCustomerAddress() + "\n");
+            custyInfo.appendText("First name : " + customer.getCustomerFirstname() + "\n");
+            custyInfo.appendText("Surname : " + customer.getCustomerSurname() + "\n");
+            custyInfo.appendText("Phone number : " + customer.getCustomerPhone() + "\n");
+            custyInfo.appendText("Address : " + customer.getCustomerAddress() + "\n");
+            custyInfo.appendText("Postcode : " + customer.getCustomerPostcode() + "\n");
+            custyInfo.appendText("Type : " + customer.getCustomerType().toString() + "\n");
         }
-        catch (NullPointerException e)
-        {
+        catch (NullPointerException e) {
             showAlert("Oops it seems like there is no owner of this vehicle! Please contact system administrator");
         }
 
     }
 
-    public void hideDetails()
-    {
+    public void hideDetails() {
         vehicleDetails.setVisible(false);
         custy_label.setVisible(false);
         custyInfo.setVisible(false);
         btn_hideDetails.setVisible(false);
     }
 
-    @FXML
-    private TableView<SpecRepBooking> specRepBooking;
-
-    @FXML
-    private TableColumn<SpecRepBooking, Integer> spc_rep_column;
-
-    @FXML
-    private TableColumn<SpecRepBooking, Integer> spc_bookingID_column;
-
-    @FXML
-    private TableColumn<SpecRepBooking, String> spc_item_column;
-
-    @FXML
-    private TableColumn<SpecRepBooking, Date> spc_del_column;
-
-    @FXML
-    private TableColumn<SpecRepBooking, Date> spc_ret_column;
-
-    @FXML
-    private TextField criteriaToSearchBy;
-
-    @FXML
-    private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
-
-    @FXML
-    private Button searchByCriteria;
-
-    public void findBookings()
-    {
+    public void findBookings() {
         try {
-            if(criteriaToSearchBy.getText().equals(""))
-            {
+            if (criteriaToSearchBy.getText().equals("")) {
                 List<SpecRepBooking> specRepBookings = new ArrayList<>();
                 List<PartRepair> partRepairs = specRepairSystem.returnAllPartRepairs();
                 List<VehicleRepair> vehicleRepairs = specRepairSystem.returnAllVehicleRepairs();
@@ -410,9 +349,8 @@ public class SpecialistRepairController implements Initializable{
                 showToTable(specRepBookings);
             }
             List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs(Integer.parseInt(criteriaToSearchBy.getText()));
-            if(partRepairs.size()==0)
-            {
-             //   showAlert("No repairs found with given criteria");
+            if (partRepairs.size() == 0) {
+                //   showAlert("No repairs found with given criteria");
             }
             showToTable(partRepairs);
 
@@ -428,11 +366,12 @@ public class SpecialistRepairController implements Initializable{
                     } //else {
 
 
-                        // }
-                   // }
-                } catch (NullPointerException ex) {
+                    // }
+                    // }
+                }
+                catch (NullPointerException ex) {
                     if (ex instanceof NullPointerException) {
-                      //  showAlert("No repairs found with given criteria");
+                        //  showAlert("No repairs found with given criteria");
                         String criteria = criteriaToSearchBy.getText();
                         List<Vehicle> vehicles = new ArrayList<>();
                         List<VehicleRepair> vehicleRepairList = new ArrayList<>();
@@ -453,7 +392,8 @@ public class SpecialistRepairController implements Initializable{
                                         showToTable(vehicleRepairList);
                                     }
                                 }
-                            } else {
+                            }
+                            else {
                                 throw new NullPointerException();
                             }
 
@@ -471,7 +411,8 @@ public class SpecialistRepairController implements Initializable{
                             if (vehicleRepairList != null) {
                                 showToTable(vehicleRepairList);
                             }
-                        } else {
+                        }
+                        else {
                             throw new NullPointerException();
                         }
                     }
@@ -483,12 +424,10 @@ public class SpecialistRepairController implements Initializable{
     }
 
     @SuppressWarnings("Duplicates")
-    private <E> void showToTable(List<E> specRepBookings)
-    {
+    private <E> void showToTable(List<E> specRepBookings) {
         specRepBooking.getItems().clear();
-        if(specRepBookings.get(0) instanceof SpecRepBooking) {
-            for(E s: specRepBookings)
-            {
+        if (specRepBookings.get(0) instanceof SpecRepBooking) {
+            for (E s : specRepBookings) {
                 SpecRepBooking specRepBooking = (SpecRepBooking) s;
                 specRepBookingObservableList.add(specRepBooking);
             }
@@ -496,7 +435,8 @@ public class SpecialistRepairController implements Initializable{
                 if (p.getValue() instanceof VehicleRepair) {
                     VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(vehicleRepair.getSpcRepID());
-                } else {
+                }
+                else {
                     PartRepair partRepair = (PartRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(partRepair.getSpcRepID());
                 }
@@ -507,7 +447,8 @@ public class SpecialistRepairController implements Initializable{
                 if (p.getValue() instanceof VehicleRepair) {
                     VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(vehicleRepair.getSpcID());
-                } else {
+                }
+                else {
                     PartRepair partRepair = (PartRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(partRepair.getspcID());
                 }
@@ -518,7 +459,8 @@ public class SpecialistRepairController implements Initializable{
                 if (p.getValue() instanceof VehicleRepair) {
                     VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(vehicleRepair.getDeliveryDate());
-                } else {
+                }
+                else {
                     PartRepair partRepair = (PartRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(partRepair.getDeliveryDate());
                 }
@@ -529,7 +471,8 @@ public class SpecialistRepairController implements Initializable{
                 if (p.getValue() instanceof VehicleRepair) {
                     VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(vehicleRepair.getReturnDate());
-                } else {
+                }
+                else {
                     PartRepair partRepair = (PartRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(partRepair.getReturnDate());
                 }
@@ -539,7 +482,8 @@ public class SpecialistRepairController implements Initializable{
                 if (p.getValue() instanceof VehicleRepair) {
                     VehicleRepair vehicleRepair = (VehicleRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(vehicleRepair.getVehicleRegNumber());
-                } else {
+                }
+                else {
                     PartRepair partRepair = (PartRepair) p.getValue();
                     return new ReadOnlyObjectWrapper<>(Integer.toString(partRepair.getPartOccurrenceID()));
                 }

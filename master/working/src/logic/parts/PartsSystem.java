@@ -3,18 +3,18 @@ package logic.parts;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
-import domain.Searchable;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
-import static logic.criterion.CriterionOperator.*;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.MoreThan;
 
 /**
  * Created by Muhammad Shakib Hoque on 07/02/2017.
- *
  */
 public class PartsSystem {
 
@@ -86,18 +86,15 @@ public class PartsSystem {
         return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", MoreThan, 0));
     }
 
-    public List<PartOccurrence> getAllUninstalled(int partAbstractionID)
-    {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1).and("partAbstractionID",EqualTo,partAbstractionID));
+    public List<PartOccurrence> getAllUninstalled(int partAbstractionID) {
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1).and("partAbstractionID", EqualTo, partAbstractionID));
     }
 
-    public PartOccurrence getByInstallationID(int InstallationID)
-    {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class,"installationID",EqualTo, InstallationID)).get(0);
+    public PartOccurrence getByInstallationID(int InstallationID) {
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, InstallationID)).get(0);
     }
 
-    public List<Installation> getAllInstallations ()
-    {
+    public List<Installation> getAllInstallations() {
         return persistence.getByCriteria(new Criterion<>(Installation.class));
     }
 }
