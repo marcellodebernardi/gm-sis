@@ -61,7 +61,7 @@ public class SpecialistController implements Initializable{
         bookingDeliveryDate.setDayCellFactory(dateChecker);
         bookingReturnDate.setDayCellFactory(dateChecker);
         instaDate.setDayCellFactory(dateChecker);
-        wEndDate.setDayCellFactory(dateChecker);
+        wEndDate.setDayCellFactory(dateBlocker);
         setPartDes();
         try {
            setValues();
@@ -135,6 +135,21 @@ public class SpecialistController implements Initializable{
                 this.setDisable(true);
                 this.setStyle("-fx-background-color: rgba(171,171,171,0)");
             }
+
+        }
+    };
+
+    private Callback<DatePicker, DateCell> dateBlocker = dp1 -> new DateCell()
+    {
+        @Override
+        public void updateItem( LocalDate item , boolean empty )
+        {
+
+            // Must call super
+            super.updateItem(item, empty);
+
+                this.setDisable(true);
+                this.setStyle("-fx-background-color: rgba(171,171,171,0)");
 
         }
     };
@@ -905,7 +920,7 @@ public class SpecialistController implements Initializable{
             PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
             Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
             int partAbs = c.getNumericValue(c);
-            Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(wEndDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
+            Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instaDate.getValue().plusDays(365), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
             specRepairSystem.commitInstallations(installation);
             showAlert("Installation added");
             List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
@@ -935,8 +950,8 @@ public class SpecialistController implements Initializable{
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
         installation.setPartOccurrence(partOccurrence);
         wEndDate.setValue(LocalDate.now());
-        installation.setEndWarrantyDate(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
-        installation.setInstallationDate(ZonedDateTime.of(wEndDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
+        installation.setInstallationDate(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
+        installation.setEndWarrantyDate(ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()));
         specRepairSystem.commitInstallations(installation);
         showAlert("Installation updated");
     }
