@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" stylesheets="/booking/stylesheets/validation.css"
+            id="validationPane">
+    <center>
+        <Label id="validationText">
+            The customer name is in an incorrect format, or the indicated customer
+            does not exist. Select a customer by choosing one of the suggestions
+            in the auto-complete dropdown. Type a single space character to view
+            every customer in the dropdown.
+        </Label>
+    </center>
+</BorderPane>

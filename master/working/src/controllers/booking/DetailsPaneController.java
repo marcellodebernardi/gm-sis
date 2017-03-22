@@ -229,11 +229,11 @@ public class DetailsPaneController {
         // interrupt if invalid entries
         if (!(validateCustomerSelection() && validateVehicleSelection()
                 && dateIsSelected(diagnosisDatePicker,
-                "/resources/booking/validation/MissingDiagDatePopOver.fxml")
+                "/booking/validation/MissingDiagDate.fxml")
                 && timeIsSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
-                "/resources/booking/validation/MissingDiagTimePopOver.fxml")
+                "/booking/validation/MissingDiagTime.fxml")
                 && timeIsValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
-                "/resources/booking/validation/InvalidDiagTimePopOver.fxml")
+                "/booking/validation/InvalidDiagTime.fxml")
                 && validateMechanicSelection())) return;
 
         // make sure selectedBooking exists
@@ -304,17 +304,17 @@ public class DetailsPaneController {
     @FXML private void completeBooking() {
         if (!(validateCustomerSelection() && validateVehicleSelection()
                 && dateIsSelected(diagnosisDatePicker,
-                "/resources/booking/validation/MissingDiagDatePopOver.fxml")
+                "/booking/validation/MissingDiagDate.fxml")
                 && timeIsSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
-                "/resources/booking/validation/MissingDiagTimePopOver.fxml")
+                "/booking/validation/MissingDiagTime.fxml")
                 && timeIsValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
-                "/resources/booking/validation/InvalidDiagTimePopOver.fxml")
+                "/booking/validation/InvalidDiagTime.fxml")
                 && dateIsSelected(repairDatePicker,
-                "/resources/booking/validation/MissingDiagDatePopOver.fxml")
+                "/booking/validation/MissingRepDate.fxml")
                 && timeIsSelected(repairStartTimeTextField, repairEndTimeTextField,
-                "/resources/booking/validation/MissingDiagTimePopOver.fxml")
+                "/booking/validation/MissingRepTime.fxml")
                 && timeIsValid(repairStartTimeTextField, repairEndTimeTextField,
-                "/resources/booking/validation/InvalidDiagTimePopOver.fxml")
+                "/booking/validation/InvalidRepTime.fxml")
                 && validateMechanicSelection())) return;
 
         selectedBooking.setComplete(true);
@@ -389,7 +389,7 @@ public class DetailsPaneController {
         if (customerValidationPopOver == null) {
             try {
                 customerValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/booking/validation/CustomerValidationPopOver.fxml")));
+                        .getResource("/booking/validation/CustomerValidation.fxml")));
                 customerValidationPopOver.setDetachable(false);
                 customerValidationPopOver.setCornerRadius(0);
             }
@@ -413,7 +413,7 @@ public class DetailsPaneController {
         if (vehicleValidationPopOver == null) {
             try {
                 vehicleValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/booking/validation/MissingVehiclePopOver.fxml")));
+                        .getResource("/booking/validation/MissingVehicle.fxml")));
                 vehicleValidationPopOver.setDetachable(false);
                 vehicleValidationPopOver.setCornerRadius(0);
             }
@@ -507,7 +507,7 @@ public class DetailsPaneController {
         if (mechanicValidationPopOver == null) {
             try {
                 mechanicValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/booking/validation/MissingMechanicPopOver.fxml")));
+                        .getResource("/booking/validation/MissingMechanic.fxml")));
                 mechanicValidationPopOver.setDetachable(false);
                 mechanicValidationPopOver.setCornerRadius(0);
             }
@@ -531,7 +531,7 @@ public class DetailsPaneController {
         if (mileageValidationPopOver == null) {
             try {
                 mileageValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/resources/booking/validation/MileageValidationPopOver.fxml")));
+                        .getResource("/booking/validation/MileageValidation.fxml")));
                 mileageValidationPopOver.setDetachable(false);
                 mileageValidationPopOver.setCornerRadius(0);
             }
