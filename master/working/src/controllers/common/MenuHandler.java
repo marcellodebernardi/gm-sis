@@ -12,6 +12,7 @@ import java.io.IOException;
  * @author Marcello De Bernardi
  */
 public class MenuHandler {
+    // todo shove back into menucontroller
     private static MenuHandler instance;
     private BorderPane view;
     private Button usersButton;

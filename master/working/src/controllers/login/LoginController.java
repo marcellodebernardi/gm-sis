@@ -36,7 +36,7 @@ public class LoginController
         if (authentication.login(username.getText(), password.getText())) {
             BorderPane menu = MenuHandler.getInstance().show();
             Main.getInstance().setRootPane((BorderPane) menu);
-            (new MenuController()).openTodayTab();
+            (new MenuController()).openApplication();
         }
         else {
             showAlert();

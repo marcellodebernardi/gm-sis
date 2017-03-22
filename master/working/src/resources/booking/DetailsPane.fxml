@@ -26,64 +26,64 @@
             <!-- Select a customer -->
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
             <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       fx:id="customerSearchBar" onAction="#selectCustomer"></TextField>
+                       fx:id="customerSearchBar" onAction="#selectCustomer" />
 
             <!-- Select a vehicle -->
             <Label GridPane.rowIndex="1" GridPane.columnIndex="0">Vehicle</Label>
             <ComboBox GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="vehicleComboBox" onAction="#selectVehicle"></ComboBox>
+                      fx:id="vehicleComboBox" onAction="#selectVehicle" />
 
             <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Description</Label>
             <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="descriptionTextField" id="descriptionTextField"></TextField>
+                      fx:id="descriptionTextField" id="descriptionTextField" />
 
             <!-- Diagnosis date and time -->
             <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Date</Label>
             <DatePicker GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="diagnosisDatePicker"></DatePicker>
+                        fx:id="diagnosisDatePicker" onAction="#selectDiagnosisDate"/>
             <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Time</Label>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="1"
-                       fx:id="diagnosisStartTimeTextField"></TextField>
+                       fx:id="diagnosisStartTimeTextField" />
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="2"
-                       fx:id="diagnosisEndTimeTextField"></TextField>
+                       fx:id="diagnosisEndTimeTextField" />
 
             <!-- Repair date and time -->
             <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Repair Date</Label>
             <DatePicker GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="repairDatePicker"></DatePicker>
+                        fx:id="repairDatePicker" />
             <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Repair Time</Label>
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="1"
-                       fx:id="repairStartTimeTextField"></TextField>
+                       fx:id="repairStartTimeTextField" />
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="2"
-                       fx:id="repairEndTimeTextField"></TextField>
+                       fx:id="repairEndTimeTextField" />
 
             <!-- Mechanic tasked on repair -->
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
             <ComboBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="mechanicComboBox"></ComboBox>
+                      fx:id="mechanicComboBox" />
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
             <TableView GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="bookingPartsTable" fx:id="partsTable">
                 <columns>
-                    <TableColumn text="Name" fx:id="nameColumn"></TableColumn>
-                    <TableColumn text="Cost" fx:id="costColumn"></TableColumn>
-                    <TableColumn text="Subcontracted" fx:id="subcontractedColumn"></TableColumn>
+                    <TableColumn text="Name" fx:id="nameColumn" />
+                    <TableColumn text="Cost" fx:id="costColumn" />
+                    <TableColumn text="Subcontracted" fx:id="subcontractedColumn" />
                 </columns>
             </TableView>
             <HBox GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2"
                   id="partsButtonsHBox">
-                <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart"></Button>
-                <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart"></Button>
+                <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart" />
+                <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart" />
             </HBox>
 
             <Label GridPane.rowIndex="10" GridPane.columnIndex="0">Mileage</Label>
             <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField"></TextField>
+                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField" />
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="newVehicleMileageTextField" fx:id="newVehicleMileageTextField"></TextField>
+                       id="newVehicleMileageTextField" fx:id="newVehicleMileageTextField" />
         </GridPane>
     </center>
     <bottom>

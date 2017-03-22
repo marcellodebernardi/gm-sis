@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.common.MenuController" stylesheets="/resources/stylesheets/common.css">
+            fx:controller="controllers.common.MenuController" stylesheets="/common/common.css">
     <top>
         <HBox id="tabHBox">
             <Button onAction="#openTodayTab" text="Today" />
@@ -16,6 +16,7 @@
             <Button onAction="#openSRCTab" text="Specialist Repairs" />
             <Button fx:id="SRCButton" onAction="#openSRCManagementTab" text="Repair Centers" />
             <Button fx:id="UsersButton" onAction="#openUsersTab" text="Users" />
+            <Button fx:id="logoutButton" id="logoutButton" onAction="#logout" text="Logout" />
         </HBox>
     </top>
     <center>

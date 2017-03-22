@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.user.UserController" stylesheets="/resources/stylesheets/user.css">
+            fx:controller="controllers.user.UserController" stylesheets="/user/user.css">
     <left>
         <BorderPane id="leftPane">
             <center>
