@@ -44,7 +44,7 @@ public class SpecialistRepairController implements Initializable {
     @FXML
     private TableColumn<SpecialistRepairCenter, String> spc_name_column, spc_phone_column, spc_address_column, spc_email_column = new TableColumn<>();
     @FXML
-    private TextField searchSRC, src_id, src_name, src_address, src_email, src_phone = new TextField();
+    private TextField src_id, src_name, src_address, src_email, src_phone = new TextField();
     @FXML
     private ObservableList<SpecialistRepairCenter> specialistRepairCenterObservableList = FXCollections.observableArrayList();
     @FXML
@@ -83,8 +83,6 @@ public class SpecialistRepairController implements Initializable {
     private TextField criteriaToSearchBy;
     @FXML
     private ObservableList<SpecRepBooking> specRepBookingObservableList = FXCollections.observableArrayList();
-    @FXML
-    private Button searchByCriteria;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -133,6 +131,7 @@ public class SpecialistRepairController implements Initializable {
         src_address.setText(specialistRepairCenter.getAddress());
         src_name.setText(specialistRepairCenter.getName());
         spcID = specialistRepairCenter.getSpcID();
+        clearLabels();
     }
 
     public void clearSRCFields() {
@@ -208,17 +207,19 @@ public class SpecialistRepairController implements Initializable {
                 specRepairSystem.deleteAllSubsequentBookings(spcID);
                 specRepairSystem.deleteRepairCenter(spcID);
                 clearSRCFields();
+                clearLabels();
             }
         }
         catch (NullPointerException e) {
             showAlert("No SPC Selected.");
         }
         findSRC();
+        clearLabels();
     }
 
     public void updateSRC() {
         SpecialistRepairCenter specialistRepairCenter = specRepairSystem.getByID(spcID);
-        if (updateConfirmation("Are you sure you want to update this SPC?")) {
+        if (updateConfirmation()) {
             if (!specialistRepairCenter.setEmail(src_email.getText())) {
                 showAlert("Please enter a correct email address.");
             }
@@ -235,6 +236,7 @@ public class SpecialistRepairController implements Initializable {
         }
         clearSRCFields();
         findSRC();
+        clearLabels();
     }
 
     private boolean addConfirmation() {
@@ -266,10 +268,10 @@ public class SpecialistRepairController implements Initializable {
         alert.showAndWait();
     }
 
-    private boolean updateConfirmation(String message) {
+    private boolean updateConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Update specialist center");
-        alert.setHeaderText(message);
+        alert.setHeaderText("Are you sure you want to update this SPC?");
         alert.showAndWait();
         return alert.getResult() == ButtonType.OK;
     }
@@ -298,15 +300,15 @@ public class SpecialistRepairController implements Initializable {
         }
         vehicleDetails.getItems().clear();
         vehicleObservableList.addAll(vehicles);
-        veh_reg_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("vehicleRegNumber"));
+        veh_reg_column.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
         veh_reg_column.setCellFactory(TextFieldTableCell.forTableColumn());
-        veh_make_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("manufacturer"));
+        veh_make_column.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         veh_make_column.setCellFactory(TextFieldTableCell.forTableColumn());
-        veh_model_column.setCellValueFactory(new PropertyValueFactory<Vehicle, String>("model"));
+        veh_model_column.setCellValueFactory(new PropertyValueFactory<>("model"));
         veh_model_column.setCellFactory(TextFieldTableCell.forTableColumn());
-        veh_mileage_column.setCellValueFactory(new PropertyValueFactory<Vehicle, Integer>("mileage"));
+        veh_mileage_column.setCellValueFactory(new PropertyValueFactory<>("mileage"));
         veh_mileage_column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        veh_eng_column.setCellValueFactory(new PropertyValueFactory<Vehicle, Double>("engineSize"));
+        veh_eng_column.setCellValueFactory(new PropertyValueFactory<>("engineSize"));
         veh_eng_column.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         vehicleDetails.setItems(vehicleObservableList);
     }
@@ -338,6 +340,7 @@ public class SpecialistRepairController implements Initializable {
         btn_hideDetails.setVisible(false);
     }
 
+    /*
     public void findBookings() {
         try {
             if (criteriaToSearchBy.getText().equals("")) {
@@ -422,9 +425,10 @@ public class SpecialistRepairController implements Initializable {
         }
 
 
-    }
+    }*/
 
-    @SuppressWarnings("Duplicates")
+
+    /*@SuppressWarnings("Duplicates")
     private <E> void showToTable(List<E> specRepBookings) {
         specRepBooking.getItems().clear();
         if (specRepBookings.get(0) instanceof SpecRepBooking) {
@@ -492,7 +496,7 @@ public class SpecialistRepairController implements Initializable {
             specRepBooking.setItems(specRepBookingObservableList);
         }
 
-    }
+    }*/
 
 
 }

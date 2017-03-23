@@ -333,5 +333,10 @@ public class SpecRepairSystem {
         return specRepBookingList;
     }
 
+    public void submitBooking(DiagRepBooking booking)
+    {
+        persistence.commitItem(booking);
+    }
+
 
 }
