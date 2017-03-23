@@ -190,7 +190,7 @@ public class VehicleController implements Initializable {
                     wed = fromLocalDate(wExpirationDate.getValue());
                 }
                 else {
-                    showAlert("error");
+                    //showAlert("error");
                     wed = null;
                 }
                 VehicleType vT;
@@ -418,8 +418,11 @@ public class VehicleController implements Initializable {
 
     public void searchVehicleA() {
         List<Vehicle> arrayList = vSys.getVehiclesList();
+        regS.setText("");
+        manufS.setText("");
+        typeS.setValue(null);
+        VehicleTS.setValue(null);
         DisplayTable(arrayList);
-
     }
 
     public void DisplayTable(List<Vehicle> arrayList) {
@@ -1246,8 +1249,13 @@ public class VehicleController implements Initializable {
 
             Double engineSize = Double.parseDouble(eSize.getText());
             int mileage = Integer.parseInt(mil.getText());
-            if (col.getText().matches(".*\\d+.*")) {
-                showAlert("Colour must be a string");
+            if (mileage <0 || engineSize <=0)
+            {
+                showAlert("Check Number inputs are above 0");
+                return false;
+            }
+            if (col.getText().matches(".*\\d+.*") || reg.getText().matches(".*\\d+.*") || manuf.getText().matches(".*\\d+.*") || mod.getText().matches(".*\\d+.*") || wName.getText().matches(".*\\d+.*") || wCompAddress.getText().matches(".*\\d+.*")) {
+                showAlert("Fields must be a string");
                 return false;
             }
 
