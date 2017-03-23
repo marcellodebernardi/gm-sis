@@ -23,6 +23,7 @@ import logic.spc.SpecRepairSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,9 +50,11 @@ public class SpecialistController implements Initializable {
     @FXML
     private DatePicker bookingReturnDate = new DatePicker();
     @FXML
-    private DatePicker instaDate, wEndDate = new DatePicker();
+    private DatePicker instaDate = new DatePicker();
     @FXML
     private Label itemLabel = new Label();
+    @FXML
+    private TextField wEndDate = new TextField();
     @FXML
     private ComboBox<String> partDes, partSerial = new ComboBox<>();
     @FXML
@@ -134,7 +137,7 @@ public class SpecialistController implements Initializable {
         bookingDeliveryDate.setDayCellFactory(dateChecker);
         bookingReturnDate.setDayCellFactory(dateChecker);
         instaDate.setDayCellFactory(dateChecker);
-        wEndDate.setDayCellFactory(dateBlocker);
+       // wEndDate.setDayCellFactory(dateBlocker);
         setPartDes();
         try {
             setValues();
@@ -756,7 +759,7 @@ public class SpecialistController implements Initializable {
 
     public void clearFields() {
         instaDate.setValue(null);
-        wEndDate.setValue(null);
+        wEndDate.clear();
         partDes.getItems().clear();
         setPartDes();
         partSerial.getItems().clear();
@@ -796,7 +799,9 @@ public class SpecialistController implements Initializable {
             installationID = installation.getInstallationID();
             partSerial.setValue(Integer.toString(installation.getPartOccurrence().getPartOccurrenceID()));
             instaDate.setValue(installation.getInstallationDate().toLocalDate());
-            wEndDate.setValue(installation.getEndWarrantyDate().toLocalDate());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = Date.from(installation.getEndWarrantyDate().toInstant());
+            wEndDate.setText(simpleDateFormat.format(date));
         }
         catch (NullPointerException e) {
             e.printStackTrace();
@@ -813,7 +818,7 @@ public class SpecialistController implements Initializable {
         wEndDate.setVisible(false);
         instaVReg.setVisible(false);
         instaDate.setValue(null);
-        wEndDate.setValue(null);
+        wEndDate.clear();
         instaVReg.clear();
         instaAbsID_lbl.setVisible(false);
         instaDate_lbl.setVisible(false);
@@ -879,7 +884,7 @@ public class SpecialistController implements Initializable {
         installation.setPartAbstractionID(abs);
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
         installation.setPartOccurrence(partOccurrence);
-        wEndDate.setValue(LocalDate.now());
+       // wEndDate.setValue(LocalDate.now());
         installation.setInstallationDate(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
         installation.setEndWarrantyDate(ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()));
         specRepairSystem.commitInstallations(installation);
