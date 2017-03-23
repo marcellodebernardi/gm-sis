@@ -1,16 +1,18 @@
 package logic;
 
-import domain.*;
+import domain.Customer;
+import domain.PartOccurrence;
+import domain.User;
+import domain.Vehicle;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
 import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.*;
+import static logic.criterion.CriterionOperator.EqualTo;
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -41,7 +43,7 @@ public class PersistenceTests {
         List<Customer> customers = persistence.getByCriteria(
                 new Criterion<>(Customer.class));
 
-        for(Customer c : customers) {
+        for (Customer c : customers) {
             System.out.println(c.getCustomerID() + " " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
             System.out.println("Vehicles: " + c.getVehicles().size());
             if (c.getVehicles().size() > 0) {

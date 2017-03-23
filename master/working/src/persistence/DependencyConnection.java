@@ -80,7 +80,6 @@ public class DependencyConnection {
     }
 
 
-
     public enum Directionality {
         TRANSMITTER, RECEIVER, BIDIRECTIONAL
     }

@@ -28,7 +28,8 @@ public class MenuHandler {
         try {
             if (instance == null) instance = new MenuHandler();
             return instance;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -42,7 +43,8 @@ public class MenuHandler {
     private void setUserType() {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
             usersButton.setDisable(false);
-        } else {
+        }
+        else {
             usersButton.setDisable(true);
         }
     }

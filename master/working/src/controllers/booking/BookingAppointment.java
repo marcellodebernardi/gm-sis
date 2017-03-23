@@ -3,7 +3,6 @@ package controllers.booking;
 import domain.DiagRepBooking;
 import jfxtras.scene.control.agenda.Agenda;
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -27,7 +26,8 @@ public class BookingAppointment implements Agenda.Appointment {
     private String description;
 
 
-    public BookingAppointment() {}
+    public BookingAppointment() {
+    }
 
     public BookingAppointment asDiagnosis(DiagRepBooking booking) {
         bookingID = booking.getBookingID();
@@ -54,16 +54,32 @@ public class BookingAppointment implements Agenda.Appointment {
         return summary;
     }
 
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getStartLocalDateTime() {
         return startTime.toLocalDateTime();
     }
 
+    public void setStartLocalDateTime(LocalDateTime localDateTime) {
+        startTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+    }
+
     public LocalDateTime getEndLocalDateTime() {
         return endTime.toLocalDateTime();
+    }
+
+    public void setEndLocalDateTime(LocalDateTime localDateTime) {
+        endTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
     }
 
     public Agenda.AppointmentGroup getAppointmentGroup() {
@@ -74,23 +90,6 @@ public class BookingAppointment implements Agenda.Appointment {
         this.appointmentGroup = appointmentGroup;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStartLocalDateTime(LocalDateTime localDateTime) {
-        startTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-    }
-
-    public void setEndLocalDateTime(LocalDateTime localDateTime) {
-        endTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-    }
-
-
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////// UNSUPPORTED OPERATIONS ///////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -98,7 +97,15 @@ public class BookingAppointment implements Agenda.Appointment {
         throw new UnsupportedOperationException();
     }
 
+    public void setStartTime(Calendar calendar) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
     public Calendar getEndTime() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setEndTime(Calendar calendar) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
@@ -106,11 +113,23 @@ public class BookingAppointment implements Agenda.Appointment {
         throw new UnsupportedOperationException();
     }
 
+    public void setStartTemporal(Temporal temporal) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
     public Temporal getEndTemporal() throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
+    public void setEndTemporal(Temporal temporal) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
     public String getLocation() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setLocation(String location) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
@@ -119,26 +138,6 @@ public class BookingAppointment implements Agenda.Appointment {
     }
 
     public void setWholeDay(Boolean wholeDay) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setLocation(String location) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setStartTemporal(Temporal temporal) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setEndTemporal(Temporal temporal) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setStartTime(Calendar calendar) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setEndTime(Calendar calendar) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 }

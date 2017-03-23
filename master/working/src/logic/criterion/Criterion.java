@@ -12,9 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import static logic.criterion.CriterionException.Cause.ARGUMENTS_INCOMPATIBLE;
-import static logic.criterion.CriterionException.Cause.NULL_INPUTS;
-import static logic.criterion.CriterionException.Cause.SUBQUERY_NOT_IN;
+import static logic.criterion.CriterionException.Cause.*;
 import static logic.criterion.CriterionOperator.In;
 import static logic.criterion.CriterionOperator.Matches;
 
@@ -213,11 +211,11 @@ public class Criterion<E extends Searchable> {
     /* HELPER: appends the value to the query, with syntax according to type of value */
     private void appendValue(Object value, CriterionOperator operator) {
         if (value.getClass() == Date.class)
-            criterionQuery.append(((Date)value).getTime());
+            criterionQuery.append(((Date) value).getTime());
         else if (value.getClass() == LocalDateTime.class)
-            criterionQuery.append(((LocalDateTime)value).toEpochSecond(ZoneOffset.UTC) * 1000);
+            criterionQuery.append(((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000);
         else if (value.getClass() == ZonedDateTime.class)
-            criterionQuery.append(((ZonedDateTime)value).toEpochSecond() * 1000);
+            criterionQuery.append(((ZonedDateTime) value).toEpochSecond() * 1000);
         else if (operator == Matches)
             criterionQuery.append("'%").append(value).append("%'");
         else
@@ -257,11 +255,11 @@ public class Criterion<E extends Searchable> {
 
             for (int i = 0; i < annotations.length; i++) {
                 if (annotations[i][0].annotationType().equals(Column.class)) {
-                    Column metadata = (Column)annotations[i][0];
+                    Column metadata = (Column) annotations[i][0];
                     if (metadata.name().equals(attribute)) {
                         return constructorArgumentTypes[i].isPrimitive() ?
-                                constructorArgumentTypes[i].toString().substring(0,1)
-                                        .equalsIgnoreCase(value.getClass().getSimpleName().substring(0,1))
+                                constructorArgumentTypes[i].toString().substring(0, 1)
+                                        .equalsIgnoreCase(value.getClass().getSimpleName().substring(0, 1))
                                 : constructorArgumentTypes[i].getSimpleName().equals(value.getClass().getSimpleName());
                     }
                 }

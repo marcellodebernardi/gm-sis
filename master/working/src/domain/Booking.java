@@ -1,5 +1,13 @@
 package domain;
 
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
+import persistence.DatabaseRepository;
+
+import java.util.List;
+
+import static logic.criterion.CriterionOperator.EqualTo;
+
 /**
  * @author Marcello De Bernardi
  * @version 0.2
@@ -53,37 +61,50 @@ public abstract class Booking implements Searchable {
         return vehicleRegNumber;
     }
 
-    public String getDescription() {
-        return description;
-    }
+    @Lazy public Vehicle getVehicle() {
+        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                (Vehicle.class, "vehicleRegNumber", EqualTo, vehicleRegNumber));
 
-    public Bill getBill() {
-        return bill;
+        return vehicles != null && vehicles.size() != 0 ? vehicles.get(0) : null;
     }
-
-    public int getMechanicID() {
-        return mechanicID;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
 
     public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public Bill getBill() {
+        return bill;
+    }
+
     public void setBill(Bill bill) {
         this.bill = bill;
     }
 
+    public int getMechanicID() {
+        return mechanicID;
+    }
+
+    @Lazy public Mechanic getMechanic() {
+        List<Mechanic> mechanics = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                (Mechanic.class, "mechanicID", EqualTo, mechanicID));
+
+        return mechanics != null && mechanics.size() != 0 ? mechanics.get(0) : null;
+    }
+
     public void setMechanicID(int mechanicID) {
         this.mechanicID = mechanicID;
+    }
+
+    public boolean isComplete() {
+        return complete;
     }
 
     public void setComplete(boolean complete) {

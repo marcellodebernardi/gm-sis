@@ -68,6 +68,12 @@ public abstract class SpecRepBooking implements Searchable {
         return this.spcID;
     }
 
+    public void setSpcID(int spcID) {
+        if (spcID != -1) {
+            this.spcID = spcID;
+        }
+    }
+
     public Date getDeliveryDate() {
         return this.deliveryDate;
     }
@@ -80,10 +86,15 @@ public abstract class SpecRepBooking implements Searchable {
         return this.cost;
     }
 
+    public void setCost(double cost) {
+        if (!(cost <= -1)) {
+            this.cost = cost;
+        }
+    }
+
     public int getBookingID() {
         return bookingID;
     }
-
 
     public void setBookingID(int bookingID) {
         List<DiagRepBooking> bookingList = bookingSystem.getAllBookings();
@@ -93,12 +104,6 @@ public abstract class SpecRepBooking implements Searchable {
         }
         if (bookingInfo.contains(bookingID)) {
             this.bookingID = bookingID;
-        }
-    }
-
-    public void setSpcID(int spcID) {
-        if (spcID != -1) {
-            this.spcID = spcID;
         }
     }
 
@@ -116,11 +121,5 @@ public abstract class SpecRepBooking implements Searchable {
             return true;
         }
         return false;
-    }
-
-    public void setCost(double cost) {
-        if (!(cost <= -1)) {
-            this.cost = cost;
-        }
     }
 }

@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
  *         todo clean up and add comments
  */
 public class MenuController implements Initializable {
+    // todo this is bad, controllers need not be entirely stateless but their state needs to be reset
     private BorderPane todayPane;
     private BorderPane customersBasePane;
     private BorderPane vehicleBasePane;
