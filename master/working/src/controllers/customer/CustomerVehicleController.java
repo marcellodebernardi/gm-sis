@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -129,11 +130,11 @@ public class CustomerVehicleController implements Initializable {
             boolean check = checkVehicleFields();
             if (check) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date rdm = java.sql.Date.valueOf(rDateMot.getValue());
-                Date dls = java.sql.Date.valueOf(dLastServiced.getValue());
+                Date rdm = fromLocalDate(rDateMot.getValue());
+                Date dls = fromLocalDate(dLastServiced.getValue());
                 Date wed = new Date();
                 if ((!(wExpirationDate.getValue() == null))) {
-                    wed = java.sql.Date.valueOf(wExpirationDate.getValue());
+                    wed = fromLocalDate(wExpirationDate.getValue());
                 }
                 VehicleType vT;
                 if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
@@ -191,11 +192,11 @@ public class CustomerVehicleController implements Initializable {
             boolean check = checkVehicleFields();
             if (check) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date rdm = java.sql.Date.valueOf(rDateMot.getValue());
-                Date dls = java.sql.Date.valueOf(dLastServiced.getValue());
+                Date rdm = fromLocalDate(rDateMot.getValue());
+                Date dls = fromLocalDate(dLastServiced.getValue());
                 Date wed = new Date();
                 if ((!(wExpirationDate.getValue() == null))) {
-                    wed = java.sql.Date.valueOf(wExpirationDate.getValue());
+                    wed = fromLocalDate(wExpirationDate.getValue());
                 }
                 VehicleType vT;
                 if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
@@ -327,11 +328,11 @@ public class CustomerVehicleController implements Initializable {
 
     public boolean checkVehicleFormat() {
         try {
-            Date date = java.sql.Date.valueOf(dLastServiced.getValue());
-            date = java.sql.Date.valueOf(rDateMot.getValue());
+            Date date = fromLocalDate(dLastServiced.getValue());
+            date = fromLocalDate(rDateMot.getValue());
             if (cByWarranty != null) {
                 if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null)) {
-                    date = java.sql.Date.valueOf(wExpirationDate.getValue());
+                    date = fromLocalDate(wExpirationDate.getValue());
                 }
             }
 
@@ -442,5 +443,9 @@ public class CustomerVehicleController implements Initializable {
             System.out.println("Initialize CustomerVehicleController.java class Error");
             e.printStackTrace();
         }
+    }
+
+    private Date fromLocalDate(java.time.LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
