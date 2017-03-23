@@ -5,17 +5,23 @@ import domain.Customer;
 import domain.FuelType;
 import domain.Vehicle;
 import domain.VehicleType;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import logic.booking.BookingSystem;
@@ -30,6 +36,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 //import logic.*;
@@ -104,15 +111,37 @@ public class CustomerVehicleController implements Initializable {
         return instance;
     }
 
-    public Stage showVehiclePopup() throws Exception {
+    public Stage showVehiclePopup()  throws Exception {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/customer/AddCustomerVehiclePopupView.fxml"));
             Parent menu = fxmlLoader.load();
             addVehicleStage = new Stage();
             addVehicleStage.setTitle("Add Vehicle");
-            addVehicleStage.setScene(new Scene(menu));
+            Scene scene = new Scene(menu);
+            addVehicleStage.setScene(scene);
             addVehicleStage.initModality(Modality.APPLICATION_MODAL);
             addVehicleStage.showAndWait();
+
+            /**
+            addVehicleStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+
+                    // consume event
+                    event.consume();
+
+                    // show close dialog
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Close Confirmation");
+                    alert.setHeaderText("Do you really want to quit?");
+                    alert.initOwner( addVehicleStage);
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        Platform.exit();
+                    }
+                }
+            });*/
         }
         catch (IOException e) {
             System.out.println("Show Vehicle Popup Error");

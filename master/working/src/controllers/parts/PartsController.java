@@ -298,10 +298,16 @@ public class PartsController implements Initializable {
 
         Criterion c2 = new Criterion<>(Installation.class);
         List2 = pSys.getAllInstallations();
-        List2.get(0).getPartOccurrence().getPartOccurrenceID();
-        System.out.println(List2.get(0).getPartOccurrence().getPartOccurrenceID());
-        System.out.println(List2.get(0).getVehicleRegNumber());
-        System.out.println(List2.get(0).getPartOccurrence().getBookingID());
+        showInfo("yes");
+        if (List2.get(0).getPartOccurrence() == null)
+        {
+            showInfo("no");
+        }
+        showInfo(List2.get(0).getPartOccurrence().getPartAbstractionID()+" l");
+        //List2.get(0).getPartOccurrence().getPartOccurrenceID();
+        //System.out.println(List2.get(0).getPartOccurrence().getPartOccurrenceID());
+        //System.out.println(List2.get(0).getVehicleRegNumber());
+        //System.out.println(List2.get(0).getPartOccurrence().getBookingID());
 
 
         tableEntries2.removeAll(tableEntries2);
