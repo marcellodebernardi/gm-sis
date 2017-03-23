@@ -1,5 +1,13 @@
 package domain;
 
+import logic.criterion.Criterion;
+import logic.criterion.CriterionOperator;
+import persistence.DatabaseRepository;
+
+import java.util.List;
+
+import static logic.criterion.CriterionOperator.EqualTo;
+
 /**
  * @author Marcello De Bernardi
  * @version 0.2
@@ -53,6 +61,13 @@ public abstract class Booking implements Searchable {
         return vehicleRegNumber;
     }
 
+    @Lazy public Vehicle getVehicle() {
+        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                (Vehicle.class, "vehicleRegNumber", EqualTo, vehicleRegNumber));
+
+        return vehicles != null && vehicles.size() != 0 ? vehicles.get(0) : null;
+    }
+
     public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
     }
@@ -75,6 +90,13 @@ public abstract class Booking implements Searchable {
 
     public int getMechanicID() {
         return mechanicID;
+    }
+
+    @Lazy public Mechanic getMechanic() {
+        List<Mechanic> mechanics = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
+                (Mechanic.class, "mechanicID", EqualTo, mechanicID));
+
+        return mechanics != null && mechanics.size() != 0 ? mechanics.get(0) : null;
     }
 
     public void setMechanicID(int mechanicID) {
