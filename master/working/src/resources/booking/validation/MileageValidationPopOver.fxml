@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" stylesheets="/resources/booking/stylesheets/validation.css"
+            id="validationPane">
+    <center>
+        <Label id="validationText">
+            The new mileage must be a positive integer greater than, or equal to, the previous
+            recorded mileage.
+        </Label>
+    </center>
+</BorderPane>

@@ -1,6 +1,5 @@
 package controllers.user;
 
-import com.sun.xml.internal.ws.api.model.MEP;
 import domain.User;
 import domain.UserType;
 import javafx.collections.FXCollections;
@@ -19,32 +18,35 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by DillonVaghela on 2/20/17.
+ * @author Dillon Vaghela, Marcello De Bernardi
  */
 public class UserController implements Initializable {
-
-
-
     private AuthenticationSystem auth = AuthenticationSystem.getInstance();
 
-    @FXML
-    private Button addButton, newButton, clearButton, deleteButton;
-    @FXML
-    private Label userLabel;
-    @FXML
-    private TextField UID, P, FN, SN, sUID, sFN, sS;
-    @FXML
-    private ComboBox UT, sUT;
-    @FXML
-    private TableView tUsers;
-    @FXML
-    private TableColumn userID, password, firstname, surname, userType;
+    @FXML private Button addButton, newButton, clearButton, deleteButton;
+    @FXML private Label userLabel;
+    @FXML private TextField UID, P, FN, SN;
+    @FXML private ComboBox UT;
+    @FXML private TableView<User> tUsers;
+    @FXML private TableColumn<User, String> userIDColumn;
+    @FXML private TableColumn<User, String> passwordColumn;
+    @FXML private TableColumn<User, String> firstnameColumn;
+    @FXML private TableColumn<User, String> surnameColumn;
+    @FXML private TableColumn<User, UserType> userTypeColumn;
+    @FXML private TextField searchBar;
+
     final ObservableList tableEntries = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AllUsers();
     }
+
+
+    @FXML private void searchUsers() {
+        displayTable(auth.searchUsers(searchBar.getText()));
+    }
+
 
 
     public void addEditUser() throws Exception {
@@ -75,7 +77,7 @@ public class UserController implements Initializable {
                 else {
                     userType = UserType.NORMAL;
                 }
-                boolean checker = auth.addEditUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
+                boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
                 clear();
                // showAlert("User " + addOrEdit + ": " + checker);
@@ -167,23 +169,8 @@ public class UserController implements Initializable {
         alert.showAndWait();
     }
 
-    public void SearchUsers() {
-        UserType UT;
-        List<User> arrayList;
-        if (sUT.getSelectionModel().getSelectedItem() !=null) {
-            if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin")) {
-                UT = UserType.ADMINISTRATOR;
-            } else {
-                UT = UserType.NORMAL;
-            }
-            arrayList = auth.searchUsersT(sUID.getText(), sFN.getText(), sS.getText(), UT);
-        }
-        arrayList = auth.searchUsers(sUID.getText(), sFN.getText(), sS.getText());
-        displayTable(arrayList);
-    }
-
     public void AllUsers() {
-        List<User> arrayList = auth.getUsersList();
+        List<User> arrayList = auth.getAllUsers();
         displayTable(arrayList);
     }
 
@@ -214,8 +201,8 @@ public class UserController implements Initializable {
                 tableEntries.add(arrayList.get(i));
             }
 
-            userID.setCellValueFactory(new PropertyValueFactory<User, String>("userID"));
-            userID.setCellFactory(TextFieldTableCell.<User>forTableColumn());
+            userIDColumn.setCellValueFactory(new PropertyValueFactory<User, String>("userID"));
+            userIDColumn.setCellFactory(TextFieldTableCell.<User>forTableColumn());
             //userID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             //   @Override
             //  public void handle(TableColumn.CellEditEvent<User, String> event) {
@@ -223,27 +210,27 @@ public class UserController implements Initializable {
             //}
             //});
 
-            password.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
-            password.setCellFactory(TextFieldTableCell.<User>forTableColumn());
-            password.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            passwordColumn.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
+            passwordColumn.setCellFactory(TextFieldTableCell.<User>forTableColumn());
+            passwordColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<User, String> event) {
                     (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPassword(event.getNewValue());
                 }
             });
 
-            firstname.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-            firstname.setCellFactory(TextFieldTableCell.<User>forTableColumn());
-            firstname.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            firstnameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+            firstnameColumn.setCellFactory(TextFieldTableCell.<User>forTableColumn());
+            firstnameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<User, String> event) {
                     (event.getTableView().getItems().get(event.getTablePosition().getRow())).setFirstName(event.getNewValue());
                 }
             });
 
-            surname.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
-            surname.setCellFactory(TextFieldTableCell.<User>forTableColumn());
-            surname.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            surnameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
+            surnameColumn.setCellFactory(TextFieldTableCell.<User>forTableColumn());
+            surnameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<User, String> event) {
                     (event.getTableView().getItems().get(event.getTablePosition().getRow())).setSurname(event.getNewValue());
@@ -251,8 +238,8 @@ public class UserController implements Initializable {
             });
 
 
-            userType.setCellValueFactory(new PropertyValueFactory<User, UserType>("userType"));
-            userType.setCellFactory(TextFieldTableCell.<User, UserType>forTableColumn(new StringConverter<UserType>() {
+            userTypeColumn.setCellValueFactory(new PropertyValueFactory<User, UserType>("userType"));
+            userTypeColumn.setCellFactory(TextFieldTableCell.<User, UserType>forTableColumn(new StringConverter<UserType>() {
                 @Override
                 public String toString(UserType object) {
                     return object.toString();
@@ -266,7 +253,7 @@ public class UserController implements Initializable {
                     return UserType.NORMAL;
                 }
             }));
-            userType.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, UserType>>() {
+            userTypeColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, UserType>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<User, UserType> event) {
 
@@ -340,8 +327,6 @@ public class UserController implements Initializable {
         P.clear();
         FN.clear();
         SN.clear();
-        sUID.clear();
-        sFN.clear();
         AllUsers();
     }
 }

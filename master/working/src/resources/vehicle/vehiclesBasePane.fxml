@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" prefHeight="638.0" prefWidth="1255.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.vehicle.VehicleController" stylesheets="/resources/stylesheets/vehicle.css">
+<BorderPane maxHeight="-Infinity" prefHeight="638.0" prefWidth="1255.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.vehicle.VehicleController" stylesheets="/vehicle/vehicle.css">
     <left>
         <FlowPane prefHeight="784.0" prefWidth="287.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>

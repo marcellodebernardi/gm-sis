@@ -123,9 +123,6 @@ public class SpecialistRepairCenter implements Searchable {
         this.bookings = SpecRepBookings;
     }
 
-    public void addToBooking(SpecRepBooking specRepBooking) {
-        this.bookings.add(specRepBooking);
-    }
 
     private boolean containsChar(String number) {
         try {

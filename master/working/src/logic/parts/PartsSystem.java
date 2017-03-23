@@ -83,12 +83,12 @@ public class PartsSystem {
     }
 
     public List<PartAbstraction> getPartAbstractions() {
-        return persistence.getByCriteria(new Criterion<PartAbstraction>(PartAbstraction.class, "partAbstractionID", MoreThan, 0));
+        return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", MoreThan, 0));
     }
 
     public List<PartOccurrence> getAllUninstalled(int partAbstractionID)
     {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0).and("partAbstractionID",EqualTo,partAbstractionID));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1).and("partAbstractionID",EqualTo,partAbstractionID));
     }
 
     public PartOccurrence getByInstallationID(int InstallationID)
@@ -98,7 +98,7 @@ public class PartsSystem {
 
     public List<Installation> getAllInstallations ()
     {
-        return persistence.getByCriteria(new Criterion<>(Installation.class,"installationID",MoreThan, 0));
+        return persistence.getByCriteria(new Criterion<>(Installation.class,"installationID",EqualTo, -1));
     }
 }
 

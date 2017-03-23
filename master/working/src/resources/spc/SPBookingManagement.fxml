@@ -99,10 +99,11 @@
    <right>
       <Pane prefHeight="0.0" prefWidth="201.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="editSRBooking" layoutX="22.0" layoutY="68.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="27.0" prefWidth="155.0" text="Edit Booking" />
-            <Button fx:id="deleteSRBooking" layoutX="23.0" layoutY="120.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="27.0" prefWidth="152.0" text="Delete Booking" />
-            <Button fx:id="viewVehicleInstallations" layoutX="23.0" layoutY="14.0" mnemonicParsing="false" onAction="#showInstallations" prefHeight="27.0" prefWidth="151.0" text="View Parts" />
+            <Button fx:id="editSRBooking" layoutX="23.0" layoutY="14.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="150.0" text="Edit Booking" />
+            <Button fx:id="deleteSRBooking" layoutX="23.0" layoutY="98.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="27.0" prefWidth="152.0" text="Delete Booking" />
+            <Button fx:id="viewVehicleInstallations" layoutX="24.0" layoutY="56.0" mnemonicParsing="false" onAction="#showInstallations" prefHeight="27.0" prefWidth="151.0" text="View Parts" />
             <Button layoutX="23.0" layoutY="171.0" mnemonicParsing="false" onAction="#queryOutstanding" prefHeight="16.0" prefWidth="152.0" text="Query Outstanding" />
+            <Button layoutX="23.0" layoutY="138.0" mnemonicParsing="false" onAction="#queryReturned" prefHeight="27.0" prefWidth="153.0" text="Query Returned" />
          </children>
       </Pane>
    </right>

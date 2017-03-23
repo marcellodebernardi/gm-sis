@@ -50,7 +50,7 @@ public class VehicleSys {
     public Vehicle searchAVehicle(String regNumber)
     {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", EqualTo, regNumber));
+                "vehicleRegNumber", EqualTo, regNumber.toUpperCase()));
         return results !=null && results.size() != 0 ? results.get(0) : null;
     }
 

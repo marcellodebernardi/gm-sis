@@ -54,19 +54,22 @@ public class AuthenticationSystem {
         return loggedInUser;
     }
 
-    public List<User> searchUsers(String userID, String firstName, String surname) {
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID).and("firstName", Matches,firstName)
-        .and("surname", Matches, surname));
-        return results;
+    public List<User> getUser(String userID, String firstName, String surname) {
+        return persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID)
+                .and("firstName", Matches,firstName)
+                .and("surname", Matches, surname));
     }
 
-    public List<User> searchUsersT(String userID, String firstName, String surname,  UserType userType) {
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID).and("firstName", Matches,firstName)
-                .and("surname", Matches, surname).and("userType", Matches, userType));
-        return results;
+    public List<User> searchUsers(String query) {
+        return persistence.getByCriteria(new Criterion<>
+                (User.class, "userID", Matches, query)
+                .or("firstName", Matches, query)
+                .or("surname", Matches, query)
+                .or("userType", Matches, query)
+        );
     }
 
-    public boolean addEditUser(String userID, String pass, String firstName, String surname, UserType userType) {
+    public boolean commitUser(String userID, String pass, String firstName, String surname, UserType userType) {
         return persistence.commitItem(new User(userID, pass, firstName, surname, userType));
     }
 
@@ -74,13 +77,7 @@ public class AuthenticationSystem {
         return persistence.deleteItem(new Criterion<>(User.class, "userID", EqualTo, userID));
     }
 
-    public User searchAUser(String userID) {
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class,
-                "userID", EqualTo, userID));
-        return results != null ? results.get(0) : null;
-    }
-
-    public List<User> getUsersList() {
+    public List<User> getAllUsers() {
         List<User> results = persistence.getByCriteria(new Criterion<>(User.class));
         return results;
     }

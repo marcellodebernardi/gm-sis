@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 public class MenuController implements Initializable {
     private BorderPane todayPane;
     private BorderPane customersBasePane;
-    private BorderPane bookingBasePane;
     private BorderPane vehicleBasePane;
     private BorderPane partsBasePane;
     private BorderPane specialistBasePane;
@@ -31,6 +30,7 @@ public class MenuController implements Initializable {
 
     @FXML private Button UsersButton;
     @FXML private Button SRCButton;
+
 
     @Override public void initialize(URL location, ResourceBundle resources) {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
@@ -44,14 +44,11 @@ public class MenuController implements Initializable {
         }
     }
 
-
-    @FXML private void logout() {
-
+    public void openApplication() {
+        openTodayTab();
     }
 
-
-
-    public void openTodayTab() {
+    @FXML private void openTodayTab() {
         try {
             if (todayPane == null) todayPane
                     = FXMLLoader.load(getClass().getResource("/resources/today/TodayPane.fxml"));
@@ -62,7 +59,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openCustomersTab() {
+    @FXML private void openCustomersTab() {
         try {
             if (customersBasePane == null) customersBasePane
                     = FXMLLoader.load(getClass().getResource("/resources/customer/CustomerView.fxml"));
@@ -73,11 +70,11 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openBookingsTab() {
+    @FXML private void openBookingsTab() {
         BookingController.getInstance().show(); // todo standardize
     }
 
-    public void openVehiclesTab() {
+    @FXML private void openVehiclesTab() {
         try {
             if (vehicleBasePane == null) vehicleBasePane
                     = FXMLLoader.load(getClass().getResource("/resources/vehicle/vehiclesBasePane.fxml"));
@@ -88,7 +85,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openPartsTab() {
+    @FXML private void openPartsTab() {
         try {
             if (partsBasePane == null) partsBasePane
                     = FXMLLoader.load(getClass().getResource("/resources/parts/PartModule.fxml"));
@@ -99,7 +96,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openSRCTab() {
+    @FXML private void openSRCTab() {
         try {
             if (specialistBasePane == null) specialistBasePane
                     = FXMLLoader.load(getClass().getResource("/spc/SPBookingManagement.fxml"));
@@ -112,7 +109,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openSRCManagementTab() {
+    @FXML private void openSRCManagementTab() {
         try {
             if (spcManagementBasePane == null) spcManagementBasePane =
                     FXMLLoader.load(getClass().getResource("/spc/SPCManagement.fxml"));
@@ -123,7 +120,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void openUsersTab() {
+    @FXML private void openUsersTab() {
         try {
             if (usersBasePane == null) usersBasePane
                     = FXMLLoader.load(getClass().getResource("/resources/user/usersBasePane.fxml"));
@@ -132,5 +129,8 @@ public class MenuController implements Initializable {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML private void logout() {
     }
 }

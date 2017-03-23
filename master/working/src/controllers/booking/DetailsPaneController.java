@@ -15,6 +15,7 @@ import logic.customer.CustomerSystem;
 import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import org.controlsfx.control.PopOver;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import persistence.DatabaseRepository;
 
@@ -27,6 +28,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static java.time.DayOfWeek.SUNDAY;
 
 /**
  * @author Marcello De Bernardi
@@ -68,6 +71,11 @@ public class DetailsPaneController {
     @FXML private TextField diagnosisEndTimeTextField;
     @FXML private TextField repairStartTimeTextField;
     @FXML private TextField repairEndTimeTextField;
+    // validation popovers
+    private PopOver customerValidationPopOver;
+    private PopOver diagnosisDateValidationPopOver;
+    private PopOver repairDateValidationPopOver;
+    private PopOver mileageValidationPopOver;
 
 
     public DetailsPaneController() {
@@ -85,10 +93,16 @@ public class DetailsPaneController {
 
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     INITIALIZATION                                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void initialize() {
         master.setController(DetailsPaneController.class, this);
 
-        populateCustomerTextField(customerSystem.getAllCustomers());
+        initializeCustomerTextField(customerSystem.getAllCustomers());
+        initializePartsTableView();
+
         populateMechanicComboBox(bookingSystem.getAllMechanics());
 
         vehicleComboBox.setPrefWidth(Double.MAX_VALUE);
@@ -100,7 +114,7 @@ public class DetailsPaneController {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
-                if (item.isBefore(LocalDate.now())) {
+                if (item.isBefore(LocalDate.now()) || item.getDayOfWeek().equals(SUNDAY)) {
                     this.setDisable(true);
                     this.setStyle(" -fx-background-color: #ff6666; ");
                 }
@@ -109,18 +123,50 @@ public class DetailsPaneController {
 
         diagnosisDatePicker.setDayCellFactory(dayCellFactory);
         repairDatePicker.setDayCellFactory(dayCellFactory);
+    }
 
-        setPartsTableCellValueFactories();
-        setColumnWidths();
-        setPartsSelectionListener();
+    // adds all customers to the customer search bar's autocomplete function
+    private void initializeCustomerTextField(List<Customer> customers) {
+        List<String> customerInfo = new ArrayList<>();
+
+        customers.forEach(c ->
+                customerInfo.add(c.getCustomerID() + ": " + c.getCustomerFirstname() + " " + c.getCustomerSurname()));
+
+        AutoCompletionBinding<String> customerAutoCompletionBinding
+                = TextFields.bindAutoCompletion(customerSearchBar, customerInfo);
+        customerAutoCompletionBinding.setOnAutoCompleted(p -> this.selectCustomer());
+    }
+
+    private void initializePartsTableView() {
+        DoubleBinding binding = partsTable.widthProperty().divide(3);
+
+        nameColumn.prefWidthProperty().bind(binding);
+        nameColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartName())
+        );
+
+        costColumn.prefWidthProperty().bind(binding);
+        costColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartPrice())
+        );
+
+        subcontractedColumn.prefWidthProperty().bind(binding);
+        subcontractedColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != -1)
+        );
+
+        partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
+        partsTable.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> selectedPart = newSelection);
     }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                     EVENT LISTENERS                                                 //
+    //                                     FXML EVENT LISTENERS                                            //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void selectCustomer() {
         if (!validateCustomerSelection()) return;
+
         populateVehicleComboBox(getCustomerFromSearchBar().getVehicles());
         selectedBooking = new DiagRepBooking();
     }
@@ -134,24 +180,25 @@ public class DetailsPaneController {
         vehicleMileageTextField.setDisable(true);
     }
 
+    @FXML private void selectDiagnosisDate() {
+        validateDiagnosisDate();
+    }
+
+    @FXML private void selectRepairDate() {
+        validateRepairDate();
+    }
+
     @FXML private void saveBooking() {
         if (selectedBooking == null) {
             selectedBooking = new DiagRepBooking();
             selectedVehicle.getBookingList().add(selectedBooking);
         }
 
-        int vehicleMileage = 0;
-        try {
-            vehicleMileage = Integer.parseInt(vehicleMileageTextField.getText());
-        }
-        catch (NumberFormatException e) {
-            // do nothing, keep 0 as mileage
-        }
-        selectedVehicle.setMileage(vehicleMileage);
+        selectedVehicle.setMileage(getInteger(newVehicleMileageTextField));
 
         // todo implement bill
         selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
-        selectedBooking.setDescription(getDescriptionFromTextField());
+        selectedBooking.setDescription(descriptionTextField.getText());
         selectedBooking.setBill(new Bill(0, false));
         selectedBooking.setMechanicID(getMechanicIDFromComboBox());
         selectedBooking.setDiagnosisStart(getDiagnosisStartTime());
@@ -266,20 +313,90 @@ public class DetailsPaneController {
     //                                     INPUT VALIDATION                                                //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private boolean validateCustomerSelection() {
-        if (getCustomerFromSearchBar() == null) {
-            PopOver customerHelper = new PopOver(new Label("You're a fag"));
-            customerHelper.setDetachable(false);
-            customerHelper.setArrowIndent(100);
-            customerHelper.setCornerRadius(0);
-            customerHelper.show(customerSearchBar);
+        if (customerValidationPopOver == null) {
+            try {
+                customerValidationPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/CustomerValidationPopOver.fxml")));
+                customerValidationPopOver.setDetachable(false);
+                customerValidationPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        if (getCustomerFromSearchBar() != null) {
+            if (customerValidationPopOver.isShowing()) customerValidationPopOver.hide();
+            return true;
+        }
+        else {
+            if (!customerValidationPopOver.isShowing()) customerValidationPopOver.show(customerSearchBar);
             return false;
         }
-        return true;
+    }
+
+    private boolean validateDiagnosisDate() {
+        if (diagnosisDateValidationPopOver == null) {
+            try {
+                diagnosisDateValidationPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/DiagnosisDateValidationPopOver.fxml")));
+                diagnosisDateValidationPopOver.setDetachable(false);
+                diagnosisDateValidationPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        LocalDate diagnosisDate = getDiagnosisStartTime().toLocalDate();
+
+        if (diagnosisDate.isAfter(LocalDate.now())) {
+            if (diagnosisDateValidationPopOver.isShowing()) diagnosisDateValidationPopOver.hide();
+            return true;
+        }
+        else {
+            if (!diagnosisDateValidationPopOver.isShowing()) diagnosisDateValidationPopOver.show(customerSearchBar);
+            return false;
+        }
+    }
+
+    private boolean validateRepairDate() {
+        return false;
     }
 
     private boolean validateNewMileage() {
-        int oldMileage = Integer.parseInt(vehicleMileageTextField.getText());
-        return false;
+        if (mileageValidationPopOver == null) {
+            try {
+                mileageValidationPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/MileageValidationPopOver.fxml")));
+                mileageValidationPopOver.setDetachable(false);
+                mileageValidationPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        try {
+            int oldMileage = Integer.parseInt(vehicleMileageTextField.getText());
+            int newMileage = Integer.parseInt(newVehicleMileageTextField.getText());
+
+            if (newMileage < oldMileage) {
+                if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newVehicleMileageTextField);
+                return false;
+            }
+            else {
+                if (mileageValidationPopOver.isShowing()) mileageValidationPopOver.hide();
+                return true;
+            }
+        }
+        catch (NumberFormatException e) {
+            if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newVehicleMileageTextField);
+            return false;
+        }
     }
 
 
@@ -351,15 +468,6 @@ public class DetailsPaneController {
         partsTable.refresh();
     }
 
-    // adds all customers to the customer search bar's autocomplete function
-    private void populateCustomerTextField(List<Customer> customers) {
-        List<String> customerInfo = new ArrayList<>();
-        for (Customer c : customers) {
-            customerInfo.add(c.getCustomerID() + ": " + c.getCustomerFirstname() + " " + c.getCustomerSurname());
-        }
-        TextFields.bindAutoCompletion(customerSearchBar, customerInfo);
-    }
-
     // adds customer's vehicle to the vehicle selection ComboBox
     private void populateVehicleComboBox(List<Vehicle> vehicles) {
         List<String> vehicleInfo = new ArrayList<>();
@@ -392,42 +500,6 @@ public class DetailsPaneController {
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                     TABLE BUILDERS                                                  //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void setPartsTableCellValueFactories() {
-        nameColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartName())
-        );
-        costColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getPartAbstraction().getPartPrice())
-        );
-        subcontractedColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != -1)
-        );
-
-        partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
-    }
-
-    private void setColumnWidths() {
-        DoubleBinding binding = partsTable.widthProperty().divide(3);
-
-        nameColumn.prefWidthProperty().bind(binding);
-        costColumn.prefWidthProperty().bind(binding);
-        subcontractedColumn.prefWidthProperty().bind(binding);
-    }
-
-    // sets the selection listeners for the parts table
-    private void setPartsSelectionListener() {
-        partsTable
-                .getSelectionModel()
-                .selectedItemProperty()
-                .addListener((obs, oldSelection, newSelection) ->
-                        selectedPart = newSelection
-                );
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FIELD EXTRACTORS                                                //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // gets the name of the selected customer from the search bar
@@ -444,11 +516,6 @@ public class DetailsPaneController {
                 .getSelectionModel()
                 .getSelectedItem()
                 .split(":")[0];
-    }
-
-    // gets the description from the appropriate textfield
-    private String getDescriptionFromTextField() {
-        return descriptionTextField.getText();
     }
 
     // returns the mechanic selected in the mechanic ComboBox
@@ -496,6 +563,11 @@ public class DetailsPaneController {
         List<PartOccurrence> parts = new ArrayList<>();
         parts.addAll(partsTable.getItems());
         return parts;
+    }
+
+    // gets an integer value from the textfield
+    private int getInteger(TextField textField) throws NumberFormatException {
+        return Integer.parseInt(textField.getText());
     }
 
 

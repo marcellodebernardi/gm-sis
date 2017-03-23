@@ -1,123 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
-<BorderPane maxHeight="-Infinity" prefHeight="638.0" prefWidth="1255.0" xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.user.UserController" stylesheets="/resources/stylesheets/user.css">
-   <left>
-      <GridPane prefHeight="638.0" prefWidth="367.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="17.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="105.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="156.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="174.0" minWidth="6.0" prefWidth="6.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="71.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="98.70053100585938" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="307.0" minHeight="10.0" prefHeight="89.29946899414062" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="270.0" minHeight="10.0" prefHeight="120.20574951171875" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="UserID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Surname:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label text="Type:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="UID" promptText="Enter User ID" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="P" promptText="Enter a password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="FN" promptText="Enter first name" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <TextField fx:id="SN" promptText="Enter surname" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <ComboBox fx:id="UT" promptText="Select type" GridPane.columnIndex="2" GridPane.rowIndex="5">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Admin" />
-                     <String fx:value="Normal" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addEditUser" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label fx:id="userLabel" text="Add User" GridPane.columnIndex="1" />
-            <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#NewVehicle" text="New" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
-               <GridPane.margin>
-                  <Insets left="15.0" />
-               </GridPane.margin></Button>
-            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#ClearFields" text="Clear" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </Button>
-            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteUser" text="Delete" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
-               <GridPane.margin>
-                  <Insets right="20.0" />
-               </GridPane.margin>
-            </Button>
-         </children>
-      </GridPane>
-   </left>
-   <center>
-      <SplitPane dividerPositions="0.08647798742138364" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-         <items>
-            <GridPane>
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="151.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="0.0" prefWidth="157.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="653.0" minWidth="10.0" prefWidth="181.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="653.0" minWidth="10.0" prefWidth="166.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="653.0" minWidth="10.0" prefWidth="82.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="653.0" minWidth="10.0" prefWidth="68.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="626.0" minWidth="10.0" prefWidth="80.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" onAction="#AllUsers" text="View All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-                  <TextField fx:id="sUID" onKeyTyped="#SearchUsers" prefHeight="27.0" prefWidth="210.0" promptText="Enter User ID" GridPane.halignment="RIGHT" />
-                  <TextField fx:id="sFN" onKeyTyped="#SearchUsers" promptText="Enter first name" GridPane.columnIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#deleteFromList" text="Delete" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
-                  <Button mnemonicParsing="false" onAction="#getUser" text="Edit" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
-                  <TextField fx:id="sS" onKeyTyped="#SearchUsers" promptText="enter surname" GridPane.columnIndex="2" />
-                  <ComboBox fx:id="sUT" onAction="#SearchUsers" promptText="Select User Type" GridPane.columnIndex="3" GridPane.halignment="CENTER">
-                     <items>
-                        <FXCollections fx:factory="observableArrayList">
-                           <String fx:value="Admin" />
-                           <String fx:value="Normal" />
-                        </FXCollections>
-                     </items>
-                  </ComboBox>
-               </children>
-            </GridPane>
-            <TableView fx:id="tUsers" prefHeight="533.0" prefWidth="789.0">
-               <columns>
-                  <TableColumn fx:id="userID" prefWidth="208.77859497070312" text="UserID" />
-                  <TableColumn fx:id="password" prefWidth="175.221435546875" text="Password" />
-                  <TableColumn fx:id="firstname" minWidth="1.0" prefWidth="144.28387451171875" text="First name" />
-                  <TableColumn fx:id="surname" minWidth="0.0" prefWidth="153.0" text="Surname" />
-                  <TableColumn fx:id="userType" prefWidth="203.0" text="User Type:" />
-               </columns>
-            </TableView>
-         </items>
-      </SplitPane>
-   </center>
-   <right>
-      <BorderPane prefHeight="638.0" prefWidth="9.0" BorderPane.alignment="CENTER" />
-   </right>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.user.UserController" stylesheets="/user/user.css">
+    <left>
+        <BorderPane id="leftPane">
+            <center>
+                <GridPane BorderPane.alignment="CENTER">
+                    <Label text="UserID" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="password" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <Label text="Surname:" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    <Label text="Type:" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    <TextField fx:id="UID" promptText="Enter User ID" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <TextField fx:id="P" promptText="Enter a password" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                    <TextField fx:id="FN" promptText="Enter first name" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                    <TextField fx:id="SN" promptText="Enter surname" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                    <ComboBox fx:id="UT" promptText="Select type" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                    <Label fx:id="userLabel" text="Add User" GridPane.columnIndex="1"/>
+                </GridPane>
+            </center>
+            <bottom>
+                <HBox id="bottomButtonsHBox">
+                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#addEditUser" text="Add" />
+                    <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#NewVehicle" text="New" />
+                    <Button fx:id="clearButton" mnemonicParsing="false" onAction="#ClearFields" text="Clear"/>
+                    <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteUser" text="Delete"/>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </left>
+    <center>
+        <BorderPane id="tablePane">
+            <top>
+                <HBox id="tableTopBar">
+                    <TextField fx:id="searchBar" id="searchBar" onKeyReleased="#searchUsers"/>
+                    <Button mnemonicParsing="false" onAction="#deleteFromList" text="Delete"/>
+                    <Button mnemonicParsing="false" onAction="#getUser" text="Edit"/>
+                    <ComboBox fx:id="sUT" onAction="#searchUsers" promptText="Select User Type"/>
+                </HBox>
+            </top>
+            <center>
+                <TableView fx:id="tUsers">
+                    <columns>
+                        <TableColumn fx:id="userIDColumn" text="UserID"/>
+                        <TableColumn fx:id="passwordColumn" text="Password"/>
+                        <TableColumn fx:id="firstnameColumn" text="First Name"/>
+                        <TableColumn fx:id="surnameColumn" text="Surname"/>
+                        <TableColumn fx:id="userTypeColumn" text="Access Privileges:"/>
+                    </columns>
+                </TableView>
+            </center>
+        </BorderPane>
+    </center>
 </BorderPane>
