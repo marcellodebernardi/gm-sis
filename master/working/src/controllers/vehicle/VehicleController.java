@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.BooleanStringConverter;
@@ -46,7 +47,9 @@ public class VehicleController implements Initializable {
     @FXML
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
     @FXML
-    private TextField reg, mod, manuf, eSize, col, mil, wName, wCompAddress, regS, manufS;
+    private TextField reg, mod, manuf, eSize, mil, wName, wCompAddress, regS, manufS;
+    @FXML
+    private ColorPicker col;
     @FXML
     private DatePicker rDateMot, dLastServiced, wExpirationDate;
     @FXML
@@ -82,14 +85,14 @@ public class VehicleController implements Initializable {
     @FXML
     private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
     @FXML
-    private Label AddEditL, SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected, PartLabel;
+    private Label AddEditL, SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected, PartLabel, errorsLabel;
     @FXML
     private Button deleteV, ClearV, addV, PartsUsed, newVB, addCustomerB, bookingsB, DeleteVT, EditVehicle, ViewPartsB;
     @FXML
     private ListView ListParts;
 
     @FXML
-    private TextArea custInfo, custInfo2;
+    private TextArea custInfo, custInfo2, Errors;
 
     private ObservableList tableEntries = FXCollections.observableArrayList(), tableEntriesB = FXCollections.observableArrayList(), comboEntriesC = FXCollections.observableArrayList();
     private Callback<DatePicker, DateCell> motDayFactory = dp1 -> new DateCell() {
@@ -156,7 +159,7 @@ public class VehicleController implements Initializable {
     public boolean checkFields() {
         boolean check = false;
 
-        if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getText().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
+        if ((!reg.getText().equals("")) && (!cID.getSelectionModel().getSelectedItem().toString().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getValue().toString().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
             check = true;
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
                 if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getValue().equals("")) {
@@ -167,7 +170,49 @@ public class VehicleController implements Initializable {
         return check;
     }
 
+    public void reset()
+    {
+        resetTextField(reg);
+        resetTextField(manuf);
+        resetTextField(mod);
+        resetTextField(eSize);
+        resetTextField(mil);
+        resetTextField(wName);
+        resetTextField(wCompAddress);
+        resetComboBox(cID);
+        resetComboBox(vType);
+        resetComboBox(fType);
+        resetComboBox(cByWarranty);
+        resetDatePicker(rDateMot);
+        resetDatePicker(dLastServiced);
+        resetDatePicker(wExpirationDate);
+        resetColourPicker(col);
+        errorsLabel.setVisible(false);
+        Errors.setStyle(null);
+    }
+
+    public void resetTextField(TextField textField)
+    {
+        textField.setStyle(null);
+    }
+
+    public void resetComboBox(ComboBox comboBox)
+    {
+        comboBox.setStyle(null);
+    }
+
+    public void  resetDatePicker(DatePicker datePicker)
+    {
+        datePicker.setStyle(null);
+    }
+
+    public void  resetColourPicker(ColorPicker colorPicker)
+    {
+        colorPicker.setStyle(null);
+    }
+
     public void addEditVehicle() {
+        reset();
         if (!CheckFormat()) {
             return;
         }
@@ -236,7 +281,7 @@ public class VehicleController implements Initializable {
                 int customerID = Character.getNumericValue(cID.getSelectionModel().getSelectedItem().toString().charAt(0));
                 boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this Vehicle, have you checked the vehicle details?");
                 if (add) {
-                    boolean checker = vSys.addEditVehicle(reg.getText(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                    boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
                     showAlert("vehicle " + addOrEdit + ": " + Boolean.toString(checker));
                     if (checker) {
                         searchVehicleA();
@@ -340,7 +385,7 @@ public class VehicleController implements Initializable {
         eSize.setText(Double.toString(vehicle.getEngineSize()));
         String VT = vehicle.getFuelType().toString();
         fType.setValue(VT.substring(0, 1).toUpperCase() + VT.substring(1, VT.length()));
-        col.setText(vehicle.getColour());
+        col.setValue(Color.valueOf(vehicle.getColour()));
         mil.setText(Integer.toString(vehicle.getMileage()));
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -940,7 +985,7 @@ public class VehicleController implements Initializable {
         mod.clear();
         manuf.clear();
         eSize.clear();
-        col.clear();
+        col.setValue(null);
         mil.clear();
         rDateMot.setValue(null);
         dLastServiced.setValue(null);
@@ -1091,6 +1136,7 @@ public class VehicleController implements Initializable {
             return;
         }
         try {
+
             setNextBookingDate();
             ViewBookingDates();
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
@@ -1239,37 +1285,190 @@ public class VehicleController implements Initializable {
 
     public boolean CheckFormat() {
         try {
-            Date date = fromLocalDate(dLastServiced.getValue());
-            date = fromLocalDate(rDateMot.getValue());
-            if (cByWarranty != null) {
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null)) {
-                    date = fromLocalDate(wExpirationDate.getValue());
+            boolean check = true;
+            Errors.setStyle("-fx-background-color: #ffc5c1");
+            Errors.setEditable(false);
+            Errors.clear();
+            if (cID.getSelectionModel().getSelectedItem() == null)
+            {
+                check = false;
+                setComboBoxBackground(cID);
+                //Errors.appendText("Chose Customer \n");
+            }
+            Date date;
+            try {
+                date = fromLocalDate(dLastServiced.getValue());
+            }
+            catch (Exception e)
+            {
+                setDatePickerBackground(dLastServiced);
+                //Errors.appendText("Invalid Last Service Date \n");
+                check =false;
+            }
+
+            try {
+                date = fromLocalDate(rDateMot.getValue());
+            }
+            catch (Exception e)
+            {
+                setDatePickerBackground(rDateMot);
+                //Errors.appendText("Invalid MOT Date \n");
+                check =false;
+            }
+            if (cByWarranty.getSelectionModel().getSelectedItem() != null) {
+                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") ) {
+                    try {
+
+                    date = fromLocalDate(wExpirationDate.getValue()); }
+                    catch (Exception e)
+                    {
+                        setDatePickerBackground(wExpirationDate);
+                        //Errors.appendText("invalid expiry date \n");
+                        check =false;
+                    }
+
+                    if (!(wName.getText().matches("[A-Za-z0-9 ]+")))
+                    {
+                        Errors.appendText("Warranty name is not correct format  \n");
+                        setTextFieldBackground(wName);
+                        check =false;
+                    }
+                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9 ]+")))
+                    {
+                        Errors.appendText("Warranty Company is not correct format  \n");
+                        setTextFieldBackground(wCompAddress);
+                        check =false;
+                    }
                 }
             }
+            else
+                {
+                    //Errors.appendText("Select if vehicle has warranty");
+                    setComboBoxBackground(cByWarranty);
+                    try {
 
-            Double engineSize = Double.parseDouble(eSize.getText());
-            int mileage = Integer.parseInt(mil.getText());
-            if (mileage <0 || engineSize <=0)
+                        date = fromLocalDate(wExpirationDate.getValue()); }
+                    catch (Exception e)
+                    {
+                        setDatePickerBackground(wExpirationDate);
+                        //Errors.appendText("invalid expiry date \n");
+                        check =false;
+                    }
+
+                    if (!(wName.getText().matches("[A-Za-z0-9 ]+")))
+                    {
+                        Errors.appendText("Warranty name is not correct format  \n");
+                        setTextFieldBackground(wName);
+                        check =false;
+                    }
+                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9 ]+")))
+                    {
+                        Errors.appendText("Warranty Company is not correct format  \n");
+                        setTextFieldBackground(wCompAddress);
+                        check =false;
+                    }
+            }
+            Double engineSize = 0.0;
+            int mileage= 0 ;
+            try {
+                engineSize = Double.parseDouble(eSize.getText());
+                if (engineSize <=0)
+                {
+                    Errors.appendText("Check engine size inputs are above  0 \n");
+                    setTextFieldBackground(eSize);
+                    check =false;
+                }
+            }
+            catch (Exception e)
             {
-                showAlert("Check Number inputs are above 0");
-                return false;
+                Errors.appendText("Check engine size inputs are above 0 \n");
+                setTextFieldBackground(eSize);
+                check =false;
             }
-            if (col.getText().matches(".*\\d+.*") || reg.getText().matches(".*\\d+.*") || manuf.getText().matches(".*\\d+.*") || mod.getText().matches(".*\\d+.*") || wName.getText().matches(".*\\d+.*") || wCompAddress.getText().matches(".*\\d+.*")) {
-                showAlert("Fields must be a string");
-                return false;
+            try {
+
+            mileage = Integer.parseInt(mil.getText());
+                if (mileage <0 )
+                {
+                    Errors.appendText("Check mileage inputs are above or equal to 0 \n");
+                    setTextFieldBackground(mil);
+                    check =false;
+                }
+            }
+            catch (Exception e)
+            {
+                Errors.appendText("Check mileage inputs are above or equal to 0 \n");
+                setTextFieldBackground(mil);
+                check =false;
             }
 
-            if (vType == null || fType == null) {
-                showAlert("Pick fuel type and vehicle Type");
-                return false;
+            if ((col.getValue()== null)) {
+                //Errors.appendText("Colour must be a string and have no spaces \n");
+                setColorPickerBackground(col);
+                check =false;
             }
-            return true;
+            if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+")))
+            {
+                Errors.appendText("Reg is not correct format \n");
+                setTextFieldBackground(reg);
+                check =false;
+            }
+            if (!(manuf.getText().matches("[A-Za-z]+")))
+            {
+                Errors.appendText("Manufacturer is not correct format and cannot have a space \n");
+                setTextFieldBackground(manuf);
+                check =false;
+            }
+            if (!(mod.getText().matches("[A-Za-z0-9 ]+")))
+            {
+                Errors.appendText("Model is not correct format and cant have more than more space \n");
+                setTextFieldBackground(mod);
+                check =false;
+            }
+
+
+            if (vType.getSelectionModel().getSelectedItem() == null ) {
+                //Errors.appendText("Pick vehicle Type \n");
+                setComboBoxBackground(vType);
+                check =false;
+            }
+            if (fType.getSelectionModel().getSelectedItem() == null)
+            {
+                //Errors.appendText("Pick fuel type");
+                setComboBoxBackground(fType);
+                check =false;
+            }
+            if (!check)
+            {
+                errorsLabel.setVisible(true);
+            }
+            return check;
         }
         catch (Exception e) {
-            showAlert(e.getMessage() + " and make sure all fields required are not blank");
+            showAlert(e.getMessage() + " and make sure all fields required are not blank \n");
             return false;
         }
 
+    }
+
+    public void setTextFieldBackground(TextField field)
+    {
+        field.setStyle("-fx-background-color: #ffc5c1");
+    }
+
+    public void setDatePickerBackground(DatePicker picker)
+    {
+        picker.setStyle("-fx-background-color: #ffc5c1");
+    }
+
+    public void setComboBoxBackground(ComboBox box)
+    {
+        box.setStyle("-fx-background-color: #ffc5c1");
+    }
+
+    public void setColorPickerBackground(ColorPicker pick)
+    {
+        pick.setStyle("-fx-background-color: #ffc5c1");
     }
 
     @Override
@@ -1279,7 +1478,8 @@ public class VehicleController implements Initializable {
         rDateMot.setDayCellFactory(motDayFactory);
         dLastServiced.setDayCellFactory(dlsDayFactory);
         wExpirationDate.setDayCellFactory(weDayFactory);
-        custInfo.setEditable(false);
+        //custInfo.setEditable(false);
+        col.setValue(null);
     }
 
     public void setCustomerCombo() {
