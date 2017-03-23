@@ -236,7 +236,7 @@ public class DetailsPaneController {
                 "/booking/validation/InvalidDiagTime.fxml")
                 && validateMechanicSelection())) return;
 
-        // make sure selectedBooking exists
+        // if new booking, connect to vehicle
         if (selectedBooking.getVehicleRegNumber() == null) {
             selectedVehicle.getBookingList().add(selectedBooking);
         }
@@ -258,6 +258,8 @@ public class DetailsPaneController {
             selectedBooking.setRepairStart(null);
             selectedBooking.setRepairEnd(null);
         }
+
+        System.out.println(selectedBooking.getRepairStart());
 
         // mileage, if set
         try {
@@ -580,17 +582,17 @@ public class DetailsPaneController {
     void populateDetailFields(DiagRepBooking booking) {
         clearFields();
         selectedBooking = booking;
-        selectedVehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
+        selectedVehicle = booking.getVehicle();
 
         Customer customer = booking.getCustomer();
         ZonedDateTime diagnosisStart = booking.getDiagnosisStart();
         ZonedDateTime diagnosisEnd = booking.getDiagnosisEnd();
         ZonedDateTime repairStart = booking.getRepairStart();
         ZonedDateTime repairEnd = booking.getRepairEnd();
-        Mechanic mechanic = bookingSystem.getMechanicByID(booking.getMechanicID());
+        Mechanic mechanic = booking.getMechanic();
 
-        customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
-                + customer.getCustomerSurname());
+        customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname()
+                + " " + customer.getCustomerSurname());
         vehicleComboBox.getSelectionModel().select(selectedVehicle);
         descriptionTextField.setText(booking.getDescription());
 
