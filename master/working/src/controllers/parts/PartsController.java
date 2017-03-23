@@ -13,26 +13,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.criterion.Criterion;
 import logic.parts.PartsSystem;
 import persistence.DatabaseRepository;
-
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-//import java.sql.Connection;
-//import org.controlsfx.control.textfield.TextFields;
-//import javax.swing.*;d
+
 
 
 public class PartsController implements Initializable {
@@ -41,7 +35,6 @@ public class PartsController implements Initializable {
     ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
     ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
     ObservableList<String> CB = FXCollections.observableArrayList();
-    ObservableList<String> CBB = FXCollections.observableArrayList();
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
     @FXML
     private TableView<PartAbstraction> PartsTable;
@@ -97,8 +90,7 @@ public class PartsController implements Initializable {
     private DatePicker instDate;
     @FXML
     private DatePicker warDate;
-    private Stage AddPartStage;
-    private Stage WithdrawPartStage;
+
     private ArrayList data = new ArrayList();
     private List<PartAbstraction> List;
     private List<Installation> List2;
@@ -137,7 +129,6 @@ public class PartsController implements Initializable {
     public void updateTable() {
 
         Criterion c = new Criterion<>(PartAbstraction.class);
-        //Criterion test = new Criterion<>(Installation.class);
 
         List = instance.getByCriteria(c); //the data from Parts DB stored in this list
 
@@ -148,7 +139,6 @@ public class PartsController implements Initializable {
 
             tableEntries.add(List.get(i));
             data.add(List.get(i).getPartName());
-            CB.add(Integer.toString(List.get(i).getPartAbstractionID()));
             CB.add(List.get(i).getPartAbstractionID() + ": " + List.get(i).getPartName());
 
         }
@@ -165,13 +155,6 @@ public class PartsController implements Initializable {
     public void setPartsTable() {
 
         partAbstractionID.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partAbstractionID"));
-        partAbstractionID.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
-        partAbstractionID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<PartAbstraction, Integer> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartAbstractionID(event.getNewValue());
-            }
-        });
 
         partName.setCellValueFactory(new PropertyValueFactory<PartAbstraction, String>("partName"));
         partName.setCellFactory(TextFieldTableCell.<PartAbstraction>forTableColumn());
@@ -201,13 +184,6 @@ public class PartsController implements Initializable {
         });
 
         partStockLevel.setCellValueFactory(new PropertyValueFactory<PartAbstraction, Integer>("partStockLevel"));
-        partStockLevel.setCellFactory(TextFieldTableCell.<PartAbstraction, Integer>forTableColumn(new IntegerStringConverter()));
-        partStockLevel.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<PartAbstraction, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<PartAbstraction, Integer> event) {
-                (event.getTableView().getItems().get(event.getTablePosition().getRow())).setPartStockLevel(event.getNewValue());
-            }
-        });
 
     }
 
@@ -222,6 +198,9 @@ public class PartsController implements Initializable {
         for (int i = 0; i < List.size(); i++) {
 
             if (List.get(i).getPartName().toLowerCase().contains(searchParts.getText())) {
+                tableEntries.add(List.get(i));
+            }
+            if (List.get(i).getPartDescription().contains(searchParts.getText())){
                 tableEntries.add(List.get(i));
             }
         }
@@ -296,18 +275,15 @@ public class PartsController implements Initializable {
      */
     public void viewAllBookingsClick() {
 
-        Criterion c2 = new Criterion<>(Installation.class);
-        List2 = pSys.getAllInstallations();
-        showInfo("yes");
-        if (List2.get(0).getPartOccurrence() == null)
-        {
-            showInfo("no");
+        try {
+
+            List2 = pSys.getAllInstallations();
+            List2.get(0).getPartOccurrence().getPartOccurrenceID();
+
+
+        }catch(IndexOutOfBoundsException | NullPointerException e){
+            e.printStackTrace();
         }
-        showInfo(List2.get(0).getPartOccurrence().getPartAbstractionID()+" l");
-        //List2.get(0).getPartOccurrence().getPartOccurrenceID();
-        //System.out.println(List2.get(0).getPartOccurrence().getPartOccurrenceID());
-        //System.out.println(List2.get(0).getVehicleRegNumber());
-        //System.out.println(List2.get(0).getPartOccurrence().getBookingID());
 
 
         tableEntries2.removeAll(tableEntries2);
@@ -586,16 +562,6 @@ public class PartsController implements Initializable {
         viewAllBookingsClick();
 
 
-    }
-
-    private java.time.LocalDate toLocalDate(Date date) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        Instant instant = date.toInstant();
-        return instant.atZone(zoneId).toLocalDate();
-    }
-
-    private Date fromLocalDate(java.time.LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 
