@@ -108,7 +108,7 @@ public class PartsPopOverController {
                         = ((DetailsPaneController) master.getController(DetailsPaneController.class)).getSelectedBooking();
                 booking.addRequiredPart(pO);
                 DatabaseRepository.getInstance().commitItem(booking);
-                ((DetailsPaneController)master.getController(DetailsPaneController.class)).populatePartsTable(booking.getRequiredPartsList());
+                ((DetailsPaneController) master.getController(DetailsPaneController.class)).populatePartsTable(booking.getRequiredPartsList());
             }
         });
     }

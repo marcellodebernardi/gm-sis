@@ -1,15 +1,10 @@
 package domain;
 
-import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static logic.criterion.CriterionOperator.EqualTo;
 
 /**
  * Created by EBUBECHUKWU on 08/02/2017.
@@ -77,10 +72,18 @@ public class Customer implements Searchable {
         return customerID;
     }
 
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
     //gets customer's surname
     @Column(name = "customerSurname")
     public String getCustomerSurname() {
         return customerSurname;
+    }
+
+    public void setCustomerSurname(String customerSurname) {
+        this.customerSurname = customerSurname;
     }
 
     //gets customer's first name
@@ -89,10 +92,18 @@ public class Customer implements Searchable {
         return customerFirstname;
     }
 
+    public void setCustomerFirstname(String customerFirstname) {
+        this.customerFirstname = customerFirstname;
+    }
+
     //gets customer's address
     @Column(name = "customerAddress")
     public String getCustomerAddress() {
         return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
     }
 
     //gets customer's postcode
@@ -101,10 +112,18 @@ public class Customer implements Searchable {
         return customerPostcode;
     }
 
+    public void setCustomerPostcode(String customerPostcode) {
+        this.customerPostcode = customerPostcode;
+    }
+
     //gets customer's phone number
     @Column(name = "customerPhone")
     public String getCustomerPhone() {
         return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 
     //gets customer's email address
@@ -113,15 +132,27 @@ public class Customer implements Searchable {
         return customerEmail;
     }
 
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
     //gets customer type (private or business)
     @Column(name = "customerType")
     public CustomerType getCustomerType() {
         return customerType;
     }
 
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
+    }
+
     @TableReference(baseType = Vehicle.class, subTypes = Vehicle.class, key = "customerID")
     public List<Vehicle> getVehicles() {
         return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
     }
 
     @Lazy
@@ -133,42 +164,5 @@ public class Customer implements Searchable {
         }
 
         return bookings;
-    }
-
-
-    public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
-    }
-
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
-    }
-
-    public void setCustomerSurname(String customerSurname) {
-        this.customerSurname = customerSurname;
-    }
-
-    public void setCustomerFirstname(String customerFirstname) {
-        this.customerFirstname = customerFirstname;
-    }
-
-    public void setCustomerPostcode(String customerPostcode) {
-        this.customerPostcode = customerPostcode;
-    }
-
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
-    }
-
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
-    }
-
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
-    }
-
-    public void setVehicles(List<Vehicle> vehicles) {
-        this.vehicles = vehicles;
     }
 }

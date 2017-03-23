@@ -15,11 +15,11 @@ public class User implements Searchable {
     /**
      * Full constructor allowing all fields to be freely set by application code.
      *
-     * @param userID unique ID distinguishing user, application should first check if available
-     * @param password user's password for logging in
+     * @param userID    unique ID distinguishing user, application should first check if available
+     * @param password  user's password for logging in
      * @param firstName user's first name
-     * @param surname user's surname
-     * @param userType user's type (administrator / normal)
+     * @param surname   user's surname
+     * @param userType  user's type (administrator / normal)
      */
     @Reflective
     public User(@Column(name = "userID", primary = true) String userID,
@@ -45,9 +45,17 @@ public class User implements Searchable {
         return password;
     }
 
+    public void setPassword(String newPassword) {
+        password = newPassword;
+    }
+
     @Column(name = "firstName")
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String newName) {
+        firstName = newName;
     }
 
     @Column(name = "surname")
@@ -55,22 +63,13 @@ public class User implements Searchable {
         return surname;
     }
 
+    public void setSurname(String newName) {
+        surname = newName;
+    }
+
     @Column(name = "userType")
     public UserType getUserType() {
         return userType;
-    }
-
-
-    public void setPassword(String newPassword) {
-        password = newPassword;
-    }
-
-    public void setFirstName(String newName) {
-        firstName = newName;
-    }
-
-    public void setSurname(String newName) {
-        surname = newName;
     }
 
     public void setUserType(UserType newUserType) {

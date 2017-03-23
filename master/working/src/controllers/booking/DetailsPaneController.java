@@ -25,6 +25,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,7 @@ import static java.time.DayOfWeek.SUNDAY;
  * @author Marcello De Bernardi
  */
 public class DetailsPaneController {
+    // logic and helpers
     private BookingController master;
     private CustomerSystem customerSystem;
     private BookingSystem bookingSystem;
@@ -42,39 +44,40 @@ public class DetailsPaneController {
     private PartsSystem partsSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
-
+    // controller state
     private DiagRepBooking selectedBooking;
     private Vehicle selectedVehicle;
     private PartOccurrence selectedPart;
     private List<PartOccurrence> detachedParts;
-
-    @FXML private Text paneTitle;
-    // customer and vehicle ComboBoxes
+    // TextFields
     @FXML private TextField customerSearchBar;
-    @FXML private ComboBox<String> vehicleComboBox;
-    // description
     @FXML private TextField descriptionTextField;
-    // mechanic and parts
-    @FXML private ComboBox<String> mechanicComboBox;
-    @FXML private TableView<PartOccurrence> partsTable;
-    @FXML private TableColumn<PartOccurrence, String> nameColumn;
-    @FXML private TableColumn<PartOccurrence, Double> costColumn;
-    @FXML private TableColumn<PartOccurrence, Boolean> subcontractedColumn;
-    @FXML private TextField vehicleMileageTextField;
-    @FXML private TextField newVehicleMileageTextField;
-    @FXML private Button addPartButton;
-    @FXML private Button removePartButton;
-    // dates and times
-    @FXML private DatePicker diagnosisDatePicker;
-    @FXML private DatePicker repairDatePicker;
     @FXML private TextField diagnosisStartTimeTextField;
     @FXML private TextField diagnosisEndTimeTextField;
     @FXML private TextField repairStartTimeTextField;
     @FXML private TextField repairEndTimeTextField;
-    // validation popovers
+    @FXML private TextField vehicleMileageTextField;
+    @FXML private TextField newMileageTextField;
+    // text
+    @FXML private Text paneTitle;
+    // ComboBoxes
+    @FXML private ComboBox<Vehicle> vehicleComboBox;
+    @FXML private ComboBox<Mechanic> mechanicComboBox;
+    // Tables
+    @FXML private TableView<PartOccurrence> partsTable;
+    @FXML private TableColumn<PartOccurrence, String> nameColumn;
+    @FXML private TableColumn<PartOccurrence, Double> costColumn;
+    @FXML private TableColumn<PartOccurrence, Boolean> subcontractedColumn;
+    // Buttons
+    @FXML private Button addPartButton;
+    @FXML private Button removePartButton;
+    // DatePickers
+    @FXML private DatePicker diagnosisDatePicker;
+    @FXML private DatePicker repairDatePicker;
+    // PopOvers
     private PopOver customerValidationPopOver;
-    private PopOver diagnosisDateValidationPopOver;
-    private PopOver repairDateValidationPopOver;
+    private PopOver vehicleValidationPopOver;
+    private PopOver mechanicValidationPopOver;
     private PopOver mileageValidationPopOver;
 
 
@@ -101,6 +104,8 @@ public class DetailsPaneController {
         master.setController(DetailsPaneController.class, this);
 
         initializeCustomerTextField(customerSystem.getAllCustomers());
+        initializeVehicleComboBox();
+        initializeMechanicComboBox();
         initializePartsTableView();
 
         populateMechanicComboBox(bookingSystem.getAllMechanics());
@@ -122,7 +127,9 @@ public class DetailsPaneController {
         };
 
         diagnosisDatePicker.setDayCellFactory(dayCellFactory);
+        diagnosisDatePicker.setEditable(false);
         repairDatePicker.setDayCellFactory(dayCellFactory);
+        repairDatePicker.setEditable(false);
     }
 
     // adds all customers to the customer search bar's autocomplete function
@@ -135,6 +142,40 @@ public class DetailsPaneController {
         AutoCompletionBinding<String> customerAutoCompletionBinding
                 = TextFields.bindAutoCompletion(customerSearchBar, customerInfo);
         customerAutoCompletionBinding.setOnAutoCompleted(p -> this.selectCustomer());
+    }
+
+    private void initializeVehicleComboBox() {
+        vehicleComboBox.setCellFactory(p -> new ListCell<Vehicle>() {
+            public void updateItem(Vehicle item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getVehicleRegNumber() + " " + item.getManufacturer() + " " + item.getModel());
+            }
+        });
+        vehicleComboBox.setButtonCell(new ListCell<Vehicle>() {
+            public void updateItem(Vehicle item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getVehicleRegNumber() + " " + item.getManufacturer() + " " + item.getModel());
+            }
+        });
+    }
+
+    private void initializeMechanicComboBox() {
+        mechanicComboBox.setCellFactory(p -> new ListCell<Mechanic>() {
+            public void updateItem(Mechanic item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getFirstName() + " " + item.getSurname());
+            }
+        });
+        mechanicComboBox.setButtonCell(new ListCell<Mechanic>() {
+            public void updateItem(Mechanic item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getFirstName() + " " + item.getSurname());
+            }
+        });
     }
 
     private void initializePartsTableView() {
@@ -172,59 +213,77 @@ public class DetailsPaneController {
     }
 
     @FXML private void selectVehicle() {
-        selectedVehicle = vehicleSystem.searchAVehicle(vehicleComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .split(":")[0]);
+        selectedVehicle = vehicleComboBox.getSelectionModel().getSelectedItem();
+
+        if (vehicleValidationPopOver != null && vehicleValidationPopOver.isShowing()) vehicleValidationPopOver.hide();
         vehicleMileageTextField.setText("" + selectedVehicle.getMileage());
         vehicleMileageTextField.setDisable(true);
     }
 
-    @FXML private void selectDiagnosisDate() {
-        validateDiagnosisDate();
-    }
-
-    @FXML private void selectRepairDate() {
-        validateRepairDate();
+    @FXML private void selectMechanic() {
+        if (mechanicValidationPopOver != null && mechanicValidationPopOver.isShowing())
+            mechanicValidationPopOver.hide();
     }
 
     @FXML private void saveBooking() {
-        if (selectedBooking == null) {
-            selectedBooking = new DiagRepBooking();
+        // interrupt if invalid entries
+        if (!(validateCustomerSelection() && validateVehicleSelection()
+                && dateIsSelected(diagnosisDatePicker,
+                "/booking/validation/MissingDiagDate.fxml")
+                && timeIsSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
+                "/booking/validation/MissingDiagTime.fxml")
+                && timeIsValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
+                "/booking/validation/InvalidDiagTime.fxml")
+                && validateMechanicSelection())) return;
+
+        // make sure selectedBooking exists
+        if (selectedBooking.getVehicleRegNumber() == null) {
             selectedVehicle.getBookingList().add(selectedBooking);
         }
 
-        selectedVehicle.setMileage(getInteger(newVehicleMileageTextField));
-
         // todo implement bill
-        selectedBooking.setVehicleRegNumber(getVehicleRegFromComboBox());
+        selectedBooking.setVehicleRegNumber(vehicleComboBox.getSelectionModel().getSelectedItem().getVehicleRegNumber());
         selectedBooking.setDescription(descriptionTextField.getText());
         selectedBooking.setBill(new Bill(0, false));
-        selectedBooking.setMechanicID(getMechanicIDFromComboBox());
+        selectedBooking.setMechanicID(mechanicComboBox.getSelectionModel().getSelectedItem().getMechanicID());
         selectedBooking.setDiagnosisStart(getDiagnosisStartTime());
         selectedBooking.setDiagnosisEnd(getDiagnosisEndTime());
-        selectedBooking.setRepairStart(getRepairStartTime());
-        selectedBooking.setRepairEnd(getRepairEndTime());
 
+        // repair dates
+        try {
+            selectedBooking.setRepairStart(getRepairStartTime());
+            selectedBooking.setRepairEnd(getRepairEndTime());
+        }
+        catch (DateTimeParseException e) {
+            selectedBooking.setRepairStart(null);
+            selectedBooking.setRepairEnd(null);
+        }
+
+        // mileage, if set
+        try {
+            selectedVehicle.setMileage(getInteger(newMileageTextField));
+        }
+        catch (NumberFormatException e) {
+            // do nothing
+        }
+
+        // commit
         boolean committed = DatabaseRepository.getInstance().commitItem(selectedVehicle);
         CalendarPaneController calendarController
                 = (CalendarPaneController) master.getController(CalendarPaneController.class);
         ListPaneController listController
                 = (ListPaneController) master.getController(ListPaneController.class);
-
         if (committed) {
             for (PartOccurrence p : detachedParts) {
                 DatabaseRepository.getInstance().commitItem(p);
             }
-
             if (calendarController != null)
                 ((CalendarPaneController) master.getController(CalendarPaneController.class))
                         .addBookingAppointment(selectedBooking);
             else if (listController != null)
                 ((ListPaneController) master.getController(ListPaneController.class))
                         .refreshBookingTable();
-
-            clearDetails();
+            clearFields();
         }
     }
 
@@ -238,11 +297,31 @@ public class DetailsPaneController {
             ((CalendarPaneController) master
                     .getController(CalendarPaneController.class))
                     .refreshAGenda(bookingSystem.getAllBookings());
-            clearDetails();
+            clearFields();
         }
     }
 
-    @FXML private void clearDetails() {
+    @FXML private void completeBooking() {
+        if (!(validateCustomerSelection() && validateVehicleSelection()
+                && dateIsSelected(diagnosisDatePicker,
+                "/booking/validation/MissingDiagDate.fxml")
+                && timeIsSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
+                "/booking/validation/MissingDiagTime.fxml")
+                && timeIsValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField,
+                "/booking/validation/InvalidDiagTime.fxml")
+                && dateIsSelected(repairDatePicker,
+                "/booking/validation/MissingRepDate.fxml")
+                && timeIsSelected(repairStartTimeTextField, repairEndTimeTextField,
+                "/booking/validation/MissingRepTime.fxml")
+                && timeIsValid(repairStartTimeTextField, repairEndTimeTextField,
+                "/booking/validation/InvalidRepTime.fxml")
+                && validateMechanicSelection())) return;
+
+        selectedBooking.setComplete(true);
+        saveBooking();
+    }
+
+    @FXML private void clearFields() {
         selectedBooking = null;
         selectedVehicle = null;
         selectedPart = null;
@@ -274,16 +353,10 @@ public class DetailsPaneController {
         partsTable.setDisable(false);
         mechanicComboBox.setDisable(false);
         vehicleMileageTextField.setDisable(false);
+        newMileageTextField.setDisable(false);
 
         selectedBooking = new DiagRepBooking();
         setPaneTitleToAdd();
-    }
-
-    @FXML private void completeBooking() {
-        selectedBooking.setComplete(true);
-        selectedVehicle.setMileage(Integer.parseInt(newVehicleMileageTextField.getText()));
-        bookingSystem.commitBooking(selectedBooking);
-        populateDetailFields(selectedBooking);
     }
 
     @FXML private void addPart() {
@@ -316,7 +389,7 @@ public class DetailsPaneController {
         if (customerValidationPopOver == null) {
             try {
                 customerValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/resources/booking/CustomerValidationPopOver.fxml")));
+                        .getResource("/booking/validation/CustomerValidation.fxml")));
                 customerValidationPopOver.setDetachable(false);
                 customerValidationPopOver.setCornerRadius(0);
             }
@@ -336,13 +409,13 @@ public class DetailsPaneController {
         }
     }
 
-    private boolean validateDiagnosisDate() {
-        if (diagnosisDateValidationPopOver == null) {
+    private boolean validateVehicleSelection() {
+        if (vehicleValidationPopOver == null) {
             try {
-                diagnosisDateValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/resources/booking/DiagnosisDateValidationPopOver.fxml")));
-                diagnosisDateValidationPopOver.setDetachable(false);
-                diagnosisDateValidationPopOver.setCornerRadius(0);
+                vehicleValidationPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/MissingVehicle.fxml")));
+                vehicleValidationPopOver.setDetachable(false);
+                vehicleValidationPopOver.setCornerRadius(0);
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -350,27 +423,115 @@ public class DetailsPaneController {
             }
         }
 
-        LocalDate diagnosisDate = getDiagnosisStartTime().toLocalDate();
-
-        if (diagnosisDate.isAfter(LocalDate.now())) {
-            if (diagnosisDateValidationPopOver.isShowing()) diagnosisDateValidationPopOver.hide();
+        if (vehicleComboBox.getSelectionModel().getSelectedItem() != null) {
+            if (vehicleValidationPopOver.isShowing()) vehicleValidationPopOver.hide();
             return true;
         }
         else {
-            if (!diagnosisDateValidationPopOver.isShowing()) diagnosisDateValidationPopOver.show(customerSearchBar);
+            if (!vehicleValidationPopOver.isShowing()) vehicleValidationPopOver.show(vehicleComboBox);
             return false;
         }
     }
 
-    private boolean validateRepairDate() {
-        return false;
+    private boolean dateIsSelected(DatePicker picker, String source) {
+        PopOver response;
+        try {
+            response = new PopOver(FXMLLoader.load(getClass().getResource(source)));
+            response.setDetachable(false);
+            response.setCornerRadius(0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // check if missing
+        if (picker.getValue() != null) {
+            if (response.isShowing()) response.hide();
+            return true;
+        }
+        else {
+            if (!response.isShowing()) response.show(picker);
+            return false;
+        }
+    }
+
+    private boolean timeIsSelected(TextField start, TextField end, String source) {
+        PopOver response;
+        try {
+            response = new PopOver(FXMLLoader.load(getClass().getResource(source)));
+            response.setDetachable(false);
+            response.setCornerRadius(0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // check if missing
+        if (start.getText().equals("''") || end.getText().equals("''")) {
+            if (!response.isShowing()) response.show(end);
+            return false;
+        }
+        else {
+            if (response.isShowing()) response.hide();
+            return true;
+        }
+    }
+
+    private boolean timeIsValid(TextField start, TextField end, String source) {
+        PopOver response;
+        try {
+            response = new PopOver(FXMLLoader.load(getClass().getResource(source)));
+            response.setDetachable(false);
+            response.setCornerRadius(0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            LocalTime.parse(start.getText(), timeFormatter);
+            LocalTime.parse(end.getText(), timeFormatter);
+            if (response.isShowing()) response.hide();
+            return true;
+        }
+        catch (DateTimeParseException e) {
+            if (!response.isShowing()) response.show(end);
+            return false;
+        }
+    }
+
+    private boolean validateMechanicSelection() {
+        if (mechanicValidationPopOver == null) {
+            try {
+                mechanicValidationPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/MissingMechanic.fxml")));
+                mechanicValidationPopOver.setDetachable(false);
+                mechanicValidationPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        if (mechanicComboBox.getSelectionModel().getSelectedItem() != null) {
+            if (mechanicValidationPopOver.isShowing()) mechanicValidationPopOver.hide();
+            return true;
+        }
+        else {
+            if (!mechanicValidationPopOver.isShowing()) mechanicValidationPopOver.show(mechanicComboBox);
+            return false;
+        }
     }
 
     private boolean validateNewMileage() {
         if (mileageValidationPopOver == null) {
             try {
                 mileageValidationPopOver = new PopOver(FXMLLoader.load(getClass()
-                        .getResource("/resources/booking/validation/MileageValidationPopOver.fxml")));
+                        .getResource("/booking/validation/MileageValidation.fxml")));
                 mileageValidationPopOver.setDetachable(false);
                 mileageValidationPopOver.setCornerRadius(0);
             }
@@ -382,10 +543,10 @@ public class DetailsPaneController {
 
         try {
             int oldMileage = Integer.parseInt(vehicleMileageTextField.getText());
-            int newMileage = Integer.parseInt(newVehicleMileageTextField.getText());
+            int newMileage = Integer.parseInt(newMileageTextField.getText());
 
             if (newMileage < oldMileage) {
-                if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newVehicleMileageTextField);
+                if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newMileageTextField);
                 return false;
             }
             else {
@@ -394,7 +555,7 @@ public class DetailsPaneController {
             }
         }
         catch (NumberFormatException e) {
-            if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newVehicleMileageTextField);
+            if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newMileageTextField);
             return false;
         }
     }
@@ -417,7 +578,7 @@ public class DetailsPaneController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // fills in the details of a booking in the details pane */
     void populateDetailFields(DiagRepBooking booking) {
-        clearDetails();
+        clearFields();
         selectedBooking = booking;
         selectedVehicle = vehicleSystem.searchAVehicle(booking.getVehicleRegNumber());
 
@@ -430,7 +591,7 @@ public class DetailsPaneController {
 
         customerSearchBar.setText(customer.getCustomerID() + ": " + customer.getCustomerFirstname() + " "
                 + customer.getCustomerSurname());
-        vehicleComboBox.getSelectionModel().select(selectedVehicle.getVehicleRegNumber() + ": " + selectedVehicle.getModel());
+        vehicleComboBox.getSelectionModel().select(selectedVehicle);
         descriptionTextField.setText(booking.getDescription());
 
         diagnosisDatePicker.setValue(diagnosisStart.toLocalDate());
@@ -442,8 +603,7 @@ public class DetailsPaneController {
 
         populatePartsTable(booking.getRequiredPartsList());
 
-        mechanicComboBox.getSelectionModel().select(mechanic.getMechanicID() + ": "
-                + mechanic.getFirstName() + " " + mechanic.getSurname());
+        mechanicComboBox.getSelectionModel().select(mechanic);
 
         vehicleMileageTextField.setText("" + selectedVehicle.getMileage());
 
@@ -458,7 +618,7 @@ public class DetailsPaneController {
         repairEndTimeTextField.setDisable(booking.isComplete());
         partsTable.setDisable(booking.isComplete());
         mechanicComboBox.setDisable(booking.isComplete());
-        newVehicleMileageTextField.setDisable(booking.isComplete());
+        newMileageTextField.setDisable(booking.isComplete());
     }
 
     // generates rows for the table containing a booking's parts
@@ -470,22 +630,14 @@ public class DetailsPaneController {
 
     // adds customer's vehicle to the vehicle selection ComboBox
     private void populateVehicleComboBox(List<Vehicle> vehicles) {
-        List<String> vehicleInfo = new ArrayList<>();
-        for (Vehicle v : vehicles) {
-            vehicleInfo.add(v.getVehicleRegNumber() + ": " + v.getManufacturer() + " " + v.getModel());
-        }
-        ObservableList<String> vehicleInfoObservable = FXCollections.observableArrayList(vehicleInfo);
-        vehicleComboBox.setItems(vehicleInfoObservable);
+        ObservableList<Vehicle> vehiclesObservable = FXCollections.observableArrayList(vehicles);
+        vehicleComboBox.setItems(vehiclesObservable);
     }
 
     // adds all mechanics to the ComboBox for mechanic selection
     private void populateMechanicComboBox(List<Mechanic> mechanics) {
-        List<String> mechanicInfo = new ArrayList<>();
-        for (Mechanic m : mechanics) {
-            mechanicInfo.add(m.getMechanicID() + ": " + m.getFirstName() + " " + m.getSurname());
-        }
-        ObservableList<String> mechanicInfoObservable = FXCollections.observableArrayList(mechanicInfo);
-        mechanicComboBox.setItems(mechanicInfoObservable);
+        ObservableList<Mechanic> mechanicsObservable = FXCollections.observableArrayList(mechanics);
+        mechanicComboBox.setItems(mechanicsObservable);
     }
 
     // generates confirmation alert for vehicle deletion
@@ -508,22 +660,6 @@ public class DetailsPaneController {
         return query.matches("[0-9]+.*") ?
                 customerSystem.getACustomers(Integer.parseInt(customerSearchBar.getText().split(":")[0]))
                 : null;
-    }
-
-    // gets the selected vehicle registration number from the ComboBox
-    private String getVehicleRegFromComboBox() {
-        return vehicleComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .split(":")[0];
-    }
-
-    // returns the mechanic selected in the mechanic ComboBox
-    private int getMechanicIDFromComboBox() {
-        return Integer.parseInt(mechanicComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .split(":")[0]);
     }
 
     // returns the diagnosis start time
@@ -556,13 +692,6 @@ public class DetailsPaneController {
                 repairDatePicker.getValue(),
                 LocalTime.parse(repairEndTimeTextField.getText(), timeFormatter),
                 ZoneId.systemDefault());
-    }
-
-    // gets the list of parts from the list
-    private List<PartOccurrence> getPartsListFromList() {
-        List<PartOccurrence> parts = new ArrayList<>();
-        parts.addAll(partsTable.getItems());
-        return parts;
     }
 
     // gets an integer value from the textfield

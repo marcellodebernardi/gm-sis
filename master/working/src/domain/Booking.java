@@ -53,37 +53,36 @@ public abstract class Booking implements Searchable {
         return vehicleRegNumber;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Bill getBill() {
-        return bill;
-    }
-
-    public int getMechanicID() {
-        return mechanicID;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-
     public void setVehicleRegNumber(String vehicleRegNumber) {
         this.vehicleRegNumber = vehicleRegNumber;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public Bill getBill() {
+        return bill;
+    }
+
     public void setBill(Bill bill) {
         this.bill = bill;
     }
 
+    public int getMechanicID() {
+        return mechanicID;
+    }
+
     public void setMechanicID(int mechanicID) {
         this.mechanicID = mechanicID;
+    }
+
+    public boolean isComplete() {
+        return complete;
     }
 
     public void setComplete(boolean complete) {

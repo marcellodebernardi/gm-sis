@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111" stylesheets="/resources/booking/stylesheets/validation.css"
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" stylesheets="/booking/stylesheets/validation.css"
             id="validationPane">
     <center>
         <Label id="validationText">

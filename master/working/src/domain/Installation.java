@@ -6,7 +6,6 @@ import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,9 +65,17 @@ public class Installation implements Searchable {
         return installationID;
     }
 
+    public void setInstallationID(int installationID) {
+        this.installationID = installationID;
+    }
+
     @Column(name = "installationDate")
     public ZonedDateTime getInstallationDate() {
         return installationDate;
+    }
+
+    public void setInstallationDate(ZonedDateTime installationDate) {
+        this.installationDate = installationDate;
     }
 
     @Column(name = "endWarrantyDate")
@@ -76,14 +83,26 @@ public class Installation implements Searchable {
         return endWarrantyDate;
     }
 
+    public void setEndWarrantyDate(ZonedDateTime endWarrantyDate) {
+        this.endWarrantyDate = endWarrantyDate;
+    }
+
     @Column(name = "vehicleRegNumber", foreign = true)
     public String getVehicleRegNumber() {
         return vehicleRegNumber;
     }
 
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        this.vehicleRegNumber = vehicleRegNumber;
+    }
+
     @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
     public PartOccurrence getPartOccurrence() {
         return partOccurrence;
+    }
+
+    public void setPartOccurrence(PartOccurrence partOccurrence) {
+        this.partOccurrence = partOccurrence;
     }
 
     @Lazy
@@ -110,29 +129,8 @@ public class Installation implements Searchable {
         return partAbstractionID;
     }
 
-
-    public void setInstallationID(int installationID) {
-        this.installationID = installationID;
-    }
-
-    public void setInstallationDate(ZonedDateTime installationDate) {
-        this.installationDate = installationDate;
-    }
-
-    public void setEndWarrantyDate(ZonedDateTime endWarrantyDate) {
-        this.endWarrantyDate = endWarrantyDate;
-    }
-
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
-    }
-
     public void setPartAbstractionID(int partAbstractionID) {
         this.partAbstractionID = partAbstractionID;
-    }
-
-    public void setPartOccurrence(PartOccurrence partOccurrence) {
-        this.partOccurrence = partOccurrence;
     }
 
     public int getPartOccurrence(PartOccurrence partOccurrence) {

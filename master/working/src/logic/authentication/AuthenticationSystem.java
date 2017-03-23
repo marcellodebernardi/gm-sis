@@ -30,6 +30,15 @@ public class AuthenticationSystem {
 
     // currently only accepted userID is "admin", password "password"
 
+    /**
+     * Returns the singleton instance of the authentication system.
+     *
+     * @return authentication system instance
+     */
+    public static AuthenticationSystem getInstance() {
+        if (instance == null) instance = new AuthenticationSystem();
+        return instance;
+    }
 
     public boolean login(String username, String password) {
         User user;
@@ -45,7 +54,6 @@ public class AuthenticationSystem {
         return false;
     }
 
-
     public UserType getUserType() {
         return loginS;
     }
@@ -56,7 +64,7 @@ public class AuthenticationSystem {
 
     public List<User> getUser(String userID, String firstName, String surname) {
         return persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID)
-                .and("firstName", Matches,firstName)
+                .and("firstName", Matches, firstName)
                 .and("surname", Matches, surname));
     }
 
@@ -80,15 +88,5 @@ public class AuthenticationSystem {
     public List<User> getAllUsers() {
         List<User> results = persistence.getByCriteria(new Criterion<>(User.class));
         return results;
-    }
-
-    /**
-     * Returns the singleton instance of the authentication system.
-     *
-     * @return authentication system instance
-     */
-    public static AuthenticationSystem getInstance() {
-        if (instance == null) instance = new AuthenticationSystem();
-        return instance;
     }
 }

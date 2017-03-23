@@ -20,16 +20,15 @@ public class Bill implements Searchable {
         return billAmount;
     }
 
+    public void setBillAmount(double billAmount) {
+        this.billAmount = billAmount;
+    }
+
     public boolean isBillSettled() {
         return billSettled;
     }
 
-
     public void setBillSettled(boolean billSettled) {
         this.billSettled = billSettled;
-    }
-
-    public void setBillAmount(double billAmount) {
-        this.billAmount = billAmount;
     }
 }

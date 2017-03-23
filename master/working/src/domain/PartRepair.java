@@ -71,14 +71,13 @@ public class PartRepair extends SpecRepBooking {
         return super.getBookingID();
     }
 
+    public void setBookingID(int bookingID) {
+        super.setBookingID(bookingID);
+    }
+
     @Column(name = "partOccurrenceID", foreign = true)
     public int getPartOccurrenceID() {
         return partOccurrenceID;
-    }
-
-
-    public void setBookingID(int bookingID) {
-        super.setBookingID(bookingID);
     }
 
     public void setPartOccurrenceID(int partOccurrenceID) {
