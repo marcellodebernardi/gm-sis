@@ -466,8 +466,9 @@ public class SpecialistRepairController implements Initializable{
                             vehicles.addAll(customer.getVehicles());
                         }
                         if (vehicles.size() > 0) {
-                            for (Vehicle v : vehicles)
+                            for (Vehicle v : vehicles) {
                                 vehicleRepairList.addAll(specRepairSystem.getVehicleBookings(v.getVehicleRegNumber()));
+                            }
                             if (vehicleRepairList != null) {
                                 showToTable(vehicleRepairList);
                             }
