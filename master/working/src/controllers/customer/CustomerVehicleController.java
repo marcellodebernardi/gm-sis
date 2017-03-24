@@ -1,6 +1,7 @@
 package controllers.customer;
 
 import controllers.booking.BookingController;
+import controllers.common.MenuController;
 import domain.Customer;
 import domain.FuelType;
 import domain.Vehicle;
@@ -8,6 +9,7 @@ import domain.VehicleType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import logic.booking.BookingSystem;
@@ -113,6 +117,21 @@ public class CustomerVehicleController implements Initializable {
             addVehicleStage.setScene(new Scene(menu));
             addVehicleStage.initModality(Modality.APPLICATION_MODAL);
             addVehicleStage.showAndWait();
+
+            List<Customer> customerList = cSystem.getAllCustomers();
+            int tempCustomerID = 0;
+            for(int i=customerList.size()-1; i>=0; i++)
+            {
+                tempCustomerID = customerList.get(i).getCustomerID();
+                break;
+            }
+            List<Vehicle> vehicleList = cSystem.searchCustomerVehicles(tempCustomerID);
+            if(vehicleList.size() == 0)
+            {
+                boolean deleteCustomer = cSystem.deleteCustomer(tempCustomerID);
+                noVehicleAdded();
+                MenuController.getInstance().reopenCustomerTab();
+            }
         }
         catch (IOException e) {
             System.out.println("Show Vehicle Popup Error");
@@ -121,9 +140,29 @@ public class CustomerVehicleController implements Initializable {
         return addVehicleStage;
     }
 
-    public void addVehicle(ActionEvent event) throws Exception {
+    public void noVehicleAdded() throws Exception {
+        Dialog<Void> dialog = new Dialog<>();
+        CheckBox preventClosing = new CheckBox("ERROR: Vehicle must be added to new Customer's record\n\nPress OK and add customer again");
+        preventClosing.setSelected(true);
+        preventClosing.setDisable(true);
+
+        dialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
+            @Override
+            public void handle(DialogEvent event) {
+                if (!preventClosing.isSelected()) {
+                    event.consume();
+                }
+                System.out.println("Consumed event: " + event.isConsumed());
+            }
+        });
+        dialog.getDialogPane().setContent(preventClosing);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.show();
+    }
+
+    public boolean addVehicle(ActionEvent event) throws Exception {
         if (!checkVehicleFormat()) {
-            return;
+            return false;
         }
 
         try {
@@ -164,7 +203,7 @@ public class CustomerVehicleController implements Initializable {
                 Vehicle vehicle = vSys.searchAVehicle(reg.getText());
                 if (vehicle != null) {
                     errorAlert("Cant add this vehicle as Registrations exists");
-                    return;
+                    return false;
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
@@ -176,11 +215,13 @@ public class CustomerVehicleController implements Initializable {
                     stage.close();
                 }
             }
+            return true;
         }
         catch (Exception e) {
             System.out.println("Add Customer's Vehicle Error");
             e.printStackTrace();
         }
+        return false;
     }
 
     public void addVehicleAndMakeBooking(ActionEvent event) throws Exception {
@@ -190,6 +231,7 @@ public class CustomerVehicleController implements Initializable {
 
         try {
             boolean check = checkVehicleFields();
+            boolean checker = false;
             if (check) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 Date rdm = fromLocalDate(rDateMot.getValue());
@@ -230,11 +272,10 @@ public class CustomerVehicleController implements Initializable {
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                boolean checker = vSys.addEditVehicle(reg.getText(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                checker = vSys.addEditVehicle(reg.getText(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
 
                 if (checker) {
                     BookingController.getInstance().show();
-
                     Stage stage = null;
                     stage = (Stage) cvSaveVehicleButton.getScene().getWindow();
                     stage.close();

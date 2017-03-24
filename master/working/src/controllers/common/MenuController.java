@@ -1,11 +1,14 @@
 package controllers.common;
 
 import controllers.booking.BookingController;
+import controllers.login.LoginController;
 import domain.UserType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import logic.authentication.AuthenticationSystem;
 import main.Main;
@@ -31,6 +34,9 @@ public class MenuController implements Initializable {
 
     @FXML private Button UsersButton;
     @FXML private Button SRCButton;
+    @FXML private Button logoutButton;
+
+    private static MenuController instance;
 
 
     @Override public void initialize(URL location, ResourceBundle resources) {
@@ -48,6 +54,8 @@ public class MenuController implements Initializable {
     public void openApplication() {
         openTodayTab();
     }
+
+    public void reopenCustomerTab() { openCustomersTab(); }
 
     @FXML private void openTodayTab() {
         try {
@@ -132,6 +140,40 @@ public class MenuController implements Initializable {
         }
     }
 
-    @FXML private void logout() {
+    public void logout()
+    {
+        try
+        {
+            if(confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true)
+            {
+                LoginController.getInstance().exitHandler();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Logout Error");
+            e.printStackTrace();
+        }
+    }
+
+    public static MenuController getInstance() {
+        if (instance == null) instance = new MenuController();
+        return instance;
+    }
+
+    public boolean confirmationAlert(String title, String message)
+    {
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle(title);
+        deleteAlert.setHeaderText(message);
+        deleteAlert.showAndWait();
+        if(deleteAlert.getResult() == ButtonType.OK)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
