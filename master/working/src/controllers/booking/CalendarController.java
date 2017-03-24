@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author Marcello De Bernardi
  */
-public class CalendarPaneController {
+public class CalendarController {
     private BookingController master;
     private BookingSystem bookingSystem;
 
@@ -30,7 +30,7 @@ public class CalendarPaneController {
     @FXML private Agenda bookingAgenda;
 
 
-    public CalendarPaneController() {
+    public CalendarController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
     }
@@ -42,13 +42,13 @@ public class CalendarPaneController {
 
         bookingAgenda.setActionCallback((appointment) -> {
             DiagRepBooking booking = bookingSystem.getBookingByID(((BookingAppointment) appointment).getBookingID());
-            ((DetailsPaneController) master.getController(DetailsPaneController.class)).populateDetailFields(booking);
-            ((DetailsPaneController) master.getController(DetailsPaneController.class)).setPaneTitleToView();
+            ((DetailsController) master.getController(DetailsController.class)).populate(booking);
+            ((DetailsController) master.getController(DetailsController.class)).setPaneTitleToView();
             return null;
         });
         bookingAgenda.setEditAppointmentCallback((appointment) -> null);
 
-        master.setController(CalendarPaneController.class, this);
+        master.setController(CalendarController.class, this);
     }
 
 
@@ -65,7 +65,7 @@ public class CalendarPaneController {
                 .toString()
                 .split(":")[0])
         );
-        refreshAGenda(mechanic.getBookings());
+        refreshAgenda(mechanic.getBookings());
     }
 
     @FXML private void openListPane() {
@@ -79,12 +79,12 @@ public class CalendarPaneController {
 
 
     //////////////////// DATA MANIPULATIONS /////////////////////////
-    void refreshAGenda(List<DiagRepBooking> bookings) {
+    void refreshAgenda(List<DiagRepBooking> bookings) {
         bookingAgenda.appointments().clear();
         populateAgenda(bookings);
     }
 
-    void addBookingAppointment(DiagRepBooking booking) {
+    void addAppointment(DiagRepBooking booking) {
         bookingAgenda.appointments().removeIf(p ->
                 p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
         );

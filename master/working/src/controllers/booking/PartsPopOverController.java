@@ -105,10 +105,10 @@ public class PartsPopOverController {
             if (newSelection.getPartStockLevel() > 0) {
                 PartOccurrence pO = partsSystem.getAllFreeOccurrences(newSelection).get(0);
                 DiagRepBooking booking
-                        = ((DetailsPaneController) master.getController(DetailsPaneController.class)).getSelectedBooking();
+                        = ((DetailsController) master.getController(DetailsController.class)).getSelectedBooking();
                 booking.addRequiredPart(pO);
                 DatabaseRepository.getInstance().commitItem(booking);
-                ((DetailsPaneController) master.getController(DetailsPaneController.class)).populatePartsTable(booking.getRequiredPartsList());
+                ((DetailsController) master.getController(DetailsController.class)).populateParts(booking.getRequiredPartsList());
             }
         });
     }

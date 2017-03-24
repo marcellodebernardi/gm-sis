@@ -26,7 +26,7 @@ import static logic.criterion.CriterionOperator.EqualTo;
 /**
  * @author Marcello De Bernardi
  */
-public class ListPaneController {
+public class ListController {
     private BookingController master;
     private BookingSystem bookingSystem;
     private DateTimeFormatter timeFormatter;
@@ -51,7 +51,7 @@ public class ListPaneController {
     @FXML private TableColumn<DiagRepBooking, String> billSettledColumn;
 
 
-    public ListPaneController() {
+    public ListController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -61,101 +61,34 @@ public class ListPaneController {
         selectedDay = ZonedDateTime.now();
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                        INITIALIZATION                                               //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void initialize() {
         populateFilterComboBox();
         filterComboBox.getSelectionModel().select(0);
         populateViewByComboBox();
         viewByComboBox.getSelectionModel().select(0);
-        setBookingTableCellValueFactories();
-        refreshBookingTable();
-        setColumnWidths();
-        setSelectionListener();
+        initializeTable();
+        refreshTable();
 
-        master.setController(ListPaneController.class, this);
+        master.setController(ListController.class, this);
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                        EVENT HANDLERS                                               //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @FXML private void searchBookings() {
-        populateBookingListView(bookingSystem.searchBookings(listSearchBar.getText()));
-    }
-
-    @FXML private void openCalendarPane() {
-        try {
-            master.setCenter(FXMLLoader.load(getClass().getResource("/resources/booking/CalendarPane.fxml")));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML private void applyListFilter() {
-        currentFilter = Filter.asEnum(filterComboBox.getSelectionModel().getSelectedItem().toString());
-        refreshBookingTable();
-    }
-
-    @FXML private void applyListViewType() {
-        currentViewBy = ViewBy.asEnum(viewByComboBox.getSelectionModel().getSelectedItem().toString());
-        refreshBookingTable();
-    }
-
-    @FXML private void selectListPeriod() {
-        selectedDay = ZonedDateTime.parse(listDatePicker.getValue().format(dateFormatter), dateFormatter);
-
-    }
-
-    void refreshBookingTable() {
-        switch (currentFilter) {
-            case ALL:
-                populateBookingListView(bookingSystem.getAllBookings());
-                break;
-            case FUTURE:
-                populateBookingListView(bookingSystem.getFutureBookings());
-                break;
-            case PAST:
-                populateBookingListView(bookingSystem.getPastBookings());
-                break;
-            default:
-                System.err.println("Unrecognized list filter applied.");
-        }
-    }
+    /** Set the cell value factories for each column in the table */
+    private void initializeTable() {
+        DoubleBinding binding = bookingTableView.widthProperty().subtract(15).divide(9);
+        customerColumn.prefWidthProperty().bind(binding);
+        vehicleRegColumn.prefWidthProperty().bind(binding);
+        diagnosisDateColumn.prefWidthProperty().bind(binding);
+        diagnosisTimeColumn.prefWidthProperty().bind(binding);
+        repairDateColumn.prefWidthProperty().bind(binding);
+        repairTimeColumn.prefWidthProperty().bind(binding);
+        billAmountColumn.prefWidthProperty().bind(binding);
+        billSettledColumn.prefWidthProperty().bind(binding);
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                     FIELD POPULATION                                                //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void populateBookingListView(List<DiagRepBooking> bookings) {
-        ObservableList<DiagRepBooking> bookingsObservable = FXCollections.observableArrayList(bookings);
-        bookingTableView.setItems(bookingsObservable);
-        bookingTableView.refresh();
-    }
-
-    private void populateFilterComboBox() {
-        List<String> options = new ArrayList<>();
-        options.add(Filter.ALL.toString());
-        options.add(Filter.PAST.toString());
-        options.add(Filter.FUTURE.toString());
-
-        filterComboBox.setItems(FXCollections.observableArrayList(options));
-    }
-
-    private void populateViewByComboBox() {
-        List<String> options = new ArrayList<>();
-        options.add(ViewBy.DAY.toString());
-        options.add(ViewBy.WEEK.toString());
-        options.add(ViewBy.MONTH.toString());
-
-        viewByComboBox.setItems(FXCollections.observableArrayList(options));
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                     TABLE CONSTRUCTION                                              //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* Set the cell value factories for each column in the table */
-    private void setBookingTableCellValueFactories() {
         customerColumn.setCellValueFactory(p -> {
             Customer customer = p.getValue().getCustomer();
             return customer == null ?
@@ -204,38 +137,100 @@ public class ListPaneController {
         bookingTableView.getColumns().setAll(customerColumn, vehicleRegColumn, manufacturerColumn,
                 diagnosisDateColumn, diagnosisTimeColumn, repairDateColumn, repairTimeColumn,
                 billAmountColumn, billSettledColumn);
-    }
 
-    private void setColumnWidths() {
-        DoubleBinding binding = bookingTableView.widthProperty().subtract(15).divide(9);
 
-        customerColumn.prefWidthProperty().bind(binding);
-        vehicleRegColumn.prefWidthProperty().bind(binding);
-        diagnosisDateColumn.prefWidthProperty().bind(binding);
-        diagnosisTimeColumn.prefWidthProperty().bind(binding);
-        repairDateColumn.prefWidthProperty().bind(binding);
-        repairTimeColumn.prefWidthProperty().bind(binding);
-        billAmountColumn.prefWidthProperty().bind(binding);
-        billSettledColumn.prefWidthProperty().bind(binding);
-    }
-
-    private void setSelectionListener() {
         bookingTableView
                 .getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldSelection, newSelection) -> {
                     if (oldSelection != null) {
-                        for (PartOccurrence p : ((DetailsPaneController) master.getController(DetailsPaneController.class)).getDetachedParts()) {
+                        for (PartOccurrence p : ((DetailsController) master.getController(DetailsController.class)).getDetachedParts()) {
                             oldSelection.getRequiredPartsList().add(p);
                         }
                     }
                     if (newSelection != null) {
-                        ((DetailsPaneController) master.getController(DetailsPaneController.class))
-                                .populateDetailFields(newSelection);
-                        ((DetailsPaneController) master.getController(DetailsPaneController.class))
+                        ((DetailsController) master.getController(DetailsController.class))
+                                .populate(newSelection);
+                        ((DetailsController) master.getController(DetailsController.class))
                                 .setPaneTitleToView();
                     }
                 });
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                        EVENT HANDLERS                                               //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @FXML private void searchBookings() {
+        populateListView(bookingSystem.searchBookings(listSearchBar.getText()));
+    }
+
+    @FXML private void openCalendarPane() {
+        try {
+            master.setCenter(FXMLLoader.load(getClass().getResource("/resources/booking/CalendarPane.fxml")));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private void applyListFilter() {
+        currentFilter = Filter.asEnum(filterComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshTable();
+    }
+
+    @FXML private void applyListViewType() {
+        currentViewBy = ViewBy.asEnum(viewByComboBox.getSelectionModel().getSelectedItem().toString());
+        refreshTable();
+    }
+
+    @FXML private void selectListPeriod() {
+        selectedDay = ZonedDateTime.parse(listDatePicker.getValue().format(dateFormatter), dateFormatter);
+
+    }
+
+    void refreshTable() {
+        switch (currentFilter) {
+            case ALL:
+                populateListView(bookingSystem.getAllBookings());
+                break;
+            case FUTURE:
+                populateListView(bookingSystem.getFutureBookings());
+                break;
+            case PAST:
+                populateListView(bookingSystem.getPastBookings());
+                break;
+            default:
+                System.err.println("Unrecognized list filter applied.");
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     FIELD POPULATION                                                //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private void populateListView(List<DiagRepBooking> bookings) {
+        ObservableList<DiagRepBooking> bookingsObservable = FXCollections.observableArrayList(bookings);
+        bookingTableView.setItems(bookingsObservable);
+        bookingTableView.refresh();
+    }
+
+    private void populateFilterComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(Filter.ALL.toString());
+        options.add(Filter.PAST.toString());
+        options.add(Filter.FUTURE.toString());
+
+        filterComboBox.setItems(FXCollections.observableArrayList(options));
+    }
+
+    private void populateViewByComboBox() {
+        List<String> options = new ArrayList<>();
+        options.add(ViewBy.DAY.toString());
+        options.add(ViewBy.WEEK.toString());
+        options.add(ViewBy.MONTH.toString());
+
+        viewByComboBox.setItems(FXCollections.observableArrayList(options));
     }
 
 

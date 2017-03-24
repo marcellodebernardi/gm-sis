@@ -1,15 +1,12 @@
 <component name="libraryTable">
-  <library name="org.jfxtras:jfxtras-agenda:8.0-r5" type="repository">
-    <properties maven-id="org.jfxtras:jfxtras-agenda:8.0-r5" />
+  <library name="org.jfxtras:jfxtras-agenda:8.0-r5">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-agenda-8.0-r5.jar!/" />
       <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-controls-8.0-r5.jar!/" />
       <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-common-8.0-r5.jar!/" />
       <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-fxml-8.0-r5.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/master/working/lib/jfxtras-agenda-8.0-r5-javadoc.jar!/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

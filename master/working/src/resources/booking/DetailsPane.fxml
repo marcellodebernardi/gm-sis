@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.DetailsPaneController"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.DetailsController"
             id="detailsPane" fx:id="detailsPane">
     <top>
         <HBox id="detailsTitle">
@@ -16,12 +16,12 @@
             <!-- Select a customer -->
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
             <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       fx:id="customerSearchBar" onAction="#selectCustomer"/>
+                       fx:id="customerSearchBar" onAction="#pickCustomer"/>
 
             <!-- Select a vehicle -->
             <Label GridPane.rowIndex="1" GridPane.columnIndex="0">Vehicle</Label>
             <ComboBox GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="vehicleComboBox" onAction="#selectVehicle"/>
+                      fx:id="vehicleComboBox" onAction="#pickVehicle"/>
 
             <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Description</Label>
             <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
@@ -50,7 +50,7 @@
             <!-- Mechanic tasked on repair -->
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
             <ComboBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="mechanicComboBox" onAction="#selectMechanic"/>
+                      fx:id="mechanicComboBox" onAction="#pickMechanic"/>
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
@@ -70,7 +70,7 @@
 
             <Label GridPane.rowIndex="10" GridPane.columnIndex="0">Mileage</Label>
             <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="vehicleMileageTextField" fx:id="vehicleMileageTextField"/>
+                       id="vehicleMileageTextField" fx:id="mileageTextField"/>
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="newVehicleMileageTextField" fx:id="newMileageTextField"/>
@@ -78,10 +78,10 @@
     </center>
     <bottom>
         <HBox id="detailsButtons">
-            <Button onAction="#saveBooking">Save</Button>
-            <Button onAction="#completeBooking">Complete</Button>
-            <Button onAction="#clearFields">New</Button>
-            <Button onAction="#deleteBooking">Delete</Button>
+            <Button onAction="#save">Save</Button>
+            <Button onAction="#complete">Complete</Button>
+            <Button onAction="#clear">New</Button>
+            <Button onAction="#delete">Delete</Button>
         </HBox>
     </bottom>
 </BorderPane>
