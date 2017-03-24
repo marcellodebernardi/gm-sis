@@ -3,6 +3,7 @@ package controllers.parts;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
+import domain.Vehicle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.criterion.Criterion;
 import logic.parts.PartsSystem;
+import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 import java.net.URL;
 import java.time.LocalTime;
@@ -35,6 +37,8 @@ public class PartsController implements Initializable {
     ObservableList<PartAbstraction> tableEntries = FXCollections.observableArrayList();
     ObservableList<Installation> tableEntries2 = FXCollections.observableArrayList();
     ObservableList<String> CB = FXCollections.observableArrayList();
+    private List<PartOccurrence> partOccurrences = new ArrayList<>();
+
     private PartsSystem pSys = PartsSystem.getInstance(DatabaseRepository.getInstance());
     @FXML
     private TableView<PartAbstraction> PartsTable;
@@ -85,11 +89,9 @@ public class PartsController implements Initializable {
     @FXML
     private Button increaseStock, decreaseStock;
     @FXML
-    private TextField regNumberInstallation;
+    private TextField regNumberInstallation, searchInst;
     @FXML
     private DatePicker instDate;
-    @FXML
-    private DatePicker warDate;
 
     private ArrayList data = new ArrayList();
     private List<PartAbstraction> List;
@@ -200,9 +202,6 @@ public class PartsController implements Initializable {
             if (List.get(i).getPartName().toLowerCase().contains(searchParts.getText())) {
                 tableEntries.add(List.get(i));
             }
-            if (List.get(i).getPartDescription().contains(searchParts.getText())){
-                tableEntries.add(List.get(i));
-            }
         }
 
         PartsTable.setItems(tableEntries);
@@ -274,50 +273,57 @@ public class PartsController implements Initializable {
      * TODO: fix the Installation data and set Occurence as editable
      */
     public void viewAllBookingsClick() {
-
+        
         try {
 
             List2 = pSys.getAllInstallations();
             List2.get(0).getPartOccurrence().getPartOccurrenceID();
 
 
+            tableEntries2.removeAll(tableEntries2);
+
+            for (int i = 0; i < List2.size(); i++) {
+                tableEntries2.add(List2.get(i));
+
+            }
+
+            installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
+            installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
+
+            installationDate.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("installationDate"));
+            installationDate.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
+
+            warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("endWarrantyDate"));
+            warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
+
+
+
+            partAbsID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                    ObservableValue<Integer>>() {
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                    return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartAbstractionID());
+                }
+            });
+
+
+
+            partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                    ObservableValue<Integer>>() {
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                    return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
+                }
+            });
+
+
+
+            regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
+            regNumber.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
         }catch(IndexOutOfBoundsException | NullPointerException e){
             e.printStackTrace();
         }
 
-
-        tableEntries2.removeAll(tableEntries2);
-
-        for (int i = 0; i < List2.size(); i++) {
-            tableEntries2.add(List2.get(i));
-
-        }
-
-        installationID.setCellValueFactory(new PropertyValueFactory<Installation, Integer>("installationID"));
-        installationID.setCellFactory(TextFieldTableCell.<Installation, Integer>forTableColumn(new IntegerStringConverter()));
-
-        installationDate.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("installationDate"));
-        installationDate.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
-
-        warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("endWarrantyDate"));
-        warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
-
-        partAbsID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
-                ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartAbstractionID());
-            }
-        });
-
-        partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
-                ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
-            }
-        });
-
-        regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
-        regNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
         PartsBookings.setItems(tableEntries2);
 
@@ -339,7 +345,7 @@ public class PartsController implements Initializable {
             if (i == partAbstractionList.size() - 1) {
                 for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
                     PartAbstraction partAbstraction = partAbstractionList.get(i);
-                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, -1);
+                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
                     pSys.addPartOccurrence(partOccurrence);
                 }
             }
@@ -362,7 +368,7 @@ public class PartsController implements Initializable {
         partStockLevelField.clear();
 
     }
-
+//possible
     public void saveChanges() {
 
         PartAbstraction singlePart;
@@ -483,7 +489,6 @@ public class PartsController implements Initializable {
      */
     public void decreaseStockLevel() {
 
-
         try {
 
             PartAbstraction partDecrease = PartsTable.getSelectionModel().getSelectedItem();
@@ -500,7 +505,6 @@ public class PartsController implements Initializable {
             saveChanges();
             updateTable();
 
-
         }
         catch (IndexOutOfBoundsException | NullPointerException e) {
 
@@ -512,58 +516,137 @@ public class PartsController implements Initializable {
             }
 
         }
-
     }
 
-    /**
-     *
-     */
     public void deleteInstallation() {
-
 
         try {
 
             Installation deleteInst = PartsBookings.getSelectionModel().getSelectedItem();
-
             if (deleteInst == null) {
                 throw new Exception();
             }
             if ((!showConfirmation("Sure you want to delete this installation?"))) {
                 return;
             }
-
-
+            boolean result = pSys.deleteInstallation(deleteInst.getInstallationID());
+            if(result){
+                viewAllBookingsClick();
+            }
         }
         catch (Exception e) {
-
             showError("Please select an installation first to delete");
-
         }
 
     }
 
     public void addInstallation() {
 
-        ZonedDateTime dateInstallation = ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
-        ZonedDateTime dateWarranty = ZonedDateTime.of(warDate.getValue(), LocalTime.now(), ZoneId.systemDefault());
+        try {
 
+            Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(regNumberInstallation.getText());
+            if (vehicle == null) {
+                throw new Exception();
+            }
 
-        System.out.print(dateInstallation + " , " + dateWarranty);
+            PartOccurrence partOccurrence = pSys.getPartOcc(Integer.parseInt(availableOcc.getSelectionModel().getSelectedItem().trim()));
+            Character c = availableOcc.getSelectionModel().getSelectedItem().trim().charAt(0);
+            int partAbs = c.getNumericValue(c);
+            System.out.println("Stock level : " + partAbs);
+            PartAbstraction partAbstraction = pSys.getPartbyID(partAbs);
+            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
+            pSys.commitAbstraction(partAbstraction);
+            System.out.println(partAbs);
+            Installation installation = new Installation(ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), regNumberInstallation.getText(), partAbs, partOccurrence);
+            pSys.commitInst(installation);
 
-        // PartOccurrence partOccurrence = pSys.getAllFreeOccurrences(addPartToInst.getSelectionModel().getSelectedItem());
+            showInfo("Installation has been added, stock for selected part has been reduced");
 
-        Installation newInst = new Installation(dateInstallation, dateWarranty, regNumberInstallation.getText(),
-                addPartToInst.getVisibleRowCount(), null);
+            viewAllBookingsClick();
+            String[]A=addPartToInst.getSelectionModel().getSelectedItem().split(":");
+            for (int i = 0; i < List.size(); i++) {
+                if(List.get(i).getPartAbstractionID()==Integer.parseInt(A[0])){
+                    actualDecrease(List.get(i));
+                }
+            }
 
-        System.out.println(newInst);
+            System.out.println(installation);
 
-
-        boolean b = instance.commitItem(newInst);
-        viewAllBookingsClick();
-
+        }
+        catch (Exception e) {
+            showError("Please enter a valid Vehicle registration.");
+        }
 
     }
 
+    public void actualDecrease(PartAbstraction partDecrease){
 
+        try {
+
+            int c = partDecrease.getPartStockLevel() - 1;
+           // System.out.println(c);
+            //System.out.println(partDecrease.getPartAbstractionID());
+            partDecrease.setPartStockLevel(c);
+
+            //saveChanges();
+            updateTable();
+
+
+        }
+        catch (IndexOutOfBoundsException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setOccs(){
+
+        try {
+            //availableOcc.getItems().removeAll()
+            partOccurrences.removeAll(partOccurrences);
+            String[] s = addPartToInst.getSelectionModel().getSelectedItem().trim().split(":");
+            partOccurrences.addAll(pSys.getAllUninstalled(Integer.parseInt(s[0].trim())));
+            availableOcc.getItems().removeAll(availableOcc.getItems());
+            for (PartOccurrence partOccurrence : partOccurrences) {
+                availableOcc.getItems().add(Integer.toString(partOccurrence.getPartOccurrenceID()));
+            }
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Showing part description.");
+        }
+
+    }
+
+    public void searchInstallations() {
+
+        tableEntries2.removeAll(tableEntries2);
+        try {
+            for (int i = 0; i < List.size(); i++) {
+
+                if (List2.get(i).getVehicleRegNumber().toLowerCase().contains(searchInst.getText())) {
+                    tableEntries2.add(List2.get(i));
+                }
+
+                /*
+                if (List2.get(i).getCustomer().getCustomerFirstname().toLowerCase().contains(searchInst.getText())) ;
+                {
+                    tableEntries2.add(List2.get(i));
+                }
+                if (List2.get(i).getCustomer().getCustomerSurname().toLowerCase().contains(searchInst.getText())) ;
+                {
+                    tableEntries2.add(List2.get(i));
+                }
+                */
+
+
+            }
+
+            PartsBookings.setItems(tableEntries2);
+
+        } catch (NullPointerException e) {
+
+            e.printStackTrace();
+        }
+    }
 }
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.Matches;
 import static logic.criterion.CriterionOperator.MoreThan;
 
 /**
@@ -74,7 +75,7 @@ public class PartsSystem {
     }
 
     public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1)
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0)
                 .and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
     }
 
@@ -97,6 +98,31 @@ public class PartsSystem {
     public List<Installation> getAllInstallations() {
         return persistence.getByCriteria(new Criterion<>(Installation.class));
     }
+
+    public PartOccurrence getPartOcc(int partOcc) {
+        try {
+            List<PartOccurrence> partOccurrences = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", EqualTo, partOcc));
+            return partOccurrences.get(0);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+    }
+
+    public boolean commitInst(Installation installation) {
+        return persistence.commitItem(installation);
+    }
+
+    public boolean deleteInstallation(int InstallationID) {
+        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", EqualTo, InstallationID));
+    }
+
+    public void commitAbstraction(PartAbstraction partAbstraction)
+    {
+        persistence.commitItem(partAbstraction);
+    }
+
+
 }
 
 
