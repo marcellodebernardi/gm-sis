@@ -1,18 +1,19 @@
 package main;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import jfxtras.resources.JFXtrasFontRoboto;
 import persistence.DatabaseRepository;
 
+import javax.swing.border.*;
+import javax.swing.border.Border;
 import java.io.IOException;
 
 /**
@@ -26,7 +27,7 @@ public class Main extends Application {
     // screen dimensions and other dimensions
     private double screenX = Screen.getPrimary().getVisualBounds().getWidth();
     private double screenY = Screen.getPrimary().getVisualBounds().getHeight();
-    private double tabWidth = screenX / 7.05;
+    private double tabWidth = screenX/7.05;
 
     // stage, scene, and BorderPane containing TabPane
     private Stage primaryStage;
@@ -40,17 +41,8 @@ public class Main extends Application {
      *
      * @param args CLI-arguments
      */
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         Application.launch(args);
-    }
-
-    /**
-     * Returns the instance of Main. Allows controllers to interact with top-level GUI logic.
-     *
-     * @return the JavaFX application
-     */
-    public static Main getInstance() {
-        return application;
     }
 
     @Override
@@ -69,7 +61,7 @@ public class Main extends Application {
             this.primaryStage.setScene(new Scene(loginPane));
             this.primaryStage.show();
         }
-        catch (LoadException e) {
+        catch(LoadException e) {
             e.printStackTrace();
         }
     }
@@ -83,13 +75,23 @@ public class Main extends Application {
     }
 
     /**
+     * Returns the instance of Main. Allows controllers to interact with top-level GUI logic.
+     *
+     * @return the JavaFX application
+     */
+    public static Main getInstance() {
+        return application;
+    }
+
+    /**
      * Takes the main scene from the login controller. The main scene cannot be loaded in Main,
      * because it has behavior that assumes that a login attempt has been made.
      */
     public void setRootPane(BorderPane rootPane) {
         applicationPane = rootPane;
-        tabPane = (HBox) rootPane.getChildren().get(0);
-
+        tabPane = (HBox)rootPane.getChildren().get(0);
+        screenX = 1289;
+        screenY = 700;
         // pane properties that are hard to implement in CSS
         applicationPane.setPrefHeight(screenY);
         applicationPane.setPrefWidth(screenX);
@@ -97,7 +99,7 @@ public class Main extends Application {
         tabPane.setPrefWidth(screenX);
 
         for (Node b : tabPane.getChildren()) {
-            ((Button) b).setPrefWidth(tabWidth);
+            ((Button)b).setPrefWidth(tabWidth);
         }
 
         // set scene and stage
@@ -105,6 +107,9 @@ public class Main extends Application {
 
         primaryStage.setScene(mainScene);
         primaryStage.setMaximized(true);
+        primaryStage.setResizable(false);
+        primaryStage.setX((Screen.getPrimary().getVisualBounds().getWidth() - primaryStage.getWidth()) / 2);
+        primaryStage.setY((Screen.getPrimary().getVisualBounds().getHeight() - primaryStage.getHeight()) / 2);
     }
 
     /**
@@ -117,8 +122,8 @@ public class Main extends Application {
             BorderPane newApplicationPane = new FXMLLoader(getClass().getResource("/common/applicationPane.fxml")).load();
             newApplicationPane.setCenter(pane);
 
-            for (Node b : ((HBox) newApplicationPane.getTop()).getChildren()) {
-                ((Button) b).setPrefWidth(tabWidth);
+            for (Node b : ((HBox)newApplicationPane.getTop()).getChildren()) {
+                ((Button)b).setPrefWidth(tabWidth);
             }
 
             primaryStage.getScene().setRoot(newApplicationPane);

@@ -87,7 +87,7 @@ public class PartsSystem {
     }
 
     public List<PartOccurrence> getAllUninstalled(int partAbstractionID) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1).and("partAbstractionID", EqualTo, partAbstractionID));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0).and("partAbstractionID", EqualTo, partAbstractionID));
     }
 
     public PartOccurrence getByInstallationID(int InstallationID) {

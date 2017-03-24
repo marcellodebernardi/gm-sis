@@ -217,14 +217,14 @@ class ObjectRelationalMapper {
             parent.addDependent(sN);
         }
         if (item instanceof DependencyConnectable) {
-            System.out.println(((DependencyConnectable) item).getDependencies());
+            // System.out.println(((DependencyConnectable) item).getDependencies());
 
             for (DependencyConnection connection : ((DependencyConnectable) item).getDependencies()) {
                 connection.transmit(sN);
 
                 // todo this shouldn't break since it only goes one way
                 if (connection.directionality() == TRANSMITTER) {
-                    System.out.println("RECURSING VIA TRANSMITTER.");
+                    // System.out.println("RECURSING VIA TRANSMITTER.");
                     statementGraph.addAll(generateStatementGraph(connection.pair().getHost(), null));
                 }
             }
