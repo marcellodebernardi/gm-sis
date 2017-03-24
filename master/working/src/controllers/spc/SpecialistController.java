@@ -25,6 +25,8 @@ import persistence.DatabaseRepository;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -137,7 +139,6 @@ public class SpecialistController implements Initializable {
         bookingDeliveryDate.setDayCellFactory(dateChecker);
         bookingReturnDate.setDayCellFactory(dateChecker);
         instaDate.setDayCellFactory(dateChecker);
-       // wEndDate.setDayCellFactory(dateBlocker);
         setPartDes();
         try {
             setValues();
@@ -172,7 +173,7 @@ public class SpecialistController implements Initializable {
                 partSerial.getItems().add(Integer.toString(partOccurrence.getPartOccurrenceID()));
             }
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException | NullPointerException e) {
             System.out.println("Showing part description.");
         }
 
@@ -407,16 +408,23 @@ public class SpecialistController implements Initializable {
     }
 
     public void editBooking() {
-        cancelEdit.setVisible(true);
-        bookingID.setEditable(true);
-        bookingItemID.setEditable(true);
-        bookingSPCID.setEditable(true);
-        bookingCost.setEditable(true);
-        bookingType.setVisible(false);
-        addSRBooking.setVisible(false);
-        updateSRBooking.setVisible(true);
-        bookingDeliveryDate.setEditable(true);
-        bookingReturnDate.setEditable(true);
+
+        if(!specialistBookings.getSelectionModel().getSelectedItem().getReturnDate().before(new Date())) {
+            cancelEdit.setVisible(true);
+            bookingID.setEditable(true);
+            bookingItemID.setEditable(true);
+            bookingSPCID.setEditable(true);
+            bookingCost.setEditable(true);
+            bookingType.setVisible(false);
+            addSRBooking.setVisible(false);
+            updateSRBooking.setVisible(true);
+            bookingDeliveryDate.setEditable(true);
+            bookingReturnDate.setEditable(true);
+        }
+        else
+            {
+                showAlert("Booking completed");
+            }
     }
 
     @FXML
@@ -447,7 +455,7 @@ public class SpecialistController implements Initializable {
                 PartOccurrence partOccurrence = specRepairSystem.findAPart(Integer.parseInt(bookingItemID.getText().trim()));
 
                 if (partOccurrence != null) {
-                    item_found_lbl.setTextFill(Color.valueOf("#4aff02"));
+                    item_found_lbl.setTextFill(Color.valueOf("#229e1c"));
                     item_found_lbl.setText("Part found");
                     item_found_lbl.setVisible(true);
                 }
@@ -464,12 +472,12 @@ public class SpecialistController implements Initializable {
              //   System.out.println(bookingItemID.getText().trim());
                 Vehicle vehicle = specRepairSystem.findVehicle(bookingItemID.getText().trim());
                 if (vehicle != null) {
-                    item_found_lbl.setTextFill(Color.valueOf("#4aff02"));
+                    item_found_lbl.setTextFill(Color.valueOf("#229e1c"));
                     item_found_lbl.setText("Vehicle found");
                     item_found_lbl.setVisible(true);
                 }
             }
-            catch (NullPointerException ex) {
+            catch (NullPointerException | IndexOutOfBoundsException ex) {
                 item_found_lbl.setTextFill(Color.RED);
                 item_found_lbl.setText("Please enter exact vehicle reg");
                 item_found_lbl.setVisible(true);
@@ -857,6 +865,9 @@ public class SpecialistController implements Initializable {
             PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
             Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
             int partAbs = c.getNumericValue(c);
+            PartAbstraction partAbstraction = partsSystem.getPartbyID(partAbs);
+            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
+            partsSystem.commitAbstraction(partAbstraction)  ;
             Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
             specRepairSystem.commitInstallations(installation);
             showInfo("Installation added");
@@ -869,9 +880,11 @@ public class SpecialistController implements Initializable {
 
     }
 
-    public void editInstallation() {
 
-        cancelEdit.setVisible(true);
+    public Button cancelInstallationUpdate = new Button();
+
+    public void editInstallation() {
+        cancelInstallationUpdate.setVisible(true);
         allowUpdate.setVisible(true);
 
     }
@@ -884,7 +897,6 @@ public class SpecialistController implements Initializable {
         installation.setPartAbstractionID(abs);
         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(partSerial.getSelectionModel().getSelectedItem().trim()));
         installation.setPartOccurrence(partOccurrence);
-       // wEndDate.setValue(LocalDate.now());
         installation.setInstallationDate(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()));
         installation.setEndWarrantyDate(ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()));
         specRepairSystem.commitInstallations(installation);
@@ -892,7 +904,7 @@ public class SpecialistController implements Initializable {
     }
 
     public void cancelUpdate() {
-        cancelEdit.setVisible(false);
+        cancelInstallationUpdate.setVisible(false);
         allowUpdate.setVisible(false);
     }
 
