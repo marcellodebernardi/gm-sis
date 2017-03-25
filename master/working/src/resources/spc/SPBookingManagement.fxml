@@ -82,7 +82,6 @@
                   <Label layoutX="128.0" layoutY="73.0" prefHeight="16.0" prefWidth="168.0" text="Specialist repair center ID:" />
                 <Button fx:id="addInsta" layoutX="24.0" layoutY="259.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="27.0" prefWidth="96.0" text="+Installation" visible="false" />
             <ComboBox fx:id="bookingIDForInsta" layoutX="132.0" layoutY="498.0" prefWidth="150.0" promptText="Select a booking" visible="false" />
-            <Label layoutX="133.0" layoutY="469.0" text="Select a booking" visible="false" />
             <Label fx:id="bookingIDLabel" layoutX="134.0" layoutY="480.0" text="Select a booking" visible="false" />
             </children>
         </Pane>

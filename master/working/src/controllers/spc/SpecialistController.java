@@ -820,7 +820,7 @@ public class SpecialistController implements Initializable {
             wEndDate.setText(simpleDateFormat.format(date));
         }
         catch (NullPointerException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
