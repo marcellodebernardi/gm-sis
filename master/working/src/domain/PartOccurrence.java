@@ -138,4 +138,14 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 installationID));
         return installations != null && installations.size() != 0 ? installations.get(0) : null;
     }
+
+    /** Returns the part's SPC repair, or null if the part has not been sent for an SPC repair.
+     *
+     * @return PartRepair if sent to SPC, null if not
+     */
+    @Lazy public PartRepair getPartRepair() {
+        List<PartRepair> repairs = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartRepair.class)
+                .where("partOccurrenceID", equalTo, this.partOccurrenceID));
+        return repairs != null && repairs.size() != 0 ? repairs.get(0) : null;
+    }
 }

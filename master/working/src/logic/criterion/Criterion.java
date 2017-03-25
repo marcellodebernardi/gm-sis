@@ -78,7 +78,7 @@ public class Criterion<E extends Searchable> {
      * (a wrapper object in case the field is primitive).
      * <p>
      * If a CriterionException is throws, use CriterionException.getMessage() to view the
-     * cause of the error.
+     * because of the error.
      *
      * @param eClass    class of the objects to be expected in return
      * @param attribute object variable used as search criterion

@@ -12,6 +12,7 @@ import static logic.booking.UnavailableDateException.Cause.*;
  */
 public class UnavailableDateException extends Exception {
     private Cause cause;
+    private Appointment appointment;
     private List<DiagRepBooking> clashes;
     private String holiday;
     private LocalTime time;
@@ -24,9 +25,43 @@ public class UnavailableDateException extends Exception {
     }
 
 
-    /** Sets the cause of the unavailability */
+    /** Returns an enum outlining the because of the exception */
+    public Cause reason() {
+        return this.cause;
+    }
+
+    public Appointment concerning() throws UnsupportedOperationException {
+        if (this.appointment == null) throw new UnsupportedOperationException("Appointment not specified.");
+        return this.appointment;
+    }
+
+    /** Returns the bookings with which there is a clash */
+    public List<DiagRepBooking> clashes() throws UnsupportedOperationException {
+        if (cause != CLASHES) throw new UnsupportedOperationException("Date is not unavailable due to clash.");
+        return clashes;
+    }
+
+    /** Returns the holiday on which the given time falls */
+    public String holiday() throws UnsupportedOperationException {
+        if (cause != HOLIDAY) throw new UnsupportedOperationException("Date is not unavailable due to holiday.");
+        return holiday;
+    }
+
+    /** Returns the invalid outside-opening-hours appointment time */
+    public LocalTime time() throws UnsupportedOperationException {
+        if (cause != CLOSED) throw new UnsupportedOperationException("Date is not unavailable due to being closed");
+        return time;
+    }
+
+    /** Sets the because of the unavailability */
     UnavailableDateException because(Cause cause) {
         this.cause = cause;
+        return this;
+    }
+
+    /** Registers whether the date problem is with the diagnosis or repair appointment */
+    UnavailableDateException concerning(Appointment appointment) {
+        this.appointment = appointment;
         return this;
     }
 
@@ -50,13 +85,20 @@ public class UnavailableDateException extends Exception {
         return this;
     }
 
-    /** Returns an enum outlining the cause of the exception */
-    public Cause because() {
-        return this.cause;
+
+    /** Enumerates the nature of the unavailability of the date */
+    public enum Cause {
+        CLASHES, CLOSED, HOLIDAY;
+
+        public String toString() {
+            if (this == CLASHES) return "The booking clashes with another booking.";
+            else if (this == CLOSED) return "The garage is closed at that time";
+            else return "A public or bank holiday falls on that date, and the garage will be closed";
+        }
     }
 
-
-    public enum Cause {
-        CLASHES, CLOSED, HOLIDAY
+    /** Enumerates whether the problematic date is that of the diagnosis of the repair */
+    public enum Appointment {
+        DIAGNOSIS, REPAIR
     }
 }

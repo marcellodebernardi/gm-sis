@@ -16,7 +16,7 @@ class CriterionException extends RuntimeException {
     }
 
 
-    /** Chained method for setting the cause of a CriterionException before it is thrown */
+    /** Chained method for setting the because of a CriterionException before it is thrown */
     CriterionException because(Cause cause) {
         this.cause = cause;
         return this;

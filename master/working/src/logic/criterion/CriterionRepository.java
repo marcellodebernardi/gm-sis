@@ -66,7 +66,7 @@ public interface CriterionRepository {
      * </p>
      * <p>
      * Matches operator should be avoided. Using the regex operator on identifiers can
-     * cause catastrophic loss of database contents.
+     * because catastrophic loss of database contents.
      * </p>
      *
      * @param criteria Criterion objects to define the objects to remove

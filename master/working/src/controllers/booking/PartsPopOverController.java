@@ -66,7 +66,7 @@ public class PartsPopOverController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     TABLE CONSTRUCTION                                              //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // sets the cell value factories for the parts table
+    /** sets the cell value factories for the parts table */
     private void setPartsTableCellValueFactories() {
         partAbstractionID.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>("" + p.getValue().getPartAbstractionID())
@@ -88,7 +88,7 @@ public class PartsPopOverController {
         partsTable.getColumns().setAll(partAbstractionID, partName, partDescription, partPrice, partStockLevel);
     }
 
-    // sets the column widths of the parts table
+    /** sets the column widths of the parts table */
     private void setColumnWidths() {
         DoubleBinding binding = partsTable.widthProperty().divide(5);
 

@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -21,10 +22,7 @@ import org.controlsfx.control.textfield.TextFields;
 import persistence.DatabaseRepository;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -32,6 +30,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.time.DayOfWeek.SUNDAY;
+import static logic.booking.UnavailableDateException.Appointment.DIAGNOSIS;
+import static logic.booking.UnavailableDateException.Cause.HOLIDAY;
 
 /**
  * @author Marcello De Bernardi
@@ -81,6 +81,8 @@ public class DetailsController {
     private PopOver vehicleValidationPopOver;
     private PopOver mechanicValidationPopOver;
     private PopOver mileageValidationPopOver;
+    private PopOver invalidTimePopOver;
+    private PopOver invertedTimePopOver;
 
 
     public DetailsController() {
@@ -102,6 +104,7 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     INITIALIZATION                                                  //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** Calls the initialization helpers and sets the controller state to initialized */
     @FXML private void initialize() {
         master.setController(DetailsController.class, this);
@@ -152,7 +155,7 @@ public class DetailsController {
         });
     }
 
-    /** Sets the cell factory and button cell for the mechanic ComboBox, and populates it*/
+    /** Sets the cell factory and button cell for the mechanic ComboBox, and populates it */
     @SuppressWarnings("Duplicates")
     private void initializeMechanicComboBox() {
         if (initialized) return;
@@ -250,12 +253,13 @@ public class DetailsController {
             mechanicValidationPopOver.hide();
     }
 
-    @FXML private void save() {
+    @FXML private boolean save() {
         if (!validateCustomerSelection() || !validateVehicleSelection()
                 || !dateSelected(diagnosisDatePicker, "/booking/validation/MissingDiagDate.fxml")
                 || !timeSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField, "/booking/validation/MissingDiagTime.fxml")
                 || !timeValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField, "/booking/validation/InvalidDiagTime.fxml")
-                || !validateMechanicSelection()) return;
+                || !timeNotInverted(diagnosisStartTimeTextField, diagnosisEndTimeTextField)
+                || !validateMechanicSelection()) return false;
 
         // if booking already exists, replace old object with new
         selectedVehicle.getBookingList().removeIf(b -> b.getBookingID() == selectedBooking.getBookingID());
@@ -266,7 +270,6 @@ public class DetailsController {
         selectedBooking.setMechanicID(extractMechanic().getMechanicID());
         selectedBooking.setDiagnosisStart(extractDiagnosisStart());
         selectedBooking.setDiagnosisEnd(extractDiagnosisEnd());
-        selectedBooking.setBill(new Bill(0, false)); // todo implement
 
         // repair dates, if set
         try {
@@ -285,6 +288,30 @@ public class DetailsController {
             // do nothing
         }
 
+        // bill
+        boolean settled = selectedVehicle.isCoveredByWarranty();
+        boolean hasRepair = selectedBooking.getRepairStart() != null;
+        double cost = 0;
+        double duration = selectedBooking.getDiagnosisEnd().toEpochSecond()
+                - selectedBooking.getDiagnosisStart().toEpochSecond();
+
+        if (hasRepair) duration += selectedBooking.getRepairEnd().toEpochSecond()
+                - selectedBooking.getRepairStart().toEpochSecond();
+        duration /= 3600;
+
+        cost += extractMechanic().getHourlyRate() * duration;
+        for (PartOccurrence pO : selectedBooking.getRequiredPartsList()) {
+            PartRepair repair = pO.getPartRepair();
+
+            if (repair != null) cost+= repair.getCost();
+            cost += pO.getPartAbstraction().getPartPrice();
+        }
+        VehicleRepair vehicleRepair = selectedBooking.getSpcRepair();
+        if (vehicleRepair != null) cost += vehicleRepair.getCost();
+
+        selectedBooking.setBill(new Bill(cost, settled));
+
+
         // commit
         try {
             bookingSystem.isClosed(selectedBooking);
@@ -292,17 +319,32 @@ public class DetailsController {
             bookingSystem.clashes(selectedBooking);
             if (vehicleSystem.addEditVehicle(selectedVehicle)) {
                 detachedParts.forEach(p -> DatabaseRepository.getInstance().commitItem(p));
+
                 ((ListController) master.getController(ListController.class)).refreshTable();
-                ((CalendarController) master.getController(CalendarController.class)).addAppointment(selectedBooking);
+                if (master.getController(CalendarController.class) != null)
+                    ((CalendarController) master.getController(CalendarController.class))
+                            .addAppointment(selectedBooking);
+
                 clear();
+                return true;
             }
         }
         catch (UnavailableDateException e) {
-            e.printStackTrace();
+            invalidTimePopOver = new PopOver(new Label(e.reason().toString()));
+            invalidTimePopOver.setCornerRadius(0);
+            invalidTimePopOver.setDetachable(false);
+
+            Node targetNode;
+            if (e.reason() == HOLIDAY)
+                targetNode = e.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker;
+            else targetNode = e.concerning() == DIAGNOSIS ? diagnosisEndTimeTextField : repairEndTimeTextField;
+
+            invalidTimePopOver.show(targetNode);
         }
         catch (NullPointerException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @FXML private void delete() {
@@ -320,17 +362,25 @@ public class DetailsController {
 
     @FXML private void complete() {
         if (!validateCustomerSelection() || !validateVehicleSelection()
-                || !dateSelected(diagnosisDatePicker,"/booking/validation/MissingDiagDate.fxml")
+                || !dateSelected(diagnosisDatePicker, "/booking/validation/MissingDiagDate.fxml")
                 || !timeSelected(diagnosisStartTimeTextField, diagnosisEndTimeTextField, "/booking/validation/MissingDiagTime.fxml")
                 || !timeValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField, "/booking/validation/InvalidDiagTime.fxml")
+                || !timeNotInverted(diagnosisStartTimeTextField, diagnosisEndTimeTextField)
                 || !dateSelected(repairDatePicker, "/booking/validation/MissingRepDate.fxml")
                 || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
                 || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
+                || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
                 || !validateMechanicSelection()
                 || !validNewMileage()) return;
 
         selectedBooking.setComplete(true);
-        save();
+
+        List<PartOccurrence> partsToInstall = selectedBooking.getRequiredPartsList();
+        ZonedDateTime installDate = selectedBooking.getRepairEnd();
+        String vehicleReg = selectedVehicle.getVehicleRegNumber();
+
+        if (save()) partsToInstall.forEach(part ->
+                partsSystem.commitInst(new Installation(installDate, vehicleReg, part)));
     }
 
     @FXML private void clear() {
@@ -368,6 +418,7 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                   FIELD STATE MANAGERS                                              //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** fills in the given booking's details into the detail pane */
     void populate(DiagRepBooking booking) {
         clear();
@@ -387,9 +438,11 @@ public class DetailsController {
         diagnosisDatePicker.setValue(booking.getDiagnosisStart().toLocalDate());
         diagnosisStartTimeTextField.setText(booking.getDiagnosisStart().format(timeFormatter));
         diagnosisEndTimeTextField.setText(booking.getDiagnosisEnd().format(timeFormatter));
-        repairDatePicker.setValue(booking.getRepairStart().toLocalDate());
-        repairStartTimeTextField.setText(booking.getRepairStart().format(timeFormatter));
-        repairEndTimeTextField.setText(booking.getRepairEnd().format(timeFormatter));
+        if (booking.getRepairStart() != null) {
+            repairDatePicker.setValue(booking.getRepairStart().toLocalDate());
+            repairStartTimeTextField.setText(booking.getRepairStart().format(timeFormatter));
+            repairEndTimeTextField.setText(booking.getRepairEnd().format(timeFormatter));
+        }
 
         disable(booking.isComplete());
     }
@@ -486,6 +539,7 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FIELD EXTRACTORS                                                //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** gets the customer from the search bar */
     private Customer extractCustomer() {
         String query = customerSearchBar.getText();
@@ -659,6 +713,30 @@ public class DetailsController {
         }
         catch (DateTimeParseException e) {
             if (!response.isShowing()) response.show(end);
+            return false;
+        }
+    }
+
+    /** Checks that the time in the end field is greater than in the start field */
+    private boolean timeNotInverted(TextField start, TextField end) {
+        if (invertedTimePopOver == null) {
+            try {
+                invalidTimePopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/InvertedTime.fxml")
+                ));
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (LocalTime.parse(end.getText(), timeFormatter).isAfter(LocalTime.parse(start.getText(), timeFormatter))) {
+            if (invalidTimePopOver.isShowing()) invalidTimePopOver.hide();
+            return true;
+        }
+        else {
+            if (!invalidTimePopOver.isShowing()) invalidTimePopOver.show(end);
             return false;
         }
     }
