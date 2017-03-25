@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.equalTo;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.matches;
 import static logic.criterion.CriterionOperator.moreThan;
 
 /**
@@ -114,7 +114,7 @@ public class PartsSystem {
     }
 
     public boolean deleteInstallation(int InstallationID) {
-        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", EqualTo, InstallationID));
+        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
     }
 
     public void commitAbstraction(PartAbstraction partAbstraction)
