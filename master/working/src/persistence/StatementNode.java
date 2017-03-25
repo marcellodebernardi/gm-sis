@@ -153,12 +153,12 @@ class StatementNode implements Comparable<StatementNode> {
                 if (value.getClass() == Date.class)
                     newInfo += delim + key + " = " + ((Date) value).getTime();
                 else if (value.getClass() == ZonedDateTime.class)
-                    newInfo += delim + key + " = " + ((ZonedDateTime) value).toEpochSecond() * 1000;
+                    newInfo += delim + key + " = " + ((ZonedDateTime) value).toInstant().toEpochMilli();
                 else if (value.getClass() == LocalDateTime.class)
-                    newInfo += delim + key + " = " + ((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000;
-                else if (value.getClass() == boolean.class && (boolean) value)
+                    newInfo += delim + key + " = " + ((LocalDateTime) value).toInstant(ZoneOffset.UTC).toEpochMilli();
+                else if (value.getClass() == Boolean.class && (Boolean) value)
                     newInfo += delim + key + " = 1";
-                else if (value.getClass() == boolean.class && !(boolean) value)
+                else if (value.getClass() == Boolean.class && !(Boolean) value)
                     newInfo += delim + key + " = 0";
                 else if (noQuotesTypes.contains(value.getClass()) && value.equals(-2))
                     newInfo += delim + key + " = -1";
