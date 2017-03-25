@@ -138,4 +138,11 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
                 installationID));
         return installations != null && installations.size() != 0 ? installations.get(0) : null;
     }
+
+    public void setBookingID(int bookingID)
+    {
+        this.bookingID =bookingID;
+    }
+
+
 }
