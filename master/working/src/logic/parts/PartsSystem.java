@@ -1,5 +1,6 @@
 package logic.parts;
 
+import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
@@ -121,7 +122,7 @@ public class PartsSystem {
     {
         persistence.commitItem(partAbstraction);
     }
-
+    
 
 }
 

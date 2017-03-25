@@ -1,9 +1,6 @@
 package controllers.parts;
 
-import domain.Installation;
-import domain.PartAbstraction;
-import domain.PartOccurrence;
-import domain.Vehicle;
+import domain.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +15,7 @@ import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.criterion.Criterion;
+import logic.customer.CustomerSystem;
 import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
@@ -612,23 +610,20 @@ public class PartsController implements Initializable {
     public void searchInstallations() {
 
         tableEntries2.removeAll(tableEntries2);
+
         try {
+
             for (int i = 0; i < List.size(); i++) {
 
-                if (List2.get(i).getVehicleRegNumber().toLowerCase().contains(searchInst.getText())) {
+                if (List2.get(i).getVehicleRegNumber().toLowerCase().contains(searchInst.getText())
+                        || List2.get(i).getCustomer().getCustomerFirstname().toLowerCase().contains(searchInst.getText())
+                        || List2.get(i).getCustomer().getCustomerSurname().toLowerCase().contains(searchInst.getText())) {
+
                     tableEntries2.add(List2.get(i));
+
                 }
 
-                /*
-                if (List2.get(i).getCustomer().getCustomerFirstname().toLowerCase().contains(searchInst.getText())) ;
-                {
-                    tableEntries2.add(List2.get(i));
-                }
-                if (List2.get(i).getCustomer().getCustomerSurname().toLowerCase().contains(searchInst.getText())) ;
-                {
-                    tableEntries2.add(List2.get(i));
-                }
-                */
+                // System.out.println(List2.get(0).getCustomer().getCustomerFirstname()); //test
 
             }
 
