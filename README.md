@@ -72,11 +72,11 @@ Parts required for a booking can conveniently be added and removed in this scree
 - buttons by the small parts table.
 
 **Some rules apply to the adding and editing of booking details**:
-1. A booking exists in the system in two states: ongoing and complete.
-2. The "save" button applies to ongoing bookings.
-3. The "complete" button completes a booking. A completed booking can no longer be modified.
-4. A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
-5. A booking can only be completed, however, once a repair appointment has been carried out and
+1.  A booking exists in the system in two states: ongoing and complete.
+2.  The "save" button applies to ongoing bookings.
+3.  The "complete" button completes a booking. A completed booking can no longer be modified.
+4.  A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
+5.  A booking can only be completed, however, once a repair appointment has been carried out and
     a new mileage value recorded.
 
 #### VEHICLES - Dillon
