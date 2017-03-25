@@ -27,7 +27,7 @@
                             </FXCollections>
                         </items>
                     </ComboBox>
-                    <Label fx:id="userLabel" text="Add User" GridPane.columnIndex="1"/>
+                    <Label fx:id="userLabel" id="detailsTitle" text="Add User" GridPane.columnIndex="1"/>
                 </GridPane>
             </center>
             <bottom>

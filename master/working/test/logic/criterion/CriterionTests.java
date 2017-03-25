@@ -6,8 +6,8 @@ import domain.Vehicle;
 import org.junit.Test;
 import persistence.DatabaseRepository;
 
-import static logic.criterion.CriterionOperator.In;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.in;
+import static logic.criterion.CriterionOperator.matches;
 
 /**
  * @author Marcello De Bernardi
@@ -21,12 +21,12 @@ public class CriterionTests {
     @Test
     public void testSubqueries() {
         System.out.println(new Criterion<>
-                (DiagRepBooking.class, "vehicleRegNumber", Matches, "Gooby")
-                .or("vehicleRegNumber", In, new Criterion<>
-                        (Vehicle.class, "manufacturer", Matches, "Gauby"))
-                .or("vehicleRegNumber", In, new Criterion<>
-                        (Vehicle.class, "customerID", In, new Criterion<>
-                                (Customer.class, "customerFirstname", Matches, "Patrolone")
-                                .or("customerSurname", Matches, "Unione"))));
+                (DiagRepBooking.class, "vehicleRegNumber", matches, "Gooby")
+                .or("vehicleRegNumber", in, new Criterion<>
+                        (Vehicle.class, "manufacturer", matches, "Gauby"))
+                .or("vehicleRegNumber", in, new Criterion<>
+                        (Vehicle.class, "customerID", in, new Criterion<>
+                                (Customer.class, "customerFirstname", matches, "Patrolone")
+                                .or("customerSurname", matches, "Unione"))));
     }
 }

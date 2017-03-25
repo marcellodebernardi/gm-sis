@@ -11,7 +11,7 @@ import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -32,8 +32,8 @@ public class PersistenceTests {
 
     @Test
     public void getSingleUserFromDatabase() {
-        User user = persistence.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, "00000").
-                and("password", EqualTo, "password")).get(0);
+        User user = persistence.getByCriteria(new Criterion<>(User.class, "userID", equalTo, "00000").
+                and("password", equalTo, "password")).get(0);
         System.out.println(user.getUserID() + " " + user.getPassword());
         assertNotNull(user);
     }

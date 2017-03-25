@@ -7,7 +7,7 @@ import persistence.DependencyConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 
 /**
  *
@@ -124,7 +124,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         List<PartAbstraction> partTypes = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(
                 PartAbstraction.class,
                 "partAbstractionID",
-                EqualTo,
+                equalTo,
                 partAbstractionID));
         return partTypes != null && partTypes.size() != 0 ? partTypes.get(0) : null;
     }
@@ -134,15 +134,18 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         List<Installation> installations = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(
                 Installation.class,
                 "installationID",
-                EqualTo,
+                equalTo,
                 installationID));
         return installations != null && installations.size() != 0 ? installations.get(0) : null;
     }
 
-    public void setBookingID(int bookingID)
-    {
-        this.bookingID =bookingID;
+    /** Returns the part's SPC repair, or null if the part has not been sent for an SPC repair.
+     *
+     * @return PartRepair if sent to SPC, null if not
+     */
+    @Lazy public PartRepair getPartRepair() {
+        List<PartRepair> repairs = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartRepair.class)
+                .where("partOccurrenceID", equalTo, this.partOccurrenceID));
+        return repairs != null && repairs.size() != 0 ? repairs.get(0) : null;
     }
-
-
 }

@@ -12,7 +12,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 
 /**
  * @author Marcello De Bernardi
@@ -71,10 +71,10 @@ class StatementNode implements Comparable<StatementNode> {
     /**
      * The natural ordering of StatementNodes is in accordance to the number of unresolved
      * dependencies they have. A StatementNode with fewer unresolved dependencies comes
-     * before a StatementNode with more unresolved dependencies.
+     * before a StatementNode with moreThan unresolved dependencies.
      *
      * @param o the StatementNode to compare to
-     * @return 1 if this comes after 0, -1 if this comes before 0, 0 if equal
+     * @return 1 if this comes after 0, -1 if this comes before 0, 0 if equalTo
      */
     @Override
     public int compareTo(StatementNode o) {
@@ -153,12 +153,12 @@ class StatementNode implements Comparable<StatementNode> {
                 if (value.getClass() == Date.class)
                     newInfo += delim + key + " = " + ((Date) value).getTime();
                 else if (value.getClass() == ZonedDateTime.class)
-                    newInfo += delim + key + " = " + ((ZonedDateTime) value).toEpochSecond() * 1000;
+                    newInfo += delim + key + " = " + ((ZonedDateTime) value).toInstant().toEpochMilli();
                 else if (value.getClass() == LocalDateTime.class)
-                    newInfo += delim + key + " = " + ((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000;
-                else if (value.getClass() == boolean.class && (boolean) value)
+                    newInfo += delim + key + " = " + ((LocalDateTime) value).toInstant(ZoneOffset.UTC).toEpochMilli();
+                else if (value.getClass() == Boolean.class && (Boolean) value)
                     newInfo += delim + key + " = 1";
-                else if (value.getClass() == boolean.class && !(boolean) value)
+                else if (value.getClass() == Boolean.class && !(Boolean) value)
                     newInfo += delim + key + " = 0";
                 else if (noQuotesTypes.contains(value.getClass()) && value.equals(-2))
                     newInfo += delim + key + " = -1";
@@ -211,14 +211,14 @@ class StatementNode implements Comparable<StatementNode> {
             // has primary key but is User: INSERT if not exists, else UPDATE
             else if (table.equals(User.class)) {
                 List<User> results = persistence.getByCriteria(
-                        new Criterion<>(User.class, "userID", EqualTo, primaryKeyValue));
+                        new Criterion<>(User.class, "userID", equalTo, primaryKeyValue));
 
                 statementType = results.size() == 0 ? StatementType.INSERT : StatementType.UPDATE;
             }
             // has primary key but is Vehicle: INSERT if not exists, else UPDATE
             else if (table.equals(Vehicle.class)) {
                 List<Vehicle> results = persistence.getByCriteria(
-                        new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, primaryKeyValue));
+                        new Criterion<>(Vehicle.class, "vehicleRegNumber", equalTo, primaryKeyValue));
 
                 statementType = results.size() == 0 ? StatementType.INSERT : StatementType.UPDATE;
             }

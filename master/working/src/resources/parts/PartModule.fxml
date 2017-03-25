@@ -30,7 +30,7 @@
                 <TextField fx:id="partStockLevelField" layoutX="121.0" layoutY="304.0" prefHeight="27.0" prefWidth="182.0" promptText="Enter current stock level" />
                 <Button fx:id="addBtn" layoutX="7.0" layoutY="343.0" mnemonicParsing="false" onAction="#addToDB" prefHeight="27.0" prefWidth="133.0" text="Add" />
                 <TextArea fx:id="partDescriptionField" layoutX="121.0" layoutY="150.0" prefHeight="103.0" prefWidth="181.0" promptText="Enter part description" />
-                <Label layoutX="100.0" layoutY="18.0" text="Add Part">
+                <Label layoutX="100.0" layoutY="18.0" id="detailsTitle" text="Add Part">
                     <font>
                         <Font name="Arial" size="24.0" />
                     </font>
@@ -117,7 +117,7 @@
                                         <Label layoutX="335.0" layoutY="57.0" text="Installation Date" />
                                         <Label layoutX="333.0" layoutY="94.0" text="Part Serial" />
                                         <ComboBox fx:id="addPartToInst" layoutX="152.0" layoutY="88.0" onAction="#setOccs" prefHeight="27.0" prefWidth="166.0" />
-                                        <Button layoutX="736.0" layoutY="89.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="228.0" text="Clear" />
+                                        <Button fx:id="clearInstBtn" layoutX="736.0" layoutY="89.0" mnemonicParsing="false" onAction="#clearInstallation" prefHeight="27.0" prefWidth="228.0" text="Clear" />
                                         <DatePicker fx:id="instDate" layoutX="457.0" layoutY="55.0" prefHeight="27.0" prefWidth="165.0" />
                                         <TextField fx:id="regNumberInstallation" layoutX="151.0" layoutY="123.0" prefHeight="27.0" prefWidth="167.0" />
                                         <ComboBox fx:id="availableOcc" layoutX="457.0" layoutY="90.0" prefHeight="27.0" prefWidth="166.0" promptText="Part Occurrences" />

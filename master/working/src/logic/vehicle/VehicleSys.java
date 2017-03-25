@@ -11,8 +11,8 @@ import persistence.DatabaseRepository;
 import java.util.Date;
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.equalTo;
+import static logic.criterion.CriterionOperator.matches;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -39,28 +39,28 @@ public class VehicleSys {
 
     public List<Vehicle> searchVehicleT(String regNumber, String manufacturer, VehicleType vt) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", Matches, regNumber).and("manufacturer", Matches, manufacturer).and("vehicleType", EqualTo, vt));
+                "vehicleRegNumber", matches, regNumber).and("manufacturer", matches, manufacturer).and("vehicleType", equalTo, vt));
         return results;
 
     }
 
     public List<Vehicle> searchByTemplate(String model, String manufacturer, Double engineSize, VehicleType vt, FuelType ft) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "model", Matches, model).and("manufacturer", Matches, manufacturer).and("engineSize", EqualTo, engineSize).and("vehicleType", EqualTo, vt).and("fuelType", EqualTo, ft));
+                "model", matches, model).and("manufacturer", matches, manufacturer).and("engineSize", equalTo, engineSize).and("vehicleType", equalTo, vt).and("fuelType", equalTo, ft));
         return results;
 
     }
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", Matches, regNumber).and("manufacturer", Matches, manufacturer));
+                "vehicleRegNumber", matches, regNumber).and("manufacturer", matches, manufacturer));
         return results;
 
     }
 
     public Vehicle searchAVehicle(String regNumber) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "vehicleRegNumber", EqualTo, regNumber.toUpperCase()));
+                "vehicleRegNumber", equalTo, regNumber.toUpperCase()));
         return results != null && results.size() != 0 ? results.get(0) : null;
     }
 
@@ -70,9 +70,13 @@ public class VehicleSys {
         return result;
     }
 
+    public boolean addEditVehicle(Vehicle vehicle) {
+        return persistence.commitItem(vehicle);
+    }
+
     public boolean deleteVehicle(String regNumber) {
-        persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo, regNumber));
-        return persistence.deleteItem(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, regNumber));
+        persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", equalTo, regNumber));
+        return persistence.deleteItem(new Criterion<>(Vehicle.class, "vehicleRegNumber", equalTo, regNumber));
     }
 
 

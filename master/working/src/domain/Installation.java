@@ -22,7 +22,6 @@ public class Installation implements Searchable {
 
     // inverse hierarchical database links
     private String vehicleRegNumber;
-    private int partAbstractionID;
 
 
     /**
@@ -34,13 +33,28 @@ public class Installation implements Searchable {
      * @param partAbstractionID
      * @param partOccurrence
      */
+    @Deprecated
     public Installation(ZonedDateTime installationDate, ZonedDateTime endWarrantyDate, String vehicleRegNumber,
                         int partAbstractionID, PartOccurrence partOccurrence) {
         this.installationID = -1;
         this.installationDate = installationDate;
         this.endWarrantyDate = endWarrantyDate;
         this.vehicleRegNumber = vehicleRegNumber;
-        this.partAbstractionID = partAbstractionID;
+        this.partOccurrence = partOccurrence;
+    }
+
+    /**
+     * Creates a new installation
+     *
+     * @param installationDate
+     * @param vehicleRegNumber
+     * @param partOccurrence
+     */
+    public Installation(ZonedDateTime installationDate, String vehicleRegNumber, PartOccurrence partOccurrence) {
+        this.installationID = -1;
+        this.installationDate = installationDate;
+        this.endWarrantyDate = this.installationDate.plusYears(1);
+        this.vehicleRegNumber = vehicleRegNumber;
         this.partOccurrence = partOccurrence;
     }
 
@@ -49,7 +63,7 @@ public class Installation implements Searchable {
     private Installation(@Column(name = "installationID", primary = true) int installationID,
                          @Column(name = "installationDate") ZonedDateTime installationDate,
                          @Column(name = "endWarrantyDate") ZonedDateTime endWarrantyDate,
-                         @Column(name = "vehicleRegNumber") String vehicleRegNumber,
+                         @Column(name = "vehicleRegNumber", foreign = true) String vehicleRegNumber,
                          @TableReference(baseType = PartOccurrence.class, subTypes = PartOccurrence.class, key = "installationID")
                                  PartOccurrence partOccurrence) {
         this.installationID = installationID;
@@ -63,10 +77,6 @@ public class Installation implements Searchable {
     @Column(name = "installationID", primary = true)
     public int getInstallationID() {
         return installationID;
-    }
-
-    public void setInstallationID(int installationID) {
-        this.installationID = installationID;
     }
 
     @Column(name = "installationDate")
@@ -107,12 +117,12 @@ public class Installation implements Searchable {
 
     @Lazy
     public Customer getCustomer() {
-        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "regNumber",
-                CriterionOperator.EqualTo, getVehicleRegNumber()));
+        List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber",
+                CriterionOperator.equalTo, getVehicleRegNumber()));
 
         if (vehicles.size() != 0) {
             List<Customer> customers = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class, "customerID",
-                    CriterionOperator.EqualTo, vehicles.get(0).getCustomerID()));
+                    CriterionOperator.equalTo, vehicles.get(0).getCustomerID()));
 
             if (customers.size() != 0) return customers.get(0);
         }
@@ -126,15 +136,11 @@ public class Installation implements Searchable {
 
     @Lazy @Deprecated
     public int getPartAbstractionID() {
-        return partAbstractionID;
+        return getPartAbstraction().getPartAbstractionID();
     }
 
+    @Deprecated
     public void setPartAbstractionID(int partAbstractionID) {
-        this.partAbstractionID = partAbstractionID;
+        // no longer does anything
     }
-
-    public int getPartOccurrence(PartOccurrence partOccurrence) {
-        return partOccurrence.getPartOccurrenceID();
-    }
-
 }

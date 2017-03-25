@@ -1,9 +1,6 @@
 package controllers.parts;
 
-import domain.Installation;
-import domain.PartAbstraction;
-import domain.PartOccurrence;
-import domain.Vehicle;
+import domain.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +15,7 @@ import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.criterion.Criterion;
+import logic.customer.CustomerSystem;
 import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
@@ -67,12 +65,6 @@ public class PartsController implements Initializable {
     @FXML
     private TableColumn<Installation, String> regNumber;
     @FXML
-    private TableColumn<Installation, Integer> bookingID;
-    @FXML
-    private TableColumn<Installation, String> firstName;
-    @FXML
-    private TableColumn<Installation, String> surname;
-    @FXML
     private TextField searchParts;
     @FXML
     private ComboBox<String> CB1, CB2, CB3, CB4, addPartToInst, availableOcc;
@@ -87,7 +79,7 @@ public class PartsController implements Initializable {
     @FXML
     private Button addPartBtn, searchBtn, calculateBtn, editPartBtn, deletePartBtn, withdrawBtn, updateBtn, viewBookingsBtn, saveChangesBtn, clearBtn, deleteInstBtn;
     @FXML
-    private Button increaseStock, decreaseStock;
+    private Button increaseStock, decreaseStock, clearInstBtn;
     @FXML
     private TextField regNumberInstallation, searchInst;
     @FXML
@@ -296,16 +288,12 @@ public class PartsController implements Initializable {
             warrantyEnd.setCellValueFactory(new PropertyValueFactory<Installation, ZonedDateTime>("endWarrantyDate"));
             warrantyEnd.setCellFactory(TextFieldTableCell.<Installation, ZonedDateTime>forTableColumn(new ZonedDateStringConverter()));
 
-
-
             partAbsID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                     ObservableValue<Integer>>() {
                 public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
                     return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartAbstractionID());
                 }
             });
-
-
 
             partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
                     ObservableValue<Integer>>() {
@@ -314,8 +302,6 @@ public class PartsController implements Initializable {
                 }
             });
 
-
-
             regNumber.setCellValueFactory(new PropertyValueFactory<Installation, String>("vehicleRegNumber"));
             regNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -323,7 +309,6 @@ public class PartsController implements Initializable {
         }catch(IndexOutOfBoundsException | NullPointerException e){
             e.printStackTrace();
         }
-
 
         PartsBookings.setItems(tableEntries2);
 
@@ -356,7 +341,6 @@ public class PartsController implements Initializable {
 
     }
 
-
     /**
      * This method just resets the text fields on the add part form
      */
@@ -382,10 +366,8 @@ public class PartsController implements Initializable {
 
         }
 
-
         showInfo("Changes have been saved");
         PartsTable.getSelectionModel().clearSelection();
-
 
     }
 
@@ -421,7 +403,6 @@ public class PartsController implements Initializable {
             else {
                 showError("Part hasn't been deleted");
             }
-
 
         }
         catch (Exception e) {
@@ -460,7 +441,6 @@ public class PartsController implements Initializable {
      */
     public void increaseStockLevel() {
 
-
         try {
 
             PartAbstraction partIncrease = PartsTable.getSelectionModel().getSelectedItem();
@@ -473,7 +453,6 @@ public class PartsController implements Initializable {
 
             saveChanges();
             updateTable();
-
 
         }
         catch (Exception e) {
@@ -570,12 +549,23 @@ public class PartsController implements Initializable {
                 }
             }
 
+            clearInstallation();
+
             System.out.println(installation);
 
         }
         catch (Exception e) {
             showError("Please enter a valid Vehicle registration.");
         }
+
+    }
+
+    public void clearInstallation(){
+
+        instDate.setValue(null);
+        addPartToInst.setValue(null);
+        availableOcc.setValue(null);
+        regNumberInstallation.clear();
 
     }
 
@@ -620,24 +610,20 @@ public class PartsController implements Initializable {
     public void searchInstallations() {
 
         tableEntries2.removeAll(tableEntries2);
+
         try {
+
             for (int i = 0; i < List.size(); i++) {
 
-                if (List2.get(i).getVehicleRegNumber().toLowerCase().contains(searchInst.getText())) {
+                if (List2.get(i).getVehicleRegNumber().toLowerCase().contains(searchInst.getText())
+                        || List2.get(i).getCustomer().getCustomerFirstname().toLowerCase().contains(searchInst.getText())
+                        || List2.get(i).getCustomer().getCustomerSurname().toLowerCase().contains(searchInst.getText())) {
+
                     tableEntries2.add(List2.get(i));
+
                 }
 
-                /*
-                if (List2.get(i).getCustomer().getCustomerFirstname().toLowerCase().contains(searchInst.getText())) ;
-                {
-                    tableEntries2.add(List2.get(i));
-                }
-                if (List2.get(i).getCustomer().getCustomerSurname().toLowerCase().contains(searchInst.getText())) ;
-                {
-                    tableEntries2.add(List2.get(i));
-                }
-                */
-
+                // System.out.println(List2.get(0).getCustomer().getCustomerFirstname()); //test
 
             }
 

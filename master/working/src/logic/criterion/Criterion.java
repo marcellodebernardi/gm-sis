@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import static logic.criterion.CriterionException.Cause.*;
-import static logic.criterion.CriterionOperator.In;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.in;
+import static logic.criterion.CriterionOperator.matches;
 
 /**
  * <p>
@@ -30,7 +30,7 @@ import static logic.criterion.CriterionOperator.Matches;
  * for said field, and operator is one of the four operators defined in the CriterionOperator enum.
  * </p>
  * <p>
- * The four operators are LessThan, MoreThan, EqualTo and Matches. Matches can only be used when the
+ * The four operators are lessThan, moreThan, equalTo and matches. matches can only be used when the
  * value object is of type String or type Pattern. The other operators can be used unrestrictedly.
  * </p>
  * <p>
@@ -41,7 +41,7 @@ import static logic.criterion.CriterionOperator.Matches;
  * connective specified in the method name. For example,
  * </p>
  * <p>
- * <i>new Criterion<>(MyClass.class, "att", LessThan, 10).and("att", MoreThan, 5)</i>
+ * <i>new Criterion<>(MyClass.class, "att", lessThan, 10).and("att", moreThan, 5)</i>
  * </p>
  * <p>
  * defines the expression
@@ -68,6 +68,7 @@ public class Criterion<E extends Searchable> {
 
     private Class<E> eClass;
     private StringBuilder criterionQuery;
+    private boolean usesDeprecatedConstructor;
 
 
     /**
@@ -77,7 +78,7 @@ public class Criterion<E extends Searchable> {
      * (a wrapper object in case the field is primitive).
      * <p>
      * If a CriterionException is throws, use CriterionException.getMessage() to view the
-     * cause of the error.
+     * because of the error.
      *
      * @param eClass    class of the objects to be expected in return
      * @param attribute object variable used as search criterion
@@ -85,6 +86,7 @@ public class Criterion<E extends Searchable> {
      * @param value     value for search variable
      * @throws CriterionException if criteria are incorrectly specified
      */
+    @Deprecated
     public Criterion(Class<E> eClass, String attribute, CriterionOperator operator, Object value)
             throws CriterionException {
         this.eClass = eClass;
@@ -97,8 +99,10 @@ public class Criterion<E extends Searchable> {
 
         criterionQuery = new StringBuilder(attribute).append(" ").append(operator).append(" ");
         appendValue(value, operator);
+        usesDeprecatedConstructor = true;
     }
 
+    @Deprecated
     public Criterion(Class<E> eClass, String attribute, CriterionOperator operator,
                      Criterion<? extends Searchable> subQuery) throws CriterionException {
         this.eClass = eClass;
@@ -106,10 +110,11 @@ public class Criterion<E extends Searchable> {
         // check inputs for correctness
         if (eClass == null || attribute == null || operator == null || subQuery == null)
             throw new CriterionException().because(NULL_INPUTS);
-        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+        if (operator != in) throw new CriterionException().because(SUBQUERY_NOT_IN);
 
         criterionQuery = new StringBuilder(attribute).append(" ").append(operator).append(" ");
         appendSubquery(subQuery, attribute);
+        usesDeprecatedConstructor = true;
     }
 
     /**
@@ -120,6 +125,26 @@ public class Criterion<E extends Searchable> {
     public Criterion(Class<E> eClass) {
         this.eClass = eClass;
         criterionQuery = new StringBuilder(50);
+    }
+
+    /**
+     * Adds a criterion to the Criterion object, connected to previous criteria by an AND
+     * logical connective.
+     *
+     * @param attribute attribute to add to the criterion
+     * @param operator  operator connecting attribute to value
+     * @param value     value of attribute
+     * @return modified Criterion object
+     * @throws CriterionException if poorly specified arguments
+     */
+    public Criterion<E> where(String attribute, CriterionOperator operator, Object value) throws CriterionException {
+        if (usesDeprecatedConstructor) throw new CriterionException().because(DEPRECATED_CONSTRUCTOR);
+        if (!isRegexCompatible(operator, value) || !isClassCompatible(attribute, value))
+            throw new CriterionException().because(ARGUMENTS_INCOMPATIBLE);
+
+        criterionQuery.append(" ").append(attribute).append(" ").append(operator).append(" ");
+        appendValue(value, operator);
+        return this;
     }
 
 
@@ -143,7 +168,7 @@ public class Criterion<E extends Searchable> {
     }
 
     public Criterion<E> and(String attribute, CriterionOperator operator, Criterion<? extends Searchable> subquery) {
-        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+        if (operator != in) throw new CriterionException().because(SUBQUERY_NOT_IN);
 
         criterionQuery.append(" AND ").append(attribute).append(" ").append(operator).append(" ");
         appendSubquery(subquery, attribute);
@@ -170,7 +195,7 @@ public class Criterion<E extends Searchable> {
     }
 
     public Criterion<E> or(String attribute, CriterionOperator operator, Criterion<? extends Searchable> subquery) {
-        if (operator != In) throw new CriterionException().because(SUBQUERY_NOT_IN);
+        if (operator != in) throw new CriterionException().because(SUBQUERY_NOT_IN);
 
         criterionQuery.append(" OR ").append(attribute).append(" ").append(operator).append(" ");
         appendSubquery(subquery, attribute);
@@ -213,10 +238,10 @@ public class Criterion<E extends Searchable> {
         if (value.getClass() == Date.class)
             criterionQuery.append(((Date) value).getTime());
         else if (value.getClass() == LocalDateTime.class)
-            criterionQuery.append(((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000);
+            criterionQuery.append(((LocalDateTime) value).toInstant(ZoneOffset.UTC).toEpochMilli());
         else if (value.getClass() == ZonedDateTime.class)
-            criterionQuery.append(((ZonedDateTime) value).toEpochSecond() * 1000);
-        else if (operator == Matches)
+            criterionQuery.append(((ZonedDateTime) value).toInstant().toEpochMilli());
+        else if (operator == matches)
             criterionQuery.append("'%").append(value).append("%'");
         else
             criterionQuery.append("'").append(value).append("'");
@@ -224,14 +249,14 @@ public class Criterion<E extends Searchable> {
 
     /* HELPER: appends the given subquery to the Criterion */
     private void appendSubquery(Criterion<? extends Searchable> subquery, String attribute) {
-        this.criterionQuery.append("(SELECT ").append(attribute).append(" FROM ");
-        this.criterionQuery.append(subquery.getCriterionClass().getSimpleName());
-        this.criterionQuery.append(" WHERE ");
-        this.criterionQuery.append(subquery.toString());
-        this.criterionQuery.append(")");
+        this.criterionQuery.append("(SELECT ").append(attribute).append(" FROM ")
+                .append(subquery.getCriterionClass().getSimpleName())
+                .append(" WHERE ")
+                .append(subquery.toString())
+                .append(")");
     }
 
-    // HELPER: returns true if attribute and value are compatible with class of Criterion
+    /** HELPER: returns true if attribute and value are compatible with class of Criterion */
     private boolean isClassCompatible(String attribute, Object value) {
         if (!DEVELOPMENT_MODE) return true; // checks not performed in deployment for performance
 
@@ -272,9 +297,9 @@ public class Criterion<E extends Searchable> {
         }
     }
 
-    // HELPER: returns true if operator and value are compatible
+    /** HELPER: returns true if operator and value are compatible */
     private boolean isRegexCompatible(CriterionOperator operator, Object value) {
-        return !(operator.equals(Matches) &&
+        return !(operator.equals(matches) &&
                 !(value.getClass().equals(String.class) || value.getClass().equals(Pattern.class)));
     }
 }

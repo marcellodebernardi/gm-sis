@@ -84,7 +84,7 @@ public class RepositoryTests {
                 .getByCriteria(new Criterion<>(
                         User.class,
                         "userID",
-                        CriterionOperator.EqualTo,
+                        CriterionOperator.equalTo,
                         "55555"));
 
         DatabaseRepository.getInstance().commitItem(new Vehicle(
@@ -97,7 +97,7 @@ public class RepositoryTests {
                 .getByCriteria(new Criterion<>(
                         Vehicle.class,
                         "vehicleRegNumber",
-                        CriterionOperator.EqualTo,
+                        CriterionOperator.equalTo,
                         "TEST REG"));
 
         DatabaseRepository.getInstance().commitItem(new PartAbstraction("" +
@@ -121,14 +121,14 @@ public class RepositoryTests {
         DatabaseRepository.getInstance().deleteItem(new Criterion<>(
                 SpecialistRepairCenter.class,
                 "spcID",
-                CriterionOperator.EqualTo,
+                CriterionOperator.equalTo,
                 2));
         List<SpecialistRepairCenter> result = DatabaseRepository
                 .getInstance()
                 .getByCriteria(new Criterion<>(
                         SpecialistRepairCenter.class,
                         "spcID",
-                        CriterionOperator.EqualTo,
+                        CriterionOperator.equalTo,
                         2
                 ));
         assertTrue(result.size() == 0);

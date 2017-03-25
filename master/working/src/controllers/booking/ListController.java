@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 
 /**
  * @author Marcello De Bernardi
@@ -101,7 +101,7 @@ public class ListController {
         );
         manufacturerColumn.setCellValueFactory(p -> {
             Vehicle vehicle = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
-                    (Vehicle.class, "vehicleRegNumber", EqualTo, p.getValue().getVehicleRegNumber())).get(0);
+                    (Vehicle.class, "vehicleRegNumber", equalTo, p.getValue().getVehicleRegNumber())).get(0);
             return new ReadOnlyObjectWrapper<>(vehicle.getManufacturer());
         });
         diagnosisDateColumn.setCellValueFactory(p -> {
