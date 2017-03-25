@@ -15,7 +15,9 @@ Requires **JRE1.8.x** to run. On the ITL machines this means running the applica
 ### LOGIN CREDENTIALS
 The system includes a variety of pre-added users. For testing, you may use
 <table>
-<th>User string</th><th>Password</th><th>Access rights</th>
+<tr><th>User string</th><th>Password</th><th>Access rights</th></tr>
+<tr><td>00000</td><td>password</td><td>ADMINISTRATOR</td></tr>
+<tr><td>00001</td><td>password</td><td>STANDARD USER</td></tr>
 </table>
 
 
