@@ -67,8 +67,8 @@ In the details pane, to select a customer, type into the customer search bar. Th
 you by featuring **auto-completion suggestions**. Select one of the suggestions as you keep typing.
 You can enter a single space character into the search bar to view all possible customer choices.
 Having selected a customer, select a vehicle from the dropdown and enter any other relevant details.
-Parts required for a booking can conveniently be added and removed in this screen too, using the + and
-- buttons by the small parts table.
+Parts required for a booking can conveniently be added and removed in this screen too, using the greed
+and red buttons by the small parts table.
 
 **Some rules apply to the adding and editing of booking details**:
 
