@@ -1,0 +1,16 @@
+# LINES STARTING WITH THE HASH CHARACTER ARE IGNORED
+# LINES STARTING WITH THE SPACE CHARACTER ARE IGNORED
+#
+# Every line must be a holiday entry. Each entry must be in the following
+# format: <ISO_LOCAL_DATE> ! <holiday name>
+#
+# For example, a typical line would be
+# 2017-12-24 ! Christmas Eve
+#
+# Be mindful of the syntax requirements outlined above. Lines not
+# conforming to the above syntax will not be registered by the system
+# as a holiday. It is the system administrator's responsibility to
+# ensure that this list is kept up to date and formatted correctly.
+# -----------------------------------------------------------------------
+
+2017-03-24 ! Gooby's holiday

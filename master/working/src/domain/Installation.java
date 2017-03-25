@@ -108,11 +108,11 @@ public class Installation implements Searchable {
     @Lazy
     public Customer getCustomer() {
         List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Vehicle.class, "regNumber",
-                CriterionOperator.EqualTo, getVehicleRegNumber()));
+                CriterionOperator.equalTo, getVehicleRegNumber()));
 
         if (vehicles.size() != 0) {
             List<Customer> customers = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class, "customerID",
-                    CriterionOperator.EqualTo, vehicles.get(0).getCustomerID()));
+                    CriterionOperator.equalTo, vehicles.get(0).getCustomerID()));
 
             if (customers.size() != 0) return customers.get(0);
         }

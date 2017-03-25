@@ -1390,14 +1390,14 @@ public class VehicleController implements Initializable {
             mileage = Integer.parseInt(mil.getText());
                 if (mileage <0 )
                 {
-                    Errors.appendText("Check mileage inputs are above or equal to 0 \n");
+                    Errors.appendText("Check mileage inputs are above or equalTo to 0 \n");
                     setTextFieldBackground(mil);
                     check =false;
                 }
             }
             catch (Exception e)
             {
-                Errors.appendText("Check mileage inputs are above or equal to 0 \n");
+                Errors.appendText("Check mileage inputs are above or equalTo to 0 \n");
                 setTextFieldBackground(mil);
                 check =false;
             }
@@ -1421,7 +1421,7 @@ public class VehicleController implements Initializable {
             }
             if (!(mod.getText().matches("[A-Za-z0-9 ]+")))
             {
-                Errors.appendText("Model is not correct format and cant have more than more space \n");
+                Errors.appendText("Model is not correct format and cant have moreThan than moreThan space \n");
                 setTextFieldBackground(mod);
                 check =false;
             }

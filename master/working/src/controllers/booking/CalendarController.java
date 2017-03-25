@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
 import jfxtras.scene.control.agenda.Agenda;
 import logic.booking.BookingSystem;
 
@@ -21,9 +22,9 @@ import java.util.List;
  * @author Marcello De Bernardi
  */
 public class CalendarController {
+    // controller state
     private BookingController master;
     private BookingSystem bookingSystem;
-
     // calendar and list panes top control bar
     @FXML private ComboBox calendarMechanicComboBox;
     @FXML private DatePicker calendarDatePicker;
@@ -35,11 +36,45 @@ public class CalendarController {
         bookingSystem = BookingSystem.getInstance();
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     INITIALIZATION                                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void initialize() {
-        populateCalendarMechanicComboBox(bookingSystem.getAllMechanics());
-        calendarMechanicComboBox.getSelectionModel().select(0);
+        bookingAgenda.setAllowDragging(false);
+        bookingAgenda.setAllowResize(false);
+
+        initializeMechanicDropdown();
+        initializeAgenda();
         populateAgenda(bookingSystem.getAllBookings());
 
+        master.setController(CalendarController.class, this);
+    }
+
+    /** Initializes the mechanic combo box */
+    @SuppressWarnings("Duplicates")
+    private void initializeMechanicDropdown() {
+        calendarMechanicComboBox.setCellFactory(p -> new ListCell<Mechanic>() {
+            public void updateItem(Mechanic item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getFirstName() + " " + item.getSurname());
+            }
+        });
+        calendarMechanicComboBox.setButtonCell(new ListCell<Mechanic>() {
+            public void updateItem(Mechanic item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setText("");
+                else setText(item.getFirstName() + " " + item.getSurname());
+            }
+        });
+
+        calendarMechanicComboBox.setItems(FXCollections.observableArrayList(bookingSystem.getAllMechanics()));
+        calendarMechanicComboBox.getSelectionModel().select(0);
+    }
+
+    /** Sets the action callback and edit appointment callback for the agenda */
+    private void initializeAgenda() {
         bookingAgenda.setActionCallback((appointment) -> {
             DiagRepBooking booking = bookingSystem.getBookingByID(((BookingAppointment) appointment).getBookingID());
             ((DetailsController) master.getController(DetailsController.class)).populate(booking);
@@ -47,17 +82,19 @@ public class CalendarController {
             return null;
         });
         bookingAgenda.setEditAppointmentCallback((appointment) -> null);
-
-        master.setController(CalendarController.class, this);
     }
 
 
-    ///////////////////// EVENT HANDLERS ////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      EVENT HANDLERS                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** Changes the time range displayed by the agenda */
     @FXML private void selectCalendarDate() {
         bookingAgenda.setDisplayedLocalDateTime(LocalDateTime.of(calendarDatePicker.getValue(),
                 LocalTime.now()));
     }
 
+    /** Changes the mechanics whose bookings are displayed on the agenda */
     @FXML private void selectCalendarMechanic() {
         Mechanic mechanic = bookingSystem.getMechanicByID(Integer.parseInt(calendarMechanicComboBox
                 .getSelectionModel()
@@ -68,6 +105,7 @@ public class CalendarController {
         refreshAgenda(mechanic.getBookings());
     }
 
+    /** Switches to the table view of bookings */
     @FXML private void openListPane() {
         try {
             master.setCenter(FXMLLoader.load(getClass().getResource("/resources/booking/ListPane.fxml")));
@@ -78,7 +116,9 @@ public class CalendarController {
     }
 
 
-    //////////////////// DATA MANIPULATIONS /////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     FIELD STATE MANAGERS                                            //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     void refreshAgenda(List<DiagRepBooking> bookings) {
         bookingAgenda.appointments().clear();
         populateAgenda(bookings);
@@ -94,15 +134,6 @@ public class CalendarController {
             bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
     }
 
-    private void populateCalendarMechanicComboBox(List<Mechanic> mechanics) {
-        List<String> mechanicInfo = new ArrayList<>();
-        for (Mechanic m : mechanics) {
-            mechanicInfo.add(m.getMechanicID() + ": " + m.getFirstName() + " " + m.getSurname());
-        }
-        ObservableList<String> calendarMechanicInfoObservable = FXCollections.observableArrayList(mechanicInfo);
-        calendarMechanicComboBox.setItems(calendarMechanicInfoObservable);
-    }
-
     private void populateAgenda(List<DiagRepBooking> bookings) {
         for (DiagRepBooking booking : bookings) {
             bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
@@ -110,7 +141,5 @@ public class CalendarController {
             if (booking.getRepairStart() != null)
                 bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
         }
-        bookingAgenda.setAllowDragging(true);
-        bookingAgenda.setAllowResize(true);
     }
 }

@@ -6,13 +6,13 @@ package logic.criterion;
  * @author Marcello De Bernardi
  */
 public enum CriterionOperator {
-    LessThan, MoreThan, EqualTo, Matches, In;
+    lessThan, moreThan, equalTo, matches, in, after, before;
 
     public String toString() {
-        if (this == LessThan) return "<";
-        else if (this == MoreThan) return ">";
-        else if (this == EqualTo) return "=";
-        else if (this == In) return "IN";
+        if (this == lessThan || this == before) return "<";
+        else if (this == moreThan || this == after) return ">";
+        else if (this == equalTo) return "=";
+        else if (this == in) return "IN";
         else return "LIKE";
     }
 }

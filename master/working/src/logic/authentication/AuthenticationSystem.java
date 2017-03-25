@@ -8,8 +8,8 @@ import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.equalTo;
+import static logic.criterion.CriterionOperator.matches;
 
 /**
  * @author Marcello De Bernardi, Dillon Vaghela, Muhammad Shakib Hoque
@@ -42,8 +42,8 @@ public class AuthenticationSystem {
 
     public boolean login(String username, String password) {
         User user;
-        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", EqualTo, username)
-                .and("password", EqualTo, password));
+        List<User> results = persistence.getByCriteria(new Criterion<>(User.class, "userID", equalTo, username)
+                .and("password", equalTo, password));
 
         if (results.size() != 0) {
             user = results.get(0);
@@ -63,17 +63,17 @@ public class AuthenticationSystem {
     }
 
     public List<User> getUser(String userID, String firstName, String surname) {
-        return persistence.getByCriteria(new Criterion<>(User.class, "userID", Matches, userID)
-                .and("firstName", Matches, firstName)
-                .and("surname", Matches, surname));
+        return persistence.getByCriteria(new Criterion<>(User.class, "userID", matches, userID)
+                .and("firstName", matches, firstName)
+                .and("surname", matches, surname));
     }
 
     public List<User> searchUsers(String query) {
         return persistence.getByCriteria(new Criterion<>
-                (User.class, "userID", Matches, query)
-                .or("firstName", Matches, query)
-                .or("surname", Matches, query)
-                .or("userType", Matches, query)
+                (User.class, "userID", matches, query)
+                .or("firstName", matches, query)
+                .or("surname", matches, query)
+                .or("userType", matches, query)
         );
     }
 
@@ -82,7 +82,7 @@ public class AuthenticationSystem {
     }
 
     public boolean deleteUser(String userID) {
-        return persistence.deleteItem(new Criterion<>(User.class, "userID", EqualTo, userID));
+        return persistence.deleteItem(new Criterion<>(User.class, "userID", equalTo, userID));
     }
 
     public List<User> getAllUsers() {

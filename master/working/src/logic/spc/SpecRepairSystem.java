@@ -42,7 +42,7 @@ public class SpecRepairSystem {
      * @return list of Specialist Repair Centers
      */
     public List<SpecialistRepairCenter> getRepairCenterList() {
-        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", MoreThan, 0));
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", moreThan, 0));
     }
 
     /**
@@ -61,7 +61,7 @@ public class SpecRepairSystem {
      * @return true if deleting of spc is successful.
      */
     public boolean deleteRepairCenter(int delete) {
-        return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, delete));
+        return persistence.deleteItem(new Criterion<>(SpecialistRepairCenter.class, "spcID", equalTo, delete));
     }
 
     /**
@@ -77,7 +77,7 @@ public class SpecRepairSystem {
      * @return true if vehicle reg is valid (will return true even if there are NO bookings with this reg)
      */
     public List<VehicleRepair> getVehicleBookings(String regNumber) {
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, regNumber));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", matches, regNumber));
         if (vehicleRepairs.size() > 0) {
             return vehicleRepairs;
         }
@@ -89,18 +89,18 @@ public class SpecRepairSystem {
      * @return true if bookings are found
      */
     public List<SpecialistRepairCenter> getAllBookings(int spcID) {
-        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, spcID));
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", equalTo, spcID));
     }
 
     public List<SpecialistRepairCenter> getBookingsByName(String spcName) {
-        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "name", Matches, spcName));
+        return persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "name", matches, spcName));
     }
 
     /**
      * @return
      */
     public List<VehicleRepair> getOutstandingV() {
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, ""));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", matches, ""));
         List<VehicleRepair> outstanding = new ArrayList<>();
         for (VehicleRepair v : vehicleRepairs) {
             if (v.getReturnDate().after(new Date())) {
@@ -114,7 +114,7 @@ public class SpecRepairSystem {
      * @returnad
      */
     public List<PartRepair> getOutstandingP() {
-        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", MoreThan, 0));
+        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", moreThan, 0));
         List<PartRepair> outstanding = new ArrayList<>();
         for (PartRepair p : partRepairs) {
             if (p.getReturnDate().after(new Date())) {
@@ -130,7 +130,7 @@ public class SpecRepairSystem {
      */
     public SpecialistRepairCenter getByID(int spcID) {
 
-        List<SpecialistRepairCenter> specialistRepairCenters = persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", EqualTo, spcID));
+        List<SpecialistRepairCenter> specialistRepairCenters = persistence.getByCriteria(new Criterion<>(SpecialistRepairCenter.class, "spcID", equalTo, spcID));
         if (specialistRepairCenters != null) {
             return specialistRepairCenters.get(0);
         }
@@ -154,7 +154,7 @@ public class SpecRepairSystem {
      * @return true if deletion was successful
      */
     public boolean deleteVehicleRepair(String reg, int spcID, Date date) {
-        return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", EqualTo, reg).and("spcID", EqualTo, spcID).and("deliveryDate", EqualTo, date));
+        return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", equalTo, reg).and("spcID", equalTo, spcID).and("deliveryDate", equalTo, date));
     }
 
     /**
@@ -166,7 +166,7 @@ public class SpecRepairSystem {
      * @return true if the deletion was successful
      */
     public boolean deletePartRepair(int partOccurrenceID, int spcID, Date date) {
-        return persistence.deleteItem(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo, partOccurrenceID).and("spcID", EqualTo, spcID).and("deliveryDate", EqualTo, date));
+        return persistence.deleteItem(new Criterion<>(PartRepair.class, "partOccurrenceID", equalTo, partOccurrenceID).and("spcID", equalTo, spcID).and("deliveryDate", equalTo, date));
     }
 
     /**
@@ -176,12 +176,12 @@ public class SpecRepairSystem {
      *              PLEASE NOTE THAT THIS METHOD **MUST** BE CALLED **BEFORE** EXECUTING DELETION METHOD OF THE spc OR SQL WILL NOT FIND ANY BOOKINGS OF THE DELETED spc (EVEN IF THEY EXIST)
      */
     public void deleteAllSubsequentBookings(int spcID) {
-        persistence.deleteItem(new Criterion<>(PartRepair.class, "spcID", EqualTo, spcID));
-        persistence.deleteItem(new Criterion<>(VehicleRepair.class, "spcID", EqualTo, spcID));
+        persistence.deleteItem(new Criterion<>(PartRepair.class, "spcID", equalTo, spcID));
+        persistence.deleteItem(new Criterion<>(VehicleRepair.class, "spcID", equalTo, spcID));
     }
 
     public VehicleRepair findVehicleRepairBooking(int bookingID) {
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcRepID", EqualTo, bookingID));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcRepID", equalTo, bookingID));
         if (vehicleRepairs != null) {
             return vehicleRepairs.get(0);
         }
@@ -189,7 +189,7 @@ public class SpecRepairSystem {
     }
 
     public PartRepair findPartRepairBookingByRep(int bookingID) {
-        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", EqualTo, bookingID));
+        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", equalTo, bookingID));
         if (partRepairs != null) {
             return partRepairs.get(0);
         }
@@ -197,7 +197,7 @@ public class SpecRepairSystem {
     }
 
     public PartRepair findPartRepairBooking(int bookingID) {
-        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "bookingID", EqualTo, bookingID));
+        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "bookingID", equalTo, bookingID));
         if (partRepairs != null) {
             return partRepairs.get(0);
         }
@@ -214,32 +214,32 @@ public class SpecRepairSystem {
     }
 
     public List<PartRepair> getAllPartRepairs(int partID) {
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", EqualTo, partID));
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", equalTo, partID));
     }
 
     public List<PartRepair> returnAllPartRepairs() {
-        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", Matches, ""));
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "partOccurrenceID", matches, ""));
     }
 
     public List<VehicleRepair> returnAllVehicleRepairs() {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, ""));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", matches, ""));
     }
 
     public List<Installation> getVehicleInstallations(String reg) {
-        return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches, reg));
+        return persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", matches, reg));
     }
 
     public boolean deleteByRepIDV(int rep) {
-        return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "spcRepID", EqualTo, rep));
+        return persistence.deleteItem(new Criterion<>(VehicleRepair.class, "spcRepID", equalTo, rep));
     }
 
     public boolean deleteByRepIDP(int rep) {
-        return persistence.deleteItem(new Criterion<>(PartRepair.class, "spcRepID", EqualTo, rep));
+        return persistence.deleteItem(new Criterion<>(PartRepair.class, "spcRepID", equalTo, rep));
     }
 
     public Installation getByInstallationID(int InstallationID) {
         try {
-            List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "installationID", EqualTo, InstallationID));
+            List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
             return installations.get(0);
         }
         catch (NullPointerException e) {
@@ -253,12 +253,12 @@ public class SpecRepairSystem {
     }
 
     public boolean deleteInstallation(int InstallationID) {
-        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", EqualTo, InstallationID));
+        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
     }
 
     public PartOccurrence getPartOcc(int partOcc) {
         try {
-            List<PartOccurrence> partOccurrences = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", EqualTo, partOcc));
+            List<PartOccurrence> partOccurrences = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", equalTo, partOcc));
             return partOccurrences.get(0);
         }
         catch (NullPointerException e) {
@@ -267,25 +267,25 @@ public class SpecRepairSystem {
     }
 
     public List<VehicleRepair> getBySpcID(int spcID) {
-        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcID", EqualTo, spcID));
+        return persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcID", equalTo, spcID));
     }
 
     public List<PartRepair> getPartRepairsBySPCID(int spcID) {
-        if (persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", EqualTo, spcID)) != null) {
-            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", EqualTo, spcID));
+        if (persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", equalTo, spcID)) != null) {
+            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", equalTo, spcID));
         }
         return new ArrayList<>();
     }
 
     public Customer getByCustomerID(int customerID) {
-        List<Customer> customers = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
+        List<Customer> customers = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", equalTo, customerID));
         return customers.get(0);
     }
 
 
     public VehicleRepair getBySpcRepID(int spcRep) {
 
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcRepID", EqualTo, spcRep));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "spcRepID", equalTo, spcRep));
         if (vehicleRepairs.get(0) != null) {
             return vehicleRepairs.get(0);
         }
@@ -295,26 +295,26 @@ public class SpecRepairSystem {
     }
 
     public Vehicle findVehicle(String reg) {
-        return persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", EqualTo, reg.toUpperCase())).get(0);
+        return persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", equalTo, reg.toUpperCase())).get(0);
     }
 
     public PartOccurrence findAPart(int partID) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", EqualTo, partID)).get(0);
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", equalTo, partID)).get(0);
     }
 
     public List<Customer> getByName(String query) {
-        return persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", Matches, query).or("customerSurname", Matches, query));
+        return persistence.getByCriteria(new Criterion<>(Customer.class, "customerFirstname", matches, query).or("customerSurname", matches, query));
 
     }
 
     public DiagRepBooking findBooking(int bookingID) {
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID)).get(0);
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "bookingID", equalTo, bookingID)).get(0);
     }
 
     public List<SpecRepBooking> getReturned() {
 
         List<SpecRepBooking> specRepBookingList = new ArrayList<>();
-        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", MoreThan, 0));
+        List<PartRepair> partRepairs = persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", moreThan, 0));
         List<PartRepair> returnedParts = new ArrayList<>();
         for (PartRepair p : partRepairs) {
             if (p.getReturnDate().before(new Date())) {
@@ -322,7 +322,7 @@ public class SpecRepairSystem {
             }
         }
         specRepBookingList.addAll(returnedParts);
-        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", Matches, ""));
+        List<VehicleRepair> vehicleRepairs = persistence.getByCriteria(new Criterion<>(VehicleRepair.class, "vehicleRegNumber", matches, ""));
         List<VehicleRepair> returedVehicles = new ArrayList<>();
         for (VehicleRepair v : vehicleRepairs) {
             if (v.getReturnDate().before(new Date())) {

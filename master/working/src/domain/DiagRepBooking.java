@@ -216,7 +216,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
             requiredPartsList = DatabaseRepository
                     .getInstance()
                     .getByCriteria(new Criterion<>(
-                            PartOccurrence.class, "bookingID", CriterionOperator.EqualTo, getBookingID()));
+                            PartOccurrence.class, "bookingID", CriterionOperator.equalTo, getBookingID()));
         return requiredPartsList;
     }
 
@@ -228,7 +228,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                         new Criterion<>(
                                 Vehicle.class,
                                 "vehicleRegNumber",
-                                CriterionOperator.EqualTo,
+                                CriterionOperator.equalTo,
                                 getVehicleRegNumber()));
 
         if (vehicles.size() != 0) {
@@ -238,7 +238,7 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                             new Criterion<>(
                                     Customer.class,
                                     "customerID",
-                                    CriterionOperator.EqualTo,
+                                    CriterionOperator.equalTo,
                                     vehicles.get(0).getCustomerID())
                     );
             if (customers.size() != 0) return customers.get(0);

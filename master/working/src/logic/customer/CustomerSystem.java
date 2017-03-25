@@ -7,8 +7,8 @@ import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
-import static logic.criterion.CriterionOperator.Matches;
+import static logic.criterion.CriterionOperator.equalTo;
+import static logic.criterion.CriterionOperator.matches;
 
 /**
  * Created by EBUBECHUKWU on 14/02/2017.
@@ -45,65 +45,65 @@ public class CustomerSystem {
     }
 
     public boolean deleteCustomer(int customerID) {
-        return persistence.deleteItem(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
+        return persistence.deleteItem(new Criterion<>(Customer.class, "customerID", equalTo, customerID));
     }
 
     public List<Customer> searchCustomerByFirstname(String customerFirstname) {
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
-                "customerFirstname", Matches, customerFirstname));
+                "customerFirstname", matches, customerFirstname));
         return results;
     }
 
     public List<Customer> searchCustomerBySurname(String customerSurname) {
         List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class,
-                "customerSurname", Matches, customerSurname));
+                "customerSurname", matches, customerSurname));
         return results;
     }
 
     public List<Customer> searchCustomerByVehicleRegistrationNumber(String vehicleRegNumber) {
-        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", Matches, vehicleRegNumber));
+        List<Vehicle> vResult = persistence.getByCriteria(new Criterion<>(Vehicle.class, "vehicleRegNumber", matches, vehicleRegNumber));
         int customerID = vResult.get(0).getCustomerID();
-        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", equalTo, customerID));
         return results;
     }
 
     public List<Customer> searchCustomerByType(CustomerType customerType) {
-        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerType", EqualTo, customerType));
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerType", equalTo, customerType));
         return results;
     }
 
     public List<Vehicle> searchCustomerVehicles(int customerID) {
-        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class, "customerID", EqualTo, customerID));
+        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class, "customerID", equalTo, customerID));
         return results;
     }
 
     public List<DiagRepBooking> searchCustomerBookings(String vehicleRegNumber) {
-        List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", Matches, vehicleRegNumber));
+        List<DiagRepBooking> results = persistence.getByCriteria(new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", matches, vehicleRegNumber));
         return results;
     }
 
     public List<Installation> searchInstallationTable(String vehicleRegNumber) {
-        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", Matches, vehicleRegNumber));
+        List<Installation> iResult = persistence.getByCriteria(new Criterion<>(Installation.class, "vehicleRegNumber", matches, vehicleRegNumber));
         return iResult;
     }
 
     public List<PartOccurrence> searchPartOccurrenceTable(int installationID) {
-        List<PartOccurrence> result = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, installationID));
+        List<PartOccurrence> result = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, installationID));
         return result;
     }
 
     public List<PartAbstraction> searchPartAbstractionTable(int partAbstractionID) {
-        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", equalTo, partAbstractionID));
         return result;
     }
 
     public List<PartAbstraction> searchCustomerVehiclePart(int partAbstractionID) {
-        List<PartAbstraction> results = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+        List<PartAbstraction> results = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", equalTo, partAbstractionID));
         return results;
     }
 
     public Customer getACustomers(int customerID) {
-        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", EqualTo, customerID));
+        List<Customer> results = persistence.getByCriteria(new Criterion<>(Customer.class, "customerID", equalTo, customerID));
         return results.size() != 0 ? results.get(0) : null;
     }
 }

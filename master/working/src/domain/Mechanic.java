@@ -5,7 +5,7 @@ import persistence.DatabaseRepository;
 
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 
 /**
  * @author Marcello De Bernardi
@@ -68,6 +68,6 @@ public class Mechanic implements Searchable {
     @Lazy
     public List<DiagRepBooking> getBookings() {
         return DatabaseRepository.getInstance().getByCriteria(new Criterion<>
-                (DiagRepBooking.class, "mechanicID", EqualTo, mechanicID));
+                (DiagRepBooking.class, "mechanicID", equalTo, mechanicID));
     }
 }

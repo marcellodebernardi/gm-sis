@@ -18,6 +18,7 @@ import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.booking.BookingSystem;
+import logic.booking.UnavailableDateException;
 import logic.parts.PartsSystem;
 import logic.spc.SpecRepairSystem;
 import logic.vehicle.VehicleSys;
@@ -526,7 +527,12 @@ public class SpecialistController implements Initializable {
                 if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
                     Bill bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
                     diagRepBooking.setBill(bill);
-                    BookingSystem.getInstance().commitBooking(diagRepBooking);
+                    try {
+                        BookingSystem.getInstance().commitBooking(diagRepBooking);
+                    }
+                    catch (UnavailableDateException e) {
+                        // do nothing, exception should never be thrown here :)
+                    }
                 }
                 else {
                     Bill bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
