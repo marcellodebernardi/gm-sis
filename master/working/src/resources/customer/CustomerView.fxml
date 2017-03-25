@@ -17,7 +17,7 @@
     <left>
         <Pane prefHeight="604.0" prefWidth="309.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="formName" layoutX="115.0" text="Add Customer" />
+                <Label fx:id="formName" layoutX="115.0" id="detailsTitle" text="Add Customer" />
                 <Label layoutX="10.0" layoutY="47.0" text="Customer ID" />
                 <Label layoutX="10.0" layoutY="83.0" text="Customer First name" />
                 <Label layoutX="10.0" layoutY="121.0" text="Customer Surname" />

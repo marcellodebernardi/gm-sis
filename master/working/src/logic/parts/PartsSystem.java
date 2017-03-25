@@ -1,5 +1,6 @@
 package logic.parts;
 
+import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
@@ -10,8 +11,9 @@ import persistence.DatabaseRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.EqualTo;
-import static logic.criterion.CriterionOperator.MoreThan;
+import static logic.criterion.CriterionOperator.equalTo;
+import static logic.criterion.CriterionOperator.matches;
+import static logic.criterion.CriterionOperator.moreThan;
 
 /**
  * Created by Muhammad Shakib Hoque on 07/02/2017.
@@ -40,7 +42,7 @@ public class PartsSystem {
     }
 
     public PartAbstraction searchPartList(String partName) {
-        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName", EqualTo, partName));
+        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName", equalTo, partName));
         return result.size() == 0 ? null : result.get(0);
 
     }
@@ -55,12 +57,12 @@ public class PartsSystem {
 
     public boolean deletePart(int partAbstractionID) {
 
-        return persistence.deleteItem(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+        return persistence.deleteItem(new Criterion<>(PartAbstraction.class, "partAbstractionID", equalTo, partAbstractionID));
 
     }
 
     public PartAbstraction getPartbyID(int partAbstractionID) {
-        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", EqualTo, partAbstractionID));
+        List<PartAbstraction> result = persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", equalTo, partAbstractionID));
         return result.size() == 0 ? null : result.get(0);
 
     }
@@ -70,33 +72,58 @@ public class PartsSystem {
     }
 
     public List<PartAbstraction> getByName(String query) {
-        return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName", EqualTo, query));
+        return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partName", equalTo, query));
     }
 
     public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, -1)
-                .and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, 0)
+                .and("partAbstractionID", equalTo, partAbstraction.getPartAbstractionID()));
     }
 
     public void deleteOccurrence(PartOccurrence partOccurrence, PartAbstraction partAbstraction) {
-        persistence.deleteItem(new Criterion<>(PartOccurrence.class, "partOccurrenceID", EqualTo, partOccurrence.getPartOccurrenceID()).and("partAbstractionID", EqualTo, partAbstraction.getPartAbstractionID()));
+        persistence.deleteItem(new Criterion<>(PartOccurrence.class, "partOccurrenceID", equalTo, partOccurrence.getPartOccurrenceID()).and("partAbstractionID", equalTo, partAbstraction.getPartAbstractionID()));
     }
 
     public List<PartAbstraction> getPartAbstractions() {
-        return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", MoreThan, 0));
+        return persistence.getByCriteria(new Criterion<>(PartAbstraction.class, "partAbstractionID", moreThan, 0));
     }
 
     public List<PartOccurrence> getAllUninstalled(int partAbstractionID) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, 0).and("partAbstractionID", EqualTo, partAbstractionID));
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, 0).and("partAbstractionID", equalTo, partAbstractionID));
     }
 
     public PartOccurrence getByInstallationID(int InstallationID) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", EqualTo, InstallationID)).get(0);
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, InstallationID)).get(0);
     }
 
     public List<Installation> getAllInstallations() {
         return persistence.getByCriteria(new Criterion<>(Installation.class));
     }
+
+    public PartOccurrence getPartOcc(int partOcc) {
+        try {
+            List<PartOccurrence> partOccurrences = persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "partOccurrenceID", equalTo, partOcc));
+            return partOccurrences.get(0);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+    }
+
+    public boolean commitInst(Installation installation) {
+        return persistence.commitItem(installation);
+    }
+
+    public boolean deleteInstallation(int InstallationID) {
+        return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
+    }
+
+    public void commitAbstraction(PartAbstraction partAbstraction)
+    {
+        persistence.commitItem(partAbstraction);
+    }
+    
+
 }
 
 

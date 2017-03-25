@@ -18,7 +18,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static logic.criterion.CriterionOperator.EqualTo;
+import static logic.criterion.CriterionOperator.equalTo;
 import static persistence.DependencyConnection.Directionality.TRANSMITTER;
 
 /**
@@ -268,7 +268,7 @@ class ObjectRelationalMapper {
                     new Criterion<>(
                             type,
                             ((Column) getPrimaryKeyGetter(attribute.getClass()).getDeclaredAnnotations()[0]).name(),
-                            EqualTo,
+                            equalTo,
                             getPrimaryKeyGetter(attribute.getClass()).invoke(attribute)), persistence));
         }
 
@@ -285,7 +285,7 @@ class ObjectRelationalMapper {
                 queries.addAll(toDELETETransaction(
                         new Criterion<>(type,
                                 ((Column) getPrimaryKeyGetter(list.get(i).getClass()).getDeclaredAnnotations()[0]).name(),
-                                EqualTo,
+                                equalTo,
                                 getPrimaryKeyGetter(list.get(i).getClass()).invoke(list.get(i))), persistence));
             }
         }
@@ -325,7 +325,7 @@ class ObjectRelationalMapper {
         // for every potential subtype, add to list
         for (Class<? extends Searchable> type : subTypes) {
             List<? extends Searchable> result
-                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, EqualTo,
+                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, equalTo,
                     primaryKey.getClass().cast(primaryKey))
             );
 
@@ -344,7 +344,7 @@ class ObjectRelationalMapper {
         // find object from one of potential subtypes
         for (Class<? extends Searchable> type : subTypes) {
             List<? extends Searchable> result
-                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, EqualTo,
+                    = persistence.getByCriteria(new Criterion<>(type, foreignKey, equalTo,
                     primaryKey.getClass().cast(primaryKey))
             );
 

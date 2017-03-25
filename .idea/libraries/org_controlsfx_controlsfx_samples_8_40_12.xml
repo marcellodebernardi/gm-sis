@@ -1,14 +1,11 @@
 <component name="libraryTable">
-  <library name="org.controlsfx:controlsfx-samples:8.40.12" type="repository">
-    <properties maven-id="org.controlsfx:controlsfx-samples:8.40.12" />
+  <library name="org.controlsfx:controlsfx-samples:8.40.12">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/master/working/lib/controlsfx-samples-8.40.12.jar!/" />
       <root url="jar://$PROJECT_DIR$/master/working/lib/controlsfx-8.40.12.jar!/" />
       <root url="jar://$PROJECT_DIR$/master/working/lib/fxsampler-1.0.9.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/master/working/lib/controlsfx-samples-8.40.12-javadoc.jar!/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

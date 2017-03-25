@@ -16,20 +16,20 @@ class CriterionException extends RuntimeException {
     }
 
 
-    /** Chained method for setting the cause of a CriterionException before it is thrown */
+    /** Chained method for setting the because of a CriterionException before it is thrown */
     CriterionException because(Cause cause) {
         this.cause = cause;
         return this;
     }
 
-
     /** Returns an enum outlining the reason for the exception. */
-    Cause getCauseOrigin() {
+    Cause because() {
         return cause;
     }
 
 
     enum Cause {
-        NULL_INPUTS, NO_SUCH_ATTRIBUTE, ARGUMENTS_INCOMPATIBLE, NOT_REGEXABLE, UNSPECIFIED, SUBQUERY_NOT_IN;
+        NULL_INPUTS, ARGUMENTS_INCOMPATIBLE, UNSPECIFIED, SUBQUERY_NOT_IN,
+        DEPRECATED_CONSTRUCTOR
     }
 }

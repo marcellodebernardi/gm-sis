@@ -7,19 +7,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.CalendarPaneController"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.CalendarController"
             id="calendarPane" fx:id="calendarPane">
     <top>
         <HBox id="calendarPaneTopControls">
             <ComboBox id="calendarMechanicComboBox" fx:id="calendarMechanicComboBox"
-                      onAction="#selectCalendarMechanic"></ComboBox>
-            <DatePicker fx:id="calendarDatePicker" onAction="#selectCalendarDate"></DatePicker>
+                      onAction="#selectCalendarMechanic" />
+            <DatePicker fx:id="calendarDatePicker" onAction="#selectCalendarDate" />
             <Button onAction="#openListPane">List View</Button>
             <Button>Calendar View</Button>
         </HBox>
 
     </top>
     <center>
-        <Agenda fx:id="bookingAgenda"></Agenda>
+        <Agenda fx:id="bookingAgenda" />
     </center>
 </BorderPane>

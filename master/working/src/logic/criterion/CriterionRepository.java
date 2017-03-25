@@ -24,7 +24,7 @@ public interface CriterionRepository {
      * defines the base type of the returned object.
      * </p>
      * <p>
-     * <i>new Criterion<>(User.class, "userID", EqualTo, "foo").and("password", EqualTo, "bar")</i>
+     * <i>new Criterion<>(User.class, "userID", equalTo, "foo").and("password", equalTo, "bar")</i>
      * </p>
      * <p>
      * corresponds to the logical statement
@@ -66,7 +66,7 @@ public interface CriterionRepository {
      * </p>
      * <p>
      * Matches operator should be avoided. Using the regex operator on identifiers can
-     * cause catastrophic loss of database contents.
+     * because catastrophic loss of database contents.
      * </p>
      *
      * @param criteria Criterion objects to define the objects to remove

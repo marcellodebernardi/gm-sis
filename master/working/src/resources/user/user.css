@@ -1,7 +1,9 @@
 #leftPane {
     -fx-pref-width: 30em;
     -fx-padding: 0em 1em 0em 1em;
-    -fx-background-color: lightgray;
+    -fx-border-style: solid;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0px 1px 0px 0px;
 }
 
 #tablePane {

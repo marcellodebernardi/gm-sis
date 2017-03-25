@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static logic.criterion.CriterionOperator.equalTo;
 import static persistence.DependencyConnection.Directionality.TRANSMITTER;
 
 /**
@@ -210,25 +211,23 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
         return dependencyConnections;
     }
 
-    @Lazy
-    public List<PartOccurrence> getRequiredPartsList() {
+    @Lazy public List<PartOccurrence> getRequiredPartsList() {
         if (requiredPartsList == null)
             requiredPartsList = DatabaseRepository
                     .getInstance()
                     .getByCriteria(new Criterion<>(
-                            PartOccurrence.class, "bookingID", CriterionOperator.EqualTo, getBookingID()));
+                            PartOccurrence.class, "bookingID", equalTo, getBookingID()));
         return requiredPartsList;
     }
 
-    @Lazy
-    public Customer getCustomer() {
+    @Lazy public Customer getCustomer() {
         List<Vehicle> vehicles = DatabaseRepository
                 .getInstance()
                 .getByCriteria(
                         new Criterion<>(
                                 Vehicle.class,
                                 "vehicleRegNumber",
-                                CriterionOperator.EqualTo,
+                                equalTo,
                                 getVehicleRegNumber()));
 
         if (vehicles.size() != 0) {
@@ -238,12 +237,18 @@ public class DiagRepBooking extends Booking implements DependencyConnectable {
                             new Criterion<>(
                                     Customer.class,
                                     "customerID",
-                                    CriterionOperator.EqualTo,
+                                    equalTo,
                                     vehicles.get(0).getCustomerID())
                     );
             if (customers.size() != 0) return customers.get(0);
         }
         return null;
+    }
+
+    @Lazy public VehicleRepair getSpcRepair() {
+        List<VehicleRepair> list = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(VehicleRepair.class)
+                .where("bookingID", equalTo, getBookingID()));
+        return list != null && list.size() != 0 ? list.get(0) : null;
     }
 
 }

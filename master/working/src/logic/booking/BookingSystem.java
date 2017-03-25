@@ -8,10 +8,25 @@ import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static java.time.DayOfWeek.*;
+import static logic.booking.UnavailableDateException.Appointment.DIAGNOSIS;
+import static logic.booking.UnavailableDateException.Appointment.REPAIR;
+import static logic.booking.UnavailableDateException.Cause.CLASHES;
+import static logic.booking.UnavailableDateException.Cause.CLOSED;
+import static logic.booking.UnavailableDateException.Cause.HOLIDAY;
 import static logic.criterion.CriterionOperator.*;
 
 /**
@@ -22,10 +37,35 @@ import static logic.criterion.CriterionOperator.*;
 public class BookingSystem {
     private static BookingSystem instance;
     private CriterionRepository persistence;
+    private DateTimeFormatter format;
 
+    private Map<LocalDate, String> holidays;
+    private Map<DayOfWeek, LocalTime[]> openingHours;
 
     private BookingSystem() {
         this.persistence = DatabaseRepository.getInstance();
+        format = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        openingHours = new HashMap<>();
+        openingHours.put(MONDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 30)});
+        openingHours.put(TUESDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 30)});
+        openingHours.put(WEDNESDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 30)});
+        openingHours.put(THURSDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 30)});
+        openingHours.put(FRIDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 30)});
+        openingHours.put(SATURDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(12, 0)});
+        openingHours.put(SUNDAY, new LocalTime[]{LocalTime.of(0, 0), LocalTime.of(0, 0)});
+
+        holidays = new HashMap<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("master/working/config/holidays.txt"));
+            reader.lines().filter(line -> line.length() > 0 && line.charAt(0) != '#' && line.charAt(0) != ' ')
+                    .forEach(line -> holidays.put(
+                            LocalDate.parse(line.split("\\s*!\\s*")[0], format),
+                            line.split("\\s*!*\\s")[1]));
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -57,9 +97,9 @@ public class BookingSystem {
     public List<DiagRepBooking> getFutureBookings() {
         ZonedDateTime now = ZonedDateTime.now();
 
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
-                "diagnosisStart", MoreThan, now)
-                .or("repairStart", MoreThan, now)
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("diagnosisStart", moreThan, now)
+                .or("repairStart", moreThan, now)
         );
     }
 
@@ -72,9 +112,9 @@ public class BookingSystem {
     public List<DiagRepBooking> getPastBookings() {
         ZonedDateTime now = ZonedDateTime.now();
 
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
-                "diagnosisStart", LessThan, now)
-                .or("repairStart", LessThan, now)
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("diagnosisStart", lessThan, now)
+                .or("repairStart", lessThan, now)
         );
     }
 
@@ -87,11 +127,11 @@ public class BookingSystem {
      * @return list of bookings in range
      */
     public List<DiagRepBooking> getBookingsBetween(ZonedDateTime start, ZonedDateTime end) {
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
-                "diagnosisStart", MoreThan, start)
-                .and("diagnosisStart", LessThan, end)
-                .or("repairStart", MoreThan, start)
-                .and("repairStart", LessThan, end)
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("diagnosisStart", moreThan, start)
+                .and("diagnosisStart", lessThan, end)
+                .or("repairStart", moreThan, start)
+                .and("repairStart", lessThan, end)
         );
     }
 
@@ -119,13 +159,13 @@ public class BookingSystem {
         if (query == null) throw new NullPointerException();
         if (query.equals("")) return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
 
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class,
-                "vehicleRegNumber", Matches, query)
-                .or("vehicleRegNumber", In, new Criterion<>(Vehicle.class,
-                        "manufacturer", Matches, query)
-                        .or("customerID", In, new Criterion<>(Customer.class,
-                                "customerFirstname", Matches, query)
-                                .or("customerSurname", Matches, query))));
+        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("vehicleRegNumber", matches, query)
+                .or("vehicleRegNumber", in, new Criterion<>(Vehicle.class)
+                        .where("manufacturer", matches, query)
+                        .or("customerID", in, new Criterion<>(Customer.class)
+                                .where("customerFirstname", matches, query)
+                                .or("customerSurname", matches, query))));
     }
 
     /**
@@ -136,7 +176,7 @@ public class BookingSystem {
      */
     public DiagRepBooking getBookingByID(int bookingID) {
         List<DiagRepBooking> result = persistence.getByCriteria(
-                new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID)
+                new Criterion<>(DiagRepBooking.class).where("bookingID", equalTo, bookingID)
         );
 
         return result != null && result.size() != 0 ? result.get(0) : null;
@@ -150,7 +190,7 @@ public class BookingSystem {
      */
     public Mechanic getMechanicByID(int mechanicID) {
         List<Mechanic> result = persistence.getByCriteria(
-                new Criterion<>(Mechanic.class, "mechanicID", EqualTo, mechanicID));
+                new Criterion<>(Mechanic.class).where("mechanicID", equalTo, mechanicID));
         return result != null ? result.get(0) : null;
     }
 
@@ -162,7 +202,7 @@ public class BookingSystem {
      */
     public List<DiagRepBooking> getVehicleBookings(String regNumber) {
         return persistence.getByCriteria(
-                new Criterion<>(DiagRepBooking.class, "vehicleRegNumber", EqualTo, regNumber));
+                new Criterion<>(DiagRepBooking.class).where("vehicleRegNumber", equalTo, regNumber));
     }
 
     /**
@@ -173,10 +213,10 @@ public class BookingSystem {
      *
      * @return true if addition successful, false otherwise
      */
-    public boolean commitBooking(DiagRepBooking booking) {
-        // if is not closed, not on holiday and does not clash, commit and return result
+    public boolean commitBooking(DiagRepBooking booking) throws UnavailableDateException {
         return !isClosed(booking) && !isHoliday(booking) && !clashes(booking) && persistence.commitItem(booking);
     }
+
 
     /**
      * Removes a specified booking from the system.
@@ -185,48 +225,93 @@ public class BookingSystem {
      */
     public boolean deleteBookingByID(int bookingID) {
         return persistence.deleteItem(
-                new Criterion<>(DiagRepBooking.class, "bookingID", EqualTo, bookingID));
+                new Criterion<>(DiagRepBooking.class).where("bookingID", equalTo, bookingID));
     }
 
+    /** Checks time validity in terms of opening and closing hours as well as weekdays. */
+    public boolean isClosed(DiagRepBooking booking) throws UnavailableDateException {
+        DayOfWeek diagDay = booking.getDiagnosisStart().getDayOfWeek();
+        LocalTime diagStart = booking.getDiagnosisStart().toLocalTime();
+        LocalTime diagEnd = booking.getDiagnosisEnd().toLocalTime();
 
-    /* Checks time validity in terms of opening and closing hours as well as weekdays. */
-    private boolean isClosed(DiagRepBooking booking) {
-        /* return (!(booking.getDiagnosisInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
-                || booking.getDiagnosisInterval().getEnd().toLocalTime().compareTo(CLOSING_HOUR) > 0
-                || booking.getRepairInterval().getStart().toLocalTime().compareTo(OPENING_HOUR) < 0
-                || booking.getRepairInterval().getEnd().toLocalTime().compareTo(CLOSING_HOUR) > 0
-                || booking.getDiagnosisInterval().getStart().toLocalDate().getDayOfWeek() < 1
-                || booking.getDiagnosisInterval().getStart().toLocalDate().getDayOfWeek() > 5
-                || booking.getRepairInterval().getStart().toLocalDate().getDayOfWeek() > 5
-                || booking.getRepairInterval().getStart().toLocalDate().getDayOfWeek() > 5)); */
-        return true;
+        // if diagnosis time is outside opening hours throw exception
+        if (diagStart.isBefore(openingHours.get(diagDay)[0]) || diagStart.isAfter(openingHours.get(diagDay)[1]))
+            throw new UnavailableDateException().concerning(DIAGNOSIS).because(CLOSED).at(diagStart);
+        else if (diagEnd.isBefore(openingHours.get(diagDay)[0]) || diagEnd.isAfter(openingHours.get(diagDay)[1]))
+            throw new UnavailableDateException().concerning(DIAGNOSIS).because(CLOSED).at(diagEnd);
+
+        // check repair time exists
+        DayOfWeek repDay = booking.getRepairStart() != null ? booking.getRepairStart().getDayOfWeek() : null;
+        LocalTime repStart = repDay != null ? booking.getRepairStart().toLocalTime() : null;
+        LocalTime repEnd = repDay != null ? booking.getRepairEnd().toLocalTime() : null;
+
+        // if repair time exists and is outside opening hours throw exception
+        if (repDay == null || repStart == null || repEnd == null)
+            return false;
+        else if (repStart.isBefore(openingHours.get(repDay)[0]) || repStart.isAfter(openingHours.get(repDay)[1]))
+            throw new UnavailableDateException().concerning(REPAIR).because(CLOSED).at(repStart);
+        else if (repEnd.isBefore(openingHours.get(repDay)[0]) || repEnd.isAfter(openingHours.get(repDay)[1]))
+            throw new UnavailableDateException().concerning(REPAIR).because(CLOSED).at(repEnd);
+
+        return false;
     }
 
-    /* Checks the booking is not for a bank or public holiday */
-    private boolean isHoliday(DiagRepBooking booking) {
-        /*return (!(HOLIDAYS.contains(booking.getDiagnosisInterval().getStart().toLocalDate())
-                || HOLIDAYS.contains(booking.getRepairInterval().getStart().toLocalDate())));*/
-        return true;
+    /** Checks the booking is not for a bank or public holiday */
+    public boolean isHoliday(DiagRepBooking booking) throws UnavailableDateException {
+        if (holidays.containsKey(booking.getDiagnosisStart().toLocalDate()))
+            throw new UnavailableDateException()
+                    .concerning(DIAGNOSIS)
+                    .because(HOLIDAY)
+                    .on(holidays.get(booking.getDiagnosisStart().toLocalDate()));
+        else if (booking.getRepairStart() != null && holidays.containsKey(booking.getRepairStart().toLocalDate()))
+            throw new UnavailableDateException()
+                    .concerning(REPAIR)
+                    .because(HOLIDAY)
+                    .on(holidays.get(booking.getRepairStart().toLocalDate()));
+
+        return false;
     }
 
-    /* HELPER: Checks that the booking does not clash temporally with other bookings */
-    private boolean clashes(DiagRepBooking booking) {
-        List<ZonedDateTime> times = new ArrayList<>();
-        times.add(booking.getDiagnosisStart());
-        times.add(booking.getDiagnosisEnd());
-        times.add(booking.getRepairStart());
-        times.add(booking.getRepairEnd());
+    /** Checks that the booking does not clash temporally with other bookings */
+    public boolean clashes(DiagRepBooking booking) throws UnavailableDateException {
+        List<DiagRepBooking> clashes = new ArrayList<>();
 
-        for (ZonedDateTime time : times) {
-            Criterion<DiagRepBooking> expression1
-                    = new Criterion<>(DiagRepBooking.class, "mechanicID", EqualTo, booking.getMechanicID())
-                    .and("diagnosisStart", LessThan, time)
-                    .and("diagnosisEnd", MoreThan, time)
-                    .or("mechanicID", EqualTo, booking.getMechanicID())
-                    .and("repairEnd", MoreThan, time)
-                    .and("repairStart", LessThan, time);
+        // get all bookings where this booking's diagnosis start time falls within appointment times
+        clashes.addAll(persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("diagnosisStart", before, booking.getDiagnosisStart())
+                .and("diagnosisEnd", after, booking.getDiagnosisStart())
+                .or("repairStart", before, booking.getDiagnosisStart())
+                .and("repairEnd", after, booking.getDiagnosisStart())));
+        // get all bookings where this booking's diagnosis end time falls within appointment times
+        clashes.addAll(persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                .where("diagnosisStart", before, booking.getDiagnosisEnd())
+                .and("diagnosisEnd", after, booking.getDiagnosisEnd())
+                .or("repairStart", before, booking.getDiagnosisEnd())
+                .and("repairEnd", after, booking.getDiagnosisEnd())));
 
-            if (persistence.getByCriteria(expression1).size() != 0) return true;
+        clashes.removeIf(b -> b.getMechanicID() != booking.getMechanicID()
+                || b.getBookingID() == booking.getBookingID());
+        if (clashes.size() > 0)
+            throw new UnavailableDateException().concerning(DIAGNOSIS).because(CLASHES).with(clashes);
+
+        if (booking.getRepairStart() != null) {
+            // get all bookings where this booking's repair start time falls within appointment times
+            clashes.addAll(persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                    .where("diagnosisStart", before, booking.getRepairStart())
+                    .and("diagnosisEnd", after, booking.getRepairStart())
+                    .or("repairStart", before, booking.getRepairStart())
+                    .and("repairEnd", after, booking.getRepairStart())));
+
+            clashes.addAll(persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
+                    .where("diagnosisStart", before, booking.getRepairEnd())
+                    .and("diagnosisEnd", after, booking.getRepairEnd())
+                    .or("repairStart", before, booking.getRepairEnd())
+                    .and("repairEnd", after, booking.getRepairEnd())));
+
+            clashes.removeIf(b -> b.getMechanicID() != booking.getMechanicID()
+                    || b.getBookingID() == booking.getBookingID());
+            if (clashes.size() > 0)
+                throw new UnavailableDateException().concerning(REPAIR).because(CLASHES).with(clashes);
         }
         return false;
     }
