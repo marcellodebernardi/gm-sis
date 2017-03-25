@@ -248,6 +248,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setEditable(false);
                 spcRepID = partRepair.getSpcRepID();
             }
+            clearFields();
         }
         catch (NullPointerException e) {
             e.printStackTrace();
