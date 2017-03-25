@@ -2,17 +2,17 @@ Repository for GM-SIS system, by Team 31.
 
 ## TEAM 31 - GARAGE MANAGEMENT SYSTEM
 
-### CONTRIBUTORS
+### 1. CONTRIBUTORS
 1. Ebubechukwu Abara (ecXXXXX)
 2. Dillon Vaghela (ecXXXXX)
 3. Marcello De Bernardi (ec15265)
 4. Muhammad Hoque (ecXXXXX)
 5. Muhammad Ahmed (ecXXXXX)
 
-### DEPLOYMENT INFORMATION
+### 2. DEPLOYMENT INFORMATION
 Requires **JRE1.8.x** to run. On the ITL machines this means running the application on Windows 10.
 
-### LOGIN CREDENTIALS
+### 3. LOGIN CREDENTIALS
 The system includes a variety of pre-added users. For testing, you may use
 <table>
 <tr><th>User string</th><th>Password</th><th>Access rights</th></tr>
@@ -21,21 +21,20 @@ The system includes a variety of pre-added users. For testing, you may use
 </table>
 
 
-### USER MANUAL
+### 4. USER MANUAL
 
-#### AUTHENTICATION
+#### 4.1. AUTHENTICATION
 The user logs in by typing their user credentials and pressing enter on the password field.
 Alternatively, the user can press the login button. An exit button is also provided.
 
 Once logged in, the user can logout using the large logout button in the upper right corner
 of the interface. This returns the user to the login screen.
 
+#### 4.2. TODAY
 
-#### TODAY
+#### 4.3. CUSTOMERS - Ebube
 
-#### CUSTOMERS - Ebube
-
-#### BOOKINGS - Marcello 
+#### 4.4 BOOKINGS - Marcello 
 The bookings screen consists of two main sections: the details pane on the left, for viewing,
 adding and editing booking details, and the main bookings pane on the right, for viewing the
 general bookings situation.
@@ -79,12 +78,12 @@ Parts required for a booking can conveniently be added and removed in this scree
 5.  A booking can only be completed, however, once a repair appointment has been carried out and
     a new mileage value recorded.
 
-#### VEHICLES - Dillon
+#### 4.5 VEHICLES - Dillon
 
-#### PARTS - Muhammad Hoque
+#### 4.6 PARTS - Muhammad Hoque
 
-#### SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
+#### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
 
-#### SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
+#### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
 
-#### USER MANAGEMENT
+#### 4.9 USER MANAGEMENT
