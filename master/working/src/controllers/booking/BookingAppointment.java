@@ -17,7 +17,6 @@ import java.util.Calendar;
  */
 public class BookingAppointment implements Agenda.Appointment {
     private int bookingID;
-    private boolean isRepair;
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
 
@@ -29,22 +28,12 @@ public class BookingAppointment implements Agenda.Appointment {
     public BookingAppointment() {
     }
 
-    public BookingAppointment asDiagnosis(DiagRepBooking booking) {
+    public BookingAppointment forBooking(DiagRepBooking booking) {
         bookingID = booking.getBookingID();
         startTime = booking.getDiagnosisStart();
         endTime = booking.getDiagnosisEnd();
-        isRepair = false;
         return this;
     }
-
-    public BookingAppointment asRepair(DiagRepBooking booking) {
-        bookingID = booking.getBookingID();
-        startTime = booking.getRepairStart();
-        endTime = booking.getRepairEnd();
-        isRepair = true;
-        return this;
-    }
-
 
     public int getBookingID() {
         return bookingID;
@@ -84,6 +73,11 @@ public class BookingAppointment implements Agenda.Appointment {
 
     public Agenda.AppointmentGroup getAppointmentGroup() {
         return appointmentGroup;
+    }
+
+    public BookingAppointment withAppointmentGroup(Agenda.AppointmentGroup group) {
+        this.appointmentGroup = group;
+        return this;
     }
 
     public void setAppointmentGroup(Agenda.AppointmentGroup appointmentGroup) {

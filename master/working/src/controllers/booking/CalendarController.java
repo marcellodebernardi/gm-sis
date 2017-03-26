@@ -10,11 +10,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.AppointmentGroupImpl;
 import logic.booking.BookingSystem;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +32,19 @@ public class CalendarController {
     @FXML private ComboBox calendarMechanicComboBox;
     @FXML private DatePicker calendarDatePicker;
     @FXML private Agenda bookingAgenda;
+    // appointment groups
+    private Agenda.AppointmentGroup diagnosis;
+    private Agenda.AppointmentGroup repair;
+    private Agenda.AppointmentGroup holiday;
 
 
     public CalendarController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
+
+        diagnosis = new AppointmentGroupImpl().withStyleClass("diagnosisAppointment");
+        repair = new AppointmentGroupImpl().withStyleClass("repairAppointment");
+        holiday = new AppointmentGroupImpl().withStyleClass("holidayAppointment");
     }
 
 
@@ -115,6 +126,15 @@ public class CalendarController {
         }
     }
 
+    @FXML private void openVehiclePane() {
+        try {
+            master.setCenter(FXMLLoader.load(getClass().getResource("/resources/booking/VehiclePane.fxml")));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FIELD STATE MANAGERS                                            //
@@ -129,17 +149,25 @@ public class CalendarController {
                 p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
         );
 
-        this.bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
+        this.bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+                .withAppointmentGroup(diagnosis));
         if (booking.getRepairStart() != null)
-            bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
+            bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+                    .withAppointmentGroup(repair));
     }
 
     private void populateAgenda(List<DiagRepBooking> bookings) {
         for (DiagRepBooking booking : bookings) {
-            bookingAgenda.appointments().add(new BookingAppointment().asDiagnosis(booking));
+            bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+                    .withAppointmentGroup(diagnosis));
 
             if (booking.getRepairStart() != null)
-                bookingAgenda.appointments().add(new BookingAppointment().asRepair(booking));
+                bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+                        .withAppointmentGroup(repair));
+        }
+
+        for (LocalDate h : bookingSystem.getAllHolidays().keySet()) {
+            bookingAgenda.appointments().add(new HolidayAppointment().withAppointmentGroup(holiday).onDate(h));
         }
     }
 }

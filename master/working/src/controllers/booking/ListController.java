@@ -12,16 +12,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import logic.booking.BookingSystem;
-import logic.criterion.Criterion;
-import persistence.DatabaseRepository;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static logic.criterion.CriterionOperator.equalTo;
+import static controllers.booking.ListController.ViewBy.*;
 
 /**
  * @author Marcello De Bernardi
@@ -31,18 +31,17 @@ public class ListController {
     private BookingSystem bookingSystem;
     private DateTimeFormatter timeFormatter;
     private DateTimeFormatter dateFormatter;
-    private Filter currentFilter;
     private ViewBy currentViewBy;
-    private ZonedDateTime selectedDay;
+    private ZonedDateTime selectedDate;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
 
     @FXML private TextField listSearchBar;
-    @FXML private ComboBox filterComboBox; // todo
     @FXML private ComboBox viewByComboBox;
     @FXML private DatePicker listDatePicker;
     @FXML private TableView<DiagRepBooking> bookingTableView;
     @FXML private TableColumn<DiagRepBooking, String> customerColumn;
-    @FXML private TableColumn<DiagRepBooking, String> vehicleRegColumn;
-    @FXML private TableColumn<DiagRepBooking, String> manufacturerColumn;
+    @FXML private TableColumn<DiagRepBooking, String> vehicleColumn;
     @FXML private TableColumn<DiagRepBooking, String> diagnosisDateColumn;
     @FXML private TableColumn<DiagRepBooking, String> diagnosisTimeColumn;
     @FXML private TableColumn<DiagRepBooking, String> repairDateColumn;
@@ -56,20 +55,20 @@ public class ListController {
         bookingSystem = BookingSystem.getInstance();
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        currentFilter = Filter.FUTURE;
-        currentViewBy = ViewBy.WEEK;
-        selectedDay = ZonedDateTime.now();
+        currentViewBy = WEEK;
+        selectedDate = ZonedDateTime.now();
     }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                        INITIALIZATION                                               //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** Initializes the controller's scene graph state */
     @FXML private void initialize() {
-        populateFilterComboBox();
-        filterComboBox.getSelectionModel().select(0);
         populateViewByComboBox();
         viewByComboBox.getSelectionModel().select(0);
+        listDatePicker.setValue(LocalDate.now());
+        selectListPeriod();
         initializeTable();
         refreshTable();
 
@@ -78,9 +77,8 @@ public class ListController {
 
     /** Set the cell value factories for each column in the table */
     private void initializeTable() {
-        DoubleBinding binding = bookingTableView.widthProperty().subtract(15).divide(9);
+        DoubleBinding binding = bookingTableView.widthProperty().subtract(5).divide(8.7);
         customerColumn.prefWidthProperty().bind(binding);
-        vehicleRegColumn.prefWidthProperty().bind(binding);
         diagnosisDateColumn.prefWidthProperty().bind(binding);
         diagnosisTimeColumn.prefWidthProperty().bind(binding);
         repairDateColumn.prefWidthProperty().bind(binding);
@@ -96,13 +94,10 @@ public class ListController {
                     new ReadOnlyObjectWrapper<>(customer.getCustomerFirstname() + " "
                             + customer.getCustomerSurname());
         });
-        vehicleRegColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getVehicleRegNumber())
-        );
-        manufacturerColumn.setCellValueFactory(p -> {
-            Vehicle vehicle = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
-                    (Vehicle.class, "vehicleRegNumber", equalTo, p.getValue().getVehicleRegNumber())).get(0);
-            return new ReadOnlyObjectWrapper<>(vehicle.getManufacturer());
+        vehicleColumn.setCellValueFactory(p -> {
+            Vehicle vehicle = p.getValue().getVehicle();
+            return new ReadOnlyObjectWrapper<>(vehicle.getVehicleRegNumber() + ": "
+                    + vehicle.getManufacturer() + " " + vehicle.getModel());
         });
         diagnosisDateColumn.setCellValueFactory(p -> {
             ZonedDateTime date = p.getValue().getDiagnosisStart();
@@ -134,7 +129,7 @@ public class ListController {
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));
 
-        bookingTableView.getColumns().setAll(customerColumn, vehicleRegColumn, manufacturerColumn,
+        bookingTableView.getColumns().setAll(customerColumn, vehicleColumn,
                 diagnosisDateColumn, diagnosisTimeColumn, repairDateColumn, repairTimeColumn,
                 billAmountColumn, billSettledColumn);
 
@@ -162,7 +157,12 @@ public class ListController {
     //                                        EVENT HANDLERS                                               //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML private void searchBookings() {
-        populateListView(bookingSystem.searchBookings(listSearchBar.getText()));
+        populateListView(bookingSystem.searchBookings(listSearchBar.getText()).stream()
+                .filter(b -> b.getDiagnosisEnd().isAfter(startTime) || b.getDiagnosisStart().isBefore(endTime)
+                        || (b.getRepairEnd() != null && b.getRepairEnd().isAfter(startTime))
+                        || (b.getRepairStart() != null && b.getRepairStart().isBefore(endTime)))
+                .collect(Collectors.toList())
+        );
     }
 
     @FXML private void openCalendarPane() {
@@ -174,35 +174,58 @@ public class ListController {
         }
     }
 
-    @FXML private void applyListFilter() {
-        currentFilter = Filter.asEnum(filterComboBox.getSelectionModel().getSelectedItem().toString());
-        refreshTable();
+    @FXML private void openVehiclePane() {
+        try {
+            master.setCenter(FXMLLoader.load(getClass().getResource("/resources/booking/VehiclePane.fxml")));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML private void applyListViewType() {
         currentViewBy = ViewBy.asEnum(viewByComboBox.getSelectionModel().getSelectedItem().toString());
+        selectListPeriod();
         refreshTable();
     }
 
     @FXML private void selectListPeriod() {
-        selectedDay = ZonedDateTime.parse(listDatePicker.getValue().format(dateFormatter), dateFormatter);
+        selectedDate = ZonedDateTime.of(listDatePicker.getValue(),
+                LocalTime.now(),
+                ZoneId.systemDefault());
 
+        System.out.println("View: " + currentViewBy);
+
+        if (currentViewBy == DAY) {
+            startTime = selectedDate.truncatedTo(ChronoUnit.DAYS);
+            endTime = startTime.plusDays(1);
+        }
+        else if (currentViewBy == WEEK) {
+            startTime = selectedDate
+                    .minusDays(selectedDate.getDayOfWeek().getValue())
+                    .truncatedTo(ChronoUnit.DAYS);
+            endTime = startTime.plusWeeks(1);
+        }
+        else if (currentViewBy == MONTH) {
+            startTime = selectedDate.minusDays(selectedDate.getDayOfMonth())
+                    .truncatedTo(ChronoUnit.DAYS);
+            endTime = startTime.plusMonths(1);
+        }
+        else {
+            startTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
+            endTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(Long.MAX_VALUE), ZoneId.systemDefault());
+        }
+        refreshTable();
     }
 
     void refreshTable() {
-        switch (currentFilter) {
-            case ALL:
-                populateListView(bookingSystem.getAllBookings());
-                break;
-            case FUTURE:
-                populateListView(bookingSystem.getFutureBookings());
-                break;
-            case PAST:
-                populateListView(bookingSystem.getPastBookings());
-                break;
-            default:
-                System.err.println("Unrecognized list filter applied.");
-        }
+        populateListView(bookingSystem.getAllBookings().stream()
+                .filter(b -> (b.getDiagnosisEnd().isAfter(startTime) && b.getDiagnosisEnd().isBefore(endTime))
+                        || (b.getDiagnosisStart().isBefore(endTime) && b.getDiagnosisStart().isAfter(startTime))
+                        || (b.getRepairEnd() != null && b.getRepairEnd().isAfter(startTime) && b.getRepairEnd().isBefore(endTime))
+                        || (b.getRepairStart() != null && b.getRepairStart().isBefore(endTime) && b.getDiagnosisStart().isAfter(startTime)))
+                .collect(Collectors.toList())
+        );
     }
 
 
@@ -215,56 +238,33 @@ public class ListController {
         bookingTableView.refresh();
     }
 
-    private void populateFilterComboBox() {
-        List<String> options = new ArrayList<>();
-        options.add(Filter.ALL.toString());
-        options.add(Filter.PAST.toString());
-        options.add(Filter.FUTURE.toString());
-
-        filterComboBox.setItems(FXCollections.observableArrayList(options));
-    }
-
     private void populateViewByComboBox() {
         List<String> options = new ArrayList<>();
-        options.add(ViewBy.DAY.toString());
-        options.add(ViewBy.WEEK.toString());
+        options.add(ALL.toString());
+        options.add(DAY.toString());
+        options.add(WEEK.toString());
         options.add(ViewBy.MONTH.toString());
 
         viewByComboBox.setItems(FXCollections.observableArrayList(options));
     }
 
-
-    enum Filter {
-        ALL, PAST, FUTURE;
-
-        static Filter asEnum(String string) throws IllegalArgumentException {
-            if (string.equalsIgnoreCase(ALL.toString())) return ALL;
-            else if (string.equalsIgnoreCase(PAST.toString())) return PAST;
-            else if (string.equalsIgnoreCase(FUTURE.toString())) return FUTURE;
-            else throw new IllegalArgumentException();
-        }
-
-        @Override public String toString() {
-            if (this == ALL) return "All";
-            else if (this == PAST) return "Past";
-            else return "Future";
-        }
-    }
-
+    /** Enumerator for the temporal mode in which the booking list is operated */
     enum ViewBy {
-        DAY, WEEK, MONTH;
+        ALL, DAY, WEEK, MONTH;
 
         static ViewBy asEnum(String string) throws IllegalArgumentException {
             if (string.equalsIgnoreCase(DAY.toString())) return DAY;
             else if (string.equalsIgnoreCase(WEEK.toString())) return WEEK;
             else if (string.equalsIgnoreCase(MONTH.toString())) return MONTH;
+            else if (string.equalsIgnoreCase(ALL.toString())) return ALL;
             else throw new IllegalArgumentException();
         }
 
         @Override public String toString() {
             if (this == DAY) return "Day";
             else if (this == WEEK) return "Week";
-            else return "Month";
+            else if (this == MONTH) return "Month";
+            else return "All";
         }
     }
 }

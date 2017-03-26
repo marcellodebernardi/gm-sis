@@ -3,34 +3,38 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.ListController"
             id="listPane" fx:id="listPane">
     <top>
         <HBox id="listPaneTopControls">
-            <ComboBox id="filterComboBox" fx:id="filterComboBox" onAction="#applyListFilter"></ComboBox>
-            <ComboBox id="viewByComboBox" fx:id="viewByComboBox" onAction="#applyListViewType"></ComboBox>
+            <ComboBox id="viewByComboBox" fx:id="viewByComboBox" onAction="#applyListViewType" />
             <Label>Period</Label>
-            <DatePicker id="listDatePicker" fx:id="listDatePicker" onAction="#selectListPeriod"></DatePicker>
+            <DatePicker id="listDatePicker" fx:id="listDatePicker" onAction="#selectListPeriod" />
             <Label>Search</Label>
-            <TextField id="listSearchBar" fx:id="listSearchBar" onKeyReleased="#searchBookings"></TextField>
-            <Button>List View</Button>
-            <Button onAction="#openCalendarPane">Calendar View</Button>
+            <TextField id="listSearchBar" fx:id="listSearchBar" onKeyReleased="#searchBookings" />
         </HBox>
     </top>
     <center>
         <TableView fx:id="bookingTableView">
             <columns>
-                <TableColumn text="Customer" fx:id="customerColumn"></TableColumn>
-                <TableColumn text="Vehicle Reg" fx:id="vehicleRegColumn"></TableColumn>
-                <TableColumn text="Manufacturer" fx:id="manufacturerColumn"></TableColumn>
-                <TableColumn text="Diagnosis Date" fx:id="diagnosisDateColumn"></TableColumn>
-                <TableColumn text="Diagnosis Time" fx:id="diagnosisTimeColumn"></TableColumn>
-                <TableColumn text="Repair Date" fx:id="repairDateColumn"></TableColumn>
-                <TableColumn text="Repair Time" fx:id="repairTimeColumn"></TableColumn>
-                <TableColumn text="Bill" fx:id="billAmountColumn"></TableColumn>
-                <TableColumn text="Settled" fx:id="billSettledColumn"></TableColumn>
+                <TableColumn text="Customer" fx:id="customerColumn" />
+                <TableColumn text="Vehicle" fx:id="vehicleColumn" />
+                <TableColumn text="Diagnosis Date" fx:id="diagnosisDateColumn" />
+                <TableColumn text="Diagnosis Time" fx:id="diagnosisTimeColumn" />
+                <TableColumn text="Repair Date" fx:id="repairDateColumn" />
+                <TableColumn text="Repair Time" fx:id="repairTimeColumn" />
+                <TableColumn text="Bill" fx:id="billAmountColumn" />
+                <TableColumn text="Settled" fx:id="billSettledColumn" />
             </columns>
         </TableView>
     </center>
+    <right>
+        <VBox id="paneSwitcherControls">
+            <Button>List View</Button>
+            <Button onAction="#openCalendarPane">Calendar View</Button>
+            <Button onAction="#openVehiclePane">Vehicle View</Button>
+        </VBox>
+    </right>
 </BorderPane>

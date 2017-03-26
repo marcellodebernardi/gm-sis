@@ -1,9 +1,6 @@
 package logic.vehicle;
 
-import domain.FuelType;
-import domain.Vehicle;
-import domain.VehicleRepair;
-import domain.VehicleType;
+import domain.*;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 import persistence.DatabaseRepository;
@@ -12,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.equalTo;
+import static logic.criterion.CriterionOperator.in;
 import static logic.criterion.CriterionOperator.matches;
 
 /**
@@ -56,6 +54,16 @@ public class VehicleSys {
                 "vehicleRegNumber", matches, regNumber).and("manufacturer", matches, manufacturer));
         return results;
 
+    }
+
+    public List<Vehicle> smartSearchVehicle(String query) {
+        return persistence.getByCriteria(new Criterion<>(Vehicle.class)
+                .where("vehicleRegNumber", matches, query)
+                .or("manufacturer", matches, query)
+                .or("model", matches, query)
+                .or("customerID", in, new Criterion<>(Customer.class)
+                        .where("customerFirstname", matches, query)
+                        .or("customerSurname", matches, query)));
     }
 
     public Vehicle searchAVehicle(String regNumber) {
