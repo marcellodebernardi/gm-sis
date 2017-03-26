@@ -1,5 +1,6 @@
 package controllers.booking;
 
+import domain.DiagRepBooking;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
@@ -7,6 +8,7 @@ import main.Main;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Marcello De Bernardi
@@ -15,6 +17,7 @@ public class BookingController {
     // singleton instance and booking system
     private static BookingController instance;
     private HashMap<Class<?>, Object> controllerMap;
+    private List<DiagRepBooking> bookingCache;
 
     private BorderPane basePane;
 

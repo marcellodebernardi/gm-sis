@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" stylesheets="/booking/stylesheets/validation.css"
+            id="validationPane">
+    <center>
+        <Label id="validationText">
+            A booking cannot be completed until the allocated repair has been performed. The
+            system will allow you to mark the booking as complete once the repair appointment has
+            started.
+        </Label>
+    </center>
+</BorderPane>

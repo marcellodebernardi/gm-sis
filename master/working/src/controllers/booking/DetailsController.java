@@ -70,12 +70,12 @@ public class DetailsController {
     @FXML private TableColumn<PartOccurrence, String> nameColumn;
     @FXML private TableColumn<PartOccurrence, Double> costColumn;
     @FXML private TableColumn<PartOccurrence, Boolean> subcontractedColumn;
-    // Buttons
-    @FXML private Button addPartButton;
-    @FXML private Button removePartButton;
     // DatePickers
     @FXML private DatePicker diagnosisDatePicker;
     @FXML private DatePicker repairDatePicker;
+    //Buttons
+    @FXML private Button addPartButton;
+    @FXML private Button removePartButton;
     // PopOvers
     private PopOver customerValidationPopOver;
     private PopOver vehicleValidationPopOver;
@@ -83,6 +83,7 @@ public class DetailsController {
     private PopOver mileageValidationPopOver;
     private PopOver invalidTimePopOver;
     private PopOver invertedTimePopOver;
+    private PopOver repairNotStartedPopOver;
 
 
     public DetailsController() {
@@ -222,7 +223,7 @@ public class DetailsController {
 
         subcontractedColumn.prefWidthProperty().bind(binding);
         subcontractedColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != -1)
+                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != 0)
         );
 
         partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
@@ -234,6 +235,15 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FXML EVENT LISTENERS                                            //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @FXML void clear() {
+        selectedBooking = new DiagRepBooking();
+        detachedParts = new ArrayList<>();
+        selectedVehicle = null;
+        selectedPart = null;
+
+        clearAll();
+    }
+
     @FXML private void pickCustomer() {
         Customer c;
         if (validateCustomerSelection() && (c = extractCustomer()) != null) populateVehicle(c.getVehicles());
@@ -370,6 +380,7 @@ public class DetailsController {
                 || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
                 || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
                 || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
+                || !repairHasStarted()
                 || !validateMechanicSelection()
                 || !validNewMileage()) return;
 
@@ -381,15 +392,6 @@ public class DetailsController {
 
         if (save()) partsToInstall.forEach(part ->
                 partsSystem.commitInst(new Installation(installDate, vehicleReg, part)));
-    }
-
-    @FXML private void clear() {
-        selectedBooking = new DiagRepBooking();
-        detachedParts = new ArrayList<>();
-        selectedVehicle = null;
-        selectedPart = null;
-
-        clearAll();
     }
 
     @FXML private void addPart() {
@@ -498,6 +500,8 @@ public class DetailsController {
         partsTable.setDisable(state);
         mechanicComboBox.setDisable(state);
         newMileageTextField.setDisable(state);
+        addPartButton.setDisable(state);
+        removePartButton.setDisable(state);
     }
 
     /** Empties all fields in the details pane */
@@ -532,6 +536,8 @@ public class DetailsController {
         partsTable.setDisable(false);
         mechanicComboBox.setDisable(false);
         newMileageTextField.setDisable(false);
+        addPartButton.setDisable(false);
+        removePartButton.setDisable(false);
         setPaneTitleToAdd();
     }
 
@@ -721,7 +727,7 @@ public class DetailsController {
     private boolean timeNotInverted(TextField start, TextField end) {
         if (invertedTimePopOver == null) {
             try {
-                invalidTimePopOver = new PopOver(FXMLLoader.load(getClass()
+                invertedTimePopOver = new PopOver(FXMLLoader.load(getClass()
                         .getResource("/resources/booking/validation/InvertedTime.fxml")
                 ));
             }
@@ -732,11 +738,35 @@ public class DetailsController {
         }
 
         if (LocalTime.parse(end.getText(), timeFormatter).isAfter(LocalTime.parse(start.getText(), timeFormatter))) {
-            if (invalidTimePopOver.isShowing()) invalidTimePopOver.hide();
+            if (invertedTimePopOver.isShowing()) invertedTimePopOver.hide();
             return true;
         }
         else {
             if (!invalidTimePopOver.isShowing()) invalidTimePopOver.show(end);
+            return false;
+        }
+    }
+
+    /** Checks that the repair time has already started */
+    private boolean repairHasStarted() {
+        if (repairNotStartedPopOver == null) {
+            try {
+                repairNotStartedPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/RepairNotStarted.fxml")
+                ));
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (ZonedDateTime.now().isAfter(extractRepairStart())) {
+            if (repairNotStartedPopOver.isShowing()) repairNotStartedPopOver.hide();
+            return true;
+        }
+        else {
+            if (!repairNotStartedPopOver.isShowing()) repairNotStartedPopOver.show(repairDatePicker);
             return false;
         }
     }

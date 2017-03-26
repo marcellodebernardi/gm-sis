@@ -60,8 +60,8 @@ public class BookingSystem {
             BufferedReader reader = new BufferedReader(new FileReader("master/working/config/holidays.txt"));
             reader.lines().filter(line -> line.length() > 0 && line.charAt(0) != '#' && line.charAt(0) != ' ')
                     .forEach(line -> holidays.put(
-                            LocalDate.parse(line.split("\\s*!\\s*")[0], format),
-                            line.split("\\s*!*\\s")[1]));
+                            LocalDate.parse(line.split("\\s*,\\s*")[0], format),
+                            line.split("\\s*,*\\s")[1]));
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -86,53 +86,6 @@ public class BookingSystem {
      */
     public List<DiagRepBooking> getAllBookings() {
         return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class));
-    }
-
-    /**
-     * Returns a list containing all diagnosis and repair bookings for which either the diagnosis
-     * or the repair is yet to take place.
-     *
-     * @return list of future bookings
-     */
-    public List<DiagRepBooking> getFutureBookings() {
-        ZonedDateTime now = ZonedDateTime.now();
-
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
-                .where("diagnosisStart", moreThan, now)
-                .or("repairStart", moreThan, now)
-        );
-    }
-
-    /**
-     * Returns a list containing all diagnosis and repair bookings for which either the diagnosis
-     * or the repair has already taken place.
-     *
-     * @return list of past bookings
-     */
-    public List<DiagRepBooking> getPastBookings() {
-        ZonedDateTime now = ZonedDateTime.now();
-
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
-                .where("diagnosisStart", lessThan, now)
-                .or("repairStart", lessThan, now)
-        );
-    }
-
-    /**
-     * Returns all diagnosis and repair bookings such that the booking has either a diagnosis
-     * appointment or a repair appointment inside the specified time range.
-     *
-     * @param start start time of time range
-     * @param end   end time of time range
-     * @return list of bookings in range
-     */
-    public List<DiagRepBooking> getBookingsBetween(ZonedDateTime start, ZonedDateTime end) {
-        return persistence.getByCriteria(new Criterion<>(DiagRepBooking.class)
-                .where("diagnosisStart", moreThan, start)
-                .and("diagnosisStart", lessThan, end)
-                .or("repairStart", moreThan, start)
-                .and("repairStart", lessThan, end)
-        );
     }
 
     /**
@@ -270,6 +223,11 @@ public class BookingSystem {
                     .on(holidays.get(booking.getRepairStart().toLocalDate()));
 
         return false;
+    }
+
+    /** Returns a map with all holiday dates and their names */
+    public Map<LocalDate, String> getAllHolidays() {
+        return holidays;
     }
 
     /** Checks that the booking does not clash temporally with other bookings */

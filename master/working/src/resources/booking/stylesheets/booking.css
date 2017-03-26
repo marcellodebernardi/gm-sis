@@ -6,18 +6,18 @@
 #calendarPaneTopControls, #listPaneTopControls {
     -fx-spacing: 1em;
     -fx-padding: 0.7em 0em 0.7em 0em;
-    -fx-alignment: center-right;
-}
-
-#calendarPaneTopControls Button, #listPaneTopControls Button {
-    -fx-end-margin: 1em;
-    -fx-background-radius: 15px;
-    -fx-pref-width: 9em;
+    -fx-alignment: center-left;
 }
 
 #calendarPaneTopControls TextField, #listPaneTopControls TextField {
     -fx-pref-width: 15em;
     -fx-background-radius: 15px;
+}
+
+#paneSwitcherControls Button {
+    -fx-end-margin: 1em;
+    -fx-background-radius: 15px;
+    -fx-pref-width: 9em;
 }
 
 #detailsPane {
@@ -78,4 +78,16 @@
 
 #detailsButtons Button {
     -fx-pref-width: 9em;
+}
+
+
+.diagnosisAppointment {
+    -fx-background-color: red;
+}
+.repairAppointment {
+    -fx-background-color: blue;
+}
+.holidayAppointment {
+    -fx-background-color: lightgray;
+    -fx-opacity: 0.5;
 }

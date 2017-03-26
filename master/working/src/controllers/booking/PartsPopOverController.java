@@ -107,7 +107,6 @@ public class PartsPopOverController {
                 DiagRepBooking booking
                         = ((DetailsController) master.getController(DetailsController.class)).getSelectedBooking();
                 booking.addRequiredPart(pO);
-                DatabaseRepository.getInstance().commitItem(booking);
                 ((DetailsController) master.getController(DetailsController.class)).populateParts(booking.getRequiredPartsList());
             }
         });
