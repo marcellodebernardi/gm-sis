@@ -1,5 +1,6 @@
 package domain;
 
+import javafx.fxml.FXML;
 import logic.criterion.Criterion;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
@@ -147,5 +148,10 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         List<PartRepair> repairs = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartRepair.class)
                 .where("partOccurrenceID", equalTo, this.partOccurrenceID));
         return repairs != null && repairs.size() != 0 ? repairs.get(0) : null;
+    }
+
+    public void setBookingID(int bookingID)
+    {
+        this.bookingID = bookingID;
     }
 }

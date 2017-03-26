@@ -882,8 +882,9 @@ public class SpecialistController implements Initializable {
             Bill bill = new Bill(partAbstraction.getPartPrice() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
             diagRepBooking.setBill(bill);
             specRepairSystem.submitBooking(diagRepBooking);
+            partOccurrence.setBookingID(diagRepBooking.getBookingID());
             partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
-            partsSystem.commitAbstraction(partAbstraction)  ;
+            partsSystem.commitAbstraction(partAbstraction);
             Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
             specRepairSystem.commitInstallations(installation);
             showInfo("Installation added");
@@ -967,7 +968,9 @@ public class SpecialistController implements Initializable {
        List<DiagRepBooking> diagRepBookings = vehicle.getBookingList();
        for(DiagRepBooking diagRepBooking: diagRepBookings)
        {
-           integerObservableList.add(diagRepBooking.getBookingID());
+           if(!diagRepBooking.isComplete()) {
+               integerObservableList.add(diagRepBooking.getBookingID());
+           }
        }
        bookingIDForInsta.setItems(integerObservableList);
     }

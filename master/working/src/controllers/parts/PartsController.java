@@ -14,6 +14,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import logic.booking.BookingSystem;
 import logic.criterion.Criterion;
 import logic.customer.CustomerSystem;
 import logic.parts.PartsSystem;
@@ -84,6 +85,11 @@ public class PartsController implements Initializable {
     private TextField regNumberInstallation, searchInst;
     @FXML
     private DatePicker instDate;
+
+    @FXML
+    private ComboBox<Integer> bookingsForInstallation = new ComboBox<>();
+    @FXML
+    private ObservableList<Integer> bookingIDs = FXCollections.observableArrayList();
 
     private ArrayList data = new ArrayList();
     private List<PartAbstraction> List;
@@ -527,7 +533,7 @@ public class PartsController implements Initializable {
             if (vehicle == null) {
                 throw new Exception();
             }
-
+            DiagRepBooking diagRepBooking = BookingSystem.getInstance().getBookingByID(bookingsForInstallation.getSelectionModel().getSelectedItem());
             PartOccurrence partOccurrence = pSys.getPartOcc(Integer.parseInt(availableOcc.getSelectionModel().getSelectedItem().trim()));
             Character c = availableOcc.getSelectionModel().getSelectedItem().trim().charAt(0);
             int partAbs = c.getNumericValue(c);
@@ -537,17 +543,16 @@ public class PartsController implements Initializable {
             pSys.commitAbstraction(partAbstraction);
             System.out.println(partAbs);
             Installation installation = new Installation(ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), regNumberInstallation.getText(), partAbs, partOccurrence);
+            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
+            pSys.commitAbstraction(partAbstraction);
+            //saveChanges();
+            viewAllBookingsClick();
+            partOccurrence.setBookingID(diagRepBooking.getBookingID());
             pSys.commitInst(installation);
 
             showInfo("Installation has been added, stock for selected part has been reduced");
 
-            viewAllBookingsClick();
-            String[]A=addPartToInst.getSelectionModel().getSelectedItem().split(":");
-            for (int i = 0; i < List.size(); i++) {
-                if(List.get(i).getPartAbstractionID()==Integer.parseInt(A[0])){
-                    actualDecrease(List.get(i));
-                }
-            }
+
 
             clearInstallation();
 
@@ -555,7 +560,13 @@ public class PartsController implements Initializable {
 
         }
         catch (Exception e) {
-            showError("Please enter a valid Vehicle registration.");
+            if(e instanceof IndexOutOfBoundsException || e instanceof  NullPointerException)
+            {
+                showError("No booking found!");
+            }
+            else {
+                showError("Please enter a valid Vehicle registration.");
+            }
         }
 
     }
@@ -601,7 +612,7 @@ public class PartsController implements Initializable {
                 availableOcc.getItems().add(Integer.toString(partOccurrence.getPartOccurrenceID()));
             }
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException | NullPointerException e) {
             System.out.println("Showing part description.");
         }
 
@@ -634,5 +645,24 @@ public class PartsController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void findRelevantBookings() {
+        try {
+            bookingsForInstallation.getItems().clear();
+            Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(regNumberInstallation.getText().toUpperCase().trim());
+            List<DiagRepBooking> diagRepBookings = vehicle.getBookingList();
+            for (DiagRepBooking diagRepBooking : diagRepBookings) {
+                if (!diagRepBooking.isComplete()) {
+                    bookingIDs.add(diagRepBooking.getBookingID());
+                }
+            }
+            bookingsForInstallation.setItems(bookingIDs);
+        }
+        catch (NullPointerException | IndexOutOfBoundsException e)
+        {
+            showError("Selected Vehicle has no booking! Please create a booking before trying to add an installation!");
+        }
+    }
+
 }
 
