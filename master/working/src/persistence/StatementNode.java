@@ -119,9 +119,9 @@ class StatementNode implements Comparable<StatementNode> {
                 values += delim;
 
                 if (value.getClass() == Date.class)
-                    values += ((Date) value).getTime();
+                    values += ((Date) value).getTime() != 0 ? "null" : ((Date)value).getTime();
                 else if (value.getClass() == LocalDateTime.class)
-                    values += ((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000;
+                    values += ((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000 == 0;
                 else if (value.getClass() == ZonedDateTime.class)
                     values += ((ZonedDateTime) value).toEpochSecond() * 1000;
                 else if (value.getClass() == boolean.class && (boolean) value)
