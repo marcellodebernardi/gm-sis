@@ -187,7 +187,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Add Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -223,7 +222,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Delete Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -260,7 +258,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Delete Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -276,7 +273,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search All Customers Error");
-            e.printStackTrace();
         }
     }
 
@@ -301,7 +297,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search by Customer Type Error");
-            e.printStackTrace();
         }
     }
 
@@ -329,7 +324,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -387,7 +381,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Customer Table view Error");
-            e.printStackTrace();
         }
     }
 
@@ -416,7 +409,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Edit Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -470,7 +462,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Update Customer Error");
-            e.printStackTrace();
         }
     }
 
@@ -539,7 +530,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search Customer Vehicle Error");
-            e.printStackTrace();
         }
         return null;
     }
@@ -553,7 +543,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search Customer Booking Error");
-            e.printStackTrace();
         }
         return null;
     }
@@ -588,7 +577,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Search Customer Vehicle Part Error");
-            e.printStackTrace();
         }
         return null;
     }
@@ -599,7 +587,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Initiate new booking Error");
-            e.printStackTrace();
         }
     }
 
@@ -612,7 +599,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Logout from CustomerController Error");
-            e.printStackTrace();
         }
     }
 
@@ -671,7 +657,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("tableViewOfCustomerVehicleFromDB Error");
-            e.printStackTrace();
         }
     }
 
@@ -700,7 +685,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("tableViewOfCustomerVehiclePartFromDB Error");
-            e.printStackTrace();
         }
     }
 
@@ -749,7 +733,6 @@ public class CustomerController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("tableViewOfCustomerBookingFromDB Error");
-            e.printStackTrace();
         }
     }
 
@@ -916,7 +899,6 @@ public class CustomerController implements Initializable {
         catch(Exception e)
         {
             System.out.println("'Verify Customer does not exist' Error");
-            e.printStackTrace();
         }
         return false;
     }

@@ -135,7 +135,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (IOException e) {
             System.out.println("Show Vehicle Popup Error");
-            e.printStackTrace();
         }
         return addVehicleStage;
     }
@@ -219,7 +218,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Add Customer's Vehicle Error");
-            e.printStackTrace();
         }
         return false;
     }
@@ -284,7 +282,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Add Customer's Vehicle Error");
-            e.printStackTrace();
         }
     }
 
@@ -403,7 +400,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (Exception e) {
             errorAlert("Make sure all fields required are not blank");
-            e.printStackTrace();
             return false;
         }
     }
@@ -500,7 +496,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (Exception e) {
             System.out.println("Initialize CustomerVehicleController.java class Error");
-            e.printStackTrace();
         }
     }
 
