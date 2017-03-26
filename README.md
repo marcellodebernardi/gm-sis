@@ -3,7 +3,7 @@ Repository for GM-SIS system, by Team 31.
 ## TEAM 31 - GARAGE MANAGEMENT SYSTEM
 
 ### 1. CONTRIBUTORS
-1. Ebubechukwu Abara (ecXXXXX)
+1. Ebubechukwu Abara (ec14177)
 2. Dillon Vaghela (ecXXXXX)
 3. Marcello De Bernardi (ec15265)
 4. Muhammad Hoque (ecXXXXX)

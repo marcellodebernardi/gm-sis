@@ -144,12 +144,12 @@ public class CustomerController implements Initializable {
     public void addCustomerToDB() throws Exception {
         try {
             //initialising variables
-            String cFirstname = customerFirstname.getText();
-            String cSurname = customerSurname.getText();
-            String cAddress = customerAddress.getText();
-            String cPostcode = customerPostcode.getText();
+            String cFirstname = firstLetterUpperCase(customerFirstname.getText());
+            String cSurname = firstLetterUpperCase(customerSurname.getText());
+            String cAddress = firstLetterUpperCase(customerAddress.getText());
+            String cPostcode = customerPostcode.getText().toUpperCase();
             String cPhone = customerPhone.getText();
-            String cEmail = customerEmail.getText();
+            String cEmail = customerEmail.getText().toLowerCase();
             CustomerType cType = null;
             boolean checkFields = false;
 
@@ -182,14 +182,7 @@ public class CustomerController implements Initializable {
                         CustomerVehicleController.getInstance().showVehiclePopup();
                     }
                 }
-                else {
-                    errorAlert("Cannot add customer. Ensure all fields have been entered correctly.");
-                }
                 customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
-            }
-            else {
-                //error message if checkFields=false meaning one or more Customer fields were invalid
-                errorAlert("Cannot add customer. Ensure all fields have been entered correctly.");
             }
         }
         catch (Exception e) {
@@ -433,12 +426,12 @@ public class CustomerController implements Initializable {
         customerBookingTable.setItems(null);
 
         try {
-            String cFirstname = customerFirstname.getText();
-            String cSurname = customerSurname.getText();
-            String cAddress = customerAddress.getText();
-            String cPostcode = customerPostcode.getText();
+            String cFirstname = firstLetterUpperCase(customerFirstname.getText());
+            String cSurname = firstLetterUpperCase(customerSurname.getText());
+            String cAddress = firstLetterUpperCase(customerAddress.getText());
+            String cPostcode = customerPostcode.getText().toUpperCase();
             String cPhone = customerPhone.getText();
-            String cEmail = customerEmail.getText();
+            String cEmail = customerEmail.getText().toLowerCase();
             CustomerType cType = null;
 
             boolean checkFields = false;
@@ -844,6 +837,11 @@ public class CustomerController implements Initializable {
                 errorAlert("'Customer Phone' number field is invalid . No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
                 return false;
             }
+            if((customerPhone.getText().substring(0,1).equals("1"))||(customerPhone.getText().substring(0,1).equals("2"))||(customerPhone.getText().substring(0,1).equals("3"))||(customerPhone.getText().substring(0,1).equals("4"))||(customerPhone.getText().substring(0,1).equals("5"))||(customerPhone.getText().substring(0,1).equals("6"))||(customerPhone.getText().substring(0,1).equals("7"))||(customerPhone.getText().substring(0,1).equals("8"))||(customerPhone.getText().substring(0,1).equals("9")))
+            {
+                errorAlert("'Customer Phone' number field can only start with '+' or '0' NOT 1-9");
+                return false;
+            }
             String customerPhoneNoPlus = customerPhone.getText().replaceAll("\\+", "");
             if ((!customerPhoneNoPlus.matches("[0-9]+"))) {
                 errorAlert("'Customer Phone' number field is invalid. Letters a-z or A-Z are not allowed. No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
@@ -876,6 +874,14 @@ public class CustomerController implements Initializable {
                 errorAlert("'Customer Email' address field does not contain '.' symbol. Enter valid Email address containing period/dot '.' and '@' symbol");
                 return false;
             }
+            System.out.println("Hello World 1");//testing
+            boolean verifyEmail = verifyCustomerDoesNotExist(customerEmail.getText());
+            if(!verifyEmail)
+            {
+                System.out.println("Hello World 2");//testing
+                errorAlert("Customer record already exists. Enter a new Email address");
+                return false;
+            }
 
             if (customerType.getSelectionModel().getSelectedItem() == null) {
                 errorAlert("Pick Customer Type");
@@ -887,5 +893,45 @@ public class CustomerController implements Initializable {
             errorAlert(e.getMessage() + ": Add or Update Customer Error");
             return false;
         }
+    }
+
+    public boolean verifyCustomerDoesNotExist(String email)
+    {
+        try
+        {
+            List<Customer> customerList = cSystem.getAllCustomers();
+            for(int i=0; i<customerList.size(); i++)
+            {
+                System.out.println("emailList " + i + ": " + customerList.get(i).getCustomerEmail());
+                System.out.println("new email: " + email);
+                if(customerList.get(i).getCustomerEmail().equals(email))
+                {
+                    System.out.println(false);
+                    return false;
+                }
+            }
+            System.out.println(true);
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("'Verify Customer does not exist' Error");
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public String firstLetterUpperCase(String words)
+    {
+        //String words = "";
+        char[] wordsArray = words.toCharArray();
+        wordsArray[0] = Character.toUpperCase(wordsArray[0]);
+        for (int i = 1; i < wordsArray.length; i++) {
+            if (Character.isWhitespace(wordsArray[i - 1])) {
+                wordsArray[i] = Character.toUpperCase(wordsArray[i]);
+            }
+        }
+        words = String.valueOf(wordsArray);
+        System.out.println(words);//testing
+        return words;
     }
 }

@@ -207,7 +207,7 @@ public class CustomerVehicleController implements Initializable {
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                boolean checker = vSys.addEditVehicle(reg.getText(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
 
                 if (checker) {
                     Stage stage = null;
@@ -272,7 +272,7 @@ public class CustomerVehicleController implements Initializable {
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                checker = vSys.addEditVehicle(reg.getText(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getText(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
 
                 if (checker) {
                     BookingController.getInstance().show();
@@ -336,6 +336,12 @@ public class CustomerVehicleController implements Initializable {
     }
 
     public void clearVehicleFields() {
+        mod.setDisable(false);
+        manuf.setDisable(false);
+        eSize.setDisable(false);
+        vType.setDisable(false);
+        fType.setDisable(false);
+
         reg.clear();
         mod.clear();
         manuf.clear();
@@ -352,6 +358,8 @@ public class CustomerVehicleController implements Initializable {
         cByWarranty.setValue(null);
         VehicleS.setValue(null);
         hiddenWarranty();
+
+
     }
 
     public boolean checkVehicleFields() {
@@ -363,6 +371,9 @@ public class CustomerVehicleController implements Initializable {
                     check = false;
                 }
             }
+        }
+        else{
+            errorAlert("Make sure all fields required are not blank except for Warranty Company \nname, address and expiry date when Warranty 'false' is selected");
         }
         return check;
     }
@@ -391,7 +402,8 @@ public class CustomerVehicleController implements Initializable {
             return true;
         }
         catch (Exception e) {
-            errorAlert(e.getMessage() + " and make sure all fields required are not blank");
+            errorAlert("Make sure all fields required are not blank");
+            e.printStackTrace();
             return false;
         }
     }
@@ -439,7 +451,7 @@ public class CustomerVehicleController implements Initializable {
         else if (VehicleS.getSelectionModel().isSelected(13)) {
             setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
         }
-        else {
+        else if (VehicleS.getSelectionModel().isSelected(14)) {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
         }
     }
@@ -450,6 +462,12 @@ public class CustomerVehicleController implements Initializable {
         eSize.setText(engineSize);
         vType.setValue(vehicleType);
         fType.setValue(fuelType);
+
+        mod.setDisable(true);
+        manuf.setDisable(true);
+        eSize.setDisable(true);
+        vType.setDisable(true);
+        fType.setDisable(true);
     }
 
     public void setVehicleCustomerID() {
