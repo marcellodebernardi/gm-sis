@@ -466,7 +466,6 @@ public class VehicleController implements Initializable {
         regS.setText("");
         manufS.setText("");
         typeS.setValue(null);
-        VehicleTS.setValue(null);
         DisplayTable(arrayList);
     }
 
@@ -921,6 +920,8 @@ public class VehicleController implements Initializable {
         }
     }
 
+
+
     public void selectVehicleS() {
         List<Vehicle> arrayList;
         if (VehicleTS.getSelectionModel().isSelected(0)) {
@@ -1101,6 +1102,7 @@ public class VehicleController implements Initializable {
 
     public void ShowParts() {
         try {
+            DateTimeFormatter dTFM = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             DiagRepBooking DRB = BookingsTable.getSelectionModel().getSelectedItem();
             List<PartOccurrence> parts = DRB.getRequiredPartsList();
             if (parts.size() == 0 || parts == null) {
@@ -1118,7 +1120,8 @@ public class VehicleController implements Initializable {
                 date = null;
             }
             else {
-                date = DRB.getDiagnosisStart().toString();
+                ZonedDateTime zdt = DRB.getDiagnosisStart();
+                date = zdt.format(dTFM);
             }
             PartLabel.setText("Booking DiagStart: " + date);
             PartLabel.setVisible(true);
@@ -1183,6 +1186,7 @@ public class VehicleController implements Initializable {
     }
 
     public void newVehicle() {
+        reg.setEditable(true);
         reg.setDisable(false);
         deleteV.setDisable(true);
         AddEditL.setText("Add Vehicle");
@@ -1421,7 +1425,7 @@ public class VehicleController implements Initializable {
             }
             if (!(mod.getText().matches("[A-Za-z0-9 ]+")))
             {
-                Errors.appendText("Model is not correct format and cant have moreThan than moreThan space \n");
+                Errors.appendText("Model is not correct format     \n");
                 setTextFieldBackground(mod);
                 check =false;
             }

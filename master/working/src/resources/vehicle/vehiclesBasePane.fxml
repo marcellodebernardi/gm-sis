@@ -180,50 +180,29 @@
                             <center>
                                 <GridPane BorderPane.alignment="CENTER">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="72.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="160.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="150.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="233.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="75.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="96.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="153.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="173.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="136.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="131.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="115.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label prefHeight="17.0" prefWidth="155.0" text="Search Bar" />
+                                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="155.0" text="Search Bar" />
                                         <TextField fx:id="regS" onKeyTyped="#searchVehicle" prefHeight="27.0" prefWidth="141.0" promptText="enter vehicle reg" GridPane.columnIndex="1" />
                                         <Button mnemonicParsing="false" onAction="#searchVehicleA" prefHeight="27.0" prefWidth="67.0" text="View All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
                                         <Button fx:id="DeleteVT" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#DeleteSelectedVehicle" text="Delete" GridPane.columnIndex="5" GridPane.halignment="RIGHT" />
                                         <Button fx:id="EditVehicle" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#VehicleEditS" prefHeight="27.0" prefWidth="58.0" text="Edit " textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="LEFT" />
                                         <TextField fx:id="manufS" onKeyTyped="#searchVehicle" prefHeight="27.0" prefWidth="299.0" promptText="enter manufacturer" GridPane.columnIndex="2" />
-                                        <ComboBox fx:id="typeS" onAction="#searchVehicle" prefHeight="27.0" prefWidth="117.0" promptText="Type" GridPane.columnIndex="3">
+                                        <ComboBox fx:id="typeS" onAction="#searchVehicle" prefHeight="27.0" prefWidth="121.0" promptText="Type" GridPane.columnIndex="3">
                                             <items>
                                                 <FXCollections fx:factory="observableArrayList">
                                                     <String fx:value="Car" />
                                                     <String fx:value="Van" />
                                                     <String fx:value="Truck" />
-                                                </FXCollections>
-                                            </items>
-                                        </ComboBox>
-                                        <ComboBox fx:id="VehicleTS" onAction="#selectVehicleS" prefHeight="27.0" prefWidth="113.0" promptText="Template" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
-                                            <items>
-                                                <FXCollections fx:factory="observableArrayList">
-                                                    <String fx:value="Honda Civic 1.6 Litre Petrol" />
-                                                    <String fx:value="Ford Focus 1.2 Litre Diesel" />
-                                                    <String fx:value="BMW 5 Series 2.2 Litre Petrol" />
-                                                    <String fx:value="BMW 3 Series 2.9 Litre Diesel" />
-                                                    <String fx:value="Mercedes A Class 3.0 Litre Petrol" />
-                                                    <String fx:value="Ford Transit 2.2 Litre Petrol" />
-                                                    <String fx:value="Nissan Roadster 1.2 Litre Diesel" />
-                                                    <String fx:value="Audi Y-8 Van 3.6 Litre Petrol" />
-                                                    <String fx:value="Ferrari Enzo 4.4 Litre Petrol" />
-                                                    <String fx:value="Ford Truckster 2.8 Litre Diesel" />
-                                                    <String fx:value="Renault Hybrid Van 2.3 Litre Petrol" />
-                                                    <String fx:value="MG Sport 2.0 Litre Diesel" />
-                                                    <String fx:value="Acura Model S 2.2 Litre Petrol" />
-                                                    <String fx:value="Bentley Arnage 4.0 Litre Petrol" />
-                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel" />
                                                 </FXCollections>
                                             </items>
                                         </ComboBox>
