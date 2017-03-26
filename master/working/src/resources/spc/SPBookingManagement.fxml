@@ -56,15 +56,15 @@
                 <DatePicker fx:id="instaDate" editable="false" layoutX="647.0" layoutY="442.0" prefHeight="29.0" prefWidth="177.0" promptText="Installation Date" visible="false" />
                 <Button fx:id="deleteInsta" layoutX="24.0" layoutY="298.0" mnemonicParsing="false" onAction="#deleteInstallation" prefHeight="25.0" prefWidth="96.0" text="-Installation" visible="false" />
                 <Button fx:id="editInsta" layoutX="24.0" layoutY="337.0" mnemonicParsing="false" onAction="#editInstallation" prefHeight="28.0" prefWidth="96.0" text="Edit Installation" visible="false" />
-                <TextField fx:id="instaVReg" layoutX="465.0" layoutY="443.0" promptText="Vehicle Reg:" visible="false" />
+                <TextField fx:id="instaVReg" layoutX="465.0" layoutY="443.0" onAction="#findAvailableBookings" promptText="Vehicle Reg:" visible="false" />
                 <Button fx:id="allowUpdate" layoutX="24.0" layoutY="378.0" mnemonicParsing="false" onAction="#updateInstallation" prefHeight="21.0" prefWidth="99.0" text="Update" visible="false" />
-                <Button fx:id="cancelInstallationUpdate" layoutX="298.0" layoutY="485.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" visible="false" />
+                <Button fx:id="cancelInstallationUpdate" layoutX="466.0" layoutY="498.0" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="27.0" prefWidth="130.0" text="Cancel" visible="false" />
                 <Label fx:id="instaAbsID_lbl" layoutX="134.0" layoutY="428.0" prefHeight="0.0" prefWidth="176.0" text="Part Description ID:" visible="false" />
                 <Label fx:id="wEndDate_lbl" layoutX="845.0" layoutY="428.0" prefHeight="0.0" prefWidth="176.0" text="Warranty End date:" visible="false" />
                 <Label fx:id="instaDate_lbl" layoutX="648.0" layoutY="427.0" prefHeight="0.0" prefWidth="176.0" text="Installation Date:" visible="false" />
                 <Label fx:id="instaOccID_lbl" layoutX="295.0" layoutY="428.0" prefHeight="0.0" prefWidth="176.0" text="Part Occurrence ID:" visible="false" />
                 <Label fx:id="instaVReg_lbl" layoutX="465.0" layoutY="428.0" prefHeight="0.0" prefWidth="176.0" text="Vehicle Registration:" visible="false" />
-                <Button fx:id="clearPartsFields" layoutX="132.0" layoutY="484.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="27.0" prefWidth="130.0" text="Clear" visible="false" />
+                <Button fx:id="clearPartsFields" layoutX="298.0" layoutY="498.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="27.0" prefWidth="130.0" text="Clear" visible="false" />
                 <Label fx:id="lbl_booking_found" layoutX="212.0" layoutY="11.0" prefHeight="10.0" prefWidth="105.0" text="Booking found" textFill="#229e1c" visible="false" />
                 <Label fx:id="lbl_booking_notFound" layoutX="210.0" layoutY="11.0" prefHeight="17.0" prefWidth="117.0" text="No Booking found" textFill="#ff441a" visible="false" />
                 <Label fx:id="item_found_lbl" layoutX="414.0" layoutY="11.0" prefHeight="17.0" prefWidth="198.0" text="Vehicle found" textFill="#229e1c" visible="false" />
@@ -81,6 +81,8 @@
                   <TextField fx:id="bookingSPCID" layoutX="129.0" layoutY="89.0" />
                   <Label layoutX="128.0" layoutY="73.0" prefHeight="16.0" prefWidth="168.0" text="Specialist repair center ID:" />
                 <Button fx:id="addInsta" layoutX="24.0" layoutY="259.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="27.0" prefWidth="96.0" text="+Installation" visible="false" />
+            <ComboBox fx:id="bookingIDForInsta" layoutX="132.0" layoutY="498.0" prefWidth="150.0" promptText="Select a booking" visible="false" />
+            <Label fx:id="bookingIDLabel" layoutX="134.0" layoutY="480.0" text="Select a booking" visible="false" />
             </children>
         </Pane>
     </bottom>

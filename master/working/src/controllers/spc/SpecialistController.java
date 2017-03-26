@@ -135,6 +135,10 @@ public class SpecialistController implements Initializable {
     private TextField instaVReg;
     @FXML
     private Label instaAbsID_lbl, instaOccID_lbl, instaVReg_lbl, instaDate_lbl, wEndDate_lbl = new Label();
+    @FXML
+    private ObservableList<Integer> integerObservableList = FXCollections.observableArrayList();
+    @FXML
+    private ComboBox<Integer> bookingIDForInsta = new ComboBox<>();
 
     public void initialize(URL location, ResourceBundle resources) {
         bookingDeliveryDate.setDayCellFactory(dateChecker);
@@ -244,6 +248,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setEditable(false);
                 spcRepID = partRepair.getSpcRepID();
             }
+            clearFields();
         }
         catch (NullPointerException e) {
             e.printStackTrace();
@@ -527,12 +532,7 @@ public class SpecialistController implements Initializable {
                 if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
                     Bill bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
                     diagRepBooking.setBill(bill);
-                    try {
-                        BookingSystem.getInstance().commitBooking(diagRepBooking);
-                    }
-                    catch (UnavailableDateException e) {
-                        // do nothing, exception should never be thrown here :)
-                    }
+                    BookingSystem.getInstance().commitBooking(diagRepBooking);
                 }
                 else {
                     Bill bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
@@ -591,7 +591,7 @@ public class SpecialistController implements Initializable {
             }
             cancelEditing();
         }
-        catch (InvalidDateException e) {
+        catch (InvalidDateException | UnavailableDateException e) {
             showAlert(e.getMessage());
         }
 
@@ -763,6 +763,8 @@ public class SpecialistController implements Initializable {
             instaVReg_lbl.setVisible(true);
             wEndDate_lbl.setVisible(true);
             clearPartsFields.setVisible(true);
+            bookingIDLabel.setVisible(true);
+            bookingIDForInsta.setVisible(true);
         }
         else {
             showAlert("Selected item is not a vehicle!");
@@ -818,10 +820,12 @@ public class SpecialistController implements Initializable {
             wEndDate.setText(simpleDateFormat.format(date));
         }
         catch (NullPointerException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
+    @FXML
+    private Label bookingIDLabel = new Label();
     public void hideInstallations() {
         Installations.setVisible(false);
         hideInstalls.setVisible(false);
@@ -843,6 +847,8 @@ public class SpecialistController implements Initializable {
         partDes.setVisible(false);
         partSerial.setVisible(false);
         clearFields();
+        bookingIDForInsta.setVisible(false);
+        bookingIDLabel.setVisible(false);
     }
 
 
@@ -872,6 +878,10 @@ public class SpecialistController implements Initializable {
             Character c = partDes.getSelectionModel().getSelectedItem().trim().charAt(0);
             int partAbs = c.getNumericValue(c);
             PartAbstraction partAbstraction = partsSystem.getPartbyID(partAbs);
+            DiagRepBooking diagRepBooking = bookingSystem.getBookingByID(bookingIDForInsta.getSelectionModel().getSelectedItem());
+            Bill bill = new Bill(partAbstraction.getPartPrice() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+            diagRepBooking.setBill(bill);
+            specRepairSystem.submitBooking(diagRepBooking);
             partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
             partsSystem.commitAbstraction(partAbstraction)  ;
             Installation installation = new Installation(ZonedDateTime.of(instaDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instaDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), instaVReg.getText(), partAbs, partOccurrence);
@@ -881,7 +891,13 @@ public class SpecialistController implements Initializable {
             displayInstallations(installations);
         }
         catch (Exception e) {
-            showAlert("Please enter a valid Vehicle registration.");
+            if(partSerial.getSelectionModel().getSelectedItem() == null)
+            {
+                showAlert("Please select a valid part occurrence.");
+            }
+            else {
+                showAlert("Please enter a valid Vehicle registration.");
+            }
         }
 
     }
@@ -943,6 +959,17 @@ public class SpecialistController implements Initializable {
         alert.setTitle("Information");
         alert.setHeaderText(message);
         alert.showAndWait();
+    }
+
+    public void findAvailableBookings()
+    {
+        Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(instaVReg.getText().trim().toUpperCase());
+       List<DiagRepBooking> diagRepBookings = vehicle.getBookingList();
+       for(DiagRepBooking diagRepBooking: diagRepBookings)
+       {
+           integerObservableList.add(diagRepBooking.getBookingID());
+       }
+       bookingIDForInsta.setItems(integerObservableList);
     }
 
 }
