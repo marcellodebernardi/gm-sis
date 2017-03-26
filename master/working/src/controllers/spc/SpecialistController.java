@@ -934,11 +934,22 @@ public class SpecialistController implements Initializable {
     public void deleteInstallation() {
         try {
             Installation installation = specRepairSystem.getByInstallationID(installationID);
-            if (deleteConfirmation("Are you sure you want to delete this installation?")) {
-                List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
-                specRepairSystem.deleteInstallation(installation.getInstallationID());
-                findSRCBookings();
-                displayInstallations(installations);
+            PartOccurrence partOccurrence = installation.getPartOccurrence();
+            DiagRepBooking diagRepBooking = bookingSystem.getBookingByID(partOccurrence.getBookingID());
+            if(diagRepBooking.isComplete())
+            {
+                showAlert("Cannot delete an installation for a complete booking!");
+            }
+            else {
+                if(deleteConfirmation("Are you sure you want to delete this installation?")) {
+                    Bill bill = new Bill(diagRepBooking.getBillAmount()-partOccurrence.getPartAbstraction().getPartPrice(), diagRepBooking.getBillSettled());
+                    diagRepBooking.setBill(bill);
+                    specRepairSystem.submitBooking(diagRepBooking);
+                    List<Installation> installations = specRepairSystem.getVehicleInstallations(installation.getVehicleRegNumber());
+                    specRepairSystem.deleteInstallation(installation.getInstallationID());
+                    findSRCBookings();
+                    displayInstallations(installations);
+                }
             }
         }
         catch (NullPointerException e) {

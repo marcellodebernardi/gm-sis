@@ -547,6 +547,7 @@ public class PartsController implements Initializable {
             pSys.commitAbstraction(partAbstraction);
             //saveChanges();
             viewAllBookingsClick();
+            updateTable();
             partOccurrence.setBookingID(diagRepBooking.getBookingID());
             pSys.commitInst(installation);
 
