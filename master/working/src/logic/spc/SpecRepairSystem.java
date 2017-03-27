@@ -338,5 +338,10 @@ public class SpecRepairSystem {
         persistence.commitItem(booking);
     }
 
+    public List<PartRepair> getAllPartRepairs()
+        {
+            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", moreThan, 0));
+        }
+
 
 }

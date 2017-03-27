@@ -986,4 +986,10 @@ public class SpecialistController implements Initializable {
        bookingIDForInsta.setItems(integerObservableList);
     }
 
+    public void findPartRepairs()
+    {
+        List<PartRepair> partRepairs = specRepairSystem.returnAllPartRepairs();
+        displaySpecRepBookings(partRepairs);
+    }
+
 }

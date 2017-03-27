@@ -89,11 +89,12 @@
     <left>
         <Pane prefHeight="201.0" prefWidth="128.0" BorderPane.alignment="CENTER">
          <children>
-                <Button fx:id="editSRBooking" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="23.0" prefWidth="98.0" text="Edit" />
-                <Button fx:id="viewVehicleInstallations" layoutX="15.0" layoutY="88.0" mnemonicParsing="false" onAction="#showInstallations" prefHeight="26.0" prefWidth="97.0" text="View Parts" />
-                <Button fx:id="deleteSRBooking" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="27.0" prefWidth="98.0" text="Delete" />
-                <Button layoutX="14.0" layoutY="126.0" mnemonicParsing="false" onAction="#queryReturned" prefHeight="22.0" prefWidth="98.0" text="Returned" />
-                <Button layoutX="15.0" layoutY="162.0" mnemonicParsing="false" onAction="#queryOutstanding" prefHeight="23.0" prefWidth="99.0" text="Outstanding" />
+                <Button fx:id="editSRBooking" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="27.0" prefWidth="98.0" text="Edit" />
+                <Button fx:id="viewVehicleInstallations" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#showInstallations" prefHeight="27.0" prefWidth="97.0" text="View Parts" />
+                <Button fx:id="deleteSRBooking" layoutX="13.0" layoutY="45.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="27.0" prefWidth="98.0" text="Delete" />
+                <Button layoutX="14.0" layoutY="155.0" mnemonicParsing="false" onAction="#queryReturned" prefHeight="27.0" prefWidth="98.0" text="Returned" />
+                <Button layoutX="14.0" layoutY="191.0" mnemonicParsing="false" onAction="#queryOutstanding" prefHeight="27.0" prefWidth="98.0" text="Outstanding" />
+            <Button layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#findPartRepairs" prefHeight="27.0" prefWidth="98.0" text="Part Repairs" />
          </children></Pane>
     </left>
     <right>
