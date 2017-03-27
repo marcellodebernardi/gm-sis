@@ -189,6 +189,9 @@ public class VehicleController implements Initializable {
         resetColourPicker(col);
         errorsLabel.setVisible(false);
         Errors.setStyle(null);
+        Errors.setVisible(false);
+        Errors.clear();
+
     }
 
     public void resetTextField(TextField textField)
@@ -263,6 +266,7 @@ public class VehicleController implements Initializable {
                     W = false;
                     wName.setText("");
                     wCompAddress.setText("");
+                    wed = new Date(0);
                     //wExpirationDate = null;
                 }
                 if (addOrEdit.equals("add")) {
@@ -329,7 +333,9 @@ public class VehicleController implements Initializable {
     @FXML
     public void VehicleEditS() {
         try {
+            reset();
             reg.setEditable(false);
+            cID.setDisable(true);
             Vehicle vehicle = searchTable.getSelectionModel().getSelectedItem();
             if (vehicle == null) {
                 throw new Exception();
@@ -895,7 +901,7 @@ public class VehicleController implements Initializable {
             setVehicle("Roadster", "Nissan", "1.2", "Truck", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(7)) {
-            setVehicle("Y-8 Van", "Audi", "3.6", "Van", "Petrol");
+            setVehicle("Y8 Van", "Audi", "3.6", "Van", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(8)) {
             setVehicle("Enzo", "Ferrari", "4.4", "Car", "Petrol");
@@ -904,7 +910,7 @@ public class VehicleController implements Initializable {
             setVehicle("Truckster", "Ford", "2.8", "Truck", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(10)) {
-            setVehicle("Hybrid Van", "Renault", "2.3", "Can", "Petrol");
+            setVehicle("Hybrid Van", "Renault", "2.3", "Van", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(11)) {
             setVehicle("Sport", "MG", "2.0", "Car", "Diesel");
@@ -918,59 +924,16 @@ public class VehicleController implements Initializable {
         else {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
         }
+        vType.setDisable(true);
+        manuf.setDisable(true);
+        mod.setDisable(true);
+        eSize.setDisable(true);
+        fType.setDisable(true);
     }
 
 
 
-    public void selectVehicleS() {
-        List<Vehicle> arrayList;
-        if (VehicleTS.getSelectionModel().isSelected(0)) {
-            arrayList = vSys.searchByTemplate("Civic", "Honda", 1.6, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(1)) {
-            arrayList = vSys.searchByTemplate("Focus", "Ford", 1.2, VehicleType.Car, FuelType.diesel);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(2)) {
-            arrayList = vSys.searchByTemplate("5 Series", "BMw", 2.2, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(3)) {
-            arrayList = vSys.searchByTemplate("3 Series", "BMw", 2.9, VehicleType.Car, FuelType.diesel);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(4)) {
-            arrayList = vSys.searchByTemplate("A Class", "Mercedes", 3.0, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(5)) {
-            arrayList = vSys.searchByTemplate("Transit", "Ford", 2.2, VehicleType.Van, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(6)) {
-            arrayList = vSys.searchByTemplate("Roadster", "Nissan", 1.2, VehicleType.Truck, FuelType.diesel);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(7)) {
-            arrayList = vSys.searchByTemplate("Y-8 Van", "Audi", 3.6, VehicleType.Van, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(8)) {
-            arrayList = vSys.searchByTemplate("Enzo", "Ferrari", 4.4, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(9)) {
-            arrayList = vSys.searchByTemplate("Truckster", "Ford", 2.8, VehicleType.Truck, FuelType.diesel);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(10)) {
-            arrayList = vSys.searchByTemplate("Hybrid Van", "Renault", 2.3, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(11)) {
-            arrayList = vSys.searchByTemplate("Sport", "MG", 2.0, VehicleType.Car, FuelType.diesel);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(12)) {
-            arrayList = vSys.searchByTemplate("Model S", "Acura", 2.2, VehicleType.Car, FuelType.petrol);
-        }
-        else if (VehicleTS.getSelectionModel().isSelected(13)) {
-            arrayList = vSys.searchByTemplate("Arnage", "Bentley", 4.0, VehicleType.Car, FuelType.petrol);
-        }
-        else {
-            arrayList = vSys.searchByTemplate("Fire Truck", "DAF", 3.8, VehicleType.Truck, FuelType.diesel);
-        }
-        DisplayTable(arrayList);
-    }
+
 
     public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType) {
         mod.setText(model);
@@ -981,6 +944,12 @@ public class VehicleController implements Initializable {
     }
 
     public void ClearFields() {
+        VehicleS.setValue(null);
+        vType.setDisable(false);
+        manuf.setDisable(false);
+        mod.setDisable(false);
+        eSize.setDisable(false);
+        fType.setDisable(false);
         reg.clear();
         cID.setValue(null);
         mod.clear();
@@ -1188,6 +1157,7 @@ public class VehicleController implements Initializable {
     public void newVehicle() {
         reg.setEditable(true);
         reg.setDisable(false);
+        cID.setDisable(false);
         deleteV.setDisable(true);
         AddEditL.setText("Add Vehicle");
         VehicleS.setDisable(false);
@@ -1290,8 +1260,6 @@ public class VehicleController implements Initializable {
     public boolean CheckFormat() {
         try {
             boolean check = true;
-            Errors.setStyle("-fx-background-color: #ffc5c1");
-            Errors.setEditable(false);
             Errors.clear();
             if (cID.getSelectionModel().getSelectedItem() == null)
             {
@@ -1331,13 +1299,13 @@ public class VehicleController implements Initializable {
                         check =false;
                     }
 
-                    if (!(wName.getText().matches("[A-Za-z0-9 ]+")))
+                    if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
                     {
                         Errors.appendText("Warranty name is not correct format  \n");
                         setTextFieldBackground(wName);
                         check =false;
                     }
-                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9 ]+")))
+                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
                     {
                         Errors.appendText("Warranty Company is not correct format  \n");
                         setTextFieldBackground(wCompAddress);
@@ -1359,13 +1327,13 @@ public class VehicleController implements Initializable {
                         check =false;
                     }
 
-                    if (!(wName.getText().matches("[A-Za-z0-9 ]+")))
+                    if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
                     {
                         Errors.appendText("Warranty name is not correct format  \n");
                         setTextFieldBackground(wName);
                         check =false;
                     }
-                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9 ]+")))
+                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
                     {
                         Errors.appendText("Warranty Company is not correct format  \n");
                         setTextFieldBackground(wCompAddress);
@@ -1445,6 +1413,8 @@ public class VehicleController implements Initializable {
             if (!check)
             {
                 errorsLabel.setVisible(true);
+                Errors.setStyle("-fx-background-color: #ffc5c1");
+                Errors.setVisible(true);
             }
             return check;
         }

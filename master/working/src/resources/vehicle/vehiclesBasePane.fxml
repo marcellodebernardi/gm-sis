@@ -43,7 +43,7 @@
                                                     <String fx:value="Mercedes A Class 3.0 Litre Petrol" />
                                                     <String fx:value="Ford Transit 2.2 Litre Petrol" />
                                                     <String fx:value="Nissan Roadster 1.2 Litre Diesel" />
-                                                    <String fx:value="Audi Y-8 Van 3.6 Litre Petrol" />
+                                                    <String fx:value="Audi Y8 Van 3.6 Litre Petrol" />
                                                     <String fx:value="Ferrari Enzo 4.4 Litre Petrol" />
                                                     <String fx:value="Ford Truckster 2.8 Litre Diesel" />
                                                     <String fx:value="Renault Hybrid Van 2.3 Litre Petrol" />
@@ -167,7 +167,7 @@
                   <Label fx:id="errorsLabel" alignment="CENTER" text="Errors" textAlignment="CENTER" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
-                      <TextArea fx:id="Errors" prefHeight="92.0" prefWidth="287.0" wrapText="true" />
+                      <TextArea fx:id="Errors" editable="false" prefHeight="92.0" prefWidth="287.0" visible="false" wrapText="true" />
             </children>
         </FlowPane>
     </left>
