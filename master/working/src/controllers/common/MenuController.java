@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import logic.authentication.AuthenticationSystem;
 import main.Main;
 
@@ -146,7 +147,9 @@ public class MenuController implements Initializable {
         {
             if(confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true)
             {
-                LoginController.getInstance().exitHandler();
+                Stage stage =((Stage)logoutButton.getScene().getWindow());
+                stage.close();
+                LoginController.getInstance().logoutHandler();
             }
         }
         catch(Exception e)

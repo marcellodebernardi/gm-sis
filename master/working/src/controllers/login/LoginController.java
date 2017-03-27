@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import logic.authentication.AuthenticationSystem;
 import main.Main;
 
@@ -46,9 +47,20 @@ public class LoginController {
         }
     }
 
-    @FXML
     public void exitHandler() {
-        System.exit(0);
+    System.exit(0);
+    }
+
+    @FXML
+    public void logoutHandler() {
+        try {
+            Main.getInstance().start(new Stage());
+        }
+        catch (Exception e)
+        {
+            System.out.println("Broken");
+        }
+
     }
 
     private void showAlert() {
