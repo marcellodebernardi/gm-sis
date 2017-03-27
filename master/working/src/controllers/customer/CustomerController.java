@@ -186,7 +186,6 @@ public class CustomerController implements Initializable {
             }
         }
         catch (Exception e) {
-            System.out.println("Add Customer Error");
         }
     }
 
@@ -221,7 +220,6 @@ public class CustomerController implements Initializable {
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
         catch (Exception e) {
-            System.out.println("Delete Customer Error");
         }
     }
 
@@ -257,7 +255,6 @@ public class CustomerController implements Initializable {
             }
         }
         catch (Exception e) {
-            System.out.println("Delete Customer Error");
         }
     }
 
@@ -272,7 +269,6 @@ public class CustomerController implements Initializable {
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
         catch (Exception e) {
-            System.out.println("Search All Customers Error");
         }
     }
 
@@ -296,7 +292,6 @@ public class CustomerController implements Initializable {
             tableViewOfCustomersFromDB(customers);
         }
         catch (Exception e) {
-            System.out.println("Search by Customer Type Error");
         }
     }
 
@@ -323,7 +318,6 @@ public class CustomerController implements Initializable {
             tableViewOfCustomersFromDB(searchCustomerList);
         }
         catch (Exception e) {
-            System.out.println("Search Customer Error");
         }
     }
 
@@ -380,7 +374,6 @@ public class CustomerController implements Initializable {
             customerTable.setItems(tableEntriesCustomer);
         }
         catch (Exception e) {
-            System.out.println("Customer Table view Error");
         }
     }
 
@@ -408,7 +401,6 @@ public class CustomerController implements Initializable {
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
         catch (Exception e) {
-            System.out.println("Edit Customer Error");
         }
     }
 
@@ -461,7 +453,6 @@ public class CustomerController implements Initializable {
             customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
         }
         catch (Exception e) {
-            System.out.println("Update Customer Error");
         }
     }
 
@@ -529,7 +520,6 @@ public class CustomerController implements Initializable {
             return searchVehicleList;
         }
         catch (Exception e) {
-            System.out.println("Search Customer Vehicle Error");
         }
         return null;
     }
@@ -542,7 +532,6 @@ public class CustomerController implements Initializable {
             return searchBookingList;
         }
         catch (Exception e) {
-            System.out.println("Search Customer Booking Error");
         }
         return null;
     }
@@ -576,7 +565,6 @@ public class CustomerController implements Initializable {
             return partList;
         }
         catch (Exception e) {
-            System.out.println("Search Customer Vehicle Part Error");
         }
         return null;
     }
@@ -586,7 +574,6 @@ public class CustomerController implements Initializable {
             BookingController.getInstance().show();
         }
         catch (Exception e) {
-            System.out.println("Initiate new booking Error");
         }
     }
 
@@ -598,7 +585,6 @@ public class CustomerController implements Initializable {
             }
         }
         catch (Exception e) {
-            System.out.println("Logout from CustomerController Error");
         }
     }
 
@@ -656,7 +642,6 @@ public class CustomerController implements Initializable {
             tableViewOfCustomerVehiclePartFromDB();//MAY REMOVE
         }
         catch (Exception e) {
-            System.out.println("tableViewOfCustomerVehicleFromDB Error");
         }
     }
 
@@ -684,7 +669,6 @@ public class CustomerController implements Initializable {
             tableViewOfCustomerBookingFromDB();//for populating
         }
         catch (Exception e) {
-            System.out.println("tableViewOfCustomerVehiclePartFromDB Error");
         }
     }
 
@@ -732,7 +716,6 @@ public class CustomerController implements Initializable {
             customerBookingTable.setItems(tableEntriesBooking);
         }
         catch (Exception e) {
-            System.out.println("tableViewOfCustomerBookingFromDB Error");
         }
     }
 
@@ -873,7 +856,6 @@ public class CustomerController implements Initializable {
             return true;
         }
         catch (Exception e) {
-            errorAlert(e.getMessage() + ": Add or Update Customer Error");
             return false;
         }
     }
@@ -896,9 +878,7 @@ public class CustomerController implements Initializable {
             System.out.println(true);
             return true;
         }
-        catch(Exception e)
-        {
-            System.out.println("'Verify Customer does not exist' Error");
+        catch(Exception e) {
         }
         return false;
     }

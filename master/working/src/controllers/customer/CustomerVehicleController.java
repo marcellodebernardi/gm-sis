@@ -134,7 +134,6 @@ public class CustomerVehicleController implements Initializable {
             }
         }
         catch (IOException e) {
-            System.out.println("Show Vehicle Popup Error");
         }
         return addVehicleStage;
     }
@@ -217,7 +216,6 @@ public class CustomerVehicleController implements Initializable {
             return true;
         }
         catch (Exception e) {
-            System.out.println("Add Customer's Vehicle Error");
         }
         return false;
     }
@@ -281,7 +279,6 @@ public class CustomerVehicleController implements Initializable {
             }
         }
         catch (Exception e) {
-            System.out.println("Add Customer's Vehicle Error");
         }
     }
 
@@ -495,7 +492,6 @@ public class CustomerVehicleController implements Initializable {
             wExpirationDate.setDayCellFactory(weDayFactory);
         }
         catch (Exception e) {
-            System.out.println("Initialize CustomerVehicleController.java class Error");
         }
     }
 
