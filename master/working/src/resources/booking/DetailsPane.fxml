@@ -54,25 +54,31 @@
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
-            <TableView GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="bookingPartsTable" fx:id="partsTable">
-                <columns>
-                    <TableColumn text="Name" fx:id="nameColumn"/>
-                    <TableColumn text="Cost" fx:id="costColumn"/>
-                    <TableColumn text="Subcontracted" fx:id="subcontractedColumn"/>
-                </columns>
-            </TableView>
-            <HBox GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                  id="partsButtonsHBox">
-                <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart"/>
-                <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart"/>
-            </HBox>
+            <BorderPane GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2" >
+                <center>
+                    <TableView
+                            id="bookingPartsTable" fx:id="partsTable">
+                        <columns>
+                            <TableColumn text="Name" fx:id="nameColumn"/>
+                            <TableColumn text="Cost" fx:id="costColumn"/>
+                            <TableColumn text="SPC" fx:id="subcontractedColumn"/>
+                        </columns>
+                    </TableView>
+                </center>
+                <right>
+                    <VBox id="partsButtonsVBox">
+                        <Button id="addPartButton" fx:id="addPartButton" onAction="#addPart"/>
+                        <Button id="removePartButton" fx:id="removePartButton" onAction="#removeSelectedPart"/>
+                    </VBox>
+                </right>
+            </BorderPane>
 
-            <Label GridPane.rowIndex="10" GridPane.columnIndex="0">Mileage</Label>
-            <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <!-- Mileage -->
+            <Label GridPane.rowIndex="9" GridPane.columnIndex="0">Mileage</Label>
+            <TextField GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="vehicleMileageTextField" fx:id="mileageTextField"/>
-            <Label GridPane.rowIndex="11" GridPane.columnIndex="0">New Mileage</Label>
-            <TextField GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.columnSpan="2"
+            <Label GridPane.rowIndex="10" GridPane.columnIndex="0">New Mileage</Label>
+            <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="newVehicleMileageTextField" fx:id="newMileageTextField"/>
         </GridPane>
     </center>

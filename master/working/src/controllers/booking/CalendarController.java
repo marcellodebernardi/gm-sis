@@ -107,12 +107,7 @@ public class CalendarController {
 
     /** Changes the mechanics whose bookings are displayed on the agenda */
     @FXML private void selectCalendarMechanic() {
-        Mechanic mechanic = bookingSystem.getMechanicByID(Integer.parseInt(calendarMechanicComboBox
-                .getSelectionModel()
-                .getSelectedItem()
-                .toString()
-                .split(":")[0])
-        );
+        Mechanic mechanic = (Mechanic) calendarMechanicComboBox.getSelectionModel().getSelectedItem();
         refreshAgenda(mechanic.getBookings());
     }
 

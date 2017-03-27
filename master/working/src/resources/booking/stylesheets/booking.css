@@ -40,12 +40,13 @@
     -fx-pref-height: 10em;
 }
 
-#partsButtonsHBox {
+#partsButtonsVBox {
     -fx-alignment: top-right;
     -fx-spacing: 0.5em;
+    -fx-padding: 0em 0em 0em 1em;
 }
 
-#partsButtonsHBox Button {
+#partsButtonsVBox Button {
     -fx-min-height: 25px;
     -fx-min-width: 25px;
     -fx-background-size: 25px 25px;
