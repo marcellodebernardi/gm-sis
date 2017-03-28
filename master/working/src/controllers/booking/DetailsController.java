@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static java.time.DayOfWeek.SUNDAY;
 import static logic.booking.UnavailableDateException.Appointment.DIAGNOSIS;
+import static logic.booking.UnavailableDateException.Cause.CLOSED;
 import static logic.booking.UnavailableDateException.Cause.HOLIDAY;
 
 /**
@@ -85,10 +86,12 @@ public class DetailsController {
     private PopOver vehicleValidationPopOver;
     private PopOver mechanicValidationPopOver;
     private PopOver mileageValidationPopOver;
-    private PopOver invalidTimePopOver;
     private PopOver invertedTimePopOver;
     private PopOver repairNotStartedPopOver;
     private PopOver notSettledPopOver;
+    private PopOver holidayPopOver;
+    private PopOver closedPopOver;
+    private PopOver clashPopOver;
 
 
     public DetailsController() {
@@ -337,16 +340,15 @@ public class DetailsController {
             }
         }
         catch (UnavailableDateException e) {
-            invalidTimePopOver = new PopOver(new Label(e.reason().toString()));
-            invalidTimePopOver.setCornerRadius(0);
-            invalidTimePopOver.setDetachable(false);
-
-            Node targetNode;
-            if (e.reason() == HOLIDAY)
-                targetNode = e.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker;
-            else targetNode = e.concerning() == DIAGNOSIS ? diagnosisEndTimeTextField : repairEndTimeTextField;
-
-            invalidTimePopOver.show(targetNode);
+            if (e.reason() == HOLIDAY) {
+                displayHolidayPopOver(e);
+            }
+            else if (e.reason() == CLOSED) {
+                displayClosedPopOver(e);
+            }
+            else {
+                displayClashPopOver(e);
+            }
         }
         catch (NullPointerException e) {
             e.printStackTrace();
@@ -743,6 +745,8 @@ public class DetailsController {
                 invertedTimePopOver = new PopOver(FXMLLoader.load(getClass()
                         .getResource("/resources/booking/validation/InvertedTime.fxml")
                 ));
+                invertedTimePopOver.setDetachable(false);
+                invertedTimePopOver.setCornerRadius(0);
             }
             catch (IOException e) {
                 e.printStackTrace(); // do nothing
@@ -755,7 +759,7 @@ public class DetailsController {
             return true;
         }
         else {
-            if (!invalidTimePopOver.isShowing()) invalidTimePopOver.show(end);
+            if (!invertedTimePopOver.isShowing()) invertedTimePopOver.show(end);
             return false;
         }
     }
@@ -767,6 +771,8 @@ public class DetailsController {
                 repairNotStartedPopOver = new PopOver(FXMLLoader.load(getClass()
                         .getResource("/resources/booking/validation/RepairNotStarted.fxml")
                 ));
+                repairNotStartedPopOver.setDetachable(false);
+                repairNotStartedPopOver.setCornerRadius(0);
             }
             catch (IOException e) {
                 e.printStackTrace(); // do nothing
@@ -781,6 +787,60 @@ public class DetailsController {
         else {
             if (!repairNotStartedPopOver.isShowing()) repairNotStartedPopOver.show(repairDatePicker);
             return false;
+        }
+    }
+
+    private void displayHolidayPopOver(UnavailableDateException exc) {
+        if (holidayPopOver == null) {
+            try {
+                holidayPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/HolidayPopOver.fxml")));
+                holidayPopOver.setDetachable(false);
+                holidayPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (!holidayPopOver.isShowing())
+                holidayPopOver.show(exc.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker);
+        }
+    }
+
+    private void displayClashPopOver(UnavailableDateException exc) {
+        if (clashPopOver == null) {
+            try {
+                clashPopOver= new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/ClashPopOver.fxml")));
+                clashPopOver.setDetachable(false);
+                clashPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (!clashPopOver.isShowing()) clashPopOver
+                    .show(exc.concerning() == DIAGNOSIS ? diagnosisEndTimeTextField : repairEndTimeTextField);
+        }
+    }
+
+    private void displayClosedPopOver(UnavailableDateException exc) {
+        if (closedPopOver == null) {
+            try {
+                closedPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/ClosedPopOver.fxml")));
+                closedPopOver.setDetachable(false);
+                closedPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (!closedPopOver.isShowing()) closedPopOver
+                    .show(exc.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker);
         }
     }
 

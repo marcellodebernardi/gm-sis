@@ -78,7 +78,7 @@ public class ListController {
 
     /** Set the cell value factories for each column in the table */
     private void initializeTable() {
-        DoubleBinding binding = bookingTableView.widthProperty().subtract(5).divide(8.7);
+        DoubleBinding binding = bookingTableView.widthProperty().divide(8.5);
         customerColumn.prefWidthProperty().bind(binding);
         diagnosisDateColumn.prefWidthProperty().bind(binding);
         diagnosisTimeColumn.prefWidthProperty().bind(binding);
