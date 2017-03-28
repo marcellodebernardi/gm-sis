@@ -36,7 +36,8 @@ TableColumn {
     -fx-font-family: 'Roboto-Light';
 }
 #tabHBox Button:hover {
-    -fx-background-color: lightgray;
+    -fx-background-color: orange;
+    -fx-text-fill: rgba(0,0,0,0.9);
 }
 
 
