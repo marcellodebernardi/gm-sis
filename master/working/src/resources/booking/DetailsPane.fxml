@@ -13,44 +13,49 @@
     </top>
     <center>
         <GridPane id="detailsGridPane">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0"/>
+            </columnConstraints>
             <!-- Select a customer -->
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
             <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       fx:id="customerSearchBar" onAction="#pickCustomer"/>
+                       fx:id="customerSearchBar" onAction="#pickCustomer" promptText="Select a customer"/>
 
             <!-- Select a vehicle -->
             <Label GridPane.rowIndex="1" GridPane.columnIndex="0">Vehicle</Label>
             <ComboBox GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="vehicleComboBox" onAction="#pickVehicle"/>
+                      fx:id="vehicleComboBox" onAction="#pickVehicle" promptText="Select a vehicle"/>
 
             <Label GridPane.rowIndex="2" GridPane.columnIndex="0">Description</Label>
             <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       fx:id="descriptionTextField" id="descriptionTextField"/>
+                       fx:id="descriptionTextField" id="descriptionTextField" promptText="Provide a description"/>
 
             <!-- Diagnosis date and time -->
             <Label GridPane.rowIndex="3" GridPane.columnIndex="0">Diagnosis Date</Label>
             <DatePicker GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="diagnosisDatePicker"/>
+                        fx:id="diagnosisDatePicker" promptText="Pick a date"/>
             <Label GridPane.rowIndex="4" GridPane.columnIndex="0">Diagnosis Time</Label>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="1"
-                       fx:id="diagnosisStartTimeTextField"/>
+                       fx:id="diagnosisStartTimeTextField" promptText="HH:mm"/>
             <TextField GridPane.rowIndex="4" GridPane.columnIndex="2"
-                       fx:id="diagnosisEndTimeTextField"/>
+                       fx:id="diagnosisEndTimeTextField" promptText="HH:mm"/>
 
             <!-- Repair date and time -->
             <Label GridPane.rowIndex="5" GridPane.columnIndex="0">Repair Date</Label>
             <DatePicker GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                        fx:id="repairDatePicker"/>
+                        fx:id="repairDatePicker" promptText="Pick a date"/>
             <Label GridPane.rowIndex="6" GridPane.columnIndex="0">Repair Time</Label>
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="1"
-                       fx:id="repairStartTimeTextField"/>
+                       fx:id="repairStartTimeTextField" promptText="HH:mm"/>
             <TextField GridPane.rowIndex="6" GridPane.columnIndex="2"
-                       fx:id="repairEndTimeTextField"/>
+                       fx:id="repairEndTimeTextField" promptText="HH:mm"/>
 
             <!-- Mechanic tasked on repair -->
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0">Mechanic</Label>
             <ComboBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                      fx:id="mechanicComboBox" onAction="#pickMechanic"/>
+                      fx:id="mechanicComboBox" onAction="#pickMechanic" promptText="Select a mechanic"/>
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
@@ -79,7 +84,8 @@
                        id="vehicleMileageTextField" fx:id="mileageTextField"/>
             <Label GridPane.rowIndex="10" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                       id="newVehicleMileageTextField" fx:id="newMileageTextField"/>
+                       id="newVehicleMileageTextField" fx:id="newMileageTextField"
+                       promptText="Before completing, record new mileage"/>
 
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">Bill settled</Label>
             <CheckBox fx:id="settledCheckBox" GridPane.rowIndex="11" GridPane.columnIndex="1" />
