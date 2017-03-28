@@ -62,7 +62,7 @@ public class AuthenticationSystem {
         return loggedInUser;
     }
 
-    
+
 
     public List<User> searchUsers(String query) {
         return persistence.getByCriteria(new Criterion<>
