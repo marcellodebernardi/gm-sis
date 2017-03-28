@@ -58,6 +58,7 @@ public class Main extends Application {
 
         try {
             BorderPane loginPane = FXMLLoader.load(getClass().getResource("/common/loginPane.fxml"));
+            loginPane.getStylesheets().add("/common/common.css");
             this.primaryStage.setScene(new Scene(loginPane));
             this.primaryStage.show();
         }

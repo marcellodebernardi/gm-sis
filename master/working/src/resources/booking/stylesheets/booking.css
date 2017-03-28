@@ -11,13 +11,14 @@
 
 #calendarPaneTopControls TextField, #listPaneTopControls TextField {
     -fx-pref-width: 15em;
-    -fx-background-radius: 15px;
 }
 
+#paneSwitcherControls {
+    -fx-spacing: 1em;
+    -fx-padding: 0em 1em 0em 1em;
+}
 #paneSwitcherControls Button {
-    -fx-end-margin: 1em;
-    -fx-background-radius: 15px;
-    -fx-pref-width: 9em;
+    -fx-pref-width: 8em;
 }
 
 #detailsPane {
@@ -32,10 +33,6 @@
     -fx-vgap: 10px;
 }
 
-#descriptionTextArea {
-    -fx-pref-height: 7em;
-}
-
 #bookingPartsTable {
     -fx-pref-height: 10em;
 }
@@ -47,6 +44,7 @@
 }
 
 #partsButtonsVBox Button {
+    -fx-background-color: inherit;
     -fx-min-height: 25px;
     -fx-min-width: 25px;
     -fx-background-size: 25px 25px;

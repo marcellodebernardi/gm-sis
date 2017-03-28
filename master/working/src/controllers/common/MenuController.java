@@ -53,20 +53,11 @@ public class MenuController implements Initializable {
     }
 
     public void openApplication() {
-        openTodayTab();
+        openBookingsTab();
     }
 
-    public void reopenCustomerTab() { openCustomersTab(); }
-
-    @FXML private void openTodayTab() {
-        try {
-            if (todayPane == null) todayPane
-                    = FXMLLoader.load(getClass().getResource("/resources/today/TodayPane.fxml"));
-            Main.getInstance().replaceTabContent(todayPane);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void openCustomerTab() {
+        openCustomersTab();
     }
 
     @FXML private void openCustomersTab() {
@@ -141,19 +132,15 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void logout()
-    {
-        try
-        {
-            if(confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true)
-            {
-                Stage stage =((Stage)logoutButton.getScene().getWindow());
+    public void logout() {
+        try {
+            if (confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true) {
+                Stage stage = ((Stage) logoutButton.getScene().getWindow());
                 stage.close();
                 LoginController.getInstance().logoutHandler();
             }
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Logout Error");
             e.printStackTrace();
         }
@@ -164,18 +151,15 @@ public class MenuController implements Initializable {
         return instance;
     }
 
-    public boolean confirmationAlert(String title, String message)
-    {
+    public boolean confirmationAlert(String title, String message) {
         Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
         deleteAlert.setTitle(title);
         deleteAlert.setHeaderText(message);
         deleteAlert.showAndWait();
-        if(deleteAlert.getResult() == ButtonType.OK)
-        {
+        if (deleteAlert.getResult() == ButtonType.OK) {
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }

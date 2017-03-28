@@ -80,14 +80,17 @@
             <Label GridPane.rowIndex="10" GridPane.columnIndex="0">New Mileage</Label>
             <TextField GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.columnSpan="2"
                        id="newVehicleMileageTextField" fx:id="newMileageTextField"/>
+
+            <Label GridPane.rowIndex="11" GridPane.columnIndex="0">Bill settled</Label>
+            <CheckBox fx:id="settledCheckBox" GridPane.rowIndex="11" GridPane.columnIndex="1" />
         </GridPane>
     </center>
     <bottom>
         <HBox id="detailsButtons">
-            <Button onAction="#save">Save</Button>
-            <Button onAction="#complete">Complete</Button>
+            <Button fx:id="saveButton" onAction="#save">Save</Button>
+            <Button fx:id="completeButton" onAction="#complete">Complete</Button>
             <Button onAction="#clear">New</Button>
-            <Button onAction="#delete">Delete</Button>
+            <Button fx:id="deleteButton" onAction="#delete">Delete</Button>
         </HBox>
     </bottom>
 </BorderPane>
