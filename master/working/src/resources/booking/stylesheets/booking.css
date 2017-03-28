@@ -44,12 +44,17 @@
 }
 
 #partsButtonsVBox Button {
-    -fx-background-color: inherit;
+    -fx-background-color: #F57C00;
     -fx-min-height: 25px;
     -fx-min-width: 25px;
-    -fx-background-size: 25px 25px;
+    -fx-background-size: 25px 26px;
     -fx-background-repeat: no-repeat;
-    -fx-background-radius: 25px;
+    -fx-background-radius: 26px;
+    -fx-background-position: 0px 0px;
+    -fx-font-family: 'Roboto Light';
+}
+#partsButtonsVBox Button:hover {
+    -fx-background-color: #FB8C00;
 }
 
 #addPartButton {
