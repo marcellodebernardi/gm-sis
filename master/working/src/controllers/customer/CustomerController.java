@@ -515,8 +515,6 @@ public class CustomerController implements Initializable {
             }
             searchVehicleList = cSystem.searchCustomerVehicles(customer.getCustomerID());
             searchCustomerBookingInDB();//testing to find customer's bookings for their vehicles
-            System.out.println("testing Total Vehicles: " + searchVehicleList.size());//testing REMOVE LATER
-
             return searchVehicleList;
         }
         catch (Exception e) {
@@ -650,8 +648,6 @@ public class CustomerController implements Initializable {
             customerVehiclePartTable.setDisable(false);
             tableEntriesParts.removeAll(tableEntriesParts);
             List<PartAbstraction> searchList = searchCustomerVehiclePartsInstalledInDB();
-
-            System.out.println("testing parts. total installed: " + searchList.size());//testing parts
 
             //arranging default list from newest to oldest customer vehicle part
             for (int i = searchList.size() - 1; i >= 0; i--) {
