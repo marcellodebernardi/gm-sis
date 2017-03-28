@@ -921,6 +921,24 @@ public class VehicleController implements Initializable {
         else if (VehicleS.getSelectionModel().isSelected(13)) {
             setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
         }
+        else if (VehicleS.getSelectionModel().isSelected(14)) {
+            setVehicle( "Vauxhall", "Astra", "2.0" , "Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(15)){
+            setVehicle("Mercedes", "C220" ,"2.2", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(16)){
+            setVehicle("Renault", "Carrier" , "2.3" ,"Van", "Diesel" );
+        }
+        else if (VehicleS.getSelectionModel().isSelected(17)){
+            setVehicle("Nissan", "Space", "3.0", "Car", "Petrol");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(18)) {
+            setVehicle("Vauxhall", "Corsa", "2.0" ,"Car", "Diesel");
+        }
+        else if (VehicleS.getSelectionModel().isSelected(19)) {
+            setVehicle("Nissan", "GTR", "4.0" ,"Car", "Petrol");
+        }
         else {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
         }
@@ -930,7 +948,6 @@ public class VehicleController implements Initializable {
         eSize.setDisable(true);
         fType.setDisable(true);
     }
-
 
 
 

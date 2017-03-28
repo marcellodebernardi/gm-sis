@@ -50,7 +50,13 @@
                                                     <String fx:value="MG Sport 2.0 Litre Diesel" />
                                                     <String fx:value="Acura Model S 2.2 Litre Petrol" />
                                                     <String fx:value="Bentley Arnage 4.0 Litre Petrol" />
-                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel" />
+                                                    <String fx:value="Vauxhall Astra 2.0 Litre Diesel" />
+                                                    <String fx:value="Mercedes C220 2.2 Litre Petrol" />
+                                                    <String fx:value="Renault Carrier Van 2.3 Litre Diesel" />
+                                                    <String fx:value="Nissan Space 3.0 Litre Petrol" />
+                                                    <String fx:value="Vauxhall Corsa 2.0 Litre Diesel" />
+                                                    <String fx:value="Nissan GTR 4.0 Litre Petrol" />
+                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel"/>
                                                 </FXCollections>
                                             </items>
                                         </ComboBox>
