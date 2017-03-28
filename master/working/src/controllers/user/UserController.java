@@ -26,7 +26,7 @@ public class UserController implements Initializable {
     @FXML private Button addButton, newButton, clearButton, deleteButton;
     @FXML private Label userLabel;
     @FXML private TextField UID, P, FN, SN;
-    @FXML private ComboBox UT;
+    @FXML private ComboBox UT, sUT;
     @FXML private TableView<User> tUsers;
     @FXML private TableColumn<User, String> userIDColumn;
     @FXML private TableColumn<User, String> passwordColumn;
@@ -42,7 +42,24 @@ public class UserController implements Initializable {
 
 
     @FXML private void searchUsers() {
-        displayTable(auth.searchUsers(searchBar.getText()));
+        if (sUT.getSelectionModel().getSelectedItem() == null)
+        {
+            displayTable(auth.searchUsers(searchBar.getText()));
+        }
+        else
+        {
+            UserType userType;
+            if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin"))
+            {
+                userType = UserType.ADMINISTRATOR;
+            }
+            else
+            {
+               userType = UserType.NORMAL;
+            }
+            displayTable(auth.searchUsersUT(searchBar.getText(),userType));
+        }
+
     }
 
 
@@ -76,8 +93,8 @@ public class UserController implements Initializable {
                 }
                 boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
-                clear();
-                // showAlert("User " + addOrEdit + ": " + checker);
+                ClearFields();
+                showAlert("User " + addOrEdit + ": " + checker);
 
             }
         }
@@ -93,7 +110,7 @@ public class UserController implements Initializable {
                 if (getConfirmation("Are you sure you want to delete this user? ")) {
                     delete(UID.getText());
                     AllUsers();
-                    clear();
+                    ClearFields();
                 }
             }
         }
@@ -104,18 +121,26 @@ public class UserController implements Initializable {
 
     public void deleteFromList() {
         User user = ((User) tUsers.getSelectionModel().getSelectedItem());
+        if (user.getUserID().equals(auth.getLoggedInUser())) {
+            showAlert("Stop trying to delete yourself");
+            return;
+        }
         if (getConfirmation("Are you sure you want to delete this user? ")) {
             delete(user.getUserID());
         }
-        AllUsers();
-        clear();
+
+        ClearFields();
     }
 
     public void delete(String userID) {
         try {
             boolean check = auth.deleteUser(userID);
-            clear();
+            ClearFields();
             showAlert("User deleted: " + check);
+            if (check)
+            {
+                AllUsers();
+            }
         }
         catch (Exception e) {
             showAlert("cant delete User, check User ID entered/selected");
@@ -186,13 +211,12 @@ public class UserController implements Initializable {
     }
 
     public void displayTable(List<User> arrayList) {
-        if (arrayList.size() == 0) {
-            //showAlert("Nothing to display");
-            return;
-        }
+
+
         try {
             tUsers.setDisable(false);
             tableEntries.removeAll(tableEntries);
+            tUsers.setItems(tableEntries);
             for (int i = 0; i < arrayList.size(); i++) {
 
                 tableEntries.add(arrayList.get(i));
@@ -272,7 +296,8 @@ public class UserController implements Initializable {
         P.clear();
         FN.clear();
         SN.clear();
-        UT.getSelectionModel().clearSelection();
+        UT.setValue(null);
+        AllUsers();
     }
 
     public void NewVehicle() {
@@ -317,11 +342,5 @@ public class UserController implements Initializable {
         return alert.getResult() == ButtonType.OK;
     }
 
-    public void clear() {
-        UID.clear();
-        P.clear();
-        FN.clear();
-        SN.clear();
-        AllUsers();
-    }
+
 }

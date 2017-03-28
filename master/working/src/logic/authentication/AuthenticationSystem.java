@@ -62,18 +62,22 @@ public class AuthenticationSystem {
         return loggedInUser;
     }
 
-    public List<User> getUser(String userID, String firstName, String surname) {
-        return persistence.getByCriteria(new Criterion<>(User.class, "userID", matches, userID)
-                .and("firstName", matches, firstName)
-                .and("surname", matches, surname));
-    }
+    
 
     public List<User> searchUsers(String query) {
         return persistence.getByCriteria(new Criterion<>
                 (User.class, "userID", matches, query)
                 .or("firstName", matches, query)
                 .or("surname", matches, query)
-                .or("userType", matches, query)
+        );
+    }
+
+    public List<User> searchUsersUT(String query, UserType userType) {
+        return persistence.getByCriteria(new Criterion<>
+                (User.class, "userID", matches, query)
+                .or("firstName", matches, query)
+                .or("surname", matches, query)
+                .and("userType", equalTo, userType)
         );
     }
 
