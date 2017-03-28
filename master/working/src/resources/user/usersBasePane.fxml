@@ -8,8 +8,13 @@
             fx:controller="controllers.user.UserController" stylesheets="/user/user.css">
     <left>
         <BorderPane id="leftPane">
+            <top>
+                <HBox>
+                    <Label fx:id="userLabel" id="detailsTitle" text="Add User"/>
+                </HBox>
+            </top>
             <center>
-                <GridPane BorderPane.alignment="CENTER">
+                <GridPane id="infoPane">
                     <Label text="UserID" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     <Label text="password" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                     <Label text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
@@ -27,7 +32,6 @@
                             </FXCollections>
                         </items>
                     </ComboBox>
-                    <Label fx:id="userLabel" id="detailsTitle" text="Add User" GridPane.columnIndex="1"/>
                 </GridPane>
             </center>
             <bottom>

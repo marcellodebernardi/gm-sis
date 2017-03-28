@@ -7,15 +7,20 @@
 Button, TextField, ComboBox, CheckBox, DatePicker, TableView {
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
+}
+Button, TableView {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 1, 0.5, 1, 1);
 }
 Button {
-    -fx-background-color: orange;
+    -fx-background-color: #F57C00;
     -fx-text-fill: white;
     -fx-font-family: 'Roboto';
 }
+Button:hover {
+    -fx-background-color: #FB8C00;
+}
 TableColumn {
-    -fx-background-color: orange;
+    -fx-background-color: #F57C00;
 }
 
 #tabHBox {
@@ -36,15 +41,7 @@ TableColumn {
     -fx-font-family: 'Roboto-Light';
 }
 #tabHBox Button:hover {
-    -fx-background-color: lightgray;
-}
-
-
-#logoutButton {
-    -fx-background-color: darkgrey;
-}
-#logoutButton:hover {
-    -fx-background-color: red;
+    -fx-background-color: #F57C00;
     -fx-text-fill: white;
     -fx-font-family: 'Roboto';
 }

@@ -22,6 +22,7 @@ public class AuthenticationSystem {
     private CriterionRepository persistence;
     private UserType loginS;
     private String loggedInUser;
+    private String loginFirstName;
 
 
     private AuthenticationSystem() {
@@ -49,6 +50,7 @@ public class AuthenticationSystem {
             user = results.get(0);
             loginS = user.getUserType();
             loggedInUser = username;
+            loginFirstName = user.getFirstName();
             return true;
         }
         return false;
@@ -60,6 +62,10 @@ public class AuthenticationSystem {
 
     public String getLoggedInUser() {
         return loggedInUser;
+    }
+
+    public String getLoginFirstName() {
+        return loginFirstName;
     }
 
 

@@ -405,7 +405,7 @@ public class DetailsController {
             partMenu.setDetachable(false);
             partMenu.setArrowIndent(100);
             partMenu.setCornerRadius(0);
-            partMenu.show(partsTable);
+            partMenu.show(addPartButton);
         }
         catch (IOException e) {
             e.printStackTrace();

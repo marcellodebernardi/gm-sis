@@ -19,20 +19,14 @@
     </top>
     <center>
         <GridPane id="GridPane">
-            <Label id="usernameLabel" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            </Label>
-            <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <Label id="passwordLabel" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="1">
-            </Label>
-            <PasswordField fx:id="password" onAction="#loginHandler" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="70.0"/>
             </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
+            <Label id="usernameLabel" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label id="passwordLabel" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <PasswordField fx:id="password" onAction="#loginHandler" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         </GridPane>
     </center>
     <bottom>

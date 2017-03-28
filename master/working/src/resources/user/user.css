@@ -6,6 +6,13 @@
     -fx-border-width: 0px 1px 0px 0px;
 }
 
+#titleHBox {
+    -fx-text-alignment: center;
+}
+#infoPane {
+    -fx-vgap: 10px;
+}
+
 #tablePane {
     -fx-padding: 0em 1em 1em 1em;
 }
