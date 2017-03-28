@@ -14,9 +14,9 @@
     <center>
         <GridPane id="detailsGridPane">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0"/>
             </columnConstraints>
             <!-- Select a customer -->
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0">Customer</Label>
