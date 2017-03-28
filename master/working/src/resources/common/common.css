@@ -4,8 +4,26 @@
     -fx-background-color: white;
 }
 
+Button, TextField, ComboBox, CheckBox, DatePicker, TableView {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+}
+Button, TableView {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 1, 0.5, 1, 1);
+}
+Button {
+    -fx-background-color: #F57C00;
+    -fx-text-fill: white;
+    -fx-font-family: 'Roboto';
+}
+Button:hover {
+    -fx-background-color: #FB8C00;
+}
+TableColumn {
+    -fx-background-color: #F57C00;
+}
+
 #tabHBox {
-    -fx-background-color: white;
     -fx-fit-to-width: true;
     -fx-alignment: top-center;
     -fx-padding: 0em 0em 1px 0em;
@@ -17,19 +35,13 @@
     -fx-pref-height: 3.5em;
     -fx-background-color: #e0e0e0;
 
+    -fx-text-fill: rgba(0,0,0,0.6);
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
+    -fx-font-family: 'Roboto-Light';
 }
 #tabHBox Button:hover {
-    -fx-background-color: lightgray;
-}
-
-
-#logoutButton {
-    -fx-background-color: darkgrey;
-}
-#logoutButton:hover {
-    -fx-background-color: red;
+    -fx-background-color: #F57C00;
     -fx-text-fill: white;
     -fx-font-family: 'Roboto';
 }

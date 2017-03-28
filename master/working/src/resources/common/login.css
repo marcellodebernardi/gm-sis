@@ -7,6 +7,8 @@
 
 #GridPane {
     -fx-padding: 2em;
+    -fx-vgap: 0.5em;
+    -fx-fill-width: true;
 }
 
 HBox {
@@ -21,13 +23,18 @@ HBox {
 
 #username {
     -fx-max-height: 0.5em;
-    -fx-spacing: 0.5em;
 }
 
 #password {
     -fx-max-height: 1em;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
 }
 
 #bottomBox {
+    -fx-fill-width: true;
     -fx-spacing: 1em;
+}
+#bottomBox Button {
+    -fx-pref-width: 10em;
 }

@@ -130,7 +130,7 @@ public class CustomerVehicleController implements Initializable {
             {
                 boolean deleteCustomer = cSystem.deleteCustomer(tempCustomerID);
                 noVehicleAdded();
-                MenuController.getInstance().reopenCustomerTab();
+                MenuController.getInstance().openCustomerTab();
             }
         }
         catch (IOException e) {

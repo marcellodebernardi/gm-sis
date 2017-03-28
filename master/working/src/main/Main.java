@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -55,9 +56,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         JFXtrasFontRoboto.loadAll();
+        this.primaryStage.getIcons().add(new Image("/resources/common/images/icon.png"));
 
         try {
             BorderPane loginPane = FXMLLoader.load(getClass().getResource("/common/loginPane.fxml"));
+            loginPane.getStylesheets().add("/common/common.css");
             this.primaryStage.setScene(new Scene(loginPane));
             this.primaryStage.show();
         }

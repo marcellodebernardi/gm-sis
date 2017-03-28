@@ -99,15 +99,19 @@ public class PartsPopOverController {
         partStockLevel.prefWidthProperty().bind(binding);
     }
 
-    // adds a selection listener to the table
+    /** adds a selection listener to the table */
     private void addTableSelectionListener() {
         partsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection.getPartStockLevel() > 0) {
                 PartOccurrence pO = partsSystem.getAllFreeOccurrences(newSelection).get(0);
                 DiagRepBooking booking
                         = ((DetailsController) master.getController(DetailsController.class)).getSelectedBooking();
+
                 booking.addRequiredPart(pO);
-                ((DetailsController) master.getController(DetailsController.class)).populateParts(booking.getRequiredPartsList());
+
+                ((DetailsController) master.getController(DetailsController.class))
+                        .populateParts(booking.getRequiredPartsList());
+
             }
         });
     }

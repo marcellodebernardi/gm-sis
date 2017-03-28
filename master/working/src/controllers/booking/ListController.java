@@ -63,6 +63,7 @@ public class ListController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                        INITIALIZATION                                               //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** Initializes the controller's scene graph state */
     @FXML private void initialize() {
         populateViewByComboBox();
@@ -193,8 +194,6 @@ public class ListController {
         selectedDate = ZonedDateTime.of(listDatePicker.getValue(),
                 LocalTime.now(),
                 ZoneId.systemDefault());
-
-        System.out.println("View: " + currentViewBy);
 
         if (currentViewBy == DAY) {
             startTime = selectedDate.truncatedTo(ChronoUnit.DAYS);

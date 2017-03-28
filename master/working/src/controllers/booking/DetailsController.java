@@ -76,6 +76,10 @@ public class DetailsController {
     //Buttons
     @FXML private Button addPartButton;
     @FXML private Button removePartButton;
+    @FXML private Button saveButton;
+    @FXML private Button completeButton;
+    // CheckBoxes
+    @FXML private CheckBox settledCheckBox;
     // PopOvers
     private PopOver customerValidationPopOver;
     private PopOver vehicleValidationPopOver;
@@ -84,6 +88,7 @@ public class DetailsController {
     private PopOver invalidTimePopOver;
     private PopOver invertedTimePopOver;
     private PopOver repairNotStartedPopOver;
+    private PopOver notSettledPopOver;
 
 
     public DetailsController() {
@@ -105,7 +110,6 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     INITIALIZATION                                                  //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /** Calls the initialization helpers and sets the controller state to initialized */
     @FXML private void initialize() {
         master.setController(DetailsController.class, this);
@@ -290,16 +294,9 @@ public class DetailsController {
             selectedBooking.setRepairStart(null);
             selectedBooking.setRepairEnd(null);
         }
-        // mileage, if set
-        try {
-            selectedVehicle.setMileage(extractInteger(newMileageTextField));
-        }
-        catch (NumberFormatException e) {
-            // do nothing
-        }
 
         // bill
-        boolean settled = selectedVehicle.isCoveredByWarranty();
+        boolean settled = selectedVehicle.isCoveredByWarranty() || settledCheckBox.isSelected();
         boolean hasRepair = selectedBooking.getRepairStart() != null;
         double cost = 0;
         double duration = selectedBooking.getDiagnosisEnd().toEpochSecond()
@@ -382,9 +379,17 @@ public class DetailsController {
                 || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
                 || !repairHasStarted()
                 || !validateMechanicSelection()
-                || !validNewMileage()) return;
+                || !validNewMileage()
+                || !isSettled()) return;
 
         selectedBooking.setComplete(true);
+        // mileage, if set
+        try {
+            selectedVehicle.setMileage(extractInteger(newMileageTextField));
+        }
+        catch (NumberFormatException e) {
+            // do nothing
+        }
 
         List<PartOccurrence> partsToInstall = selectedBooking.getRequiredPartsList();
         ZonedDateTime installDate = selectedBooking.getRepairEnd();
@@ -400,7 +405,7 @@ public class DetailsController {
             partMenu.setDetachable(false);
             partMenu.setArrowIndent(100);
             partMenu.setCornerRadius(0);
-            partMenu.show(partsTable);
+            partMenu.show(addPartButton);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -420,7 +425,6 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                   FIELD STATE MANAGERS                                              //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /** fills in the given booking's details into the detail pane */
     void populate(DiagRepBooking booking) {
         clear();
@@ -446,6 +450,7 @@ public class DetailsController {
             repairEndTimeTextField.setText(booking.getRepairEnd().format(timeFormatter));
         }
 
+        settledCheckBox.setSelected(booking.getBillSettled());
         disable(booking.isComplete());
     }
 
@@ -502,6 +507,9 @@ public class DetailsController {
         newMileageTextField.setDisable(state);
         addPartButton.setDisable(state);
         removePartButton.setDisable(state);
+        settledCheckBox.setDisable(state);
+        saveButton.setDisable(state);
+        completeButton.setDisable(state);
     }
 
     /** Empties all fields in the details pane */
@@ -517,6 +525,7 @@ public class DetailsController {
 
         vehicleComboBox.getSelectionModel().clearSelection();
         mechanicComboBox.getSelectionModel().clearSelection();
+        settledCheckBox.setSelected(false);
 
         diagnosisDatePicker.setValue(null);
         repairDatePicker.setValue(null);
@@ -538,6 +547,10 @@ public class DetailsController {
         newMileageTextField.setDisable(false);
         addPartButton.setDisable(false);
         removePartButton.setDisable(false);
+        settledCheckBox.setDisable(false);
+        saveButton.setDisable(false);
+        completeButton.setDisable(false);
+
         setPaneTitleToAdd();
     }
 
@@ -824,6 +837,30 @@ public class DetailsController {
         }
         catch (NumberFormatException e) {
             if (!mileageValidationPopOver.isShowing()) mileageValidationPopOver.show(newMileageTextField);
+            return false;
+        }
+    }
+
+    private boolean isSettled() {
+        if (notSettledPopOver == null) {
+            try {
+                notSettledPopOver= new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/booking/validation/NotSettled.fxml")));
+                notSettledPopOver.setDetachable(false);
+                notSettledPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        if (settledCheckBox.isSelected() || selectedVehicle.isCoveredByWarranty()) {
+            if (notSettledPopOver.isShowing()) notSettledPopOver.hide();
+            return true;
+        }
+        else {
+            if (!notSettledPopOver.isShowing()) notSettledPopOver.show(settledCheckBox);
             return false;
         }
     }

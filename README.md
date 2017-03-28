@@ -4,7 +4,7 @@ Repository for GM-SIS system, by Team 31.
 
 ### 1. CONTRIBUTORS
 1. Ebubechukwu Abara (ec14177)
-2. Dillon Vaghela (ecXXXXX)
+2. Dillon Vaghela (ec15147)
 3. Marcello De Bernardi (ec15265)
 4. Muhammad Hoque (ecXXXXX)
 5. Muhammad Ahmed (ecXXXXX)
