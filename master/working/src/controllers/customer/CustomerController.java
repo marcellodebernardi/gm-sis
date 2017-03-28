@@ -836,11 +836,9 @@ public class CustomerController implements Initializable {
                 errorAlert("'Customer Email' address field does not contain '.' symbol. Enter valid Email address containing period/dot '.' and '@' symbol");
                 return false;
             }
-            System.out.println("Hello World 1");//testing
             boolean verifyEmail = verifyCustomerDoesNotExist(customerEmail.getText());
             if(!verifyEmail)
             {
-                System.out.println("Hello World 2");//testing
                 errorAlert("Customer record already exists. Enter a new Email address");
                 return false;
             }
@@ -863,15 +861,11 @@ public class CustomerController implements Initializable {
             List<Customer> customerList = cSystem.getAllCustomers();
             for(int i=0; i<customerList.size(); i++)
             {
-                System.out.println("emailList " + i + ": " + customerList.get(i).getCustomerEmail());
-                System.out.println("new email: " + email);
                 if(customerList.get(i).getCustomerEmail().equals(email))
                 {
-                    System.out.println(false);
                     return false;
                 }
             }
-            System.out.println(true);
             return true;
         }
         catch(Exception e) {
@@ -889,7 +883,6 @@ public class CustomerController implements Initializable {
             }
         }
         words = String.valueOf(wordsArray);
-        System.out.println(words);//testing
         return words;
     }
 }

@@ -150,7 +150,6 @@ public class CustomerVehicleController implements Initializable {
                 if (!preventClosing.isSelected()) {
                     event.consume();
                 }
-                System.out.println("Consumed event: " + event.isConsumed());
             }
         });
         dialog.getDialogPane().setContent(preventClosing);
