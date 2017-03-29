@@ -248,6 +248,10 @@ public class DetailsController {
         selectedVehicle = null;
         selectedPart = null;
 
+        PartsPopOverController controller = ((PartsPopOverController)
+                master.getController(PartsPopOverController.class));
+        if (controller != null) controller.fetch();
+
         clearAll();
     }
 
@@ -297,6 +301,9 @@ public class DetailsController {
             selectedBooking.setRepairStart(null);
             selectedBooking.setRepairEnd(null);
         }
+
+        // parts
+        ((PartsPopOverController) master.getController(PartsPopOverController.class)).save();
 
         // bill
         boolean settled = selectedVehicle.isCoveredByWarranty() || settledCheckBox.isSelected();
@@ -415,10 +422,14 @@ public class DetailsController {
     }
 
     @FXML private void removeSelectedPart() {
+        if (selectedPart == null) return;
+
         selectedBooking.removeRequiredPart(selectedPart);
 
         selectedPart.unsetBooking();
         detachedParts.add(selectedPart);
+        PartsPopOverController controller = (PartsPopOverController) master.getController(PartsPopOverController.class);
+        if (controller != null) controller.restore(selectedPart);
 
         populateParts(selectedBooking.getRequiredPartsList());
     }

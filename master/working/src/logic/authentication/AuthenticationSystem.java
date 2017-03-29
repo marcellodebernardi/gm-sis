@@ -70,20 +70,20 @@ public class AuthenticationSystem {
 
 
 
-    public List<User> searchUsers(String query) {
+    public List<User> searchUsers(String fn, String ln, String id) {
         return persistence.getByCriteria(new Criterion<>
-                (User.class, "userID", matches, query)
-                .or("firstName", matches, query)
-                .or("surname", matches, query)
+                (User.class, "userID", matches, id)
+                .and("firstName", matches, fn)
+                .and("surname", matches, ln)
         );
     }
 
-    public List<User> searchUsersUT(String query, UserType userType) {
+    public List<User> searchUsersUT(String fn, String ln, String id, UserType userType) {
         return persistence.getByCriteria(new Criterion<>
-                (User.class, "userID", matches, query)
-                .or("firstName", matches, query)
-                .or("surname", matches, query)
-                .and("userType", equalTo, userType)
+                (User.class,"userType", equalTo, userType)
+                .and("firstName", matches, fn)
+                .and("surname", matches, ln)
+                .and("userID", matches, id)
         );
     }
 

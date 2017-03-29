@@ -1,5 +1,6 @@
 package controllers.booking;
 
+import domain.Booking;
 import domain.DiagRepBooking;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -16,7 +17,7 @@ import java.util.Calendar;
  *         the GMSIS domain model.
  */
 public class BookingAppointment implements Agenda.Appointment {
-    private int bookingID;
+    private DiagRepBooking booking;
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
 
@@ -29,14 +30,24 @@ public class BookingAppointment implements Agenda.Appointment {
     }
 
     public BookingAppointment forBooking(DiagRepBooking booking) {
-        bookingID = booking.getBookingID();
+        this.booking = booking;
+        return this;
+    }
+
+    public BookingAppointment asRepair() {
+        startTime = booking.getRepairStart();
+        endTime = booking.getRepairEnd();
+        return this;
+    }
+
+    public BookingAppointment asDiagnosis() {
         startTime = booking.getDiagnosisStart();
         endTime = booking.getDiagnosisEnd();
         return this;
     }
 
     public int getBookingID() {
-        return bookingID;
+        return booking.getBookingID();
     }
 
     public String getSummary() {

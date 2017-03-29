@@ -33,7 +33,7 @@ public class UserController implements Initializable {
     @FXML private TableColumn<User, String> firstnameColumn;
     @FXML private TableColumn<User, String> surnameColumn;
     @FXML private TableColumn<User, UserType> userTypeColumn;
-    @FXML private TextField searchBar;
+    @FXML private TextField searchBarFN, searchBarLS, searchBarID;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,20 +44,27 @@ public class UserController implements Initializable {
     @FXML private void searchUsers() {
         if (sUT.getSelectionModel().getSelectedItem() == null)
         {
-            displayTable(auth.searchUsers(searchBar.getText()));
+            //showAlert("A");
+            displayTable(auth.searchUsers(searchBarFN.getText(),searchBarLS.getText(),searchBarID.getText()));
         }
         else
         {
             UserType userType;
             if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin"))
             {
+                //showAlert("B");
                 userType = UserType.ADMINISTRATOR;
             }
             else
             {
+                //showAlert("C");
                userType = UserType.NORMAL;
             }
-            displayTable(auth.searchUsersUT(searchBar.getText(),userType));
+            //showAlert("D");
+            displayTable(auth.searchUsersUT(searchBarFN.getText(),
+                    searchBarLS.getText(),
+                    searchBarID.getText()
+                    ,userType));
         }
 
     }
@@ -192,6 +199,7 @@ public class UserController implements Initializable {
     }
 
     public void AllUsers() {
+        sUT.setValue(null);
         List<User> arrayList = auth.getAllUsers();
         displayTable(arrayList);
     }

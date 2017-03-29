@@ -153,11 +153,15 @@ public class CalendarController {
 
     private void populateAgenda(List<DiagRepBooking> bookings) {
         for (DiagRepBooking booking : bookings) {
-            bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+            bookingAgenda.appointments().add(new BookingAppointment()
+                    .forBooking(booking)
+                    .asDiagnosis()
                     .withAppointmentGroup(diagnosis));
 
             if (booking.getRepairStart() != null)
-                bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+                bookingAgenda.appointments().add(new BookingAppointment()
+                        .forBooking(booking)
+                        .asRepair()
                         .withAppointmentGroup(repair));
         }
 

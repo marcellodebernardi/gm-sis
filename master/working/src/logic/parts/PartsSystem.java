@@ -1,6 +1,5 @@
 package logic.parts;
 
-import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.equalTo;
-import static logic.criterion.CriterionOperator.matches;
 import static logic.criterion.CriterionOperator.moreThan;
 
 /**
@@ -76,7 +74,9 @@ public class PartsSystem {
     }
 
     public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, 0)
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class)
+                .where("installationID", equalTo, 0)
+                .and("bookingID", equalTo, 0)
                 .and("partAbstractionID", equalTo, partAbstraction.getPartAbstractionID()));
     }
 
@@ -118,11 +118,10 @@ public class PartsSystem {
         return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
     }
 
-    public void commitAbstraction(PartAbstraction partAbstraction)
-    {
+    public void commitAbstraction(PartAbstraction partAbstraction) {
         persistence.commitItem(partAbstraction);
     }
-    
+
 
 }
 
