@@ -256,6 +256,7 @@ public class SpecialistController implements Initializable {
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     public void findSRCBookings() {
         try {
             specialistBookings.getItems().clear();
@@ -277,11 +278,18 @@ public class SpecialistController implements Initializable {
                     }
                 }
                 displaySpecRepBookings(vehicleRepairs);
+
             }
             else {
-                specialistBookings.getItems().clear();
-                List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
-                displaySpecRepBookings(vehicleRepairs);
+                try {
+                    specialistBookings.getItems().clear();
+                    List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
+                    displaySpecRepBookings(vehicleRepairs);
+                }
+                catch (NullPointerException ex1)
+                {
+                    //do nothing
+                }
             }
         }
     }
@@ -317,16 +325,16 @@ public class SpecialistController implements Initializable {
                 showAlert("No return date selected");
             }
             DiagRepBooking diagRepBookings = specRepairSystem.findBooking(Integer.parseInt(bookingID.getText()));
-            if (diagRepBookings != null) {
-
-
+            if( diagRepBookings !=null && diagRepBookings.isComplete())
+            {
+                showAlert("Booking is complete! Cannot proceed.");
+            }
+             else if (diagRepBookings != null) {
                 if (!isBefore(bookingDeliveryDate.getValue())) {
                     throw new InvalidDateException("Delivery date before today's date.");
                 }
-
                 Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
                 Date returnDate = fromLocalDate(bookingReturnDate.getValue());
-
                 if (returnDate.before(deliveryDate)) {
                     throw new InvalidDateException("Return date before delivery date.");
                 }
@@ -351,14 +359,14 @@ public class SpecialistController implements Initializable {
                         }
                     }
                     else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
+                        System.out.println("got here");
                         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText().trim() ));
-                        Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
+                            Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
+                        System.out.println(installation.getInstallationID());
                         if (installation != null) {
                             if (installation.getEndWarrantyDate().isAfter(ZonedDateTime.now())) {
                                 bookingCost.setText("0");
                             }
-
-
                             Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
                             diagRepBookings.setBill(bill);
                             PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText().trim()));
@@ -384,6 +392,7 @@ public class SpecialistController implements Initializable {
             clearBookingFields();
         }
         catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException | NullPointerException e) {
+            //e.printStackTrace();
             if (e instanceof InvalidDateException) {
                 showAlert(e.getMessage());
             }
@@ -438,7 +447,11 @@ public class SpecialistController implements Initializable {
         try {
             int criteria = Integer.parseInt(bookingID.getText());
             DiagRepBooking diagRepBookings = specRepairSystem.findBooking(criteria);
-            if (diagRepBookings != null) {
+            if(diagRepBookings!=null && diagRepBookings.isComplete())
+            {
+                showAlert("Booking completed! Cannot add.");
+            }
+            if (diagRepBookings != null && !diagRepBookings.isComplete()) {
                 lbl_booking_notFound.setVisible(false);
                 lbl_booking_found.setText("Booking found");
                 lbl_booking_found.setVisible(true);
@@ -991,7 +1004,7 @@ public class SpecialistController implements Initializable {
 
     public void findPartRepairs()
     {
-        List<PartRepair> partRepairs = specRepairSystem.returnAllPartRepairs();
+        List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs();
         displaySpecRepBookings(partRepairs);
     }
 

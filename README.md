@@ -6,8 +6,8 @@ Repository for GM-SIS system, by Team 31.
 1. Ebubechukwu Abara (ec14177)
 2. Dillon Vaghela (ec15147)
 3. Marcello De Bernardi (ec15265)
-4. Muhammad Hoque (ecXXXXX)
-5. Muhammad Ahmed (ecXXXXX)
+4. Muhammad Hoque (ec15157)
+5. Muhammad Ahmed (ec15496)
 
 ### 2. DEPLOYMENT INFORMATION
 Requires **JRE1.8.x** to run. On the ITL machines this means running the application on Windows 10.
@@ -84,6 +84,22 @@ and red buttons by the small parts table.
 #### 4.6 PARTS - Muhammad Hoque
 
 #### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
+
+In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
+and vehicles. The user is also able to view a list of**installations**for a chosen vehicle from the list of repairs.
+The user can query a list of **outstanding**bookings, which will return a list of items (both parts and vehicles) which
+have not yet been returned to the garage. The user can also query a list of**returned**items which have been returned to
+the garage. 
+
+**Some rules apply to the adding and editing and deletion of specialist booking details**:
+
+1.  A specialist repair booking MUST be linked to a diagnosis and repair booking. 
+2.  A
+3.  The "complete" button completes a booking. A completed booking can no longer be modified.
+4.  A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
+5.  A booking can only be completed, however, once a repair appointment has been carried out and
+    a new mileage value recorded.
+
 
 #### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
 
