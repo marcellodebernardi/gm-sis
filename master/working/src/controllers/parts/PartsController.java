@@ -268,7 +268,7 @@ public class PartsController implements Initializable {
 
 
     /**
-     * TODO: fix the Installation data and set Occurence as editable
+     * This method shows all the installations in the tableview.
      */
     public void viewAllBookingsClick() {
         
@@ -322,7 +322,7 @@ public class PartsController implements Initializable {
 
     /**
      * The addToDb() method is responsible for adding new part items to the database, a new object is created which uses
-     * the constructor from PartAbstraction and is then saved to the database using commitItem().
+     * the constructor from PartAbstraction and is then saved to the database using commitItem(), the stock level creates the part occurrences.
      **/
     public void addToDB() throws Exception {
 
@@ -358,7 +358,10 @@ public class PartsController implements Initializable {
         partStockLevelField.clear();
 
     }
-//possible
+
+    /**
+     * This method is for the "Save" button, when the table is edited, the user must press enter to commit and then press save
+     */
     public void saveChanges() {
 
         PartAbstraction singlePart;
@@ -377,17 +380,8 @@ public class PartsController implements Initializable {
 
     }
 
-    public void showInfo(String message) {
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Updated to Database");
-        alert.setHeaderText(message);
-        alert.showAndWait();
-
-    }
-
     /**
-     * deletes stock item
+     * Deletes part abstraction, when the part is deleted, all the occurences for that part is also deleted
      */
 
     public void deletePart() {
@@ -417,6 +411,18 @@ public class PartsController implements Initializable {
             showError("No part has been selected");
 
         }
+
+    }
+
+    /**
+     * The 4 show... methods display popups to the user, used for validation.
+     */
+    public void showInfo(String message) {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Updated to Database");
+        alert.setHeaderText(message);
+        alert.showAndWait();
 
     }
 
@@ -458,7 +464,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * This method increases stock by 1 when selecting a part from table and pressing +Stock
+     * This method increases stock by 1 when selecting a part from table and pressing +Stock, an occurrence is also created for that part
      */
     public void increaseStockLevel() {
 
@@ -485,7 +491,7 @@ public class PartsController implements Initializable {
     }
 
     /**
-     * This method decreases stock by 1 when selecting a part from table and pressing -Stock
+     * This method decreases stock by 1 when selecting a part from table and pressing -Stock, an occurrence is deleted
      */
     public void decreaseStockLevel() {
 
@@ -518,6 +524,10 @@ public class PartsController implements Initializable {
         }
     }
 
+    /**
+     * This method deletes an installation from the database, the user must select from the table and press the delete button.
+     */
+
     public void deleteInstallation() {
 
         try {
@@ -540,6 +550,10 @@ public class PartsController implements Initializable {
 
     }
 
+    /**
+     * This method adds an installation to the tableview by filing out the fields on the GUI.
+     */
+
     public void addInstallation() {
 
         try {
@@ -560,7 +574,6 @@ public class PartsController implements Initializable {
             Installation installation = new Installation(ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), regNumberInstallation.getText(), partAbs, partOccurrence);
             partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
             pSys.commitAbstraction(partAbstraction);
-            //saveChanges();
             viewAllBookingsClick();
             updateTable();
             partOccurrence.setBookingID(diagRepBooking.getBookingID());
@@ -568,11 +581,7 @@ public class PartsController implements Initializable {
 
             showInfo("Installation has been added, stock for selected part has been reduced");
 
-
-
             clearInstallation();
-
-            System.out.println(installation);
 
         }
         catch (Exception e) {
@@ -587,6 +596,10 @@ public class PartsController implements Initializable {
 
     }
 
+    /**
+     * This method clears the installation fields
+     */
+
     public void clearInstallation(){
 
         instDate.setValue(null);
@@ -596,30 +609,13 @@ public class PartsController implements Initializable {
 
     }
 
-    public void actualDecrease(PartAbstraction partDecrease){
-
-        try {
-
-            int c = partDecrease.getPartStockLevel() - 1;
-           // System.out.println(c);
-            //System.out.println(partDecrease.getPartAbstractionID());
-            partDecrease.setPartStockLevel(c);
-
-            //saveChanges();
-            updateTable();
-
-
-        }
-        catch (IndexOutOfBoundsException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
+    /**
+     * This method gets all the occurrences for the selected part in the the combo box
+     */
     public void setOccs(){
 
         try {
-            //availableOcc.getItems().removeAll()
+
             partOccurrences.removeAll(partOccurrences);
             String[] s = addPartToInst.getSelectionModel().getSelectedItem().trim().split(":");
             partOccurrences.addAll(pSys.getAllUninstalled(Integer.parseInt(s[0].trim())));
@@ -633,6 +629,10 @@ public class PartsController implements Initializable {
         }
 
     }
+
+    /**
+     * This method allows user to search installations by reg number or customer first name or surname
+     */
 
     public void searchInstallations() {
 
@@ -650,8 +650,6 @@ public class PartsController implements Initializable {
 
                 }
 
-                // System.out.println(List2.get(0).getCustomer().getCustomerFirstname()); //test
-
             }
 
             PartsBookings.setItems(tableEntries2);
@@ -662,6 +660,10 @@ public class PartsController implements Initializable {
         }
     }
 
+
+    /**
+     * This method finds the booking that is selected in the installation form, to check whether an installation can be added to an existing booking
+     */
     public void findRelevantBookings() {
         try {
             bookingsForInstallation.getItems().clear();
