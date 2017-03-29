@@ -5,6 +5,7 @@ import domain.PartAbstraction;
 import domain.PartOccurrence;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +16,7 @@ import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * @author Marcello De Bernardi
@@ -33,6 +34,8 @@ public class PartsPopOverController {
     @FXML private TableColumn<PartAbstraction, Double> partPrice;
     @FXML private TableColumn<PartAbstraction, Integer> partStockLevel;
 
+    private ObservableList<PartAbstraction> parts;
+
 
     public PartsPopOverController() {
         master = BookingController.getInstance();
@@ -40,6 +43,8 @@ public class PartsPopOverController {
         bookingSystem = BookingSystem.getInstance();
         vehicleSystem = VehicleSys.getInstance();
         partsSystem = PartsSystem.getInstance(DatabaseRepository.getInstance());
+
+        fetch();
     }
 
     @FXML private void initialize() {
@@ -47,18 +52,64 @@ public class PartsPopOverController {
 
         setPartsTableCellValueFactories();
         setColumnWidths();
-        populateTable(partsSystem.getPartAbstractions());
+        populateTable();
         addTableSelectionListener();
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                     EVENT LISTENERS                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** handles the selection of an item in the parts table */
+    private void selectPart(ObservableValue<? extends PartAbstraction> obs, PartAbstraction oldSelection,
+                            PartAbstraction newSelection) {
+        if (newSelection.getPartStockLevel() > 0) {
+            PartOccurrence pOcc = newSelection.getOccurrenceList().get(0);
+            newSelection.getOccurrenceList().remove(pOcc);
+            newSelection.setPartStockLevel(newSelection.getPartStockLevel() - 1);
+            partsTable.refresh();
+
+            DiagRepBooking booking = ((DetailsController)master.getController(DetailsController.class))
+                    .getSelectedBooking();
+
+            booking.addRequiredPart(pOcc);
+            ((DetailsController) master.getController(DetailsController.class))
+                    .populateParts(booking.getRequiredPartsList());
+        }
+    }
+
+    /** Fetches the current state of the database, filtering out parts that are not free */
+    void fetch() {
+        parts = FXCollections.observableArrayList(partsSystem.getPartAbstractions());
+        parts.forEach(partAbs ->
+                partAbs.getOccurrenceList().removeIf(pOcc ->
+                        pOcc.getInstallationID() != 0 || pOcc.getBookingID() != 0)
+        );
+    }
+
+    /** Commits to database all part abstractions held in the state cache */
+    void save() {
+        parts.forEach(part -> partsSystem.commitAbstraction(part));
+    }
+
+    /** Returns a part to the list of available parts */
+    void restore(PartOccurrence occurrence) {
+        parts.forEach(pAbs -> {
+            if (pAbs.getPartAbstractionID() == occurrence.getPartAbstractionID()) {
+                pAbs.setPartStockLevel(pAbs.getPartStockLevel() + 1);
+                pAbs.getOccurrenceList().add(occurrence);
+            }
+        });
+        partsTable.refresh();
     }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FIELD POPULATION                                                //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // populates the table of parts with part abstractions
-    private void populateTable(List<PartAbstraction> parts) {
-        ObservableList<PartAbstraction> bookingsObservable = FXCollections.observableArrayList(parts);
-        partsTable.setItems(bookingsObservable);
+    /** populates the table of parts with part abstractions */
+    private void populateTable() {
+        partsTable.setItems(FXCollections.observableArrayList(parts));
         partsTable.refresh();
     }
 
@@ -101,18 +152,6 @@ public class PartsPopOverController {
 
     /** adds a selection listener to the table */
     private void addTableSelectionListener() {
-        partsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection.getPartStockLevel() > 0) {
-                PartOccurrence pO = partsSystem.getAllFreeOccurrences(newSelection).get(0);
-                DiagRepBooking booking
-                        = ((DetailsController) master.getController(DetailsController.class)).getSelectedBooking();
-
-                booking.addRequiredPart(pO);
-
-                ((DetailsController) master.getController(DetailsController.class))
-                        .populateParts(booking.getRequiredPartsList());
-
-            }
-        });
+        partsTable.getSelectionModel().selectedItemProperty().addListener(this::selectPart);
     }
 }

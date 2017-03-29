@@ -77,6 +77,7 @@ public class ListController {
     }
 
     /** Set the cell value factories for each column in the table */
+    @SuppressWarnings("Duplicates")
     private void initializeTable() {
         DoubleBinding binding = bookingTableView.widthProperty().divide(8.5);
         customerColumn.prefWidthProperty().bind(binding);
@@ -140,9 +141,9 @@ public class ListController {
                 .selectedItemProperty()
                 .addListener((obs, oldSelection, newSelection) -> {
                     if (oldSelection != null) {
-                        for (PartOccurrence p : ((DetailsController) master.getController(DetailsController.class)).getDetachedParts()) {
-                            oldSelection.getRequiredPartsList().add(p);
-                        }
+                        // for (PartOccurrence p : ((DetailsController) master.getController(DetailsController.class)).getDetachedParts()) {
+                        //    oldSelection.getRequiredPartsList().add(p);
+                        // }
                     }
                     if (newSelection != null) {
                         ((DetailsController) master.getController(DetailsController.class))
