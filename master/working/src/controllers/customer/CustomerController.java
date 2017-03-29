@@ -844,7 +844,7 @@ public class CustomerController implements Initializable {
             }
 
             if (customerType.getSelectionModel().getSelectedItem() == null) {
-                errorAlert("Pick Customer Type");
+                errorAlert("Pick Customer type");
                 return false;
             }
             return true;
