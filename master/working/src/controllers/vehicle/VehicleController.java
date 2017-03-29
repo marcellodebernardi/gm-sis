@@ -242,6 +242,11 @@ public class VehicleController implements Initializable {
 
                 }
                 int customerID = Character.getNumericValue(cID.getSelectionModel().getSelectedItem().toString().charAt(0));
+                if (reg.getText().length()>7)
+                {
+                    showAlert("registration cant be longer than 7 characters");
+                    return;
+                }
                 boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this Vehicle, have you checked the vehicle details?");
                 if (add) {
                     boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
