@@ -42,12 +42,7 @@ public class VehicleSys {
 
     }
 
-    public List<Vehicle> searchByTemplate(String model, String manufacturer, Double engineSize, VehicleType vt, FuelType ft) {
-        List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,
-                "model", matches, model).and("manufacturer", matches, manufacturer).and("engineSize", equalTo, engineSize).and("vehicleType", equalTo, vt).and("fuelType", equalTo, ft));
-        return results;
 
-    }
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {
         List<Vehicle> results = persistence.getByCriteria(new Criterion<>(Vehicle.class,

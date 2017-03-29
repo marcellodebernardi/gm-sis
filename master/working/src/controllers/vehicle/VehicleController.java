@@ -53,13 +53,11 @@ public class VehicleController implements Initializable {
     @FXML
     private DatePicker rDateMot, dLastServiced, wExpirationDate;
     @FXML
-    private ComboBox vType, fType, cByWarranty, VehicleS, cID, typeS, VehicleTS;
+    private ComboBox vType, fType, cByWarranty, VehicleS, cID, typeS;
     @FXML
     private TableView<Vehicle> searchTable;
     @FXML
     private TableView<DiagRepBooking> BookingsTable;
-    @FXML
-    private TableView<Customer> CustomerTable;
     @FXML
     private TableColumn<Vehicle, String> tReg, tMod, tManu, tCol, tWn, tA;
     @FXML
@@ -79,15 +77,9 @@ public class VehicleController implements Initializable {
     @FXML
     private TableColumn<Vehicle, Boolean> tW;
     @FXML
-    private TableColumn<Customer, Integer> ctID;
+    private Label AddEditL, DSL, RSL, RSLL, DSLL, PartLabel, errorsLabel;
     @FXML
-    private TableColumn<Customer, String> ctFN, ctSN, ctA, ctP, ctPN, ctE;
-    @FXML
-    private CheckBox cReg, cCID, cVT, cMod, cManu, cES, cFT, cC, cMil, cMOT, cDLS, cW, cWN, cA, cD, ccID, cFN, cLN, cCA, cCPC, cCP, cCE, cCT;
-    @FXML
-    private Label AddEditL, SelectedVehicle, RCL, vehicleS, DSL, RSL, RSLL, DSLL, VehiclePartSelected, PartLabel, errorsLabel;
-    @FXML
-    private Button deleteV, ClearV, addV, PartsUsed, newVB, addCustomerB, bookingsB, DeleteVT, EditVehicle, ViewPartsB;
+    private Button deleteV, ClearV, addV, PartsUsed, newVB, DeleteVT, EditVehicle;
     @FXML
     private ListView ListParts;
 
@@ -95,42 +87,9 @@ public class VehicleController implements Initializable {
     private TextArea custInfo, custInfo2, Errors;
 
     private ObservableList tableEntries = FXCollections.observableArrayList(), tableEntriesB = FXCollections.observableArrayList(), comboEntriesC = FXCollections.observableArrayList();
-    private Callback<DatePicker, DateCell> motDayFactory = dp1 -> new DateCell() {
-        @Override
-        public void updateItem(LocalDate item, boolean empty) {
-
-            // Must call super
-            super.updateItem(item, empty);
-            if (item.isBefore(LocalDate.now())) {
-                this.setStyle(" -fx-background-color: #ff6666; ");
-                this.setDisable(true);
-            }
-        }
-    };
-    private Callback<DatePicker, DateCell> dlsDayFactory = dp2 -> new DateCell() {
-        @Override
-        public void updateItem(LocalDate item, boolean empty) {
-
-            // Must call super
-            super.updateItem(item, empty);
-            if (item.isAfter(LocalDate.now())) {
-                this.setStyle(" -fx-background-color: #ff6666; ");
-                this.setDisable(true);
-            }
-        }
-    };
-    private Callback<DatePicker, DateCell> weDayFactory = dp -> new DateCell() {
-        @Override
-        public void updateItem(LocalDate item, boolean empty) {
-
-            // Must call super
-            super.updateItem(item, empty);
-            if (item.isBefore(LocalDate.now())) {
-                this.setStyle(" -fx-background-color: #ff6666; ");
-                this.setDisable(true);
-            }
-        }
-    };
+    private Callback<DatePicker, DateCell> motDayFactory;
+    private Callback<DatePicker, DateCell> dlsDayFactory;
+    private Callback<DatePicker, DateCell> weDayFactory;
 
     private Date fromLocalDate(java.time.LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -744,139 +703,7 @@ public class VehicleController implements Initializable {
         }
     }
 
-    public void changeColumns() {
-        if (cReg.isSelected()) {
-            tReg.setVisible(true);
-        }
-        else {
-            tReg.setVisible(false);
-        }
-        if (cCID.isSelected()) {
-            tCID.setVisible(true);
-        }
-        else {
-            tCID.setVisible(false);
-        }
-        if (cVT.isSelected()) {
-            tVT.setVisible(true);
-        }
-        else {
-            tVT.setVisible(false);
-        }
-        if (cMod.isSelected()) {
-            tMod.setVisible(true);
-        }
-        else {
-            tMod.setVisible(false);
-        }
-        if (cManu.isSelected()) {
-            tManu.setVisible(true);
-        }
-        else {
-            tManu.setVisible(false);
-        }
-        if (cES.isSelected()) {
-            tEs.setVisible(true);
-        }
-        else {
-            tEs.setVisible(false);
-        }
-        if (cFT.isSelected()) {
-            tFT.setVisible(true);
-        }
-        else {
-            tFT.setVisible(false);
-        }
-        if (cC.isSelected()) {
-            tCol.setVisible(true);
-        }
-        else {
-            tCol.setVisible(false);
-        }
-        if (cMil.isSelected()) {
-            tMil.setVisible(true);
-        }
-        else {
-            tMil.setVisible(false);
-        }
-        if (cMOT.isSelected()) {
-            tMOT.setVisible(true);
-        }
-        else {
-            tMOT.setVisible(false);
-        }
-        if (cDLS.isSelected()) {
-            tDLS.setVisible(true);
-        }
-        else {
-            tDLS.setVisible(false);
-        }
-        if (cW.isSelected()) {
-            tW.setVisible(true);
-        }
-        else {
-            tW.setVisible(false);
-        }
-        if (cWN.isSelected()) {
-            tWn.setVisible(true);
-        }
-        else {
-            tWn.setVisible(false);
-        }
-        if (cA.isSelected()) {
-            tA.setVisible(true);
-        }
-        else {
-            tA.setVisible(false);
-        }
-        if (cD.isSelected()) {
-            tD.setVisible(true);
-        }
-        else {
-            tD.setVisible(false);
-        }
-        if (ccID.isSelected()) {
-            ctID.setVisible(true);
-        }
-        else {
-            ctID.setVisible(false);
-        }
-        if (cFN.isSelected()) {
-            ctFN.setVisible(true);
-        }
-        else {
-            ctFN.setVisible(false);
-        }
-        if (cLN.isSelected()) {
-            ctSN.setVisible(true);
-        }
-        else {
-            ctSN.setVisible(false);
-        }
-        if (cCA.isSelected()) {
-            ctA.setVisible(true);
-        }
-        else {
-            ctA.setVisible(false);
-        }
-        if (cCPC.isSelected()) {
-            ctP.setVisible(true);
-        }
-        if (cCP.isSelected()) {
-            ctPN.setVisible(true);
-        }
-        else {
-            ctPN.setVisible(false);
-        }
-        if (cCE.isSelected()) {
-            ctE.setVisible(true);
-        }
-        else {
-            ctE.setVisible(false);
-        }
 
-
-    }
 
     public void selectVehicle() {
         if (VehicleS.getSelectionModel().isSelected(0)) {
@@ -987,40 +814,7 @@ public class VehicleController implements Initializable {
         hiddenWarranty();
     }
 
-    public void ResetColumns() {
-        cReg.setSelected(true);
-        cVT.setSelected(true);
-        cCID.setSelected(true);
-        cVT.setSelected(true);
-        cMod.setSelected(true);
-        cManu.setSelected(true);
-        cES.setSelected(false);
-        cFT.setSelected(false);
-        cC.setSelected(false);
-        cMil.setSelected(false);
-        cMOT.setSelected(true);
-        cDLS.setSelected(true);
-        cW.setSelected(true);
-        cWN.setSelected(true);
-        cA.setSelected(true);
-        cD.setSelected(true);
-        tReg.setVisible(true);
-        tMod.setVisible(true);
-        tManu.setVisible(true);
-        tCol.setVisible(false);
-        tWn.setVisible(true);
-        tA.setVisible(true);
-        tMil.setVisible(false);
-        tVT.setVisible(true);
-        tEs.setVisible(false);
-        tFT.setVisible(false);
-        tCID.setVisible(true);
-        tMOT.setVisible(true);
-        tDLS.setVisible(true);
-        tD.setVisible(true);
-        tW.setVisible(true);
 
-    }
 
     public void ViewBookingDates() {
         Vehicle vehicle = ((Vehicle) searchTable.getSelectionModel().getSelectedItem());
@@ -1152,24 +946,7 @@ public class VehicleController implements Initializable {
         }
     }
 
-    public void ResetCustomerColumns() {
-        ccID.setSelected(false);
-        cFN.setSelected(true);
-        cLN.setSelected(true);
-        cCA.setSelected(true);
-        cCPC.setSelected(true);
-        cCP.setSelected(true);
-        cCE.setSelected(true);
-        cCT.setSelected(true);
-        ctID.setVisible(false);
-        ctFN.setVisible(true);
-        ctSN.setVisible(true);
-        ctA.setVisible(true);
-        ctP.setVisible(true);
-        ctPN.setVisible(true);
-        ctE.setVisible(true);
-        //ctT.setVisible(true);
-    }
+
 
     public void newVehicle() {
         reg.setEditable(true);
@@ -1466,11 +1243,47 @@ public class VehicleController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setCustomerCombo();
         searchVehicleA();
+        //custInfo.setEditable(false);
+        col.setValue(null);
+        motDayFactory = dp1 -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+
+                // Must call super
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    this.setStyle(" -fx-background-color: #ff6666; ");
+                    this.setDisable(true);
+                }
+            }
+        };
+        dlsDayFactory = dp2 -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+
+                // Must call super
+                super.updateItem(item, empty);
+                if (item.isAfter(LocalDate.now())) {
+                    this.setStyle(" -fx-background-color: #ff6666; ");
+                    this.setDisable(true);
+                }
+            }
+        };
+        weDayFactory = dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+
+                // Must call super
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    this.setStyle(" -fx-background-color: #ff6666; ");
+                    this.setDisable(true);
+                }
+            }
+        };
         rDateMot.setDayCellFactory(motDayFactory);
         dLastServiced.setDayCellFactory(dlsDayFactory);
         wExpirationDate.setDayCellFactory(weDayFactory);
-        //custInfo.setEditable(false);
-        col.setValue(null);
     }
 
     public void setCustomerCombo() {
