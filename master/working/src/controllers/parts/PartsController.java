@@ -327,23 +327,27 @@ public class PartsController implements Initializable {
     public void addToDB() throws Exception {
 
 
-        PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
-                Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
-                null);
-        boolean s = instance.commitItem(newPart);
-        List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
-        for (int i = 0; i < partAbstractionList.size(); i++) {
-            if (i == partAbstractionList.size() - 1) {
-                for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
-                    PartAbstraction partAbstraction = partAbstractionList.get(i);
-                    PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
-                    pSys.addPartOccurrence(partOccurrence);
+        try {
+            PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
+                    Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
+                    null);
+            boolean s = instance.commitItem(newPart);
+            List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
+            for (int i = 0; i < partAbstractionList.size(); i++) {
+                if (i == partAbstractionList.size() - 1) {
+                    for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
+                        PartAbstraction partAbstraction = partAbstractionList.get(i);
+                        PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
+                        pSys.addPartOccurrence(partOccurrence);
+                    }
                 }
             }
-        }
 
-        clearAddForm();
-        updateTable();
+            clearAddForm();
+            updateTable();
+        }catch(NullPointerException | NumberFormatException e){
+            showError("Please fill out all the fields to add a part to the system");
+        }
 
     }
 
@@ -617,6 +621,7 @@ public class PartsController implements Initializable {
         try {
 
             partOccurrences.removeAll(partOccurrences);
+
             String[] s = addPartToInst.getSelectionModel().getSelectedItem().trim().split(":");
             partOccurrences.addAll(pSys.getAllUninstalled(Integer.parseInt(s[0].trim())));
             availableOcc.getItems().removeAll(availableOcc.getItems());

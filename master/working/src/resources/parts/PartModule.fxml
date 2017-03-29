@@ -28,7 +28,7 @@
                 <TextField fx:id="partNameField" layoutX="121.0" layoutY="108.0" prefHeight="27.0" prefWidth="179.0" promptText="Enter part name" />
                 <TextField fx:id="partPriceField" layoutX="121.0" layoutY="265.0" prefHeight="27.0" prefWidth="179.0" promptText="Enter part price (£)" />
                 <TextField fx:id="partStockLevelField" layoutX="121.0" layoutY="304.0" prefHeight="27.0" prefWidth="182.0" promptText="Enter current stock level" />
-                <Button fx:id="addBtn" layoutX="7.0" layoutY="343.0" mnemonicParsing="false" onAction="#addToDB" prefHeight="27.0" prefWidth="133.0" text="Add" />
+                <Button fx:id="addBtn" layoutX="7.0" layoutY="343.0" mnemonicParsing="false" onAction="#addToDB" prefHeight="27.0" prefWidth="133.0" text="Add Part" />
                 <TextArea fx:id="partDescriptionField" layoutX="121.0" layoutY="150.0" prefHeight="103.0" prefWidth="181.0" promptText="Enter part description" />
                 <Label id="detailsTitle" layoutX="100.0" layoutY="18.0" text="Add Part">
                     <font>
@@ -111,18 +111,18 @@
                                         </Button>
                                         <Button layoutX="736.0" layoutY="53.0" mnemonicParsing="false" onAction="#addInstallation" prefHeight="27.0" prefWidth="226.0" text="Add Installation" />
                                         <Label layoutX="18.0" layoutY="59.0" text="Installation ID" />
-                                        <TextField editable="false" layoutX="152.0" layoutY="54.0" prefHeight="27.0" prefWidth="165.0" text="Auto Assigned" />
+                                        <TextField disable="true" editable="false" layoutX="152.0" layoutY="54.0" prefHeight="27.0" prefWidth="217.0" text="Auto Assigned" />
                                         <Label layoutX="18.0" layoutY="131.0" text="Registration" />
                                         <Label layoutX="18.0" layoutY="94.0" text="Part from Inventory" />
-                                        <Label layoutX="439.0" layoutY="59.0" text="Installation Date" />
-                                        <Label layoutX="439.0" layoutY="94.0" text="Part Serial" />
-                                        <ComboBox fx:id="addPartToInst" layoutX="152.0" layoutY="88.0" onAction="#setOccs" prefHeight="27.0" prefWidth="166.0" />
+                                        <Label layoutX="388.0" layoutY="59.0" text="Installation Date" />
+                                        <Label layoutX="388.0" layoutY="94.0" text="Part Serial" />
+                                        <ComboBox fx:id="addPartToInst" layoutX="152.0" layoutY="88.0" onAction="#setOccs" prefHeight="27.0" prefWidth="217.0" promptText="Select a part from stock" />
                                         <Button fx:id="clearInstBtn" layoutX="736.0" layoutY="89.0" mnemonicParsing="false" onAction="#clearInstallation" prefHeight="27.0" prefWidth="228.0" text="Clear" />
-                                        <DatePicker fx:id="instDate" layoutX="555.0" layoutY="54.0" prefHeight="27.0" prefWidth="165.0" />
-                                        <TextField fx:id="regNumberInstallation" layoutX="151.0" layoutY="123.0" prefHeight="27.0" prefWidth="167.0" />
-                                        <ComboBox fx:id="availableOcc" layoutX="555.0" layoutY="89.0" prefHeight="27.0" prefWidth="166.0" promptText="Part Occurrences" />
-                              <ComboBox fx:id="bookingsForInstallation" layoutX="555.0" layoutY="126.0" prefHeight="27.0" prefWidth="166.0" promptText="Select a booking" />
-                              <Button layoutX="322.0" layoutY="123.0" mnemonicParsing="false" onAction="#findRelevantBookings" prefHeight="27.0" prefWidth="107.0" text="Find Bookings" />
+                                        <DatePicker fx:id="instDate" layoutX="506.0" layoutY="54.0" prefHeight="27.0" prefWidth="214.0" promptText="Pick installation date" />
+                                        <TextField fx:id="regNumberInstallation" layoutX="151.0" layoutY="123.0" prefHeight="27.0" prefWidth="219.0" promptText="Enter reg number" />
+                                        <ComboBox fx:id="availableOcc" layoutX="508.0" layoutY="89.0" prefHeight="27.0" prefWidth="213.0" promptText="Select an individual item" />
+                              <ComboBox fx:id="bookingsForInstallation" layoutX="509.0" layoutY="126.0" prefHeight="27.0" prefWidth="212.0" promptText="Select a booking" />
+                              <Button layoutX="385.0" layoutY="126.0" mnemonicParsing="false" onAction="#findRelevantBookings" prefHeight="27.0" prefWidth="107.0" text="Find Bookings" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -130,7 +130,7 @@
                     </tabs>
                 </TabPane>
                 <Label layoutX="14.0" layoutY="75.0" text="Part ID" />
-                <TextField editable="false" layoutX="121.0" layoutY="70.0" prefHeight="27.0" prefWidth="178.0" text="Auto Assigned" />
+                <TextField disable="true" editable="false" layoutX="121.0" layoutY="70.0" prefHeight="27.0" prefWidth="178.0" text="Auto Assigned" />
                       <Label layoutX="82.0" layoutY="378.0" text="Parts Bill Calculator">
                           <font>
                               <Font name="System Bold" size="13.0" />
