@@ -83,6 +83,34 @@ and red buttons by the small parts table.
 
 #### 4.6 PARTS - Muhammad Hoque
 
+The parts screen consists of two tab views: **Available Parts** and **Part Installation History**
+
+The first tab is the **Available Parts**, this section on the interface displays all of the current stock items
+available in the garage. In order to add to this stock list, the user must complete all of the appropriate fields
+which are located on the left hand side and must press the **Add Part** button.
+The table should then automatically update showing the new stock item. The user can increase/decrease the stock
+by selecting on a row and pressing either the ** +Stock ** or the ** -Stock ** button. This will increase/decrease
+the stock by 1 and will also add/remove an occurrence for the selected part.
+
+The available parts section also consists of a search bar which allows the user to search by part name,
+this is done by entering full or partial part name and pressing the **Search** button. The user can also edit
+this table by double-clicking on the area they wish to edit and pressing enter, to commit the changes and
+then pressing the **Save** button which will save to database and update the table. Also, the delete function
+has been implemented and the user can select a part which they wish to delete and press the **Delete** button.
+
+The second tab which is the **Part Installation History** displays all of the installations which have used a part
+from the inventory. The user can add installations by filling out the fields and selecting the part they wish to add
+and also choosing an available occurrence in the garage. This table also allows the user to search by full or partial
+registration, customer first name and surname and then by pressing the **Search** button the table shows the
+information.
+
+A **part calculator** has also been implemented to show the total part cost of the selected items:
+
+1.  Select a part from the first combo-box, this will display the ID for the part and also display the name.
+2.  The selected part will show the price in the opposite text field.
+3.  A quantity **must** be entered even if the user wishes to select only 1, in order for the total to be shown.
+4.  Press the **Calculate Total** button so that the total part cost is given to the user.
+
 #### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
 
 In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
