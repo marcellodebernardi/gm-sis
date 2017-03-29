@@ -76,7 +76,9 @@ public class PartsSystem {
     }
 
     public List<PartOccurrence> getAllFreeOccurrences(PartAbstraction partAbstraction) {
-        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class, "installationID", equalTo, 0)
+        return persistence.getByCriteria(new Criterion<>(PartOccurrence.class)
+                .where("installationID", equalTo, 0)
+                .and("bookingID", equalTo, 0)
                 .and("partAbstractionID", equalTo, partAbstraction.getPartAbstractionID()));
     }
 
