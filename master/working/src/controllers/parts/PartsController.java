@@ -399,7 +399,8 @@ public class PartsController implements Initializable {
             if (part == null) {
                 throw new Exception();
             }
-            if ((!showConfirmation("Sure you want to delete this part?"))) {
+            if ((!showWarning("Warning: Deleting this part type will delete all related stock items from the inventory\n" + " \n" +
+                   "Press OK to continue"))) {
                 return;
             }
             boolean result = pSys.deletePart(part.getPartAbstractionID());
@@ -426,6 +427,20 @@ public class PartsController implements Initializable {
         alert.setHeaderText(message);
         alert.showAndWait();
 
+    }
+
+    public boolean showWarning(String message){
+
+        Alert warnAlert = new Alert(Alert.AlertType.WARNING);
+        warnAlert.setTitle("Warning");
+        warnAlert.setHeaderText(message);
+        warnAlert.showAndWait();
+        if (warnAlert.getResult() == ButtonType.OK) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean showConfirmation(String message) {
