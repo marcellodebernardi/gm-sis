@@ -89,7 +89,7 @@ The first tab is the **Available Parts**, this section on the interface displays
 available in the garage. In order to add to this stock list, the user must complete all of the appropriate fields
 which are located on the left hand side and must press the **Add Part** button.
 The table should then automatically update showing the new stock item. The user can increase/decrease the stock
-by selecting on a row and pressing either the ** +Stock ** or the ** -Stock ** button. This will increase/decrease
+by selecting on a row and pressing either the **+Stock** or the **-Stock** button. This will increase/decrease
 the stock by 1 and will also add/remove an occurrence for the selected part.
 
 The available parts section also consists of a search bar which allows the user to search by part name,
@@ -114,14 +114,14 @@ A **part calculator** has also been implemented to show the total part cost of t
 #### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
 
 In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
-and vehicles. The user is also able to view a list of**installations**for a chosen vehicle from the list of repairs.
-The user can query a list of **outstanding**bookings, which will return a list of items (both parts and vehicles) which
-have not yet been returned to the garage. The user can also query a list of**returned**items which have been returned to
+and vehicles. The user is also able to view a list of **installations** for a chosen vehicle from the list of repairs.
+The user can query a list of **outstanding** bookings, which will return a list of items (both parts and vehicles) which
+have not yet been returned to the garage. The user can also query a list of **returned** items which have been returned to
 the garage. 
 
 **Some rules apply to the adding and editing and deletion of specialist booking details**:
 
-1.  A specialist repair booking MUST be linked to a diagnosis and repair booking. 
+1.  A specialist repair booking **MUST** be linked to a diagnosis and repair booking.
 2.  A
 3.  The "complete" button completes a booking. A completed booking can no longer be modified.
 4.  A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
