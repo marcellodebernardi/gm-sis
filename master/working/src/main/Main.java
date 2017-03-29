@@ -93,8 +93,6 @@ public class Main extends Application {
     public void setRootPane(BorderPane rootPane) {
         applicationPane = rootPane;
         tabPane = (HBox)rootPane.getChildren().get(0);
-        screenX = 1289;
-        screenY = 700;
         // pane properties that are hard to implement in CSS
         applicationPane.setPrefHeight(screenY);
         applicationPane.setPrefWidth(screenX);
@@ -102,7 +100,13 @@ public class Main extends Application {
         tabPane.setPrefWidth(screenX);
 
         for (Node b : tabPane.getChildren()) {
-            ((Button)b).setPrefWidth(tabWidth);
+            if (b instanceof Button) {
+                ((Button) b).setPrefWidth(tabWidth);
+            }
+            else if (b instanceof GridPane)
+            {
+                ((GridPane)b).setPrefWidth(tabWidth);
+            }
         }
 
         // set scene and stage
@@ -111,8 +115,6 @@ public class Main extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.setMaximized(true);
         primaryStage.setResizable(false);
-        primaryStage.setX((Screen.getPrimary().getVisualBounds().getWidth() - primaryStage.getWidth()) / 2);
-        primaryStage.setY((Screen.getPrimary().getVisualBounds().getHeight() - primaryStage.getHeight()) / 2);
     }
 
     /**
@@ -126,7 +128,13 @@ public class Main extends Application {
             newApplicationPane.setCenter(pane);
 
             for (Node b : ((HBox)newApplicationPane.getTop()).getChildren()) {
-                ((Button)b).setPrefWidth(tabWidth);
+                if (b instanceof Button) {
+                    ((Button) b).setPrefWidth(tabWidth);
+                }
+                else if (b instanceof GridPane)
+                {
+                    ((GridPane)b).setPrefWidth(tabWidth);
+                }
             }
 
             primaryStage.getScene().setRoot(newApplicationPane);

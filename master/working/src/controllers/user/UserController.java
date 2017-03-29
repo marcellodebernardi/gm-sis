@@ -178,7 +178,7 @@ public class UserController implements Initializable {
         }
         UT.setValue(theUser);
         userLabel.setText("Edit User");
-        addButton.setText("Edit");
+        addButton.setText("Save");
         clearButton.setDisable(true);
         newButton.setDisable(false);
         deleteButton.setDisable(false);
