@@ -126,7 +126,7 @@ public class ListController {
                             : "");
         });
         billAmountColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getBillAmount())
+                new ReadOnlyObjectWrapper<>((double)((int)(p.getValue().getBillAmount() * 100)) / 100)
         );
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));

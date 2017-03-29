@@ -80,6 +80,12 @@ public class VehiclePaneController {
             Customer c = p.getValue().getCustomer();
             return new ReadOnlyObjectWrapper<>(c.getCustomerFirstname() + " " + c.getCustomerSurname());
         });
+        warrantyColumn.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(
+                        p.getValue().isCoveredByWarranty() ?
+                                "Covered - " + p.getValue().getWarrantyName()
+                                : ""
+                ));
 
         vehicleTableView.getColumns().setAll(vehicleColumn, customerColumn, warrantyColumn);
 
@@ -130,7 +136,7 @@ public class VehiclePaneController {
                             : "");
         });
         billAmountColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getBillAmount())
+                new ReadOnlyObjectWrapper<>((double)((int)(p.getValue().getBillAmount() * 100)) / 100)
         );
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));

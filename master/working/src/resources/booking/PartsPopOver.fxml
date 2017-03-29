@@ -2,8 +2,14 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111"
             fx:controller="controllers.booking.PartsPopOverController" id="PartsPopOverPane">
+    <top>
+        <HBox id="partsTop">
+            <Label>Click on a row to add a required part to the booking.</Label>
+        </HBox>
+    </top>
     <center>
         <TableView fx:id="partsTable">
             <columns>
