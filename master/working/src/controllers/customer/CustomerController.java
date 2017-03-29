@@ -152,7 +152,6 @@ public class CustomerController implements Initializable {
             String cEmail = customerEmail.getText().toLowerCase();
             CustomerType cType = null;
             boolean checkFields = false;
-
             checkFields = checkCustomerFields();
 
             if (customerType.getSelectionModel().getSelectedItem().toString().equals("Private")) {
@@ -723,6 +722,11 @@ public class CustomerController implements Initializable {
 
     public boolean checkCustomerFields() {
         try {
+            if((customerFirstname.getText().equals(""))&&(customerSurname.getText().equals(""))&&(customerAddress.getText().equals(""))&&(customerPostcode.getText().equals(""))&&(customerPhone.getText().equals(""))&&(customerEmail.getText().equals(""))&&(customerType.getSelectionModel().getSelectedItem() == null))
+            {
+                errorAlert("All fields are empty. Add Customer record");
+                return false;
+            }
             if (customerFirstname.getText().equals("")) {
                 errorAlert("'Customer First name' field is empty. Enter First name");
                 return false;
@@ -834,6 +838,15 @@ public class CustomerController implements Initializable {
             }
             if (!customerEmail.getText().contains(".")) {
                 errorAlert("'Customer Email' address field does not contain '.' symbol. Enter valid Email address containing period/dot '.' and '@' symbol");
+                return false;
+            }
+
+            int emailAtSignPosition = customerEmail.getText().indexOf("@");
+            String emailAtSign = customerEmail.getText().substring(emailAtSignPosition);
+
+            if(!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})"))
+            {
+                errorAlert("Invalid email");
                 return false;
             }
             boolean verifyEmail = verifyCustomerDoesNotExist(customerEmail.getText());
