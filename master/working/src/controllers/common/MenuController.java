@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import logic.authentication.AuthenticationSystem;
@@ -36,8 +37,11 @@ public class MenuController implements Initializable {
     @FXML private Button UsersButton;
     @FXML private Button SRCButton;
     @FXML private Button logoutButton;
+    @FXML private Label userloggedIn, usernloggedIn;
 
     private static MenuController instance;
+
+
 
 
     @Override public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +54,8 @@ public class MenuController implements Initializable {
             UsersButton.setDisable(true);
             SRCButton.setDisable(true);
         }
+        usernloggedIn.setText(AuthenticationSystem.getInstance().getLoggedInUser());
+        userloggedIn.setText(AuthenticationSystem.getInstance().getLoginFirstName());
     }
 
     public void openApplication() {
