@@ -199,6 +199,7 @@ public class UserController implements Initializable {
     }
 
     public void AllUsers() {
+        sUT.setValue(null);
         List<User> arrayList = auth.getAllUsers();
         displayTable(arrayList);
     }
