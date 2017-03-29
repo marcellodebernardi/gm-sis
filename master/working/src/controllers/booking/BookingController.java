@@ -17,7 +17,6 @@ public class BookingController {
     // singleton instance and booking system
     private static BookingController instance;
     private HashMap<Class<?>, Object> controllerMap;
-    private List<DiagRepBooking> bookingCache;
 
     private BorderPane basePane;
 

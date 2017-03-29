@@ -1,6 +1,5 @@
 package logic.parts;
 
-import domain.Customer;
 import domain.Installation;
 import domain.PartAbstraction;
 import domain.PartOccurrence;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static logic.criterion.CriterionOperator.equalTo;
-import static logic.criterion.CriterionOperator.matches;
 import static logic.criterion.CriterionOperator.moreThan;
 
 /**
@@ -120,11 +118,10 @@ public class PartsSystem {
         return persistence.deleteItem(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
     }
 
-    public void commitAbstraction(PartAbstraction partAbstraction)
-    {
+    public void commitAbstraction(PartAbstraction partAbstraction) {
         persistence.commitItem(partAbstraction);
     }
-    
+
 
 }
 
