@@ -4,6 +4,7 @@ import domain.Searchable;
 import logic.criterion.Criterion;
 import logic.criterion.CriterionRepository;
 
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class DatabaseRepository implements CriterionRepository {
     private static DatabaseRepository instance;
 
     // database connection
-    private final String DB_URL = "jdbc:sqlite:master/working/lib/GM-SIS.db";
+    private String DB_URL;
     private Connection connection;
     private PreparedStatement statement;
 
@@ -32,11 +33,19 @@ public class DatabaseRepository implements CriterionRepository {
     private DatabaseRepository() {
         try {
             // connect to database
+
+            DB_URL = "jdbc:sqlite:"
+                    + this.getClass().getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath().replaceAll("[/\\\\]\\w*\\.jar", "/")
+                    + "lib/GM-SIS.db";
             connection = DriverManager.getConnection(DB_URL);
             mapper = ObjectRelationalMapper.getInstance();
             mapper.initialize(this);
         }
-        catch (SQLException e) {
+        catch (SQLException | URISyntaxException e) {
             System.out.println(e.toString());
         }
     }
