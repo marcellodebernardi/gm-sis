@@ -14,7 +14,7 @@
         </HBox>
     </top>
     <center>
-        <VBox>
+        <VBox id="doubleTableVBox">
             <TableView fx:id="vehicleTableView">
                 <columns>
                     <TableColumn text="Vehicle" fx:id="vehicleColumn" />
