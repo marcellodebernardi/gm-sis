@@ -111,7 +111,7 @@ public class UserController implements Initializable {
                 boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
                 ClearFields();
-                NewVehicle();
+                NewUser();
                 if (addOrEdit.equals("add"))
                 {
                     if (checker)
@@ -179,6 +179,7 @@ public class UserController implements Initializable {
             {
                 showAlert("successfully deleted");
                 AllUsers();
+                NewUser();
             }
             else
             {
@@ -345,7 +346,7 @@ public class UserController implements Initializable {
         AllUsers();
     }
 
-    public void NewVehicle() {
+    public void NewUser() {
         ClearFields();
         UID.setDisable(false);
         userLabel.setText("Add User");

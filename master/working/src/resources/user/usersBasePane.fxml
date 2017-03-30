@@ -59,7 +59,7 @@
             <bottom>
                 <HBox id="bottomButtonsHBox">
                     <Button fx:id="addButton" mnemonicParsing="false" onAction="#addEditUser" text="Add" />
-                    <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#NewVehicle" text="New" />
+                    <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#NewUser" text="New" />
                     <Button fx:id="clearButton" mnemonicParsing="false" onAction="#ClearFields" text="Clear" />
                     <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteUser" text="Delete" />
                 </HBox>
