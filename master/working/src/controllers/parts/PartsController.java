@@ -21,9 +21,7 @@ import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 import java.net.URL;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -104,6 +102,8 @@ public class PartsController implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
 
+        instDate.setDayCellFactory(dateChecker);
+        
         try {
             CB1.setItems(CB);
             CB2.setItems(CB);
@@ -119,6 +119,24 @@ public class PartsController implements Initializable {
         }
 
     }
+
+    private Callback<DatePicker, DateCell> dateChecker = dp1 -> new DateCell() {
+        @Override
+        public void updateItem(LocalDate item, boolean empty) {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isBefore(LocalDate.now())) {
+                this.setStyle(" -fx-background-color: rgba(171,171,171,0); ");
+                this.setDisable(true);
+            }
+            if (item.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                this.setDisable(true);
+                this.setStyle("-fx-background-color: rgba(171,171,171,0)");
+            }
+
+        }
+    };
 
     /**
      * This method is the action for my "View All Parts" button on the interface
@@ -331,17 +349,27 @@ public class PartsController implements Initializable {
             PartAbstraction newPart = new PartAbstraction(partNameField.getText(), partDescriptionField.getText(),
                     Double.parseDouble(partPriceField.getText()), Integer.parseInt(partStockLevelField.getText()),
                     null);
-            boolean s = instance.commitItem(newPart);
+            pSys.commitAbstraction(newPart);
+            //boolean s = instance.commitItem(newPart);
             List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
+            int index  = partAbstractionList.size()-1;
+            for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
+                System.out.println("added : " + j+1);
+                PartAbstraction partAbstraction = partAbstractionList.get(index);
+                PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
+                pSys.addPartOccurrence(partOccurrence);
+            }
+            /*
             for (int i = 0; i < partAbstractionList.size(); i++) {
                 if (i == partAbstractionList.size() - 1) {
                     for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
+                        System.out.println("added : " + j+1);
                         PartAbstraction partAbstraction = partAbstractionList.get(i);
                         PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
                         pSys.addPartOccurrence(partOccurrence);
                     }
                 }
-            }
+            }*/
 
             clearAddForm();
             updateTable();
@@ -568,8 +596,9 @@ public class PartsController implements Initializable {
             }
             DiagRepBooking diagRepBooking = BookingSystem.getInstance().getBookingByID(bookingsForInstallation.getSelectionModel().getSelectedItem());
             PartOccurrence partOccurrence = pSys.getPartOcc(Integer.parseInt(availableOcc.getSelectionModel().getSelectedItem().trim()));
-            Character c = availableOcc.getSelectionModel().getSelectedItem().trim().charAt(0);
-            int partAbs = c.getNumericValue(c);
+            String [] s = addPartToInst.getSelectionModel().getSelectedItem().split(":");
+            int partAbs = Integer.parseInt(s[0].trim());
+            System.out.println(partAbs);
             System.out.println("Stock level : " + partAbs);
             PartAbstraction partAbstraction = pSys.getPartbyID(partAbs);
             partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
@@ -589,6 +618,7 @@ public class PartsController implements Initializable {
 
         }
         catch (Exception e) {
+            e.printStackTrace();
             if(e instanceof IndexOutOfBoundsException || e instanceof  NullPointerException)
             {
                 showError("No booking found!");
@@ -619,9 +649,7 @@ public class PartsController implements Initializable {
     public void setOccs(){
 
         try {
-
             partOccurrences.removeAll(partOccurrences);
-
             String[] s = addPartToInst.getSelectionModel().getSelectedItem().trim().split(":");
             partOccurrences.addAll(pSys.getAllUninstalled(Integer.parseInt(s[0].trim())));
             availableOcc.getItems().removeAll(availableOcc.getItems());
