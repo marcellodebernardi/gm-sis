@@ -103,7 +103,7 @@ public class PartsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         instDate.setDayCellFactory(dateChecker);
-        
+
         try {
             CB1.setItems(CB);
             CB2.setItems(CB);
@@ -359,17 +359,6 @@ public class PartsController implements Initializable {
                 PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
                 pSys.addPartOccurrence(partOccurrence);
             }
-            /*
-            for (int i = 0; i < partAbstractionList.size(); i++) {
-                if (i == partAbstractionList.size() - 1) {
-                    for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
-                        System.out.println("added : " + j+1);
-                        PartAbstraction partAbstraction = partAbstractionList.get(i);
-                        PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
-                        pSys.addPartOccurrence(partOccurrence);
-                    }
-                }
-            }*/
 
             clearAddForm();
             updateTable();
@@ -594,6 +583,7 @@ public class PartsController implements Initializable {
             if (vehicle == null) {
                 throw new Exception();
             }
+            viewAllBookingsClick();
             DiagRepBooking diagRepBooking = BookingSystem.getInstance().getBookingByID(bookingsForInstallation.getSelectionModel().getSelectedItem());
             PartOccurrence partOccurrence = pSys.getPartOcc(Integer.parseInt(availableOcc.getSelectionModel().getSelectedItem().trim()));
             String [] s = addPartToInst.getSelectionModel().getSelectedItem().split(":");
@@ -607,7 +597,7 @@ public class PartsController implements Initializable {
             Installation installation = new Installation(ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), regNumberInstallation.getText(), partAbs, partOccurrence);
             partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
             pSys.commitAbstraction(partAbstraction);
-            viewAllBookingsClick();
+
             updateTable();
             partOccurrence.setBookingID(diagRepBooking.getBookingID());
             pSys.commitInst(installation);
