@@ -1,4 +1,6 @@
-package persistence.cellgetter;
+package persistence.support;
+
+import domain.FuelType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,8 +8,8 @@ import java.sql.SQLException;
 /**
  * @author Marcello De Bernardi
  */
-class DoubleCellGetter extends CellGetter {
+class FuelTypeCellGetter extends CellGetter {
     Object getObject(ResultSet results, int columnIndex) throws SQLException {
-        return results.getDouble(columnIndex);
+        return FuelType.valueOf(results.getString(columnIndex));
     }
 }

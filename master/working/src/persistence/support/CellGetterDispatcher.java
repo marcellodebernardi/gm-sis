@@ -1,4 +1,4 @@
-package persistence.cellgetter;
+package persistence.support;
 
 import domain.CustomerType;
 import domain.FuelType;

@@ -1,4 +1,4 @@
-package persistence.cellgetter;
+package persistence.support;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

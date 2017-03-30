@@ -1,6 +1,4 @@
-package persistence.cellgetter;
-
-import domain.UserType;
+package persistence.support;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +6,8 @@ import java.sql.SQLException;
 /**
  * @author Marcello De Bernardi
  */
-class UserTypeCellGetter extends CellGetter {
+class DoubleCellGetter extends CellGetter {
     Object getObject(ResultSet results, int columnIndex) throws SQLException {
-        return UserType.valueOf(results.getString(columnIndex));
+        return results.getDouble(columnIndex);
     }
 }
