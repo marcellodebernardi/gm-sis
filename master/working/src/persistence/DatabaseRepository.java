@@ -106,7 +106,6 @@ public class DatabaseRepository implements CriterionRepository {
             // generate and queue statements for transaction
             List<String> statements = mapper.toCOMMITTransaction(item);
             for (String s : statements) {
-                System.out.println("Executing " + s);
                 connection.prepareStatement(s).executeUpdate();
             }
 
@@ -132,7 +131,6 @@ public class DatabaseRepository implements CriterionRepository {
             // generate and queue queries for transaction
             List<String> statements = mapper.toDELETETransaction(criteria, this);
             for (String s : statements) {
-                System.out.println("Executing " + s);
                 connection.prepareStatement(s).executeUpdate();
             }
 
