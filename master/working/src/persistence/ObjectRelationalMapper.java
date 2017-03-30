@@ -2,7 +2,7 @@ package persistence;
 
 import domain.*;
 import logic.criterion.Criterion;
-import persistence.cellgetter.CellGetterDispatcher;
+import persistence.support.CellGetterDispatcher;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

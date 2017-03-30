@@ -25,8 +25,6 @@ import java.util.ResourceBundle;
  *         todo clean up and add comments
  */
 public class MenuController implements Initializable {
-    // todo this is bad, controllers need not be entirely stateless but their state needs to be reset
-    private BorderPane todayPane;
     private BorderPane customersBasePane;
     private BorderPane vehicleBasePane;
     private BorderPane partsBasePane;
@@ -37,7 +35,7 @@ public class MenuController implements Initializable {
     @FXML private Button UsersButton;
     @FXML private Button SRCButton;
     @FXML private Button logoutButton;
-    @FXML private Label userloggedIn, usernloggedIn;
+    @FXML private Button userGreeting;
 
     private static MenuController instance;
 
@@ -54,8 +52,7 @@ public class MenuController implements Initializable {
             UsersButton.setDisable(true);
             SRCButton.setDisable(true);
         }
-        usernloggedIn.setText(AuthenticationSystem.getInstance().getLoggedInUser());
-        userloggedIn.setText(AuthenticationSystem.getInstance().getLoginFirstName());
+        userGreeting.setText(userGreeting.getText() + AuthenticationSystem.getInstance().getLoginFirstName());
     }
 
     public void openApplication() {

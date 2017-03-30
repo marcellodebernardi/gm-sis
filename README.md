@@ -6,8 +6,8 @@ Repository for GM-SIS system, by Team 31.
 1. Ebubechukwu Abara (ec14177)
 2. Dillon Vaghela (ec15147)
 3. Marcello De Bernardi (ec15265)
-4. Muhammad Hoque (ecXXXXX)
-5. Muhammad Ahmed (ecXXXXX)
+4. Muhammad Hoque (ec15157)
+5. Muhammad Ahmed (ec15496)
 
 ### 2. DEPLOYMENT INFORMATION
 Requires **JRE1.8.x** to run. On the ITL machines this means running the application on Windows 10.
@@ -83,7 +83,51 @@ and red buttons by the small parts table.
 
 #### 4.6 PARTS - Muhammad Hoque
 
+The parts screen consists of two tab views: **Available Parts** and **Part Installation History**
+
+The first tab is the **Available Parts**, this section on the interface displays all of the current stock items
+available in the garage. In order to add to this stock list, the user must complete all of the appropriate fields
+which are located on the left hand side and must press the **Add Part** button.
+The table should then automatically update showing the new stock item. The user can increase/decrease the stock
+by selecting on a row and pressing either the **+Stock** or the **-Stock** button. This will increase/decrease
+the stock by 1 and will also add/remove an occurrence for the selected part.
+
+The available parts section also consists of a search bar which allows the user to search by part name,
+this is done by entering full or partial part name and pressing the **Search** button. The user can also edit
+this table by double-clicking on the area they wish to edit and pressing enter, to commit the changes and
+then pressing the **Save** button which will save to database and update the table. Also, the delete function
+has been implemented and the user can select a part which they wish to delete and press the **Delete** button.
+
+The second tab which is the **Part Installation History** displays all of the installations which have used a part
+from the inventory. The user can add installations by filling out the fields and selecting the part they wish to add
+and also choosing an available occurrence in the garage. This table also allows the user to search by full or partial
+registration, customer first name and surname and then by pressing the **Search** button the table shows the
+information.
+
+A **part calculator** has also been implemented to show the total part cost of the selected items:
+
+1.  Select a part from the first combo-box, this will display the ID for the part and also display the name.
+2.  The selected part will show the price in the opposite text field.
+3.  A quantity **must** be entered even if the user wishes to select only 1, in order for the total to be shown.
+4.  Press the **Calculate Total** button so that the total part cost is given to the user.
+
 #### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
+
+In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
+and vehicles. The user is also able to view a list of **installations** for a chosen vehicle from the list of repairs.
+The user can query a list of **outstanding** bookings, which will return a list of items (both parts and vehicles) which
+have not yet been returned to the garage. The user can also query a list of **returned** items which have been returned to
+the garage. 
+
+**Some rules apply to the adding and editing and deletion of specialist booking details**:
+
+1.  A specialist repair booking **MUST** be linked to a diagnosis and repair booking.
+2.  A
+3.  The "complete" button completes a booking. A completed booking can no longer be modified.
+4.  A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
+5.  A booking can only be completed, however, once a repair appointment has been carried out and
+    a new mileage value recorded.
+
 
 #### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
 

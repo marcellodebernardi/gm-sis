@@ -240,9 +240,10 @@ public class SpecRepairSystem {
     public Installation getByInstallationID(int InstallationID) {
         try {
             List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
-            return installations.get(0);
+             return installations.get(0);
         }
-        catch (NullPointerException e) {
+        catch (IndexOutOfBoundsException e) {
+           // e.printStackTrace();
             return null;
         }
 
@@ -340,8 +341,13 @@ public class SpecRepairSystem {
 
     public List<PartRepair> getAllPartRepairs()
         {
-            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcRepID", moreThan, 0));
+            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", moreThan, 0));
         }
+
+    public  List<Customer> getByBothNames(String [] query )
+    {
+       return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",matches, query[0].trim()  ).and("customerSurname", matches, query[1].trim()));
+    }
 
 
 }

@@ -35,7 +35,7 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
     public PartOccurrence(int partAbstractionID, int installationID, int specRepID) {
         partOccurrenceID = -1;
         this.partAbstractionID = partAbstractionID;
-        this.installationID = -1;
+        this.installationID = 0;
         this.bookingID = -1;
         this.specRepID = specRepID;
     }

@@ -56,7 +56,7 @@
                                                     <String fx:value="Nissan Space 3.0 Litre Petrol" />
                                                     <String fx:value="Vauxhall Corsa 2.0 Litre Diesel" />
                                                     <String fx:value="Nissan GTR 4.0 Litre Petrol" />
-                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel"/>
+                                                    <String fx:value="DAF Fire Truck 3.8 Litre Diesel" />
                                                 </FXCollections>
                                             </items>
                                         </ComboBox>
@@ -216,7 +216,7 @@
                                 </GridPane>
                             </center>
                         </BorderPane>
-                        <TableView fx:id="searchTable" disable="true" onKeyPressed="#ShowCustomerDetails" onMouseClicked="#ShowCustomerDetails" prefHeight="265.0" prefWidth="804.0">
+                        <TableView fx:id="searchTable" disable="true" onKeyReleased="#ShowCustomerDetails" onMouseClicked="#ShowCustomerDetails" prefHeight="265.0" prefWidth="804.0">
                             <columns>
                                 <TableColumn fx:id="tReg" prefWidth="65.0" text="Reg" />
                                 <TableColumn fx:id="tCID" prefWidth="33.0" text="CID" />

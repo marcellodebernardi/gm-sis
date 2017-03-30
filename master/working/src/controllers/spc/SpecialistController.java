@@ -224,6 +224,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setText(Double.toString(vehicleRepair.getCost()));
                 bookingCost.setEditable(false);
                 spcRepID = vehicleRepair.getSpcRepID();
+                bookingType.setValue("Vehicle");
             }
             if (specialistBookings.getSelectionModel().getSelectedItem() instanceof PartRepair) {
                 itemLabel.setText("Part ID:");
@@ -247,6 +248,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setText(Double.toString(partRepair.getCost()));
                 bookingCost.setEditable(false);
                 spcRepID = partRepair.getSpcRepID();
+                bookingType.setValue("Part");
             }
             clearFields();
         }
@@ -256,6 +258,7 @@ public class SpecialistController implements Initializable {
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     public void findSRCBookings() {
         try {
             specialistBookings.getItems().clear();
@@ -277,11 +280,18 @@ public class SpecialistController implements Initializable {
                     }
                 }
                 displaySpecRepBookings(vehicleRepairs);
+
             }
             else {
-                specialistBookings.getItems().clear();
-                List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
-                displaySpecRepBookings(vehicleRepairs);
+                try {
+                    specialistBookings.getItems().clear();
+                    List<VehicleRepair> vehicleRepairs = specRepairSystem.getVehicleBookings(idOfBookingItem.getText());
+                    displaySpecRepBookings(vehicleRepairs);
+                }
+                catch (NullPointerException ex1)
+                {
+                    //do nothing
+                }
             }
         }
     }
@@ -317,16 +327,16 @@ public class SpecialistController implements Initializable {
                 showAlert("No return date selected");
             }
             DiagRepBooking diagRepBookings = specRepairSystem.findBooking(Integer.parseInt(bookingID.getText()));
-            if (diagRepBookings != null) {
-
-
+            if( diagRepBookings !=null && diagRepBookings.isComplete())
+            {
+                showAlert("Booking is complete! Cannot proceed.");
+            }
+             else if (diagRepBookings != null) {
                 if (!isBefore(bookingDeliveryDate.getValue())) {
                     throw new InvalidDateException("Delivery date before today's date.");
                 }
-
                 Date deliveryDate = fromLocalDate(bookingDeliveryDate.getValue());
                 Date returnDate = fromLocalDate(bookingReturnDate.getValue());
-
                 if (returnDate.before(deliveryDate)) {
                     throw new InvalidDateException("Return date before delivery date.");
                 }
@@ -351,28 +361,33 @@ public class SpecialistController implements Initializable {
                         }
                     }
                     else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
-                        PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText().trim() ));
-                        Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
-                        if (installation != null) {
-                            if (installation.getEndWarrantyDate().isAfter(ZonedDateTime.now())) {
-                                bookingCost.setText("0");
+                        try {
+                            // System.out.println("got here");
+                            PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText().trim()));
+                            Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
+                            System.out.println(installation.getInstallationID());
+                            if (installation != null) {
+                                if (installation.getEndWarrantyDate().isAfter(ZonedDateTime.now())) {
+                                    bookingCost.setText("0");
+                                }
+                                Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
+                                diagRepBookings.setBill(bill);
+                                PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText().trim()));
+                                partsSystem.addPartOccurrence(partOccurrence);
+                                specRepairSystem.addSpecialistBooking(partRepair);
+                                PartRepair repair = specRepairSystem.findPartRepairBooking(Integer.parseInt(bookingID.getText()));
+                                partOccurrence.setSpecRepID(repair.getSpcRepID());
+                                specRepairSystem.submitBooking(diagRepBookings);
+                                findSRCBookings();
+                                clearBookingFields();
+                                showInfo("Successfully added part booking ");
+                            } else {
+                                showAlert("No part found.");
                             }
-
-
-                            Bill bill = new Bill(Double.parseDouble(bookingCost.getText()) + diagRepBookings.getBillAmount(), false);
-                            diagRepBookings.setBill(bill);
-                            PartRepair partRepair = new PartRepair(Integer.parseInt(bookingSPCID.getText()), deliveryDate, returnDate, Double.parseDouble(bookingCost.getText()), Integer.parseInt(bookingID.getText()), Integer.parseInt(bookingItemID.getText().trim()));
-                            partsSystem.addPartOccurrence(partOccurrence);
-                            specRepairSystem.addSpecialistBooking(partRepair);
-                            PartRepair repair = specRepairSystem.findPartRepairBooking(Integer.parseInt(bookingID.getText()));
-                            partOccurrence.setSpecRepID(repair.getSpcRepID());
-                            specRepairSystem.submitBooking(diagRepBookings);
-                            findSRCBookings();
-                            clearBookingFields();
-                            showInfo("Successfully added part booking ");
                         }
-                        else {
-                            showAlert("No part found.");
+                        catch (NullPointerException | IndexOutOfBoundsException e)
+                        {
+                            showAlert("Selected part has not been installed!");
                         }
                     }
                 }
@@ -384,6 +399,7 @@ public class SpecialistController implements Initializable {
             clearBookingFields();
         }
         catch (NumberFormatException | InvalidDateException | IndexOutOfBoundsException | NullPointerException e) {
+            //e.printStackTrace();
             if (e instanceof InvalidDateException) {
                 showAlert(e.getMessage());
             }
@@ -438,7 +454,11 @@ public class SpecialistController implements Initializable {
         try {
             int criteria = Integer.parseInt(bookingID.getText());
             DiagRepBooking diagRepBookings = specRepairSystem.findBooking(criteria);
-            if (diagRepBookings != null) {
+            if(diagRepBookings!=null && diagRepBookings.isComplete())
+            {
+                showAlert("Booking completed! Cannot add.");
+            }
+            if (diagRepBookings != null && !diagRepBookings.isComplete()) {
                 lbl_booking_notFound.setVisible(false);
                 lbl_booking_found.setText("Booking found");
                 lbl_booking_found.setVisible(true);
@@ -599,42 +619,43 @@ public class SpecialistController implements Initializable {
 
     public void deleteBooking() {
         try {
-            if (deleteConfirmation("Are you sure you want to delete this booking?")) {
-                if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
-                    Bill bill;
-                    if (-trackerV.getCost() + diagRepBooking.getBillAmount() <= 0) {
-                        bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), true);
+                if (deleteConfirmation("Are you sure you want to delete this booking?")) {
+                    if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
+                        Bill bill;
+                        if (-trackerV.getCost() + diagRepBooking.getBillAmount() <= 0) {
+                            bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), true);
+                        } else {
+                            bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        }
+                        diagRepBooking.setBill(bill);
+                        specRepairSystem.submitBooking(diagRepBooking);
+                        clearBookingFields();
+                        clearFields();
+                        specRepairSystem.deleteByRepIDV(spcRepID);
+                        findSRCBookings();
+                    } else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
+                        Bill bill;
+                        if (-trackerP.getCost() + diagRepBooking.getBillAmount() <= 0) {
+                            bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), true);
+                        } else {
+                            bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        }
+                        diagRepBooking.setBill(bill);
+                        specRepairSystem.submitBooking(diagRepBooking);
+                        specRepairSystem.deleteByRepIDP(spcRepID);
+                        clearBookingFields();
+                        clearFields();
+                        findSRCBookings();
                     } else {
-                        bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        showAlert("Please select the correct type of booking");
                     }
-                    diagRepBooking.setBill(bill);
-                    specRepairSystem.submitBooking(diagRepBooking);
-                    clearBookingFields();
-                    clearFields();
-                    specRepairSystem.deleteByRepIDV(spcRepID);
-                    findSRCBookings();
-                } else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
-                    Bill bill;
-                    if (-trackerP.getCost() + diagRepBooking.getBillAmount() <= 0) {
-                        bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), true);
-                    } else {
-                        bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
-                    }
-                    diagRepBooking.setBill(bill);
-                    specRepairSystem.submitBooking(diagRepBooking);
-                    specRepairSystem.deleteByRepIDP(spcRepID);
-                    clearBookingFields();
-                    clearFields();
-                    findSRCBookings();
-                } else {
-                    showAlert("Please select the correct type of booking");
-                }
 
-            }
+                }
         }
         catch(NullPointerException e)
             {
-                showAlert("Cannot delete past bookings");
+                e.printStackTrace();
+                //showAlert("Cannot delete past bookings");
             }
 
 
@@ -991,7 +1012,7 @@ public class SpecialistController implements Initializable {
 
     public void findPartRepairs()
     {
-        List<PartRepair> partRepairs = specRepairSystem.returnAllPartRepairs();
+        List<PartRepair> partRepairs = specRepairSystem.getAllPartRepairs();
         displaySpecRepBookings(partRepairs);
     }
 

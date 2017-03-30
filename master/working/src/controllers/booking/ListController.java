@@ -67,11 +67,12 @@ public class ListController {
     /** Initializes the controller's scene graph state */
     @FXML private void initialize() {
         populateViewByComboBox();
-        viewByComboBox.getSelectionModel().select(0);
+        viewByComboBox.getSelectionModel().select(ALL);
         listDatePicker.setValue(LocalDate.now());
         selectListPeriod();
         initializeTable();
         refreshTable();
+        applyListViewType();
 
         master.setController(ListController.class, this);
     }

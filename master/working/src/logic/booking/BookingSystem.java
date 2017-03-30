@@ -11,6 +11,7 @@ import persistence.DatabaseRepository;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.URISyntaxException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,6 +39,7 @@ public class BookingSystem {
     private static BookingSystem instance;
     private CriterionRepository persistence;
     private DateTimeFormatter format;
+    private String holidayURL;
 
     private Map<LocalDate, String> holidays;
     private Map<DayOfWeek, LocalTime[]> openingHours;
@@ -55,9 +57,20 @@ public class BookingSystem {
         openingHours.put(SATURDAY, new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(12, 0)});
         openingHours.put(SUNDAY, new LocalTime[]{LocalTime.of(0, 0), LocalTime.of(0, 0)});
 
+        try {
+            holidayURL = this.getClass().getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath().replaceAll("[/\\\\]\\w*\\.jar", "/") + "config/holidays.txt";
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         holidays = new HashMap<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("master/working/config/holidays.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader(holidayURL));
             reader.lines().filter(line -> line.length() > 0 && line.charAt(0) != '#' && line.charAt(0) != ' ')
                     .forEach(line -> holidays.put(
                             LocalDate.parse(line.split("\\s*,\\s*")[0], format),
