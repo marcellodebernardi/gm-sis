@@ -72,9 +72,8 @@ public class UserController implements Initializable {
 
     public void addEditUser() throws Exception {
         String addOrEdit;
-        if (userLabel.equals("Edit User")) {
+        if (userLabel.getText().equals("Edit User")) {
             addOrEdit = "edit";
-            UID.setDisable(true);
             // true is edit
         }
         else {
@@ -98,10 +97,43 @@ public class UserController implements Initializable {
                 else {
                     userType = UserType.NORMAL;
                 }
+                List<User> userList= auth.getAllUsers();
+                if (addOrEdit.equals("add"))
+                {
+                for (int i =0;i<userList.size();i++)
+                {
+                    if (userList.get(0).getUserID().equals(UID.getText()))
+                    {
+                        showAlert("This user has already been added!");
+                        return;
+                    }
+                }}
                 boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
                 ClearFields();
-                showAlert("User " + addOrEdit + ": " + checker);
+                NewVehicle();
+                if (addOrEdit.equals("add"))
+                {
+                    if (checker)
+                    {
+                        showAlert("User has ben successfully added");
+                    }
+                    else
+                    {
+                        showAlert("User cannot be added");
+                    }
+                }
+                else
+                {
+                    if (checker)
+                    {
+                        showAlert("User details have successfully been saved");
+                    }
+                    else
+                    {
+                        showAlert("User details cannot be edited");
+                    }
+                }
 
             }
         }
@@ -143,10 +175,14 @@ public class UserController implements Initializable {
         try {
             boolean check = auth.deleteUser(userID);
             ClearFields();
-            showAlert("User deleted: " + check);
             if (check)
             {
+                showAlert("successfully deleted");
                 AllUsers();
+            }
+            else
+            {
+                showAlert("Delete failed");
             }
         }
         catch (Exception e) {
@@ -182,6 +218,7 @@ public class UserController implements Initializable {
         clearButton.setDisable(true);
         newButton.setDisable(false);
         deleteButton.setDisable(false);
+        UID.setDisable(true);
     }
 
     public boolean checkFields() {
