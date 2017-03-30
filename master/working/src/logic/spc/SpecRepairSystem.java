@@ -243,7 +243,7 @@ public class SpecRepairSystem {
              return installations.get(0);
         }
         catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             return null;
         }
 
