@@ -159,83 +159,22 @@ public class CustomerVehicleController implements Initializable {
         dialog.show();
     }
 
-    public boolean addVehicle(ActionEvent event) throws Exception {
-        if (!checkVehicleFormat()) {
-            return false;
-        }
-
-        try {
-            boolean check = checkVehicleFields();
-            if (check) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date rdm = fromLocalDate(rDateMot.getValue());
-                Date dls = fromLocalDate(dLastServiced.getValue());
-                Date wed = new Date();
-                if ((!(wExpirationDate.getValue() == null))) {
-                    wed = fromLocalDate(wExpirationDate.getValue());
-                }
-                VehicleType vT;
-                if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
-                    vT = VehicleType.Car;
-                }
-                else if (vType.getSelectionModel().getSelectedItem().toString().equals("Van")) {
-                    vT = VehicleType.Van;
-                }
-                else {
-                    vT = VehicleType.Truck;
-                }
-                FuelType fT;
-                if (fType.getSelectionModel().getSelectedItem().toString().equals("Diesel")) {
-                    fT = FuelType.diesel;
-                }
-                else {
-                    fT = FuelType.petrol;
-                }
-                Boolean W;
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
-                    W = true;
-                }
-                else {
-                    W = false;
-                }
-
-                Vehicle vehicle = vSys.searchAVehicle(reg.getText());
-                if (vehicle != null) {
-                    errorAlert("Cant add this vehicle as Registrations exists");
-                    return false;
-                }
-
-                int customerID = Integer.parseInt(cID.getText());
-                boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
-
-                if (checker) {
-                    Stage stage = null;
-                    stage = (Stage) cvSaveVehicleButton.getScene().getWindow();
-                    stage.close();
-                }
-            }
-            return true;
-        }
-        catch (Exception e) {
-        }
-        return false;
-    }
-
-    public void addVehicleAndMakeBooking(ActionEvent event) throws Exception {
+    public void addVehicle() {
         if (!checkVehicleFormat()) {
             return;
         }
-
         try {
             boolean check = checkVehicleFields();
-            boolean checker = false;
             if (check) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 Date rdm = fromLocalDate(rDateMot.getValue());
                 Date dls = fromLocalDate(dLastServiced.getValue());
                 Date wed = new Date();
                 if ((!(wExpirationDate.getValue() == null))) {
                     wed = fromLocalDate(wExpirationDate.getValue());
+                }
+                else {
+                    //showAlert("error");
+                    wed = null;
                 }
                 VehicleType vT;
                 if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
@@ -260,26 +199,133 @@ public class CustomerVehicleController implements Initializable {
                 }
                 else {
                     W = false;
+                    wName.setText("");
+                    wCompAddress.setText("");
+                    wed = new Date(0);
+                    //wExpirationDate = null;
                 }
 
-                Vehicle vehicle = vSys.searchAVehicle(reg.getText());
-                if (vehicle != null) {
-                    errorAlert("Cant add this vehicle as Registrations exists");
-                    return;
+                try {
+                    Vehicle vehicle = vSys.searchAVehicle(reg.getText());
+                    if (vehicle != null) {
+                        errorAlert("Cant add this vehicle as Registrations exists");
+                        return;
+                    }
+                }
+                catch (Exception e) {
+
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
-
-                if (checker) {
-                    BookingController.getInstance().show();
-                    Stage stage = null;
-                    stage = (Stage) cvSaveVehicleButton.getScene().getWindow();
-                    stage.close();
+                if (reg.getText().length()>7)
+                {
+                    errorAlert("registration cant be longer than 7 characters");
+                    return;
                 }
+                boolean add = showAlertC("Are you sure you want to add this Vehicle, have you checked the vehicle details?");
+                if (add) {
+
+                    boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+                    if (checker) {
+                        Stage stage = null;
+                        stage = (Stage) cvSaveVehicleButton.getScene().getWindow();
+                        stage.close();
+                    }
+                }
+            }
+            else {
+                errorAlert("Can't add as all fields required are incomplete");
             }
         }
         catch (Exception e) {
+            errorAlert("Vehicle add error");
+            e.printStackTrace();
+        }
+    }
+
+    public void addVehicleAndMakeBooking(ActionEvent event) throws Exception
+    {
+        if (!checkVehicleFormat()) {
+            return;
+        }
+        try {
+            boolean check = checkVehicleFields();
+            if (check) {
+                Date rdm = fromLocalDate(rDateMot.getValue());
+                Date dls = fromLocalDate(dLastServiced.getValue());
+                Date wed = new Date();
+                if ((!(wExpirationDate.getValue() == null))) {
+                    wed = fromLocalDate(wExpirationDate.getValue());
+                }
+                else {
+                    //showAlert("error");
+                    wed = null;
+                }
+                VehicleType vT;
+                if (vType.getSelectionModel().getSelectedItem().toString().equals("Car")) {
+                    vT = VehicleType.Car;
+                }
+                else if (vType.getSelectionModel().getSelectedItem().toString().equals("Van")) {
+                    vT = VehicleType.Van;
+                }
+                else {
+                    vT = VehicleType.Truck;
+                }
+                FuelType fT;
+                if (fType.getSelectionModel().getSelectedItem().toString().equals("Diesel")) {
+                    fT = FuelType.diesel;
+                }
+                else {
+                    fT = FuelType.petrol;
+                }
+                Boolean W;
+                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
+                    W = true;
+                }
+                else {
+                    W = false;
+                    wName.setText("");
+                    wCompAddress.setText("");
+                    wed = new Date(0);
+                    //wExpirationDate = null;
+                }
+
+                try {
+                    Vehicle vehicle = vSys.searchAVehicle(reg.getText());
+                    if (vehicle != null) {
+                        errorAlert("Cant add this vehicle as Registrations exists");
+                        return;
+                    }
+                }
+                catch (Exception e) {
+
+                }
+
+                int customerID = Integer.parseInt(cID.getText());
+                if (reg.getText().length()>7)
+                {
+                    errorAlert("registration cant be longer than 7 characters");
+                    return;
+                }
+                boolean add = showAlertC("Are you sure you want to add this Vehicle, have you checked the vehicle details?");
+                if (add) {
+
+                    boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
+
+                    if (checker) {
+                        BookingController.getInstance().show();
+                        Stage stage = null;
+                        stage = (Stage) cvSaveVehicleButton.getScene().getWindow();
+                        stage.close();
+                    }
+                }
+            }
+            else {
+                errorAlert("Can't add as all fields required are incomplete");
+            }
+        }
+        catch (Exception e) {
+            errorAlert("Vehicle add error");
         }
     }
 
@@ -359,7 +405,8 @@ public class CustomerVehicleController implements Initializable {
 
     public boolean checkVehicleFields() {
         boolean check = false;
-        if ((!reg.getText().equals("")) && (!cID.equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getValue().toString().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
+
+        if ((!reg.getText().equals("")) && (!cID.getText().equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getValue().toString().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals(""))) {
             check = true;
             if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
                 if (wName.getText().equals("") || wCompAddress.getText().equals("") || wExpirationDate.getValue().equals("")) {
@@ -367,19 +414,11 @@ public class CustomerVehicleController implements Initializable {
                 }
             }
         }
-        else{
-            errorAlert("Make sure all fields required are not blank except for Warranty Company \nname, address and expiry date when Warranty 'false' is selected");
-        }
         return check;
     }
 
     public boolean checkVehicleFormat() {
         try {
-            if ((!reg.getText().equals("")) && (!cID.equals("")) && (!vType.getSelectionModel().getSelectedItem().toString().equals("")) && (!mod.getText().equals("")) && (!manuf.getText().equals("")) && (!eSize.getText().equals("")) && (!fType.getSelectionModel().getSelectedItem().toString().equals("")) && (!col.getValue().toString().equals("")) && (!mil.getText().equals("")) && (!rDateMot.getValue().equals("")) && (!dLastServiced.getValue().equals("")) && (!cByWarranty.getSelectionModel().getSelectedItem().toString().equals("")))
-            {
-                errorAlert("Make sure all fields required are not blank except for Warranty Company \nname, address and expiry date when Warranty 'false' is selected");
-                return false;
-            }
 
             if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+")))
             {
@@ -475,43 +514,49 @@ public class CustomerVehicleController implements Initializable {
                 errorAlert("Invalid Last Service Date");
                 return false;
             }
+            Date date;
             if (cByWarranty.getSelectionModel().getSelectedItem() != null) {
                 if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") ) {
                     try {
 
-                        Date date = fromLocalDate(wExpirationDate.getValue()); }
+                        date = fromLocalDate(wExpirationDate.getValue()); }
                     catch (Exception e)
                     {
-                        errorAlert("invalid Warranty expiry date");
                         return false;
                     }
 
                     if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
                     {
-                        errorAlert("Warranty Company name is not correct format");
-                        return false;
-                    }
-                    if(wName.getText().equals(""))
-                    {
-                        errorAlert("Warranty Company Name field is Empty");
+                        errorAlert("Warranty name is not correct format  \n");
                         return false;
                     }
                     if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
                     {
-                        errorAlert("Warranty Company address is not correct format  \n");
-                        return false;
-                    }
-                    if(wCompAddress.getText().equals(""))
-                    {
-                        errorAlert("Warranty Company Address field is Empty");
+                        errorAlert("Warranty Company is not correct format  \n");
                         return false;
                     }
                 }
             }
             else
             {
-                errorAlert("Select if vehicle has warranty or not");
-                return false;
+                try {
+
+                    date = fromLocalDate(wExpirationDate.getValue()); }
+                catch (Exception e)
+                {
+                    return false;
+                }
+
+                if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
+                {
+                    errorAlert("Warranty name is not correct format  \n");
+                    return false;
+                }
+                if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
+                {
+                    errorAlert("Warranty Company is not correct format  \n");
+                    return false;
+                }
             }
             return true;
         }
@@ -636,4 +681,32 @@ public class CustomerVehicleController implements Initializable {
     private Date fromLocalDate(java.time.LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
+
+    public String firstLetterUpperCase(String words)
+    {
+        //String words = "";
+        char[] wordsArray = words.toCharArray();
+        wordsArray[0] = Character.toUpperCase(wordsArray[0]);
+        for (int i = 1; i < wordsArray.length; i++) {
+            if (Character.isWhitespace(wordsArray[i - 1])) {
+                wordsArray[i] = Character.toUpperCase(wordsArray[i]);
+            }
+        }
+        words = String.valueOf(wordsArray);
+        return words;
+    }
+
+    public boolean showAlertC(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
