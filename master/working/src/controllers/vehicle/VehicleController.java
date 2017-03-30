@@ -301,7 +301,8 @@ public class VehicleController implements Initializable {
             }
             boolean check = vSys.deleteVehicle(reg.getText());
             if (check) {
-                showAlert("Vehicle Found and Deleted: " + Boolean.toString(check));
+                showAlert("Vehicle Found and Deleted successful");
+                newVehicle();
                 searchVehicleA();
             }
             else {
@@ -309,8 +310,7 @@ public class VehicleController implements Initializable {
             }
         }
         catch (Exception e) {
-            System.out.println("Vehicle delete error");
-            e.printStackTrace();
+            showAlert("Vehicle delete error");
         }
     }
 
@@ -348,6 +348,7 @@ public class VehicleController implements Initializable {
             if (check) {
                 showAlert("Vehicle Found and Deleted successful");
                 searchVehicleA();
+                newVehicle();
             }
             else {
                 showAlert("Vehicle Found and Deleted unsuccessful");
@@ -446,8 +447,7 @@ public class VehicleController implements Initializable {
 
         }
         catch (Exception e) {
-            System.out.println("Search Vehicle Error");
-            e.printStackTrace();
+            showAlert("Search Vehicle Error");
         }
     }
 
@@ -898,9 +898,7 @@ public class VehicleController implements Initializable {
             BookingsTable.setItems(tableEntriesB);
         }
         catch (Exception e) {
-            System.out.println("not working");
-            e.printStackTrace();
-            System.out.println(e);
+            showAlert("error with table");
         }
 
     }
@@ -934,8 +932,8 @@ public class VehicleController implements Initializable {
         }
         catch (Exception e) {
             showAlert("No Booking selected");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            //System.out.println(e.getMessage());
+            //e.printStackTrace();
         }
     }
 
@@ -966,8 +964,8 @@ public class VehicleController implements Initializable {
         }
         catch (Exception e) {
             showAlert("no Vehicle Selected");
-            System.out.println(e);
-            e.printStackTrace();
+            //System.out.println(e);
+            //e.printStackTrace();
         }
     }
 
@@ -1043,8 +1041,8 @@ public class VehicleController implements Initializable {
         }
         catch (Exception e) {
             showAlert("No Bookings");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            //System.out.println(e.getMessage());
+            //e.printStackTrace();
         }
     }
 
