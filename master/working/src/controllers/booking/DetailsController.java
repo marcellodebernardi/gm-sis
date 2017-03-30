@@ -455,7 +455,7 @@ public class DetailsController {
 
         writeCustomer(booking.getCustomer());
         descriptionTextField.setText(booking.getDescription());
-        mileageTextField.setText("" + selectedVehicle.getMileage()
+        mileageTextField.setText("" + selectedVehicle.getMileage());
         selectVehicle(selectedVehicle);
         selectMechanic(booking.getMechanic());
 
