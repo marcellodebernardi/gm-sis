@@ -607,7 +607,6 @@ public class CustomerVehicleController implements Initializable {
             Customer customer = customerList.get(i);
             cID.setText(Integer.toString(customer.getCustomerID()));
 
-            //addVehicleLabel.setText("Add Vehicle new Customer: " + customer.getCustomerFirstname() + " " + customer.getCustomerSurname());
             addVehicleLabel.setText(customer.getCustomerFirstname() + " " + customer.getCustomerSurname() + "'s new Vehicle");
 
             break;
@@ -620,24 +619,6 @@ public class CustomerVehicleController implements Initializable {
         errorAlert.setHeaderText(message);
         errorAlert.showAndWait();
     }
-
-
-    public void setDatePickerBackground(DatePicker picker)
-    {
-        picker.setStyle("-fx-background-color: #ffc5c1");
-    }
-
-    public void setComboBoxBackground(ComboBox box)
-    {
-        box.setStyle("-fx-background-color: #ffc5c1");
-    }
-
-    public void setColorPickerBackground(ColorPicker pick)
-    {
-        pick.setStyle("-fx-background-color: #ffc5c1");
-    }
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -656,34 +637,3 @@ public class CustomerVehicleController implements Initializable {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
-
-
-
-//    public boolean checkVehicleFormat() {
-//        try {
-//            Date date = fromLocalDate(dLastServiced.getValue());
-//            date = fromLocalDate(rDateMot.getValue());
-//            if (cByWarranty != null) {
-//                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") || cByWarranty.getSelectionModel().getSelectedItem().equals(null)) {
-//                    date = fromLocalDate(wExpirationDate.getValue());
-//                }
-//            }
-//
-//            Double engineSize = Double.parseDouble(eSize.getText());
-//            int mileage = Integer.parseInt(mil.getText());
-//            if (col.getText().matches(".*\\d+.*")) {
-//                errorAlert("Colour must be a string");
-//                return false;
-//            }
-//
-//            if (vType == null || fType == null) {
-//                errorAlert("Pick fuel type and vehicle Type");
-//                return false;
-//            }
-//            return true;
-//        }
-//        catch (Exception e) {
-//            errorAlert("Make sure all fields required are not blank");
-//            return false;
-//        }
-//    }

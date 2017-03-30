@@ -574,17 +574,6 @@ public class CustomerController implements Initializable {
         }
     }
 
-    public void logout() {
-        try {
-            customerTypeSearch.setValue(null);//set Search by Customer Type ComboBox to null
-            if (confirmationAlert("Logout Confirmation - Garage Management System", "You are about to logout") == true) {
-                LoginController.getInstance().exitHandler();
-            }
-        }
-        catch (Exception e) {
-        }
-    }
-
     public void tableViewOfCustomerVehicleFromDB() throws Exception {
         if (customerTable.getSelectionModel().getSelectedItem() == null) {
             return;
