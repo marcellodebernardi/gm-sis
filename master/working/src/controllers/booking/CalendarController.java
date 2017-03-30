@@ -144,10 +144,14 @@ public class CalendarController {
                 p instanceof BookingAppointment && ((BookingAppointment) p).getBookingID() == booking.getBookingID()
         );
 
-        this.bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+        this.bookingAgenda.appointments().add(new BookingAppointment()
+                .forBooking(booking)
+                .asDiagnosis()
                 .withAppointmentGroup(diagnosis));
         if (booking.getRepairStart() != null)
-            bookingAgenda.appointments().add(new BookingAppointment().forBooking(booking)
+            bookingAgenda.appointments().add(new BookingAppointment()
+                    .forBooking(booking)
+                    .asRepair()
                     .withAppointmentGroup(repair));
     }
 
