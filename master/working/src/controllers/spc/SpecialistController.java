@@ -224,6 +224,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setText(Double.toString(vehicleRepair.getCost()));
                 bookingCost.setEditable(false);
                 spcRepID = vehicleRepair.getSpcRepID();
+                bookingType.setValue("Vehicle");
             }
             if (specialistBookings.getSelectionModel().getSelectedItem() instanceof PartRepair) {
                 itemLabel.setText("Part ID:");
@@ -247,6 +248,7 @@ public class SpecialistController implements Initializable {
                 bookingCost.setText(Double.toString(partRepair.getCost()));
                 bookingCost.setEditable(false);
                 spcRepID = partRepair.getSpcRepID();
+                bookingType.setValue("Part");
             }
             clearFields();
         }
@@ -359,7 +361,7 @@ public class SpecialistController implements Initializable {
                         }
                     }
                     else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
-                        System.out.println("got here");
+                        //System.out.println("got here");
                         PartOccurrence partOccurrence = specRepairSystem.getPartOcc(Integer.parseInt(bookingItemID.getText().trim() ));
                             Installation installation = specRepairSystem.getByInstallationID(partOccurrence.getInstallationID());
                         System.out.println(installation.getInstallationID());
@@ -612,42 +614,51 @@ public class SpecialistController implements Initializable {
 
     public void deleteBooking() {
         try {
-            if (deleteConfirmation("Are you sure you want to delete this booking?")) {
-                if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
-                    Bill bill;
-                    if (-trackerV.getCost() + diagRepBooking.getBillAmount() <= 0) {
-                        bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), true);
+            SpecRepBooking specRepBooking = specialistBookings.getSelectionModel().getSelectedItem();
+            LocalDate returnDate = toLocalDate(specRepBooking.getReturnDate());
+            if(!isBefore(returnDate))
+            {
+                showAlert("Cannot delete past bookings!");
+            }
+            else {
+                if (deleteConfirmation("Are you sure you want to delete this booking?")) {
+                    if (bookingType.getSelectionModel().getSelectedItem().equals("Vehicle")) {
+                        Bill bill;
+                        if (-trackerV.getCost() + diagRepBooking.getBillAmount() <= 0) {
+                            bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), true);
+                        } else {
+                            bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        }
+                        diagRepBooking.setBill(bill);
+                        specRepairSystem.submitBooking(diagRepBooking);
+                        clearBookingFields();
+                        clearFields();
+                        specRepairSystem.deleteByRepIDV(spcRepID);
+                        findSRCBookings();
+                    } else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
+                        Bill bill;
+                        if (-trackerP.getCost() + diagRepBooking.getBillAmount() <= 0) {
+                            bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), true);
+                        } else {
+                            bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        }
+                        diagRepBooking.setBill(bill);
+                        specRepairSystem.submitBooking(diagRepBooking);
+                        specRepairSystem.deleteByRepIDP(spcRepID);
+                        clearBookingFields();
+                        clearFields();
+                        findSRCBookings();
                     } else {
-                        bill = new Bill(-trackerV.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
+                        showAlert("Please select the correct type of booking");
                     }
-                    diagRepBooking.setBill(bill);
-                    specRepairSystem.submitBooking(diagRepBooking);
-                    clearBookingFields();
-                    clearFields();
-                    specRepairSystem.deleteByRepIDV(spcRepID);
-                    findSRCBookings();
-                } else if (bookingType.getSelectionModel().getSelectedItem().equals("Part")) {
-                    Bill bill;
-                    if (-trackerP.getCost() + diagRepBooking.getBillAmount() <= 0) {
-                        bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), true);
-                    } else {
-                        bill = new Bill(-trackerP.getCost() + diagRepBooking.getBillAmount(), diagRepBooking.getBillSettled());
-                    }
-                    diagRepBooking.setBill(bill);
-                    specRepairSystem.submitBooking(diagRepBooking);
-                    specRepairSystem.deleteByRepIDP(spcRepID);
-                    clearBookingFields();
-                    clearFields();
-                    findSRCBookings();
-                } else {
-                    showAlert("Please select the correct type of booking");
-                }
 
+                }
             }
         }
         catch(NullPointerException e)
             {
-                showAlert("Cannot delete past bookings");
+                e.printStackTrace();
+                //showAlert("Cannot delete past bookings");
             }
 
 
