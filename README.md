@@ -167,8 +167,11 @@ When adding an installation the user must perform the following:
 1. Select a part type you wish to install.
 2. Select a part serial ID which is available to install.
 3. Enter a vehicle registration and click Enter.
-4. Select an installation date.
-5. Click on the '+ Installation' button 
+4. Select the booking to which you wish to add the cost of the installaton 
+
+**NOTE** IF THERE ARE NO INCOMPLETE BOOKINGS FOR THAT VEHICLE THE USER CANNOT ADD AN INSTALLATION
+5. Select an installation date.
+6. Click on the '+ Installation' button 
 
 
 
