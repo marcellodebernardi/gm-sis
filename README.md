@@ -147,14 +147,25 @@ the garage.
 
 **Some rules apply to the adding and editing and deletion of specialist booking details**:
 
-1.  A specialist repair booking **MUST** be linked to a diagnosis and repair booking.
-2.  A
-3.  The "complete" button completes a booking. A completed booking can no longer be modified.
-4.  A booking only needs a customer, a vehicle, a mechanic and a diagnosis appointment to be saved.
-5.  A booking can only be completed, however, once a repair appointment has been carried out and
-    a new mileage value recorded.
+1.  A specialist repair booking**must**be linked to a diagnosis and repair booking.
+2.  A Vehicle that is being sent to SPC**must**be a registered vehicle of the garage.
+3.  A Part being that is being sent to SPC**must** be an installed part registered to a vehicle within the garage database.
+4.  A SPC booking **must** have delivery and return dates, where delivery dates must be after the current date, and the return date after the delivery date.
 
 
 #### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
+
+In the specialist repair center management interface. The user is able to add, edit and modify existing SPCs to the GMSIS.
+A user must fill in the following details when adding a new SPC:
+1. The name of the SPC.
+2. The address of the SPC.
+3. The phone number of the SPC.
+4. The email address of the SPC.
+
+The following rules apply when modifying or adding a new SPC:
+1. The name **must not** be empty. 
+2. The address **must not** be empty.
+3. The phone number **must** only contain 11 characters and no letters.
+4. The email address **must** contain an '@' character.
 
 #### 4.9 USER MANAGEMENT
