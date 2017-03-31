@@ -239,7 +239,6 @@ public class CustomerVehicleController implements Initializable {
         }
         catch (Exception e) {
             errorAlert("Vehicle add error");
-            e.printStackTrace();
         }
     }
 
@@ -680,20 +679,6 @@ public class CustomerVehicleController implements Initializable {
 
     private Date fromLocalDate(java.time.LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
-
-    public String firstLetterUpperCase(String words)
-    {
-        //String words = "";
-        char[] wordsArray = words.toCharArray();
-        wordsArray[0] = Character.toUpperCase(wordsArray[0]);
-        for (int i = 1; i < wordsArray.length; i++) {
-            if (Character.isWhitespace(wordsArray[i - 1])) {
-                wordsArray[i] = Character.toUpperCase(wordsArray[i]);
-            }
-        }
-        words = String.valueOf(wordsArray);
-        return words;
     }
 
     public boolean showAlertC(String message) {

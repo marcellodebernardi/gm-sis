@@ -738,10 +738,10 @@ public class VehicleController implements Initializable {
             setVehicle("Focus", "Ford", "1.2", "Car", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(2)) {
-            setVehicle("5 Series", "BMw", "2.2", "Car", "Petrol");
+            setVehicle("5 Series", "BMW", "2.2", "Car", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(3)) {
-            setVehicle("3 Series", "BMw", "2.9", "Car", "Diesel");
+            setVehicle("3 Series", "BMW", "2.9", "Car", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(4)) {
             setVehicle("A Class", "Mercedes", "3.0", "Car", "Petrol");
