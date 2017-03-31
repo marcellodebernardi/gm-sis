@@ -32,7 +32,20 @@ of the interface. This returns the user to the login screen.
 
 #### 4.2. TODAY
 
+
 #### 4.3. CUSTOMERS - Ebube
+Customer screen consists of three key sections, the left pane, central pane and a popup form.
+
+Add customer form on the left pane allows user to add a new customer record. The ‘Save and Add Vehicle’ makes sure new customer has at least one vehicle record. Edit customer form allows user to edit or delete a customer’s record after the select customer from table and click the ‘Edit’ button. 
+
+Top section of the central pane allows user for to search for a customer using their customer type, partial or full first name, surname or vehicle registration numbers.
+
+The first table on the central pane displays a table list of all customers. Clicking a customer populated the ‘Vehicle(s)’ table with their vehicle record. Clicking a vehicle record populated the ‘Part(s)’ table with parts used on the vehicle and ‘Booking(s)’ table with past or future bookings made on the customer’s vehicle. 
+
+Deleting a customer’s record has a cascading effect as the customer vehicle record, bookings made and parts installed per vehicle records are all deleted. 
+
+Customer vehicle popup screen shows immediately after user clicks ‘Save and Add Vehicle’ button. This popup allows user to add the customer’s first vehicle record. This ensures that a customer must have at least one vehicle record else the customer record is not saved. 
+
 
 #### 4.4 BOOKINGS - Marcello 
 The bookings screen consists of two main sections: the details pane on the left, for viewing,
