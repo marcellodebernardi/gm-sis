@@ -344,10 +344,6 @@ public class SpecRepairSystem {
             return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", moreThan, 0));
         }
 
-    public  List<Customer> getByBothNames(String [] query )
-    {
-       return persistence.getByCriteria(new Criterion<>(Customer.class,"customerFirstname",matches, query[0].trim()  ).and("customerSurname", matches, query[1].trim()));
-    }
 
 
 }
