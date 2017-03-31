@@ -7,13 +7,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 <?import jfxtras.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.booking.CalendarController"
             id="calendarPane" fx:id="calendarPane">
     <top>
         <HBox id="calendarPaneTopControls">
+            <Label>Mechanic</Label>
             <ComboBox id="calendarMechanicComboBox" fx:id="calendarMechanicComboBox"
                       onAction="#selectCalendarMechanic" />
+            <Label>Week</Label>
             <DatePicker fx:id="calendarDatePicker" onAction="#selectCalendarDate" />
         </HBox>
 
