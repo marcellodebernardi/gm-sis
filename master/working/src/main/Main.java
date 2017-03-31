@@ -113,7 +113,7 @@ public class Main extends Application {
 
         primaryStage.setScene(mainScene);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
     }
 
     /**
