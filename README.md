@@ -137,7 +137,7 @@ A **part calculator** has also been implemented to show the total part cost of t
 3.  A quantity **must** be entered even if the user wishes to select only 1, in order for the total to be shown.
 4.  Press the **Calculate Total** button so that the total part cost is given to the user.
 
-#### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Ahmed
+#### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Murad Ahmed
 
 In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
 and vehicles. The user is also able to view a list of **installations** for a chosen vehicle from the list of repairs.
@@ -152,8 +152,27 @@ the garage.
 3.  A Part being that is being sent to SPC**must** be an installed part registered to a vehicle within the garage database.
 4.  A SPC booking **must** have delivery and return dates, where delivery dates must be after the current date, and the return date after the delivery date.
 
+When a booking is created, the cost of the repair (if any) will be recorded to the related diagnosis and repair booking. This is true
+for when a user deletes  a SPC booking; the cost of that booking is reduced from the linked booking.
 
-#### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Ahmed
+The user is able to query different information from the SPC Bookings window:
+1. A list of outstanding repair items.
+2. A list of part SPC repairs.
+3. A list of returned items.
+4. A list of installations, for a vehicle if the user has selected a vehicle repair.
+
+If the user views a list of installations, they are able add, edit and delete installations from the given list. 
+
+When adding an installation the user must perform the following:
+1. Select a part type you wish to install.
+2. Select a part serial ID which is available to install.
+3. Enter a vehicle registration and click Enter.
+4. Select an installation date.
+5. Click on the '+ Installation' button 
+
+
+
+#### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Murad Ahmed
 
 In the specialist repair center management interface. The user is able to add, edit and modify existing SPCs to the GMSIS.
 A user must fill in the following details when adding a new SPC:
@@ -167,5 +186,8 @@ The following rules apply when modifying or adding a new SPC:
 2. The address **must not** be empty.
 3. The phone number **must** only contain 11 characters and no letters.
 4. The email address **must** contain an '@' character.
+
+The user is able to view, for a given SPC, a list of vehicles that were sent to the selected SPC. From this list the user is able to
+view the customer who owns the selected vehicle.
 
 #### 4.9 USER MANAGEMENT
