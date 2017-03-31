@@ -210,7 +210,8 @@ public class ListController {
         else if (currentViewBy == MONTH) {
             startTime = selectedDate.minusDays(selectedDate.getDayOfMonth())
                     .truncatedTo(ChronoUnit.DAYS);
-            endTime = startTime.plusMonths(1);
+            endTime = startTime.plusDays(32);
+            endTime = endTime.minusDays(endTime.getDayOfMonth());
         }
         else {
             startTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());

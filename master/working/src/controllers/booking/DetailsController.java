@@ -94,6 +94,8 @@ public class DetailsController {
     private PopOver holidayPopOver;
     private PopOver closedPopOver;
     private PopOver clashPopOver;
+    private PopOver timesOverlapPopOver;
+    private PopOver diagnosisBeforeRepairPopOver;
 
 
     public DetailsController() {
@@ -233,7 +235,7 @@ public class DetailsController {
 
         subcontractedColumn.prefWidthProperty().bind(binding);
         subcontractedColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != 0)
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartRepair() != null)
         );
 
         partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
@@ -284,6 +286,16 @@ public class DetailsController {
                 || !timeValid(diagnosisStartTimeTextField, diagnosisEndTimeTextField, "/booking/validation/InvalidDiagTime.fxml")
                 || !timeNotInverted(diagnosisStartTimeTextField, diagnosisEndTimeTextField)
                 || !validateMechanicSelection()) return false;
+
+        if (repairStartTimeTextField.getText() != null || repairEndTimeTextField.getText() != null
+                || repairDatePicker.getValue() != null) {
+            if (!dateSelected(repairDatePicker, "/booking/validation/MissingRepDate.fxml")
+                    || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
+                    || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
+                    || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
+                    || !diagnosisBeforeRepair()
+                    || !timesDoNotOverlap()) return false;
+        }
 
         // if booking already exists, replace old object with new
         selectedVehicle.getBookingList().removeIf(b -> b.getBookingID() == selectedBooking.getBookingID());
@@ -344,7 +356,7 @@ public class DetailsController {
                 ((ListController) master.getController(ListController.class)).refreshTable();
                 if (master.getController(CalendarController.class) != null)
                     ((CalendarController) master.getController(CalendarController.class))
-                            .addAppointment(selectedBooking);
+                            .refreshAgenda(bookingSystem.getAllBookings());
 
                 clear();
                 return true;
@@ -390,6 +402,8 @@ public class DetailsController {
                 || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
                 || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
                 || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
+                || !diagnosisBeforeRepair()
+                || !timesDoNotOverlap()
                 || !repairHasStarted()
                 || !validateMechanicSelection()
                 || !validNewMileage()
@@ -528,6 +542,8 @@ public class DetailsController {
         settledCheckBox.setDisable(state);
         saveButton.setDisable(state);
         completeButton.setDisable(state);
+
+        if (selectedVehicle.isCoveredByWarranty()) settledCheckBox.setDisable(true);
     }
 
     /** Empties all fields in the details pane */
@@ -780,6 +796,57 @@ public class DetailsController {
         }
     }
 
+    private boolean timesDoNotOverlap() {
+        if (timesOverlapPopOver == null) {
+            try {
+                timesOverlapPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/TimesOverlapPopOver.fxml")
+                ));
+                timesOverlapPopOver.setDetachable(false);
+                timesOverlapPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (!extractDiagnosisStart().isBefore(extractRepairStart())
+                && extractRepairStart().isBefore(extractDiagnosisEnd())) {
+            if (!timesOverlapPopOver.isShowing()) timesOverlapPopOver.show(repairEndTimeTextField);
+            return false;
+        }
+        else {
+            if (invertedTimePopOver.isShowing()) timesOverlapPopOver.hide();
+            return true;
+        }
+    }
+
+    private boolean diagnosisBeforeRepair() {
+        if (diagnosisBeforeRepairPopOver == null) {
+            try {
+                diagnosisBeforeRepairPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/DiagnosisBeforeRepairPopOver.fxml")
+                ));
+                diagnosisBeforeRepairPopOver.setDetachable(false);
+                diagnosisBeforeRepairPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (extractRepairStart().isBefore(extractDiagnosisStart())) {
+            if (!diagnosisBeforeRepairPopOver.isShowing()) diagnosisBeforeRepairPopOver.show(repairEndTimeTextField);
+            return false;
+        }
+        else {
+            if (invertedTimePopOver.isShowing()) diagnosisBeforeRepairPopOver.hide();
+            return true;
+        }
+    }
+
     /** Checks that the repair time has already started */
     private boolean repairHasStarted() {
         if (repairNotStartedPopOver == null) {
@@ -856,7 +923,7 @@ public class DetailsController {
             }
 
             if (!closedPopOver.isShowing()) closedPopOver
-                    .show(exc.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker);
+                    .show(exc.concerning() == DIAGNOSIS ? diagnosisEndTimeTextField : repairEndTimeTextField);
         }
     }
 
