@@ -26,7 +26,7 @@ The system includes a variety of pre-added users. For testing, you may use
 <table>
 <tr><th>User string</th><th>Password</th><th>Access rights</th></tr>
 <tr><td>00000</td><td>password</td><td>ADMINISTRATOR</td></tr>
-<tr><td>10000</td><td>software17</td><td>STANDARD USER</td></tr>
+<tr><td>10000</td><td>software31</td><td>STANDARD USER</td></tr>
 </table>
 
 
