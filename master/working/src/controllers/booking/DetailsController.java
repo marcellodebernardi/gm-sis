@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -22,7 +21,10 @@ import org.controlsfx.control.textfield.TextFields;
 import persistence.DatabaseRepository;
 
 import java.io.IOException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -92,6 +94,8 @@ public class DetailsController {
     private PopOver holidayPopOver;
     private PopOver closedPopOver;
     private PopOver clashPopOver;
+    private PopOver timesOverlapPopOver;
+    private PopOver diagnosisBeforeRepairPopOver;
 
 
     public DetailsController() {
@@ -113,6 +117,7 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     INITIALIZATION                                                  //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** Calls the initialization helpers and sets the controller state to initialized */
     @FXML private void initialize() {
         master.setController(DetailsController.class, this);
@@ -230,7 +235,7 @@ public class DetailsController {
 
         subcontractedColumn.prefWidthProperty().bind(binding);
         subcontractedColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>(p.getValue().getInstallationID() != 0)
+                new ReadOnlyObjectWrapper<>(p.getValue().getPartRepair() != null)
         );
 
         partsTable.getColumns().setAll(nameColumn, costColumn, subcontractedColumn);
@@ -282,6 +287,16 @@ public class DetailsController {
                 || !timeNotInverted(diagnosisStartTimeTextField, diagnosisEndTimeTextField)
                 || !validateMechanicSelection()) return false;
 
+        if (repairStartTimeTextField.getText() != null || repairEndTimeTextField.getText() != null
+                || repairDatePicker.getValue() != null) {
+            if (!dateSelected(repairDatePicker, "/booking/validation/MissingRepDate.fxml")
+                    || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
+                    || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
+                    || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
+                    || !diagnosisBeforeRepair()
+                    || !timesDoNotOverlap()) return false;
+        }
+
         // if booking already exists, replace old object with new
         selectedVehicle.getBookingList().removeIf(b -> b.getBookingID() == selectedBooking.getBookingID());
         selectedVehicle.getBookingList().add(selectedBooking);
@@ -303,7 +318,8 @@ public class DetailsController {
         }
 
         // parts
-        ((PartsPopOverController) master.getController(PartsPopOverController.class)).save();
+        if (master.getController(PartsPopOverController.class) != null)
+            ((PartsPopOverController) master.getController(PartsPopOverController.class)).save();
 
         // bill
         boolean settled = selectedVehicle.isCoveredByWarranty() || settledCheckBox.isSelected();
@@ -320,7 +336,7 @@ public class DetailsController {
         for (PartOccurrence pO : selectedBooking.getRequiredPartsList()) {
             PartRepair repair = pO.getPartRepair();
 
-            if (repair != null) cost+= repair.getCost();
+            if (repair != null) cost += repair.getCost();
             cost += pO.getPartAbstraction().getPartPrice();
         }
         VehicleRepair vehicleRepair = selectedBooking.getSpcRepair();
@@ -340,7 +356,7 @@ public class DetailsController {
                 ((ListController) master.getController(ListController.class)).refreshTable();
                 if (master.getController(CalendarController.class) != null)
                     ((CalendarController) master.getController(CalendarController.class))
-                            .addAppointment(selectedBooking);
+                            .refreshAgenda(bookingSystem.getAllBookings());
 
                 clear();
                 return true;
@@ -386,6 +402,8 @@ public class DetailsController {
                 || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
                 || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
                 || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
+                || !diagnosisBeforeRepair()
+                || !timesDoNotOverlap()
                 || !repairHasStarted()
                 || !validateMechanicSelection()
                 || !validNewMileage()
@@ -438,6 +456,7 @@ public class DetailsController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                   FIELD STATE MANAGERS                                              //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** fills in the given booking's details into the detail pane */
     void populate(DiagRepBooking booking) {
         clear();
@@ -523,6 +542,8 @@ public class DetailsController {
         settledCheckBox.setDisable(state);
         saveButton.setDisable(state);
         completeButton.setDisable(state);
+
+        if (selectedVehicle.isCoveredByWarranty()) settledCheckBox.setDisable(true);
     }
 
     /** Empties all fields in the details pane */
@@ -775,6 +796,57 @@ public class DetailsController {
         }
     }
 
+    private boolean timesDoNotOverlap() {
+        if (timesOverlapPopOver == null) {
+            try {
+                timesOverlapPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/TimesOverlapPopOver.fxml")
+                ));
+                timesOverlapPopOver.setDetachable(false);
+                timesOverlapPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (!extractDiagnosisStart().isBefore(extractRepairStart())
+                && extractRepairStart().isBefore(extractDiagnosisEnd())) {
+            if (!timesOverlapPopOver.isShowing()) timesOverlapPopOver.show(repairEndTimeTextField);
+            return false;
+        }
+        else {
+            if (invertedTimePopOver.isShowing()) timesOverlapPopOver.hide();
+            return true;
+        }
+    }
+
+    private boolean diagnosisBeforeRepair() {
+        if (diagnosisBeforeRepairPopOver == null) {
+            try {
+                diagnosisBeforeRepairPopOver = new PopOver(FXMLLoader.load(getClass()
+                        .getResource("/resources/booking/validation/DiagnosisBeforeRepairPopOver.fxml")
+                ));
+                diagnosisBeforeRepairPopOver.setDetachable(false);
+                diagnosisBeforeRepairPopOver.setCornerRadius(0);
+            }
+            catch (IOException e) {
+                e.printStackTrace(); // do nothing
+                return false;
+            }
+        }
+
+        if (extractRepairStart().isBefore(extractDiagnosisStart())) {
+            if (!diagnosisBeforeRepairPopOver.isShowing()) diagnosisBeforeRepairPopOver.show(repairEndTimeTextField);
+            return false;
+        }
+        else {
+            if (invertedTimePopOver.isShowing()) diagnosisBeforeRepairPopOver.hide();
+            return true;
+        }
+    }
+
     /** Checks that the repair time has already started */
     private boolean repairHasStarted() {
         if (repairNotStartedPopOver == null) {
@@ -822,7 +894,7 @@ public class DetailsController {
     private void displayClashPopOver(UnavailableDateException exc) {
         if (clashPopOver == null) {
             try {
-                clashPopOver= new PopOver(FXMLLoader.load(getClass()
+                clashPopOver = new PopOver(FXMLLoader.load(getClass()
                         .getResource("/booking/validation/ClashPopOver.fxml")));
                 clashPopOver.setDetachable(false);
                 clashPopOver.setCornerRadius(0);
@@ -851,7 +923,7 @@ public class DetailsController {
             }
 
             if (!closedPopOver.isShowing()) closedPopOver
-                    .show(exc.concerning() == DIAGNOSIS ? diagnosisDatePicker : repairDatePicker);
+                    .show(exc.concerning() == DIAGNOSIS ? diagnosisEndTimeTextField : repairEndTimeTextField);
         }
     }
 
@@ -915,7 +987,7 @@ public class DetailsController {
     private boolean isSettled() {
         if (notSettledPopOver == null) {
             try {
-                notSettledPopOver= new PopOver(FXMLLoader.load(getClass()
+                notSettledPopOver = new PopOver(FXMLLoader.load(getClass()
                         .getResource("/booking/validation/NotSettled.fxml")));
                 notSettledPopOver.setDetachable(false);
                 notSettledPopOver.setCornerRadius(0);

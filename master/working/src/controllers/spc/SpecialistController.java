@@ -808,23 +808,29 @@ public class SpecialistController implements Initializable {
 
 
     private void displayInstallations(List<Installation> installations) {
-        Installations.getItems().clear();
-        installationObservableList.addAll(installations);
-        VehicleReg.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
-        VehicleReg.setCellFactory(TextFieldTableCell.forTableColumn());
-        instDate.setCellValueFactory(new PropertyValueFactory<>("installationDate"));
-        instDate.setCellFactory(TextFieldTableCell.forTableColumn(new ZonedDateStringConverter()));
-        warrDate.setCellValueFactory(new PropertyValueFactory<>("endWarrantyDate"));
-        warrDate.setCellFactory(TextFieldTableCell.forTableColumn(new ZonedDateStringConverter()));
-        partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
-                ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
-                return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
-            }
-        });
-        partOccID.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        try {
+            Installations.getItems().clear();
+            installationObservableList.addAll(installations);
+            VehicleReg.setCellValueFactory(new PropertyValueFactory<>("vehicleRegNumber"));
+            VehicleReg.setCellFactory(TextFieldTableCell.forTableColumn());
+            instDate.setCellValueFactory(new PropertyValueFactory<>("installationDate"));
+            instDate.setCellFactory(TextFieldTableCell.forTableColumn(new ZonedDateStringConverter()));
+            warrDate.setCellValueFactory(new PropertyValueFactory<>("endWarrantyDate"));
+            warrDate.setCellFactory(TextFieldTableCell.forTableColumn(new ZonedDateStringConverter()));
+            partOccID.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Installation, Integer>,
+                    ObservableValue<Integer>>() {
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Installation, Integer> p) {
+                    return new ReadOnlyObjectWrapper<>(p.getValue().getPartOccurrence().getPartOccurrenceID());
+                }
+            });
+            partOccID.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
-        Installations.setItems(installationObservableList);
+            Installations.setItems(installationObservableList);
+        }
+        catch (Exception e)
+        {
+            //nothing to do
+        }
     }
 
     @FXML
@@ -997,8 +1003,10 @@ public class SpecialistController implements Initializable {
         alert.showAndWait();
     }
 
+    @SuppressWarnings("Duplicates")
     public void findAvailableBookings()
     {
+        bookingIDForInsta.getItems().clear();
         Vehicle vehicle = VehicleSys.getInstance().searchAVehicle(instaVReg.getText().trim().toUpperCase());
        List<DiagRepBooking> diagRepBookings = vehicle.getBookingList();
        for(DiagRepBooking diagRepBooking: diagRepBookings)
