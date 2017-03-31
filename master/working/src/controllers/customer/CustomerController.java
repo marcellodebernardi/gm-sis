@@ -418,7 +418,7 @@ public class CustomerController implements Initializable {
             CustomerType cType = null;
 
             boolean checkFields = false;
-            checkFields = checkCustomerFields();
+            checkFields = checkCustomerFieldsForEdit();
 
             if (customerType.getSelectionModel().getSelectedItem().toString().equals("Private")) {
                 cType = CustomerType.Private;
@@ -842,6 +842,147 @@ public class CustomerController implements Initializable {
             if(!verifyEmail)
             {
                 errorAlert("Customer record already exists. Enter a new Email address");
+                return false;
+            }
+
+            if (customerType.getSelectionModel().getSelectedItem() == null) {
+                errorAlert("Pick Customer type");
+                return false;
+            }
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean checkCustomerFieldsForEdit() {
+        try {
+            if((customerFirstname.getText().equals(""))&&(customerSurname.getText().equals(""))&&(customerAddress.getText().equals(""))&&(customerPostcode.getText().equals(""))&&(customerPhone.getText().equals(""))&&(customerEmail.getText().equals(""))&&(customerType.getSelectionModel().getSelectedItem() == null))
+            {
+                errorAlert("All fields are empty. Add Customer record");
+                return false;
+            }
+            if (customerFirstname.getText().equals("")) {
+                errorAlert("'Customer First name' field is empty. Enter First name");
+                return false;
+            }
+            if (customerFirstname.getText().length() < 2) {
+                errorAlert("'Customer First name' is too short. Minimum is 2 characters");
+                return false;
+            }
+            if (customerFirstname.getText().length() > 30) {
+                errorAlert("'Customer First name' is too long. Maximum is 30 characters");
+                return false;
+            }
+            if ((customerFirstname.getText().contains("`")) || (customerFirstname.getText().contains("¬")) || (customerFirstname.getText().contains("!")) || (customerFirstname.getText().contains("\"")) || (customerFirstname.getText().contains("£")) || (customerFirstname.getText().contains("$")) || (customerFirstname.getText().contains("%")) || (customerFirstname.getText().contains("^")) || (customerFirstname.getText().contains("&")) || (customerFirstname.getText().contains("*")) || (customerFirstname.getText().contains("(")) || (customerFirstname.getText().contains(")")) || (customerFirstname.getText().contains("_")) || (customerFirstname.getText().contains("+")) || (customerFirstname.getText().contains("=")) || (customerFirstname.getText().contains("{")) || (customerFirstname.getText().contains("}")) || (customerFirstname.getText().contains("[")) || (customerFirstname.getText().contains("]")) || (customerFirstname.getText().contains(":")) || (customerFirstname.getText().contains(";")) || (customerFirstname.getText().contains("@")) || (customerFirstname.getText().contains("'")) || (customerFirstname.getText().contains("~")) || (customerFirstname.getText().contains("#")) || (customerFirstname.getText().contains("<")) || (customerFirstname.getText().contains(">")) || (customerFirstname.getText().contains(",")) || (customerFirstname.getText().contains(".")) || (customerFirstname.getText().contains("?")) || (customerFirstname.getText().contains("/")) || (customerFirstname.getText().contains("|")) || (customerFirstname.getText().contains("1")) || (customerFirstname.getText().contains("2")) || (customerFirstname.getText().contains("3")) || (customerFirstname.getText().contains("4")) || (customerFirstname.getText().contains("5")) || (customerFirstname.getText().contains("6")) || (customerFirstname.getText().contains("7")) || (customerFirstname.getText().contains("8")) || (customerFirstname.getText().contains("9")) || (customerFirstname.getText().contains("0"))) {
+                errorAlert("'Customer First name' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
+                return false;
+            }
+
+            if (customerSurname.getText().equals("")) {
+                errorAlert("'Customer Surname' field is empty. Enter First name");
+                return false;
+            }
+            if (customerSurname.getText().length() < 2) {
+                errorAlert("'Customer Surname' is too short. Minimum is 2 characters");
+                return false;
+            }
+            if (customerSurname.getText().length() > 30) {
+                errorAlert("'Customer Surname' is too long. Maximum is 30 characters");
+                return false;
+            }
+            if ((customerSurname.getText().contains("`")) || (customerSurname.getText().contains("¬")) || (customerSurname.getText().contains("!")) || (customerSurname.getText().contains("\"")) || (customerSurname.getText().contains("£")) || (customerSurname.getText().contains("$")) || (customerSurname.getText().contains("%")) || (customerSurname.getText().contains("^")) || (customerSurname.getText().contains("&")) || (customerSurname.getText().contains("*")) || (customerSurname.getText().contains("(")) || (customerSurname.getText().contains(")")) || (customerSurname.getText().contains("_")) || (customerSurname.getText().contains("+")) || (customerSurname.getText().contains("=")) || (customerSurname.getText().contains("{")) || (customerSurname.getText().contains("}")) || (customerSurname.getText().contains("[")) || (customerSurname.getText().contains("]")) || (customerSurname.getText().contains(":")) || (customerSurname.getText().contains(";")) || (customerSurname.getText().contains("@")) || (customerSurname.getText().contains("'")) || (customerSurname.getText().contains("~")) || (customerSurname.getText().contains("#")) || (customerSurname.getText().contains("<")) || (customerSurname.getText().contains(">")) || (customerSurname.getText().contains(",")) || (customerSurname.getText().contains(".")) || (customerSurname.getText().contains("?")) || (customerSurname.getText().contains("/")) || (customerSurname.getText().contains("|")) || (customerSurname.getText().contains("1")) || (customerSurname.getText().contains("2")) || (customerSurname.getText().contains("3")) || (customerSurname.getText().contains("4")) || (customerSurname.getText().contains("5")) || (customerSurname.getText().contains("6")) || (customerSurname.getText().contains("7")) || (customerSurname.getText().contains("8")) || (customerSurname.getText().contains("9")) || (customerSurname.getText().contains("0"))) {
+                errorAlert("'Customer Surname' cannot have numbers or symbols except '-'. Only English Alphabet letters a-z or A-Z are allowed");
+                return false;
+            }
+
+            if (customerAddress.getText().equals("")) {
+                errorAlert("'Customer Address' field is empty. Enter Address");
+                return false;
+            }
+            if (customerAddress.getText().length() < 4) {
+                errorAlert("'Customer Address' field is too short. Minimum is 4 characters");
+                return false;
+            }
+            if (customerAddress.getText().length() > 50) {
+                errorAlert("'Customer Address' field is too long. Maximum is 50 characters");
+                return false;
+            }
+
+            if (customerPostcode.getText().equals("")) {
+                errorAlert("'Customer Postcode' field is empty. Enter postcode");
+                return false;
+            }
+            if (customerPostcode.getText().length() < 6) {
+                errorAlert("'Customer Postcode' field is too short. Enter valid UK Postcode including required spacing");
+                return false;
+            }
+            if (customerPostcode.getText().length() > 8) {
+                errorAlert("'Customer Postcode' field is too long. Enter valid UK Postcode including required spacing");
+                return false;
+            }
+
+            if (customerPhone.getText().equals("")) {
+                errorAlert("'Customer Phone' number field is empty. Enter Phone number");
+                return false;
+            }
+            if (customerPhone.getText().length() < 7) {
+                errorAlert("'Customer Phone' number field is too short. Enter valid Phone number between 7 and 15 digits");
+                return false;
+            }
+            if (customerPhone.getText().length() > 15) {
+                errorAlert("'Customer Phone' number field is too long. Enter valid Phone number between 7 and 15 digits");
+                return false;
+            }
+            if ((customerPhone.getText().equals("`")) || (customerPhone.getText().equals("¬")) || (customerPhone.getText().equals("!")) || (customerPhone.getText().equals('"')) || (customerPhone.getText().equals("£")) || (customerPhone.getText().equals("$")) || (customerPhone.getText().equals("%")) || (customerPhone.getText().equals("^")) || (customerPhone.getText().equals("&")) || (customerPhone.getText().equals("*")) || (customerPhone.getText().equals("(")) || (customerPhone.getText().equals(")")) || (customerPhone.getText().equals("_")) || (customerPhone.getText().equals("+")) || (customerPhone.getText().equals("=")) || (customerPhone.getText().equals("{")) || (customerPhone.getText().equals("}")) || (customerPhone.getText().equals("[")) || (customerPhone.getText().equals("]")) || (customerPhone.getText().equals(":")) || (customerPhone.getText().equals(";")) || (customerPhone.getText().equals("@")) || (customerPhone.getText().equals("'")) || (customerPhone.getText().equals("~")) || (customerPhone.getText().equals("#")) || (customerPhone.getText().equals("<")) || (customerPhone.getText().equals(">")) || (customerPhone.getText().equals(",")) || (customerPhone.getText().equals(".")) || (customerPhone.getText().equals("?")) || (customerPhone.getText().equals("/")) || (customerPhone.getText().equals("|"))) {
+                errorAlert("'Customer Phone' number field is invalid . No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
+                return false;
+            }
+            if((customerPhone.getText().substring(0,1).equals("1"))||(customerPhone.getText().substring(0,1).equals("2"))||(customerPhone.getText().substring(0,1).equals("3"))||(customerPhone.getText().substring(0,1).equals("4"))||(customerPhone.getText().substring(0,1).equals("5"))||(customerPhone.getText().substring(0,1).equals("6"))||(customerPhone.getText().substring(0,1).equals("7"))||(customerPhone.getText().substring(0,1).equals("8"))||(customerPhone.getText().substring(0,1).equals("9")))
+            {
+                errorAlert("'Customer Phone' number field can only start with '+' or '0' NOT 1-9");
+                return false;
+            }
+            String customerPhoneNoPlus = customerPhone.getText().replaceAll("\\+", "");
+            if ((!customerPhoneNoPlus.matches("[0-9]+"))) {
+                errorAlert("'Customer Phone' number field is invalid. Letters a-z or A-Z are not allowed. No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
+                return false;
+            }
+            for (int i = 1; i < customerPhone.getText().length(); i++) {
+                if (customerPhone.getText().substring(i, i + 1).equals("+")) {
+                    errorAlert("'Customer Phone' number field is invalid. '+' symbol can only be optionally used at the start");
+                    return false;
+                }
+            }
+
+            if (customerEmail.getText().equals("")) {
+                errorAlert("'Customer Email' address field is empty. Enter Email address");
+                return false;
+            }
+            if (customerEmail.getText().length() < 5) {
+                errorAlert("'Customer Email' address field is too short. Enter valid Email address between 5 to 30 characters long");
+                return false;
+            }
+            if (customerEmail.getText().length() > 30) {
+                errorAlert("'Customer Email' address field is too long. Enter valid Email address between 5 to 30 characters long");
+                return false;
+            }
+            if (!customerEmail.getText().contains("@")) {
+                errorAlert("'Customer Email' address field does not contain '@' symbol. Enter valid Email address containing '@' and period/dot symbol");
+                return false;
+            }
+            if (!customerEmail.getText().contains(".")) {
+                errorAlert("'Customer Email' address field does not contain '.' symbol. Enter valid Email address containing period/dot '.' and '@' symbol");
+                return false;
+            }
+
+            int emailAtSignPosition = customerEmail.getText().indexOf("@");
+            String emailAtSign = customerEmail.getText().substring(emailAtSignPosition);
+
+            if(!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})"))
+            {
+                errorAlert("Invalid email");
                 return false;
             }
 
