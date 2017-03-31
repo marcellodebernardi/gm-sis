@@ -287,11 +287,10 @@ public class DetailsController {
                 || !timeNotInverted(diagnosisStartTimeTextField, diagnosisEndTimeTextField)
                 || !validateMechanicSelection()) return false;
 
-        if (repairStartTimeTextField.getText() != null || repairEndTimeTextField.getText() != null
-                || repairDatePicker.getValue() != null) {
-            if (!dateSelected(repairDatePicker, "/booking/validation/MissingRepDate.fxml")
-                    || !timeSelected(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/MissingRepTime.fxml")
-                    || !timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
+        if ((repairStartTimeTextField.getText() != null && !repairStartTimeTextField.getText().trim().equals(""))
+                || (repairEndTimeTextField.getText() != null && !repairEndTimeTextField.getText().trim().equals(""))
+                || (repairDatePicker.getValue() != null)) {
+            if (!timeValid(repairStartTimeTextField, repairEndTimeTextField, "/booking/validation/InvalidRepTime.fxml")
                     || !timeNotInverted(repairStartTimeTextField, repairEndTimeTextField)
                     || !diagnosisBeforeRepair()
                     || !timesDoNotOverlap()) return false;
@@ -357,6 +356,9 @@ public class DetailsController {
                 if (master.getController(CalendarController.class) != null)
                     ((CalendarController) master.getController(CalendarController.class))
                             .refreshAgenda(bookingSystem.getAllBookings());
+                if (master.getController(VehiclePaneController.class) != null)
+                    ((VehiclePaneController) master.getController(VehiclePaneController.class))
+                            .populateBookingTable(selectedVehicle.getBookingList());
 
                 clear();
                 return true;

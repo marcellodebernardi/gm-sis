@@ -200,7 +200,7 @@ public class VehiclePaneController {
         vehicleTableView.setItems(FXCollections.observableArrayList(vehicles));
     }
 
-    private void populateBookingTable(List<DiagRepBooking> bookings) {
+    void populateBookingTable(List<DiagRepBooking> bookings) {
         ObservableList<DiagRepBooking> bookingsObservable = FXCollections.observableArrayList(bookings);
         bookingTableView.setItems(bookingsObservable);
         bookingTableView.refresh();

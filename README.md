@@ -81,6 +81,19 @@ and red buttons by the small parts table.
 
 #### 4.5 VEHICLES - Dillon
 
+The vehicle screen consists of 4 sections: **Edit/Add Vehicles**, **Vehicle Table**, **Part Lists** and **Customer/Bookings Details**.
+
+The left panel is designed to **Add Vehicles** into the system. All fields have to entered in order to add a vehicle, if any field is blank or entered incorreclty they will turn light pink/red and display a erorr message at the bottom of the pane. There is a **Clear** button to reset the fields and a **Add** button to add the vehicle to the System. An confirmation box will appear to add the Vehicle, by pressing **OK** it will add to the system and **cancel** will go back allowing you to edit the vehicle details. If the vehicle registration already exists a pop up will be displayed to stop you from adding the vehicle, if they vehicle addition is successful then a message explaining this will be displayed. 
+
+The right panel will display vehicle parts or bookings parts, the list auto refresh depending on the vehicle *selected** in the table and will display the registraion above the list so you know what vehicle the list it for. It also shows parts for a booking, this happens when you click on the **parts** button after selecting a booking. If there are no parts for a particualar booking or vehicle it will display no parts message.
+
+The central pane displays the vehicles is table view, on opening the vehicle tab, it will auto load all the vehicles in the system, there is a search bar which allows you to search by registration, manufactuerer or vehicle type. There is also a view all button to redisplay all the vehicles after you want to clear a search. The button **Delete** will delete any vehicle selected in the table and **Edit** will display the vehicle detials on the left pane.
+
+On click **Edit** the add vehicle pane on the left will turn into a edit vehicle pane. This allows you to edit details of the vehicle, you can edit anything apart from the registraion and the customer. There are 3 buttons at the bottom of the edit vehicle pane, the **Edit** button will save the vehicle details, clear the textfields and turn it into add vehicle then refresh the table. The **Delete** will delete the vehicle and **New** button will turn the edit vehicle into add vehicle pane.
+
+The Pane below the table view displays the next booking date for the vehicle selected in the table as well as display the customer detials selected below this. At the bottom of the pane it displays past and future bookings for the vehicle.
+This pane will auto refresh when a new vehicle is selected in the table.
+
 #### 4.6 PARTS - Muhammad Hoque
 
 The parts screen consists of two tab views: **Available Parts** and **Part Installation History**
