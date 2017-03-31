@@ -35,6 +35,7 @@ HBox {
     -fx-fill-width: true;
     -fx-spacing: 1em;
 }
+
 #bottomBox Button {
     -fx-pref-width: 10em;
 }

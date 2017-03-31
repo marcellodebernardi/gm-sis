@@ -42,29 +42,25 @@ public class UserController implements Initializable {
 
 
     @FXML private void searchUsers() {
-        if (sUT.getSelectionModel().getSelectedItem() == null)
-        {
+        if (sUT.getSelectionModel().getSelectedItem() == null) {
             //showAlert("A");
-            displayTable(auth.searchUsers(searchBarFN.getText(),searchBarLS.getText(),searchBarID.getText()));
+            displayTable(auth.searchUsers(searchBarFN.getText(), searchBarLS.getText(), searchBarID.getText()));
         }
-        else
-        {
+        else {
             UserType userType;
-            if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin"))
-            {
+            if (sUT.getSelectionModel().getSelectedItem().toString().equals("Admin")) {
                 //showAlert("B");
                 userType = UserType.ADMINISTRATOR;
             }
-            else
-            {
+            else {
                 //showAlert("C");
-               userType = UserType.NORMAL;
+                userType = UserType.NORMAL;
             }
             //showAlert("D");
             displayTable(auth.searchUsersUT(searchBarFN.getText(),
                     searchBarLS.getText(),
                     searchBarID.getText()
-                    ,userType));
+                    , userType));
         }
 
     }
@@ -97,40 +93,32 @@ public class UserController implements Initializable {
                 else {
                     userType = UserType.NORMAL;
                 }
-                List<User> userList= auth.getAllUsers();
-                if (addOrEdit.equals("add"))
-                {
-                for (int i =0;i<userList.size();i++)
-                {
-                    if (userList.get(0).getUserID().equals(UID.getText()))
-                    {
-                        showAlert("This user has already been added!");
-                        return;
+                List<User> userList = auth.getAllUsers();
+                if (addOrEdit.equals("add")) {
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(0).getUserID().equals(UID.getText())) {
+                            showAlert("This user has already been added!");
+                            return;
+                        }
                     }
-                }}
+                }
                 boolean checker = auth.commitUser(UID.getText(), P.getText(), FN.getText(), SN.getText(), userType);
                 AllUsers();
                 ClearFields();
                 NewUser();
-                if (addOrEdit.equals("add"))
-                {
-                    if (checker)
-                    {
+                if (addOrEdit.equals("add")) {
+                    if (checker) {
                         showAlert("User has ben successfully added");
                     }
-                    else
-                    {
+                    else {
                         showAlert("User cannot be added");
                     }
                 }
-                else
-                {
-                    if (checker)
-                    {
+                else {
+                    if (checker) {
                         showAlert("User details have successfully been saved");
                     }
-                    else
-                    {
+                    else {
                         showAlert("User details cannot be edited");
                     }
                 }
@@ -175,14 +163,12 @@ public class UserController implements Initializable {
         try {
             boolean check = auth.deleteUser(userID);
             ClearFields();
-            if (check)
-            {
+            if (check) {
                 showAlert("successfully deleted");
                 AllUsers();
                 NewUser();
             }
-            else
-            {
+            else {
                 showAlert("Delete failed");
             }
         }

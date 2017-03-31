@@ -48,7 +48,7 @@ public class LoginController {
     }
 
     public void exitHandler() {
-    System.exit(0);
+        System.exit(0);
     }
 
     @FXML
@@ -56,8 +56,7 @@ public class LoginController {
         try {
             Main.getInstance().start(new Stage());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             System.out.println("Broken");
         }
 

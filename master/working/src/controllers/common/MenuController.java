@@ -9,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import logic.authentication.AuthenticationSystem;
@@ -25,22 +24,22 @@ import java.util.ResourceBundle;
  *         todo clean up and add comments
  */
 public class MenuController implements Initializable {
+    private static MenuController instance;
     private BorderPane customersBasePane;
     private BorderPane vehicleBasePane;
     private BorderPane partsBasePane;
     private BorderPane specialistBasePane;
     private BorderPane spcManagementBasePane;
     private BorderPane usersBasePane;
-
     @FXML private Button UsersButton;
     @FXML private Button SRCButton;
     @FXML private Button logoutButton;
     @FXML private Button userGreeting;
 
-    private static MenuController instance;
-
-
-
+    public static MenuController getInstance() {
+        if (instance == null) instance = new MenuController();
+        return instance;
+    }
 
     @Override public void initialize(URL location, ResourceBundle resources) {
         if (AuthenticationSystem.getInstance().getUserType().equals(UserType.ADMINISTRATOR)) {
@@ -147,11 +146,6 @@ public class MenuController implements Initializable {
             System.out.println("Logout Error");
             e.printStackTrace();
         }
-    }
-
-    public static MenuController getInstance() {
-        if (instance == null) instance = new MenuController();
-        return instance;
     }
 
     public boolean confirmationAlert(String title, String message) {

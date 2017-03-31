@@ -63,13 +63,13 @@ public class HolidayAppointment implements Agenda.Appointment {
         return appointmentGroup;
     }
 
+    public void setAppointmentGroup(Agenda.AppointmentGroup appointmentGroup) {
+        this.appointmentGroup = appointmentGroup;
+    }
+
     public HolidayAppointment withAppointmentGroup(Agenda.AppointmentGroup group) {
         this.appointmentGroup = group;
         return this;
-    }
-
-    public void setAppointmentGroup(Agenda.AppointmentGroup appointmentGroup) {
-        this.appointmentGroup = appointmentGroup;
     }
 
     ////////////////////////////////////////////////////////////////////////////

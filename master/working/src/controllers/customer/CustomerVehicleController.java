@@ -18,8 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import logic.booking.BookingSystem;
@@ -28,7 +26,6 @@ import logic.vehicle.VehicleSys;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -122,14 +119,12 @@ public class CustomerVehicleController implements Initializable {
 
             List<Customer> customerList = cSystem.getAllCustomers();
             int tempCustomerID = 0;
-            for(int i=customerList.size()-1; i>=0; i++)
-            {
+            for (int i = customerList.size() - 1; i >= 0; i++) {
                 tempCustomerID = customerList.get(i).getCustomerID();
                 break;
             }
             List<Vehicle> vehicleList = cSystem.searchCustomerVehicles(tempCustomerID);
-            if(vehicleList.size() == 0)
-            {
+            if (vehicleList.size() == 0) {
                 boolean deleteCustomer = cSystem.deleteCustomer(tempCustomerID);
                 noVehicleAdded();
                 MenuController.getInstance().openCustomerTab();
@@ -217,8 +212,7 @@ public class CustomerVehicleController implements Initializable {
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                if (reg.getText().length()>7)
-                {
+                if (reg.getText().length() > 7) {
                     errorAlert("registration cant be longer than 7 characters");
                     return;
                 }
@@ -242,8 +236,7 @@ public class CustomerVehicleController implements Initializable {
         }
     }
 
-    public void addVehicleAndMakeBooking(ActionEvent event) throws Exception
-    {
+    public void addVehicleAndMakeBooking(ActionEvent event) throws Exception {
         if (!checkVehicleFormat()) {
             return;
         }
@@ -301,8 +294,7 @@ public class CustomerVehicleController implements Initializable {
                 }
 
                 int customerID = Integer.parseInt(cID.getText());
-                if (reg.getText().length()>7)
-                {
+                if (reg.getText().length() > 7) {
                     errorAlert("registration cant be longer than 7 characters");
                     return;
                 }
@@ -419,140 +411,118 @@ public class CustomerVehicleController implements Initializable {
     public boolean checkVehicleFormat() {
         try {
 
-            if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+")))
-            {
+            if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+"))) {
                 errorAlert("Reg is not correct format");
                 return false;
             }
-            if(reg.getText().equals(""))
-            {
+            if (reg.getText().equals("")) {
                 errorAlert("Reg field is empty");
                 return false;
             }
-            if (vType.getSelectionModel().getSelectedItem() == null ) {
+            if (vType.getSelectionModel().getSelectedItem() == null) {
                 errorAlert("Pick Vehicle type");
                 return false;
             }
-            if (!(manuf.getText().matches("[A-Za-z]+")))
-            {
+            if (!(manuf.getText().matches("[A-Za-z]+"))) {
                 errorAlert("Manufacturer is not correct format and cannot have a space \n");
                 return false;
             }
-            if(manuf.getText().equals(""))
-            {
+            if (manuf.getText().equals("")) {
                 errorAlert("Manufacturer field is empty");
                 return false;
             }
-            if (!(mod.getText().matches("[A-Za-z0-9 ]+")))
-            {
+            if (!(mod.getText().matches("[A-Za-z0-9 ]+"))) {
                 errorAlert("Model is not correct format");
                 return false;
             }
-            if(mod.getText().equals(""))
-            {
+            if (mod.getText().equals("")) {
                 errorAlert("Model field is empty");
                 return false;
             }
             Double engineSize = 0.0;
             engineSize = Double.parseDouble(eSize.getText());
-            if (engineSize <=0)
-            {
+            if (engineSize <= 0) {
                 errorAlert("Check engine size inputs are above  0");
                 return false;
             }
-            if(eSize.getText().equals(""))
-            {
+            if (eSize.getText().equals("")) {
                 errorAlert("Engine size field is empty");
                 return false;
             }
-            if (fType.getSelectionModel().getSelectedItem() == null)
-            {
+            if (fType.getSelectionModel().getSelectedItem() == null) {
                 errorAlert("Pick Fuel type");
                 return false;
             }
-            if ((col.getValue()== null)) {
+            if ((col.getValue() == null)) {
                 errorAlert("Colour must be selected, be a string and have no spaces");
                 return false;
             }
             int mileage = Integer.parseInt(mil.getText());
-            if (mileage <0 )
-            {
+            if (mileage < 0) {
                 errorAlert("Check mileage inputs are above or equalTo to 0 \n");
                 return false;
             }
-            if(mil.getText().equals(""))
-            {
+            if (mil.getText().equals("")) {
                 errorAlert("Mileage field is empty");
-                return  false;
+                return false;
             }
-            if(rDateMot.getValue() == null)
-            {
+            if (rDateMot.getValue() == null) {
                 errorAlert("Pick MOT Renewal Date");
                 return false;
             }
-            try
-            {
+            try {
                 Date dateR = fromLocalDate(rDateMot.getValue());
             }
-            catch(Exception e)
-            {
+            catch (Exception e) {
                 errorAlert("Invalid MOT Date");
                 return false;
             }
-            if(dLastServiced.getValue() == null)
-            {
+            if (dLastServiced.getValue() == null) {
                 errorAlert("Date Last Serviced");
                 return false;
             }
-            try
-            {
+            try {
                 Date dateL = fromLocalDate(dLastServiced.getValue());
             }
-            catch(Exception e)
-            {
+            catch (Exception e) {
                 errorAlert("Invalid Last Service Date");
                 return false;
             }
             Date date;
             if (cByWarranty.getSelectionModel().getSelectedItem() != null) {
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") ) {
+                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
                     try {
 
-                        date = fromLocalDate(wExpirationDate.getValue()); }
-                    catch (Exception e)
-                    {
+                        date = fromLocalDate(wExpirationDate.getValue());
+                    }
+                    catch (Exception e) {
                         return false;
                     }
 
-                    if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
-                    {
+                    if (!(wName.getText().matches("[A-Za-z0-9, ]+"))) {
                         errorAlert("Warranty name is not correct format  \n");
                         return false;
                     }
-                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
-                    {
+                    if (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+"))) {
                         errorAlert("Warranty Company is not correct format  \n");
                         return false;
                     }
                 }
             }
-            else
-            {
+            else {
                 try {
 
-                    date = fromLocalDate(wExpirationDate.getValue()); }
-                catch (Exception e)
-                {
+                    date = fromLocalDate(wExpirationDate.getValue());
+                }
+                catch (Exception e) {
                     return false;
                 }
 
-                if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
-                {
+                if (!(wName.getText().matches("[A-Za-z0-9, ]+"))) {
                     errorAlert("Warranty name is not correct format  \n");
                     return false;
                 }
-                if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
-                {
+                if (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+"))) {
                     errorAlert("Warranty Company is not correct format  \n");
                     return false;
                 }
@@ -609,24 +579,24 @@ public class CustomerVehicleController implements Initializable {
             setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(14)) {
-            setVehicle( "Vauxhall", "Astra", "2.0" , "Car", "Diesel");
+            setVehicle("Vauxhall", "Astra", "2.0", "Car", "Diesel");
         }
-        else if (VehicleS.getSelectionModel().isSelected(15)){
-            setVehicle("Mercedes", "C220" ,"2.2", "Car", "Petrol");
+        else if (VehicleS.getSelectionModel().isSelected(15)) {
+            setVehicle("Mercedes", "C220", "2.2", "Car", "Petrol");
         }
-        else if (VehicleS.getSelectionModel().isSelected(16)){
-            setVehicle("Renault", "Carrier" , "2.3" ,"Van", "Diesel" );
+        else if (VehicleS.getSelectionModel().isSelected(16)) {
+            setVehicle("Renault", "Carrier", "2.3", "Van", "Diesel");
         }
-        else if (VehicleS.getSelectionModel().isSelected(17)){
+        else if (VehicleS.getSelectionModel().isSelected(17)) {
             setVehicle("Nissan", "Space", "3.0", "Car", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(18)) {
-            setVehicle("Vauxhall", "Corsa", "2.0" ,"Car", "Diesel");
+            setVehicle("Vauxhall", "Corsa", "2.0", "Car", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(19)) {
-            setVehicle("Nissan", "GTR", "4.0" ,"Car", "Petrol");
+            setVehicle("Nissan", "GTR", "4.0", "Car", "Petrol");
         }
-        else if (VehicleS.getSelectionModel().isSelected(20)){
+        else if (VehicleS.getSelectionModel().isSelected(20)) {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
         }
     }

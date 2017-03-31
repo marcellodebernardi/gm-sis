@@ -8,9 +8,7 @@ import persistence.DatabaseRepository;
 import java.util.Date;
 import java.util.List;
 
-import static logic.criterion.CriterionOperator.equalTo;
-import static logic.criterion.CriterionOperator.in;
-import static logic.criterion.CriterionOperator.matches;
+import static logic.criterion.CriterionOperator.*;
 
 /**
  * Created by DillonVaghela on 2/9/17.
@@ -41,7 +39,6 @@ public class VehicleSys {
         return results;
 
     }
-
 
 
     public List<Vehicle> searchVehicle(String regNumber, String manufacturer) {

@@ -1,7 +1,6 @@
 package controllers.customer;
 
 import controllers.booking.BookingController;
-import controllers.login.LoginController;
 import domain.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -711,8 +710,7 @@ public class CustomerController implements Initializable {
 
     public boolean checkCustomerFields() {
         try {
-            if((customerFirstname.getText().equals(""))&&(customerSurname.getText().equals(""))&&(customerAddress.getText().equals(""))&&(customerPostcode.getText().equals(""))&&(customerPhone.getText().equals(""))&&(customerEmail.getText().equals(""))&&(customerType.getSelectionModel().getSelectedItem() == null))
-            {
+            if ((customerFirstname.getText().equals("")) && (customerSurname.getText().equals("")) && (customerAddress.getText().equals("")) && (customerPostcode.getText().equals("")) && (customerPhone.getText().equals("")) && (customerEmail.getText().equals("")) && (customerType.getSelectionModel().getSelectedItem() == null)) {
                 errorAlert("All fields are empty. Add Customer record");
                 return false;
             }
@@ -792,8 +790,7 @@ public class CustomerController implements Initializable {
                 errorAlert("'Customer Phone' number field is invalid . No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
                 return false;
             }
-            if((customerPhone.getText().substring(0,1).equals("1"))||(customerPhone.getText().substring(0,1).equals("2"))||(customerPhone.getText().substring(0,1).equals("3"))||(customerPhone.getText().substring(0,1).equals("4"))||(customerPhone.getText().substring(0,1).equals("5"))||(customerPhone.getText().substring(0,1).equals("6"))||(customerPhone.getText().substring(0,1).equals("7"))||(customerPhone.getText().substring(0,1).equals("8"))||(customerPhone.getText().substring(0,1).equals("9")))
-            {
+            if ((customerPhone.getText().substring(0, 1).equals("1")) || (customerPhone.getText().substring(0, 1).equals("2")) || (customerPhone.getText().substring(0, 1).equals("3")) || (customerPhone.getText().substring(0, 1).equals("4")) || (customerPhone.getText().substring(0, 1).equals("5")) || (customerPhone.getText().substring(0, 1).equals("6")) || (customerPhone.getText().substring(0, 1).equals("7")) || (customerPhone.getText().substring(0, 1).equals("8")) || (customerPhone.getText().substring(0, 1).equals("9"))) {
                 errorAlert("'Customer Phone' number field can only start with '+' or '0' NOT 1-9");
                 return false;
             }
@@ -833,14 +830,12 @@ public class CustomerController implements Initializable {
             int emailAtSignPosition = customerEmail.getText().indexOf("@");
             String emailAtSign = customerEmail.getText().substring(emailAtSignPosition);
 
-            if(!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})"))
-            {
+            if (!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})")) {
                 errorAlert("Invalid email");
                 return false;
             }
             boolean verifyEmail = verifyCustomerDoesNotExist(customerEmail.getText());
-            if(!verifyEmail)
-            {
+            if (!verifyEmail) {
                 errorAlert("Customer record already exists. Enter a new Email address");
                 return false;
             }
@@ -858,8 +853,7 @@ public class CustomerController implements Initializable {
 
     public boolean checkCustomerFieldsForEdit() {
         try {
-            if((customerFirstname.getText().equals(""))&&(customerSurname.getText().equals(""))&&(customerAddress.getText().equals(""))&&(customerPostcode.getText().equals(""))&&(customerPhone.getText().equals(""))&&(customerEmail.getText().equals(""))&&(customerType.getSelectionModel().getSelectedItem() == null))
-            {
+            if ((customerFirstname.getText().equals("")) && (customerSurname.getText().equals("")) && (customerAddress.getText().equals("")) && (customerPostcode.getText().equals("")) && (customerPhone.getText().equals("")) && (customerEmail.getText().equals("")) && (customerType.getSelectionModel().getSelectedItem() == null)) {
                 errorAlert("All fields are empty. Add Customer record");
                 return false;
             }
@@ -939,8 +933,7 @@ public class CustomerController implements Initializable {
                 errorAlert("'Customer Phone' number field is invalid . No symbol is allowed except '+' at the start. Number digits from 0-9 are allowed");
                 return false;
             }
-            if((customerPhone.getText().substring(0,1).equals("1"))||(customerPhone.getText().substring(0,1).equals("2"))||(customerPhone.getText().substring(0,1).equals("3"))||(customerPhone.getText().substring(0,1).equals("4"))||(customerPhone.getText().substring(0,1).equals("5"))||(customerPhone.getText().substring(0,1).equals("6"))||(customerPhone.getText().substring(0,1).equals("7"))||(customerPhone.getText().substring(0,1).equals("8"))||(customerPhone.getText().substring(0,1).equals("9")))
-            {
+            if ((customerPhone.getText().substring(0, 1).equals("1")) || (customerPhone.getText().substring(0, 1).equals("2")) || (customerPhone.getText().substring(0, 1).equals("3")) || (customerPhone.getText().substring(0, 1).equals("4")) || (customerPhone.getText().substring(0, 1).equals("5")) || (customerPhone.getText().substring(0, 1).equals("6")) || (customerPhone.getText().substring(0, 1).equals("7")) || (customerPhone.getText().substring(0, 1).equals("8")) || (customerPhone.getText().substring(0, 1).equals("9"))) {
                 errorAlert("'Customer Phone' number field can only start with '+' or '0' NOT 1-9");
                 return false;
             }
@@ -980,8 +973,7 @@ public class CustomerController implements Initializable {
             int emailAtSignPosition = customerEmail.getText().indexOf("@");
             String emailAtSign = customerEmail.getText().substring(emailAtSignPosition);
 
-            if(!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})"))
-            {
+            if (!customerEmail.getText().matches("([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})")) {
                 errorAlert("Invalid email");
                 return false;
             }
@@ -997,26 +989,22 @@ public class CustomerController implements Initializable {
         }
     }
 
-    public boolean verifyCustomerDoesNotExist(String email)
-    {
-        try
-        {
+    public boolean verifyCustomerDoesNotExist(String email) {
+        try {
             List<Customer> customerList = cSystem.getAllCustomers();
-            for(int i=0; i<customerList.size(); i++)
-            {
-                if(customerList.get(i).getCustomerEmail().equals(email))
-                {
+            for (int i = 0; i < customerList.size(); i++) {
+                if (customerList.get(i).getCustomerEmail().equals(email)) {
                     return false;
                 }
             }
             return true;
         }
-        catch(Exception e) {
+        catch (Exception e) {
         }
         return false;
     }
-    public String firstLetterUpperCase(String words)
-    {
+
+    public String firstLetterUpperCase(String words) {
         //String words = "";
         char[] wordsArray = words.toCharArray();
         wordsArray[0] = Character.toUpperCase(wordsArray[0]);

@@ -1,10 +1,8 @@
 package domain;
 
 import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
@@ -90,15 +88,15 @@ public class Vehicle implements Searchable {
         return customerID;
     }
 
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
     @Lazy
     public Customer getCustomer() {
         List<Customer> list = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(Customer.class)
                 .where("customerID", equalTo, customerID));
         return list != null && list.size() != 0 ? list.get(0) : null;
-    }
-
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
     }
 
     @Column(name = "vehicleType")

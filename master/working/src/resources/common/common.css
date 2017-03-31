@@ -8,17 +8,21 @@ Button, TextField, ComboBox, CheckBox, DatePicker, TableView {
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
 }
+
 Button, TableView {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 1, 0.5, 1, 1);
 }
+
 Button {
     -fx-background-color: #F57C00;
     -fx-text-fill: white;
     -fx-font-family: 'Roboto';
 }
+
 Button:hover {
     -fx-background-color: #FB8C00;
 }
+
 TableColumn {
     -fx-background-color: #F57C00;
 }
@@ -31,21 +35,22 @@ TableColumn {
     -fx-border-color: darkgrey;
     -fx-border-width: 0px 0px 1px 0px;
 }
+
 #tabHBox Button {
     -fx-pref-height: 3.5em;
     -fx-background-color: #e0e0e0;
 
-    -fx-text-fill: rgba(0,0,0,0.6);
+    -fx-text-fill: rgba(0, 0, 0, 0.6);
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
     -fx-font-family: 'Roboto-Light';
 }
+
 #tabHBox Button:hover {
     -fx-background-color: #F57C00;
     -fx-text-fill: white;
     -fx-font-family: 'Roboto';
 }
-
 
 #detailsTitle {
     -fx-font-size: 2em;

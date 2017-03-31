@@ -1,7 +1,6 @@
 package domain;
 
 import logic.criterion.Criterion;
-import logic.criterion.CriterionOperator;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
 

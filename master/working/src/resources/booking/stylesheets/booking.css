@@ -17,6 +17,7 @@
     -fx-spacing: 1em;
     -fx-padding: 0em 1em 0em 1em;
 }
+
 #paneSwitcherControls Button {
     -fx-pref-width: 8em;
 }
@@ -53,6 +54,7 @@
     -fx-background-position: center;
     -fx-font-family: 'Roboto Light';
 }
+
 #partsButtonsVBox Button:hover {
     -fx-background-color: #FB8C00;
 }
@@ -94,13 +96,14 @@
     -fx-alignment: center;
 }
 
-
 .diagnosisAppointment {
     -fx-background-color: #e03331;
 }
+
 .repairAppointment {
     -fx-background-color: #25bbef;
 }
+
 .holidayAppointment {
     -fx-background-color: lightgray;
     -fx-opacity: 0.5;

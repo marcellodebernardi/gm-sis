@@ -10,14 +10,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import logic.booking.BookingSystem;
 import logic.vehicle.VehicleSys;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class VehiclePaneController {
     @FXML private TableColumn<Vehicle, String> warrantyColumn;
 
 
-    public VehiclePaneController () {
+    public VehiclePaneController() {
         master = BookingController.getInstance();
         bookingSystem = BookingSystem.getInstance();
         vehicleSystem = VehicleSys.getInstance();
@@ -136,7 +137,7 @@ public class VehiclePaneController {
                             : "");
         });
         billAmountColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>((double)((int)(p.getValue().getBillAmount() * 100)) / 100)
+                new ReadOnlyObjectWrapper<>((double) ((int) (p.getValue().getBillAmount() * 100)) / 100)
         );
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));

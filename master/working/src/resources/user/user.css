@@ -9,6 +9,7 @@
 #titleHBox {
     -fx-text-alignment: center;
 }
+
 #infoPane {
     -fx-vgap: 10px;
 }

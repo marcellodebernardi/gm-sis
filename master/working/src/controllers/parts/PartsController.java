@@ -16,16 +16,15 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import logic.booking.BookingSystem;
 import logic.criterion.Criterion;
-import logic.customer.CustomerSystem;
 import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
+
 import java.net.URL;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 
 
 public class PartsController implements Initializable {
@@ -95,6 +94,23 @@ public class PartsController implements Initializable {
 
 
     /*****************************************************************************************************************/
+    private Callback<DatePicker, DateCell> dateChecker = dp1 -> new DateCell() {
+        @Override
+        public void updateItem(LocalDate item, boolean empty) {
+
+            // Must call super
+            super.updateItem(item, empty);
+            if (item.isBefore(LocalDate.now())) {
+                this.setStyle(" -fx-background-color: rgba(171,171,171,0); ");
+                this.setDisable(true);
+            }
+            if (item.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                this.setDisable(true);
+                this.setStyle("-fx-background-color: rgba(171,171,171,0)");
+            }
+
+        }
+    };
 
     /**
      * The initialize method ensures that the combo-boxes which i have created refers to an observableArrayList (CB).
@@ -119,24 +135,6 @@ public class PartsController implements Initializable {
         }
 
     }
-
-    private Callback<DatePicker, DateCell> dateChecker = dp1 -> new DateCell() {
-        @Override
-        public void updateItem(LocalDate item, boolean empty) {
-
-            // Must call super
-            super.updateItem(item, empty);
-            if (item.isBefore(LocalDate.now())) {
-                this.setStyle(" -fx-background-color: rgba(171,171,171,0); ");
-                this.setDisable(true);
-            }
-            if (item.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                this.setDisable(true);
-                this.setStyle("-fx-background-color: rgba(171,171,171,0)");
-            }
-
-        }
-    };
 
     /**
      * This method is the action for my "View All Parts" button on the interface
@@ -289,7 +287,7 @@ public class PartsController implements Initializable {
      * This method shows all the installations in the tableview.
      */
     public void viewAllBookingsClick() {
-        
+
         try {
 
             List2 = pSys.getAllInstallations();
@@ -330,7 +328,8 @@ public class PartsController implements Initializable {
             regNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
-        }catch(IndexOutOfBoundsException | NullPointerException e){
+        }
+        catch (IndexOutOfBoundsException | NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -352,9 +351,9 @@ public class PartsController implements Initializable {
             pSys.commitAbstraction(newPart);
             //boolean s = instance.commitItem(newPart);
             List<PartAbstraction> partAbstractionList = pSys.getByName(partNameField.getText());
-            int index  = partAbstractionList.size()-1;
+            int index = partAbstractionList.size() - 1;
             for (int j = 0; j < Integer.parseInt(partStockLevelField.getText()); j++) {
-                System.out.println("added : " + j+1);
+                System.out.println("added : " + j + 1);
                 PartAbstraction partAbstraction = partAbstractionList.get(index);
                 PartOccurrence partOccurrence = new PartOccurrence(partAbstraction.getPartAbstractionID(), 0, 0);
                 pSys.addPartOccurrence(partOccurrence);
@@ -362,7 +361,8 @@ public class PartsController implements Initializable {
 
             clearAddForm();
             updateTable();
-        }catch(NullPointerException | NumberFormatException e){
+        }
+        catch (NullPointerException | NumberFormatException e) {
             showError("Please fill out all the fields to add a part to the system");
         }
 
@@ -415,7 +415,7 @@ public class PartsController implements Initializable {
                 throw new Exception();
             }
             if ((!showWarning("Warning: Deleting this part type will delete all related stock items from the inventory\n" + " \n" +
-                   "Press OK to continue"))) {
+                    "Press OK to continue"))) {
                 return;
             }
             boolean result = pSys.deletePart(part.getPartAbstractionID());
@@ -456,7 +456,7 @@ public class PartsController implements Initializable {
 
     }
 
-    public boolean showWarning(String message){
+    public boolean showWarning(String message) {
 
         Alert warnAlert = new Alert(Alert.AlertType.WARNING);
         warnAlert.setTitle("Warning");
@@ -561,7 +561,7 @@ public class PartsController implements Initializable {
                 return;
             }
             boolean result = pSys.deleteInstallation(deleteInst.getInstallationID());
-            if(result){
+            if (result) {
                 viewAllBookingsClick();
             }
         }
@@ -586,16 +586,16 @@ public class PartsController implements Initializable {
             viewAllBookingsClick();
             DiagRepBooking diagRepBooking = BookingSystem.getInstance().getBookingByID(bookingsForInstallation.getSelectionModel().getSelectedItem());
             PartOccurrence partOccurrence = pSys.getPartOcc(Integer.parseInt(availableOcc.getSelectionModel().getSelectedItem().trim()));
-            String [] s = addPartToInst.getSelectionModel().getSelectedItem().split(":");
+            String[] s = addPartToInst.getSelectionModel().getSelectedItem().split(":");
             int partAbs = Integer.parseInt(s[0].trim());
             System.out.println(partAbs);
             System.out.println("Stock level : " + partAbs);
             PartAbstraction partAbstraction = pSys.getPartbyID(partAbs);
-            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
+            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel() - 1);
             pSys.commitAbstraction(partAbstraction);
             System.out.println(partAbs);
             Installation installation = new Installation(ZonedDateTime.of(instDate.getValue(), LocalTime.now(), ZoneId.systemDefault()), ZonedDateTime.of(instDate.getValue().plusYears(1), LocalTime.now(), ZoneId.systemDefault()), regNumberInstallation.getText(), partAbs, partOccurrence);
-            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel()-1);
+            partAbstraction.setPartStockLevel(partAbstraction.getPartStockLevel() - 1);
             pSys.commitAbstraction(partAbstraction);
 
             updateTable();
@@ -609,8 +609,7 @@ public class PartsController implements Initializable {
         }
         catch (Exception e) {
             e.printStackTrace();
-            if(e instanceof IndexOutOfBoundsException || e instanceof  NullPointerException)
-            {
+            if (e instanceof IndexOutOfBoundsException || e instanceof NullPointerException) {
                 showError("No booking found!");
             }
             else {
@@ -624,7 +623,7 @@ public class PartsController implements Initializable {
      * This method clears the installation fields
      */
 
-    public void clearInstallation(){
+    public void clearInstallation() {
 
         instDate.setValue(null);
         addPartToInst.setValue(null);
@@ -636,7 +635,7 @@ public class PartsController implements Initializable {
     /**
      * This method gets all the occurrences for the selected part in the the combo box
      */
-    public void setOccs(){
+    public void setOccs() {
 
         try {
             partOccurrences.removeAll(partOccurrences);
@@ -677,7 +676,8 @@ public class PartsController implements Initializable {
 
             PartsBookings.setItems(tableEntries2);
 
-        } catch (NullPointerException e) {
+        }
+        catch (NullPointerException e) {
 
             e.printStackTrace();
         }
@@ -699,8 +699,7 @@ public class PartsController implements Initializable {
             }
             bookingsForInstallation.setItems(bookingIDs);
         }
-        catch (NullPointerException | IndexOutOfBoundsException e)
-        {
+        catch (NullPointerException | IndexOutOfBoundsException e) {
             showError("Selected Vehicle has no booking! Please create a booking before trying to add an installation!");
         }
     }

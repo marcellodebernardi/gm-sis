@@ -2,7 +2,6 @@ package controllers.booking;
 
 import domain.Customer;
 import domain.DiagRepBooking;
-import domain.PartOccurrence;
 import domain.Vehicle;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -127,7 +126,7 @@ public class ListController {
                             : "");
         });
         billAmountColumn.setCellValueFactory(p ->
-                new ReadOnlyObjectWrapper<>((double)((int)(p.getValue().getBillAmount() * 100)) / 100)
+                new ReadOnlyObjectWrapper<>((double) ((int) (p.getValue().getBillAmount() * 100)) / 100)
         );
         billSettledColumn.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(p.getValue().getBillSettled() ? "Yes" : "No"));

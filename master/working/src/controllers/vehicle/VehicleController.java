@@ -129,8 +129,7 @@ public class VehicleController implements Initializable {
         return check;
     }
 
-    public void reset()
-    {
+    public void reset() {
         resetTextField(reg);
         resetTextField(manuf);
         resetTextField(mod);
@@ -153,23 +152,19 @@ public class VehicleController implements Initializable {
 
     }
 
-    public void resetTextField(TextField textField)
-    {
+    public void resetTextField(TextField textField) {
         textField.setStyle(null);
     }
 
-    public void resetComboBox(ComboBox comboBox)
-    {
+    public void resetComboBox(ComboBox comboBox) {
         comboBox.setStyle(null);
     }
 
-    public void  resetDatePicker(DatePicker datePicker)
-    {
+    public void resetDatePicker(DatePicker datePicker) {
         datePicker.setStyle(null);
     }
 
-    public void  resetColourPicker(ColorPicker colorPicker)
-    {
+    public void resetColourPicker(ColorPicker colorPicker) {
         colorPicker.setStyle(null);
     }
 
@@ -242,33 +237,26 @@ public class VehicleController implements Initializable {
 
                 }
                 int customerID = Character.getNumericValue(cID.getSelectionModel().getSelectedItem().toString().charAt(0));
-                if (reg.getText().length()>7)
-                {
+                if (reg.getText().length() > 7) {
                     showAlert("registration cant be longer than 7 characters");
                     return;
                 }
                 boolean add = showAlertC("Are you sure you want to " + addOrEdit + " this Vehicle, have you checked the vehicle details?");
                 if (add) {
                     boolean checker = vSys.addEditVehicle(reg.getText().toUpperCase(), customerID, vT, mod.getText(), manuf.getText(), Double.parseDouble(eSize.getText()), fT, col.getValue().toString(), Integer.parseInt(mil.getText()), rdm, dls, W, wName.getText(), wCompAddress.getText(), wed);
-                    if(addOrEdit.equals("add"))
-                    {
-                        if (checker)
-                        {
+                    if (addOrEdit.equals("add")) {
+                        if (checker) {
                             showAlert("Vehicle successfully added!");
                         }
-                        else
-                        {
+                        else {
                             showAlert("Vehicle unsuccessfully added!");
                         }
                     }
-                    else
-                    {
-                        if (checker)
-                        {
+                    else {
+                        if (checker) {
                             showAlert("Vehicle details successfully saved!");
                         }
-                        else
-                        {
+                        else {
                             showAlert("Vehicle details unsuccessfully saved!");
                         }
                     }
@@ -729,7 +717,6 @@ public class VehicleController implements Initializable {
     }
 
 
-
     public void selectVehicle() {
         if (VehicleS.getSelectionModel().isSelected(0)) {
             setVehicle("Civic", "Honda", "1.6", "Car", "Petrol");
@@ -774,22 +761,22 @@ public class VehicleController implements Initializable {
             setVehicle("Arnage", "Bentley", "4.0", "Car", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(14)) {
-            setVehicle( "Vauxhall", "Astra", "2.0" , "Car", "Diesel");
+            setVehicle("Vauxhall", "Astra", "2.0", "Car", "Diesel");
         }
-        else if (VehicleS.getSelectionModel().isSelected(15)){
-            setVehicle("Mercedes", "C220" ,"2.2", "Car", "Petrol");
+        else if (VehicleS.getSelectionModel().isSelected(15)) {
+            setVehicle("Mercedes", "C220", "2.2", "Car", "Petrol");
         }
-        else if (VehicleS.getSelectionModel().isSelected(16)){
-            setVehicle("Renault", "Carrier" , "2.3" ,"Van", "Diesel" );
+        else if (VehicleS.getSelectionModel().isSelected(16)) {
+            setVehicle("Renault", "Carrier", "2.3", "Van", "Diesel");
         }
-        else if (VehicleS.getSelectionModel().isSelected(17)){
+        else if (VehicleS.getSelectionModel().isSelected(17)) {
             setVehicle("Nissan", "Space", "3.0", "Car", "Petrol");
         }
         else if (VehicleS.getSelectionModel().isSelected(18)) {
-            setVehicle("Vauxhall", "Corsa", "2.0" ,"Car", "Diesel");
+            setVehicle("Vauxhall", "Corsa", "2.0", "Car", "Diesel");
         }
         else if (VehicleS.getSelectionModel().isSelected(19)) {
-            setVehicle("Nissan", "GTR", "4.0" ,"Car", "Petrol");
+            setVehicle("Nissan", "GTR", "4.0", "Car", "Petrol");
         }
         else {
             setVehicle("Fire Truck", "DAF", "3.8", "Truck", "Diesel");
@@ -800,8 +787,6 @@ public class VehicleController implements Initializable {
         eSize.setDisable(true);
         fType.setDisable(true);
     }
-
-
 
 
     public void setVehicle(String model, String manufacturer, String engineSize, String vehicleType, String fuelType) {
@@ -838,7 +823,6 @@ public class VehicleController implements Initializable {
         cByWarranty.setValue(null);
         hiddenWarranty();
     }
-
 
 
     public void ViewBookingDates() {
@@ -970,7 +954,6 @@ public class VehicleController implements Initializable {
     }
 
 
-
     public void newVehicle() {
         reg.setEditable(true);
         reg.setDisable(false);
@@ -1078,8 +1061,7 @@ public class VehicleController implements Initializable {
         try {
             boolean check = true;
             Errors.clear();
-            if (cID.getSelectionModel().getSelectedItem() == null)
-            {
+            if (cID.getSelectionModel().getSelectedItem() == null) {
                 check = false;
                 setComboBoxBackground(cID);
                 //Errors.appendText("Chose Customer \n");
@@ -1088,147 +1070,131 @@ public class VehicleController implements Initializable {
             try {
                 date = fromLocalDate(dLastServiced.getValue());
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 setDatePickerBackground(dLastServiced);
                 //Errors.appendText("Invalid Last Service Date \n");
-                check =false;
+                check = false;
             }
 
             try {
                 date = fromLocalDate(rDateMot.getValue());
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 setDatePickerBackground(rDateMot);
                 //Errors.appendText("Invalid MOT Date \n");
-                check =false;
+                check = false;
             }
             if (cByWarranty.getSelectionModel().getSelectedItem() != null) {
-                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True") ) {
+                if (cByWarranty.getSelectionModel().getSelectedItem().toString().equals("True")) {
                     try {
 
-                    date = fromLocalDate(wExpirationDate.getValue()); }
-                    catch (Exception e)
-                    {
+                        date = fromLocalDate(wExpirationDate.getValue());
+                    }
+                    catch (Exception e) {
                         setDatePickerBackground(wExpirationDate);
                         //Errors.appendText("invalid expiry date \n");
-                        check =false;
+                        check = false;
                     }
 
-                    if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
-                    {
+                    if (!(wName.getText().matches("[A-Za-z0-9, ]+"))) {
                         Errors.appendText("Warranty name is not correct format  \n");
                         setTextFieldBackground(wName);
-                        check =false;
+                        check = false;
                     }
-                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
-                    {
+                    if (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+"))) {
                         Errors.appendText("Warranty Company is not correct format  \n");
                         setTextFieldBackground(wCompAddress);
-                        check =false;
+                        check = false;
                     }
                 }
             }
-            else
-                {
-                    //Errors.appendText("Select if vehicle has warranty");
-                    setComboBoxBackground(cByWarranty);
-                    try {
+            else {
+                //Errors.appendText("Select if vehicle has warranty");
+                setComboBoxBackground(cByWarranty);
+                try {
 
-                        date = fromLocalDate(wExpirationDate.getValue()); }
-                    catch (Exception e)
-                    {
-                        setDatePickerBackground(wExpirationDate);
-                        //Errors.appendText("invalid expiry date \n");
-                        check =false;
-                    }
+                    date = fromLocalDate(wExpirationDate.getValue());
+                }
+                catch (Exception e) {
+                    setDatePickerBackground(wExpirationDate);
+                    //Errors.appendText("invalid expiry date \n");
+                    check = false;
+                }
 
-                    if (!(wName.getText().matches("[A-Za-z0-9, ]+")))
-                    {
-                        Errors.appendText("Warranty name is not correct format  \n");
-                        setTextFieldBackground(wName);
-                        check =false;
-                    }
-                    if  (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+")))
-                    {
-                        Errors.appendText("Warranty Company is not correct format  \n");
-                        setTextFieldBackground(wCompAddress);
-                        check =false;
-                    }
+                if (!(wName.getText().matches("[A-Za-z0-9, ]+"))) {
+                    Errors.appendText("Warranty name is not correct format  \n");
+                    setTextFieldBackground(wName);
+                    check = false;
+                }
+                if (!(wCompAddress.getText().matches("[A-Za-z0-9, ]+"))) {
+                    Errors.appendText("Warranty Company is not correct format  \n");
+                    setTextFieldBackground(wCompAddress);
+                    check = false;
+                }
             }
             Double engineSize = 0.0;
-            int mileage= 0 ;
+            int mileage = 0;
             try {
                 engineSize = Double.parseDouble(eSize.getText());
-                if (engineSize <=0)
-                {
+                if (engineSize <= 0) {
                     Errors.appendText("Check engine size inputs are above  0 \n");
                     setTextFieldBackground(eSize);
-                    check =false;
+                    check = false;
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Errors.appendText("Check engine size inputs are above 0 \n");
                 setTextFieldBackground(eSize);
-                check =false;
+                check = false;
             }
             try {
 
-            mileage = Integer.parseInt(mil.getText());
-                if (mileage <0 )
-                {
+                mileage = Integer.parseInt(mil.getText());
+                if (mileage < 0) {
                     Errors.appendText("Check mileage inputs are above or equalTo to 0 \n");
                     setTextFieldBackground(mil);
-                    check =false;
+                    check = false;
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Errors.appendText("Check mileage inputs are above or equalTo to 0 \n");
                 setTextFieldBackground(mil);
-                check =false;
+                check = false;
             }
 
-            if ((col.getValue()== null)) {
+            if ((col.getValue() == null)) {
                 //Errors.appendText("Colour must be a string and have no spaces \n");
                 setColorPickerBackground(col);
-                check =false;
+                check = false;
             }
-            if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+")))
-            {
+            if (!(reg.getText().matches("[A-Za-z0-9]+[ ]{0,1}[A-Za-z0-9]+"))) {
                 Errors.appendText("Reg is not correct format \n");
                 setTextFieldBackground(reg);
-                check =false;
+                check = false;
             }
-            if (!(manuf.getText().matches("[A-Za-z]+")))
-            {
+            if (!(manuf.getText().matches("[A-Za-z]+"))) {
                 Errors.appendText("Manufacturer is not correct format and cannot have a space \n");
                 setTextFieldBackground(manuf);
-                check =false;
+                check = false;
             }
-            if (!(mod.getText().matches("[A-Za-z0-9 ]+")))
-            {
+            if (!(mod.getText().matches("[A-Za-z0-9 ]+"))) {
                 Errors.appendText("Model is not correct format     \n");
                 setTextFieldBackground(mod);
-                check =false;
+                check = false;
             }
 
 
-            if (vType.getSelectionModel().getSelectedItem() == null ) {
+            if (vType.getSelectionModel().getSelectedItem() == null) {
                 //Errors.appendText("Pick vehicle Type \n");
                 setComboBoxBackground(vType);
-                check =false;
+                check = false;
             }
-            if (fType.getSelectionModel().getSelectedItem() == null)
-            {
+            if (fType.getSelectionModel().getSelectedItem() == null) {
                 //Errors.appendText("Pick fuel type");
                 setComboBoxBackground(fType);
-                check =false;
+                check = false;
             }
-            if (!check)
-            {
+            if (!check) {
                 errorsLabel.setVisible(true);
                 Errors.setStyle("-fx-background-color: #ffc5c1");
                 Errors.setVisible(true);
@@ -1242,23 +1208,19 @@ public class VehicleController implements Initializable {
 
     }
 
-    public void setTextFieldBackground(TextField field)
-    {
+    public void setTextFieldBackground(TextField field) {
         field.setStyle("-fx-background-color: #ffc5c1");
     }
 
-    public void setDatePickerBackground(DatePicker picker)
-    {
+    public void setDatePickerBackground(DatePicker picker) {
         picker.setStyle("-fx-background-color: #ffc5c1");
     }
 
-    public void setComboBoxBackground(ComboBox box)
-    {
+    public void setComboBoxBackground(ComboBox box) {
         box.setStyle("-fx-background-color: #ffc5c1");
     }
 
-    public void setColorPickerBackground(ColorPicker pick)
-    {
+    public void setColorPickerBackground(ColorPicker pick) {
         pick.setStyle("-fx-background-color: #ffc5c1");
     }
 

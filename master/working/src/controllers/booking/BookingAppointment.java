@@ -1,6 +1,5 @@
 package controllers.booking;
 
-import domain.Booking;
 import domain.DiagRepBooking;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -86,13 +85,13 @@ public class BookingAppointment implements Agenda.Appointment {
         return appointmentGroup;
     }
 
+    public void setAppointmentGroup(Agenda.AppointmentGroup appointmentGroup) {
+        this.appointmentGroup = appointmentGroup;
+    }
+
     public BookingAppointment withAppointmentGroup(Agenda.AppointmentGroup group) {
         this.appointmentGroup = group;
         return this;
-    }
-
-    public void setAppointmentGroup(Agenda.AppointmentGroup appointmentGroup) {
-        this.appointmentGroup = appointmentGroup;
     }
 
     ////////////////////////////////////////////////////////////////////////////

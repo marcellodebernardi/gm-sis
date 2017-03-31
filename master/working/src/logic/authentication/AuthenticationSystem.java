@@ -69,7 +69,6 @@ public class AuthenticationSystem {
     }
 
 
-
     public List<User> searchUsers(String fn, String ln, String id) {
         return persistence.getByCriteria(new Criterion<>
                 (User.class, "userID", matches, id)
@@ -80,7 +79,7 @@ public class AuthenticationSystem {
 
     public List<User> searchUsersUT(String fn, String ln, String id, UserType userType) {
         return persistence.getByCriteria(new Criterion<>
-                (User.class,"userType", equalTo, userType)
+                (User.class, "userType", equalTo, userType)
                 .and("firstName", matches, fn)
                 .and("surname", matches, ln)
                 .and("userID", matches, id)

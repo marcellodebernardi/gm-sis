@@ -16,8 +16,6 @@ import logic.parts.PartsSystem;
 import logic.vehicle.VehicleSys;
 import persistence.DatabaseRepository;
 
-import java.util.HashMap;
-
 /**
  * @author Marcello De Bernardi
  */
@@ -60,6 +58,7 @@ public class PartsPopOverController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     EVENT LISTENERS                                                 //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** handles the selection of an item in the parts table */
     private void selectPart(ObservableValue<? extends PartAbstraction> obs, PartAbstraction oldSelection,
                             PartAbstraction newSelection) {
@@ -69,7 +68,7 @@ public class PartsPopOverController {
             newSelection.setPartStockLevel(newSelection.getPartStockLevel() - 1);
             partsTable.refresh();
 
-            DiagRepBooking booking = ((DetailsController)master.getController(DetailsController.class))
+            DiagRepBooking booking = ((DetailsController) master.getController(DetailsController.class))
                     .getSelectedBooking();
 
             booking.addRequiredPart(pOcc);
@@ -107,6 +106,7 @@ public class PartsPopOverController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     FIELD POPULATION                                                //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** populates the table of parts with part abstractions */
     private void populateTable() {
         partsTable.setItems(FXCollections.observableArrayList(parts));
@@ -117,6 +117,7 @@ public class PartsPopOverController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                     TABLE CONSTRUCTION                                              //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** sets the cell value factories for the parts table */
     private void setPartsTableCellValueFactories() {
         partAbstractionID.setCellValueFactory(p ->

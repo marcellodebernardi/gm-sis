@@ -59,7 +59,7 @@
 
             <!-- Parts needed for repair -->
             <Label GridPane.rowIndex="8" GridPane.columnIndex="0">Parts</Label>
-            <BorderPane GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2" >
+            <BorderPane GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2">
                 <center>
                     <TableView
                             id="bookingPartsTable" fx:id="partsTable">
@@ -88,7 +88,7 @@
                        promptText="Before completing, record new mileage"/>
 
             <Label GridPane.rowIndex="11" GridPane.columnIndex="0">Bill settled</Label>
-            <CheckBox fx:id="settledCheckBox" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+            <CheckBox fx:id="settledCheckBox" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
         </GridPane>
     </center>
     <bottom>

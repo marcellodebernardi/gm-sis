@@ -3,7 +3,6 @@ package controllers.booking;
 import domain.DiagRepBooking;
 import domain.Mechanic;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
@@ -17,8 +16,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,6 +96,7 @@ public class CalendarController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                      EVENT HANDLERS                                                 //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** Changes the time range displayed by the agenda */
     @FXML private void selectCalendarDate() {
         bookingAgenda.setDisplayedLocalDateTime(LocalDateTime.of(calendarDatePicker.getValue(),

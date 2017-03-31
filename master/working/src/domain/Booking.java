@@ -60,15 +60,15 @@ public abstract class Booking implements Searchable {
         return vehicleRegNumber;
     }
 
+    public void setVehicleRegNumber(String vehicleRegNumber) {
+        this.vehicleRegNumber = vehicleRegNumber;
+    }
+
     @Lazy public Vehicle getVehicle() {
         List<Vehicle> vehicles = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
                 (Vehicle.class, "vehicleRegNumber", equalTo, vehicleRegNumber));
 
         return vehicles != null && vehicles.size() != 0 ? vehicles.get(0) : null;
-    }
-
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
     }
 
     public String getDescription() {
@@ -91,15 +91,15 @@ public abstract class Booking implements Searchable {
         return mechanicID;
     }
 
+    public void setMechanicID(int mechanicID) {
+        this.mechanicID = mechanicID;
+    }
+
     @Lazy public Mechanic getMechanic() {
         List<Mechanic> mechanics = DatabaseRepository.getInstance().getByCriteria(new Criterion<>
                 (Mechanic.class, "mechanicID", equalTo, mechanicID));
 
         return mechanics != null && mechanics.size() != 0 ? mechanics.get(0) : null;
-    }
-
-    public void setMechanicID(int mechanicID) {
-        this.mechanicID = mechanicID;
     }
 
     public boolean isComplete() {

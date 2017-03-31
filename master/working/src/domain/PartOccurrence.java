@@ -1,6 +1,5 @@
 package domain;
 
-import javafx.fxml.FXML;
 import logic.criterion.Criterion;
 import persistence.DatabaseRepository;
 import persistence.DependencyConnection;
@@ -94,6 +93,10 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return bookingID;
     }
 
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
+
     @Column(name = "specRepID", foreign = true)
     public int getSpecRepID() {
         return specRepID;
@@ -140,7 +143,8 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         return installations != null && installations.size() != 0 ? installations.get(0) : null;
     }
 
-    /** Returns the part's SPC repair, or null if the part has not been sent for an SPC repair.
+    /**
+     * Returns the part's SPC repair, or null if the part has not been sent for an SPC repair.
      *
      * @return PartRepair if sent to SPC, null if not
      */
@@ -148,10 +152,5 @@ public class PartOccurrence implements Searchable, DependencyConnectable {
         List<PartRepair> repairs = DatabaseRepository.getInstance().getByCriteria(new Criterion<>(PartRepair.class)
                 .where("partOccurrenceID", equalTo, this.partOccurrenceID));
         return repairs != null && repairs.size() != 0 ? repairs.get(0) : null;
-    }
-
-    public void setBookingID(int bookingID)
-    {
-        this.bookingID = bookingID;
     }
 }

@@ -15,7 +15,6 @@ import java.net.URISyntaxException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +24,7 @@ import java.util.Map;
 import static java.time.DayOfWeek.*;
 import static logic.booking.UnavailableDateException.Appointment.DIAGNOSIS;
 import static logic.booking.UnavailableDateException.Appointment.REPAIR;
-import static logic.booking.UnavailableDateException.Cause.CLASHES;
-import static logic.booking.UnavailableDateException.Cause.CLOSED;
-import static logic.booking.UnavailableDateException.Cause.HOLIDAY;
+import static logic.booking.UnavailableDateException.Cause.*;
 import static logic.criterion.CriterionOperator.*;
 
 /**

@@ -240,10 +240,10 @@ public class SpecRepairSystem {
     public Installation getByInstallationID(int InstallationID) {
         try {
             List<Installation> installations = persistence.getByCriteria(new Criterion<>(Installation.class, "installationID", equalTo, InstallationID));
-             return installations.get(0);
+            return installations.get(0);
         }
         catch (IndexOutOfBoundsException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
 
@@ -334,16 +334,13 @@ public class SpecRepairSystem {
         return specRepBookingList;
     }
 
-    public void submitBooking(DiagRepBooking booking)
-    {
+    public void submitBooking(DiagRepBooking booking) {
         persistence.commitItem(booking);
     }
 
-    public List<PartRepair> getAllPartRepairs()
-        {
-            return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", moreThan, 0));
-        }
-
+    public List<PartRepair> getAllPartRepairs() {
+        return persistence.getByCriteria(new Criterion<>(PartRepair.class, "spcID", moreThan, 0));
+    }
 
 
 }

@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane stylesheets="/common/common.css" xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.common.MenuController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="/common/common.css"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controllers.common.MenuController">
     <top>
         <HBox id="tabHBox">
             <Button onAction="#openCustomersTab" text="Customers"/>

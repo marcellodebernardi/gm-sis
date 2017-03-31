@@ -121,7 +121,7 @@ class StatementNode implements Comparable<StatementNode> {
                 if (value.getClass() == Date.class)
                     values += ((Date) value).getTime() == 0 ?
                             "null"
-                            : ((Date)value).getTime();
+                            : ((Date) value).getTime();
                 else if (value.getClass() == LocalDateTime.class)
                     values += ((LocalDateTime) value).toEpochSecond(ZoneOffset.UTC) * 1000 == 0;
                 else if (value.getClass() == ZonedDateTime.class)
