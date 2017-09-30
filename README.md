@@ -1,19 +1,23 @@
-Repository for GM-SIS system, by Team 31. To view this readme in a formatted and legible
-form, go to https://github.research.its.qmul.ac.uk/ecs506u/SE31 (main project readme).
+Software Engineering Project for Queen Mary University of London (second year, second semester). The team had to produce a complete software solution based on a document outlining requirements. Each team member received an individual grade. My **personal grade for the project was 95%**. My personal contribution to the effort was:
+
+1. **Team leader**
+2. **Designed the overall architecture** of the software (based on [Uncle Bob's clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html), the architecture is an example of **domain-driven-development** and emphasizes heavily **dependency inversion**)
+3. Wrote a **custom ORM framework** to completely abstract the database, found in the persistence package
+4. Responsible for the **bookings module** of the software
+
+
 
 ## TEAM 31 - GARAGE MANAGEMENT SYSTEM
 
 ### 1. CONTRIBUTORS
-1. Ebubechukwu Abara (ec14177)
-2. Dillon Vaghela (ec15147)
-3. Marcello De Bernardi (ec15265)
-4. Muhammad Hoque (ec15157)
-5. Muhammad Ahmed (ec15496)
+1. Ebubechukwu Abara
+2. Dillon Vaghela
+3. Marcello De Bernardi
+4. Muhammad Hoque
+5. Muhammad Ahmed
 
 ### 2. INSTALLATION INSTRUCTIONS
-Requires **JRE1.8.x** to run. On the ITL machines this means running the application on Windows 10.
-Download the .zip file in the release folder, unzip to any location, and run the program by double
-clicking the jar. A few notes:
+Requires **JRE1.8.x** to run. Download the .zip file in the release folder, unzip to any location, and run the jar. A few notes:
 
 1. Do not rename the jar file. This will break the software.
 2. Do not remove the GM-SIS.db file, or the lib folder
@@ -40,7 +44,7 @@ Once logged in, the user can logout using the large logout button in the upper r
 of the interface. This returns the user to the login screen.
 
 
-#### 4.3. CUSTOMERS - Ebube
+#### 4.3. CUSTOMERS (author: Ebube)
 Customer screen consists of three key sections, the left pane, central pane and a popup form.
 
 Add customer form on the left pane allows user to add a new customer record. The ‘Save and Add Vehicle’ makes sure new customer has at least one vehicle record. Edit customer form allows user to edit or delete a customer’s record after the select customer from table and click the ‘Edit’ button. 
@@ -54,7 +58,7 @@ Deleting a customer’s record has a cascading effect as the customer vehicle re
 Customer vehicle popup screen shows immediately after user clicks ‘Save and Add Vehicle’ button. This popup allows user to add the customer’s first vehicle record. This ensures that a customer must have at least one vehicle record else the customer record is not saved. 
 
 
-#### 4.4 BOOKINGS - Marcello 
+#### 4.4 BOOKINGS (author: Marcello) 
 The bookings screen consists of two main sections: the details pane on the left, for viewing,
 adding and editing booking details, and the main bookings pane on the right, for viewing the
 general bookings situation.
@@ -102,7 +106,8 @@ and red buttons by the small parts table.
 5.  A booking can only be completed, however, once a repair appointment has been carried out and
     a new mileage value recorded.
 
-#### 4.5 VEHICLES - Dillon
+
+#### 4.5 VEHICLES (author: Dillon)
 
 The vehicle screen consists of 4 sections: **Edit/Add Vehicles**, **Vehicle Table**, **Part Lists** and **Customer/Bookings Details**.
 
@@ -117,7 +122,8 @@ On click **Edit** the add vehicle pane on the left will turn into a edit vehicle
 The Pane below the table view displays the next booking date for the vehicle selected in the table as well as display the customer detials selected below this. At the bottom of the pane it displays past and future bookings for the vehicle.
 This pane will auto refresh when a new vehicle is selected in the table.
 
-#### 4.6 PARTS - Muhammad Hoque
+
+#### 4.6 PARTS (author: Muhammad Hoque)
 
 The parts screen consists of two tab views: **Available Parts** and **Part Installation History**
 
@@ -147,7 +153,8 @@ A **part calculator** has also been implemented to show the total part cost of t
 3.  A quantity **must** be entered even if the user wishes to select only 1, in order for the total to be shown.
 4.  Press the **Calculate Total** button so that the total part cost is given to the user.
 
-#### 4.7 SPECIALIST REPAIR BOOKINGS (SPC PART 1) - Muhammad Murad Ahmed
+
+#### 4.7 SPECIALIST REPAIR BOOKINGS (author: Muhammad Murad Ahmed)
 
 In the specialist repair booking, the user is able to add, delete, modify specialist repair bookings for both parts 
 and vehicles. The user is also able to view a list of **installations** for a chosen vehicle from the list of repairs.
@@ -185,7 +192,7 @@ When adding an installation the user must perform the following:
 
 
 
-#### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (SPC PART 2) - Muhammad Murad Ahmed
+#### 4.8 SPECIALIST REPAIR CENTER MANAGEMENT (author: Muhammad Murad Ahmed)
 
 In the specialist repair center management interface. The user is able to add, edit and modify existing SPCs to the GMSIS.
 A user must fill in the following details when adding a new SPC:
