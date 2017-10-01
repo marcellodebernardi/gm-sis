@@ -7,14 +7,14 @@ Software Engineering Project for Queen Mary University of London (second year, s
 3. Wrote a **custom ORM framework** to completely abstract the database, found in the persistence package
 4. Responsible for the **bookings module** of the software
 
-### 1. CONTRIBUTORS
-1. Ebubechukwu Abara
+### CONTRIBUTORS
+1. [Ebubechukwu Abara](https://github.com/ena3)
 2. Dillon Vaghela
 3. Marcello De Bernardi
 4. Muhammad Hoque
 5. Muhammad Ahmed
 
-### 2. INSTALLATION INSTRUCTIONS
+### INSTALLATION INSTRUCTIONS
 Requires **JRE1.8.x** to run. Download the .zip file in the release folder, unzip to any location, and run the jar. A few notes:
 
 1. Do not rename the jar file. This will break the software.
@@ -23,7 +23,7 @@ Requires **JRE1.8.x** to run. Download the .zip file in the release folder, unzi
 4. Do not remove the META-INF folder, or its contents.
 
 
-### 3. LOGIN CREDENTIALS
+### LOGIN CREDENTIALS
 The system includes a variety of pre-added users. For testing, you may use
 <table>
 <tr><th>User string</th><th>Password</th><th>Access rights</th></tr>
