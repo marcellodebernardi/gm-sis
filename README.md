@@ -12,7 +12,7 @@ Software Engineering Project for Queen Mary University of London (second year, s
 2. Dillon Vaghela
 3. Marcello De Bernardi
 4. Muhammad Hoque
-5. Muhammad Ahmed
+5. [Muhammad Ahmed](https://github.com/M-Murad-Ahmed)
 
 ### INSTALLATION INSTRUCTIONS
 Requires **JRE1.8.x** to run. Download the .zip file in the release folder, unzip to any location, and run the jar. A few notes:
